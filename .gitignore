@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.env
+*.sqlite3
+.DS_Store
+**/.DS_Store
+
+# large raw media stays out; captions/transcripts/chat are committed
+evals/fixtures/**/audio.opus
+evals/fixtures/**/raw/
+
+# capture salt - keeps pseudonyms stable locally, must never be distributed
+.capture_salt
+
+# never commit
+telegram-export/
+*.ogg
