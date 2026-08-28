@@ -1,0 +1,29 @@
+Analyze the following Twitch stream data and update the context summary.
+
+===PREVIOUS CONTEXT===
+$old_context
+===
+
+===STREAMER SPEECH===
+$speech_sum
+===
+
+===SCREEN DESCRIPTIONS===
+$frames_sum
+===
+
+Task: Create an updated context summary in English that:
+1. Incorporates what is currently happening on the stream right now
+2. Builds upon or updates the previous context as needed
+3. Describes key activities, events, or situations visible/audible
+4. Provides relevant background context
+
+Important considerations:
+- The streamer may be talking to chat, teammates, or themselves
+- Focus on observable facts from the speech and screen descriptions
+- Update the context if the stream has changed significantly
+- Maintain continuity with previous context when appropriate
+- Keep the summary brief and informative (3-5 sentences)
+- Write in clear, natural English
+
+Output: Provide only the updated summary text, nothing else.

@@ -1,0 +1,55 @@
+Analyze the following chat messages based on the streamer's context.
+
+===STREAMER SPEECH TRANSCRIPT (last 1.5 minutes)===
+$streamer_transcript
+===
+
+**Note about transcript:** The transcript may contain speech from multiple people (the streamer, teammates, other participants). The streamer may be talking to chat, to another person, just voicing their thoughts, or reacting to something in the game. Time stamps are in milliseconds: [start_ms-end_ms] text.
+
+===WHAT'S HAPPENING ON STREAM===
+$screen_description
+===
+
+**Note:** This describes what is happening on the stream - what the streamer is doing, what they are seeing, what events are occurring, etc.
+
+===CHAT MESSAGES (sorted by time)===
+$chat_messages
+===
+
+**Note:** Chat messages are sorted chronologically. Time stamps are in milliseconds: [time_ms] username: message.
+
+**Categories to use:**
+1. **STREAM_TECH_FEEDBACK**
+   Messages about the technical quality or delivery of the stream. This includes audio/video problems, sync issues, buffering/lag, volume levels, dropped frames, encoding quality, or any production-related troubleshooting signals.
+
+2. **DIRECT_ANSWER**
+   Messages that directly answer an explicit question, prompt, poll, or choice posed by the streamer (or a moderator) in the provided context. The primary function is to provide a selection, vote, factual response, or short confirmation requested by the streamer. One-word answers (names, teams, numbers, “yes/no”) that match a question are DIRECT_ANSWER. Short declarative status updates that resolve a recent question (e.g., “he left”, “they have a coach”, “still playing”, “on cats”) are also DIRECT_ANSWER.
+
+3. **DIRECT_QUESTION**
+   Messages whose primary intent is to ask the streamer (or the chat) for information, clarification, or a decision. The viewer expects an answer, explanation, or acknowledgment in response to the question.
+
+4. **HELPFUL_GUIDANCE**
+   Messages intended to help the streamer make better decisions or understand the current situation. This includes actionable advice, strategic tips, useful factual information, and corrections of misunderstandings. Optionally, you can track a subtype such as `action` (what to do), `info` (useful facts), or `correction` (fixing an error).
+
+5. **REACTION_OR_COMMENTARY**
+   Short, in-the-moment reactions and lightweight opinions about recent events. This covers emotional bursts (surprise, hype, frustration) and quick judgments about what just happened (“boring”, “nice”, “bro wtf”, “trash game”) without giving instructions.
+
+6. **OFF_TOPIC_OR_MISC**
+   Messages unrelated to the current stream context: random memes/copypasta, spammy jokes, self-promo, side conversations, or comments with no clear tie to what’s happening. If it’s not about the content on screen or the streamer’s recent words, use this.
+
+7. **SOCIAL_OR_COMMUNITY**
+   Messages focused on social bonding and community interaction rather than specific stream events. This includes greetings and farewells, thanks, encouragement, congratulations, and general small talk that supports a friendly community atmosphere.
+
+**Instructions:**
+For each chat message, identify the category and explain why the viewer wrote that message given the streamer's speech context. If the message is a reaction to something specific the streamer said or did, mention that in your explanation. Keep explanations brief and to-the-point.
+
+**Classification priority (apply in this order):**
+1) If the streamer asked a question (from transcript/screen context) and the message supplies an answer—even a single word, name, number, or yes/no—label it DIRECT_ANSWER (mention if tone is joking).
+2) If the message itself asks for info/clarification, label DIRECT_QUESTION.
+3) If it provides advice/tips/facts/corrections, label HELPFUL_GUIDANCE.
+4) If it comments on stream quality/technical delivery, label STREAM_TECH_FEEDBACK.
+5) If it’s an in-the-moment emotional reaction or a quick opinion/judgment about what just happened, label REACTION_OR_COMMENTARY. Sportsmanship interjections like “gg”, “wp”, “glhf” default to SOCIAL_OR_COMMUNITY unless they are sarcastic/taunting (then OFF_TOPIC_OR_MISC).
+6) Use OFF_TOPIC_OR_MISC when the message isn’t about the current stream context (random meme/copypasta, spam, self-promo, unrelated chatter, sarcastic off-topic jabs).
+7) Use SOCIAL_OR_COMMUNITY for greetings, thanks, congrats, and social niceties.
+
+Output each analysis as JSON with index (message position number starting from 1), category, and reason for each message.

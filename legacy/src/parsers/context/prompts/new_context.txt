@@ -1,0 +1,22 @@
+Analyze the following Twitch stream data and create a context summary.
+
+===STREAMER SPEECH===
+$speech_sum
+===
+
+===SCREEN DESCRIPTIONS===
+$frames_sum
+===
+
+Task: Create a concise context summary in English that describes:
+1. What is currently happening on the stream right now
+2. Key activities, events, or situations visible/audible
+3. Relevant background context if needed
+
+Important considerations:
+- The streamer may be talking to chat, teammates, or themselves
+- Focus on observable facts from the speech and screen descriptions
+- Keep the summary brief and informative (3-5 sentences)
+- Write in clear, natural English
+
+Output: Provide only the summary text, nothing else.

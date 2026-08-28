@@ -1,0 +1,75 @@
+/* Chrome + Safari matched glass */
+.glass {
+  /* tokens */
+  --g-blur: clamp(8px, 0.9vw, 14px);
+  --g-tint: rgba(18, 18, 20, 0.18);   /* tint ON the blurred layer */
+  --g-border: rgba(255, 255, 255, 0.18);
+  --g-shine: rgba(255, 255, 255, 0.10);
+  --g-topline: rgba(255, 255, 255, 0.35);
+
+  position: relative;
+  border-radius: clamp(12px, 1.8vw, 28px);
+  border: 1px solid var(--g-border);
+  background: transparent;            /* card itself stays transparent */
+  isolation: isolate;
+  overflow: hidden;                   /* clip the pseudo layers */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+/* The actual blur + tint lives here (Safari-friendly) */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
+  -webkit-backdrop-filter: saturate(130%) blur(var(--g-blur));
+  backdrop-filter: saturate(130%) blur(var(--g-blur));
+  background: var(--g-tint);
+}
+
+/* Highlights only — no blur here */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;                          /* stays under content */
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, var(--g-shine), rgba(255,255,255,0.02) 60%, transparent),
+    radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,0.12), transparent 60%);
+  box-shadow: inset 0 1px 0 var(--g-topline);
+}
+
+/* Content layer */
+.glass-body {
+  position: relative;
+  z-index: 1;
+  padding: clamp(10px, 1.6vw, 22px) clamp(12px, 2vw, 28px);
+}
+
+/* Reduce vertical padding of the chart glass by ~35% (only this card) */
+.chart-section .glass-body {
+  /* was: clamp(10px, 1.6vw, 22px) clamp(12px, 2vw, 28px) */
+  padding: clamp(6px, 1.05vw, 14px) clamp(10px, 1.6vw, 22px);
+  font-family: "Space Grotesk", "SpaceGrotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+
+/* Safari micro-tune (keeps it from looking “milky”) */
+@supports (-webkit-backdrop-filter: blur(0)) {
+  .glass::before {
+    background: rgba(18,18,20,0.16);
+    -webkit-backdrop-filter: saturate(130%) blur(calc(var(--g-blur) - 1px));
+    backdrop-filter: saturate(130%) blur(calc(var(--g-blur) - 1px));
+  }
+}
+
+/* Fallback when blur is unsupported */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+  }
+}

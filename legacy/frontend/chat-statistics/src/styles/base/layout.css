@@ -1,0 +1,141 @@
+/* ============================================================================
+   GLOBAL STYLES
+   ============================================================================ */
+
+:root {
+    --panel-top: 12px;
+    /* same as the status card */
+    --panel-bottom: 120px;
+    /* gap above main-content bottom */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Space Grotesk', 'SpaceGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #000000;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================================================
+   LAYOUT STRUCTURE
+   ============================================================================ */
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+    height: calc(100vh - 4rem);
+}
+
+/* ============================================================================
+   CHART SECTION
+   ============================================================================ */
+
+.chart-section {
+    position: absolute;
+    top: var(--chart-top);
+    left: var(--panel-left, 24px);
+    z-index: 10;
+}
+
+.chart-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #bf94ff;
+}
+
+.chart-title {
+    font-size: 1.2rem;
+    margin: 0;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: #bf94ff;
+    font-weight: 600;
+    text-shadow: 0 2px 8px rgba(191, 148, 255, 0.3);
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.chart-container {
+    width: 100%;
+    height: 320px;
+    position: relative;
+    --chart-pad-top: 12px;
+    --chart-pad-bottom: 8px;
+}
+
+#bar-chart {
+    width: 100%;
+    height: 100%;
+    --chart-pad-top: 12px;
+    --chart-pad-bottom: 20px;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.footer {
+    padding: 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+}
+
+.footer p {
+    opacity: 0.7;
+    color: #bf94ff;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 900px) {
+    .chart-section {
+        left: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .chart-section {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        width: calc(100vw - 2rem);
+        max-width: none;
+    }
+
+    .chart-container {
+        height: 180px;
+        width: 85%;
+    }
+
+    #bar-chart {
+        --chart-pad-top: 8px;
+        --chart-pad-bottom: 6px;
+    }
+}
