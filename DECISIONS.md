@@ -18,3 +18,9 @@ Every scope or technical decision, with a one-line rationale. This file is the r
 | 2026-08-29 | Frame prompt written fresh, not ported from `legacy/.../image_annotations/workers.py` | The loop's context guardrail allows only three legacy files; the intent (factual, ≤500 chars, "text unclear" over invention) was already recorded in the enrich docstring |
 | 2026-08-29 | Enrichment writes rows without `id`; the replay loader derives them | One implementation of the id rule, so the writer and reader cannot drift; `EventIndex` already rejects duplicates |
 | 2026-08-29 | Deepgram `utterances` preferred, word-grouping only as fallback | Deepgram's own final segmentation beats a hand-tuned pause threshold, and the fallback keeps enrichment working if the flag is ever dropped |
+| 2026-08-29 | Analysis windows are fixed 60 s tiles derived from the fixture span | Window bounds enter the prompt; tiling on event volume or wall-clock would change every cache key and break replay reproduction |
+| 2026-08-29 | Agent and baseline run through one `_run_over_fixture` on identical windows | The eval compares them — any difference other than the system itself would be measured as an improvement it did not earn |
+| 2026-08-29 | The CLI reports counts, never rates | `evals/scorer.py` owns every published metric; a second implementation would eventually disagree with it in print |
+| 2026-08-29 | `trace_id` derived from `(agent, case_id)`, not `uuid4` | Unseeded randomness leaked into the published result document, so two replays of one fixture differed and each run orphaned a trajectory file |
+| 2026-08-29 | `serve` uses stdlib `http.server`, not the declared FastAPI/uvicorn | `make demo` is off the graded path; stdlib keeps the fresh-clone install smaller and has no startup surface |
+| 2026-08-29 | `serve` never runs the agent — it only serves what `make replay` wrote | What a judge sees on screen is then exactly the file they can open and diff |

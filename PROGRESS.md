@@ -28,3 +28,13 @@ Result: `make test` green, 59 -> 70. New `providers/deepgram.py`, `providers/vis
 provider unplugged (asserted). `COST_LEDGER.md` opened at 0.00; no paid calls made.
 Next: A2 — wire `ts/cli.py` `replay`, `baseline` and `serve` to the real implementations.
 Blockers: none. A1 is code-complete but unexercised on real media — no fixture exists yet (P0-3).
+
+## 2026-08-29T20:47Z — iteration 2
+Attempted: A2 — wire `ts/cli.py` `replay`, `baseline` and `serve` to the real implementations.
+Result: `make test` green, 70 -> 84. All three commands are real: tiled 60 s windows shared by
+both systems, result document per system in `--out`, `CacheMiss` exits 3 without a paid call,
+`serve` serves recorded output plus a labelled non-dashboard placeholder (`report/serve.py`).
+Fixed a determinism defect found on the way: `trace_id` came from `uuid4`, so two replays of one
+fixture produced different published documents. Now derived from `(agent, case_id)`.
+Next: RISKS #10 — `python -m ts.cli` fails from a fresh clone without `PYTHONPATH=src`. P0, blocks C2.
+Blockers: none for A2. Cache is still empty, so `make replay` exits 3 by design until B1.
