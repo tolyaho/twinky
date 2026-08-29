@@ -13,3 +13,8 @@ Every scope or technical decision, with a one-line rationale. This file is the r
 | 2026-08-29 | One agent, bounded tools; no web-search or scheduler agent | Neither addresses a demonstrated failure; PDF states purposeful choices beat component count |
 | 2026-08-29 | Dashboard is the landing page | Halves the frontend work and feeds End-to-End Quality instead of competing with it |
 | 2026-08-29 | API-only, `deepseek-v4-flash` | No local compute available; `deepseek-chat` retired 2026-07-24 |
+| 2026-08-29 | Cache key names media by SHA-256; bytes never enter the entry | The cache is committed for keyless reproduction — a 19 MB WAV or 100 KB of base64 per frame does not belong in git |
+| 2026-08-29 | Deepgram via REST + `httpx`, no SDK | `httpx` is already a dependency; an SDK would add a version surface for one POST |
+| 2026-08-29 | Frame prompt written fresh, not ported from `legacy/.../image_annotations/workers.py` | The loop's context guardrail allows only three legacy files; the intent (factual, ≤500 chars, "text unclear" over invention) was already recorded in the enrich docstring |
+| 2026-08-29 | Enrichment writes rows without `id`; the replay loader derives them | One implementation of the id rule, so the writer and reader cannot drift; `EventIndex` already rejects duplicates |
+| 2026-08-29 | Deepgram `utterances` preferred, word-grouping only as fallback | Deepgram's own final segmentation beats a hand-tuned pause threshold, and the fallback keeps enrichment working if the flag is ever dropped |
