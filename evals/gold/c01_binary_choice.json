@@ -1,0 +1,33 @@
+{
+ "case_id": "c01_binary_choice",
+ "fixture": "sample",
+ "window_ms": [
+  1756399998000,
+  1756400010000
+ ],
+ "gold_signals": [
+  {
+   "type": "audience_answer",
+   "trigger_event_id": "tr_0001",
+   "relevant_message_ids": [
+    "msg_0001",
+    "msg_0002",
+    "msg_0003",
+    "msg_0004",
+    "msg_0005",
+    "msg_0006",
+    "msg_0007",
+    "msg_0008",
+    "msg_0009",
+    "msg_0010",
+    "msg_0011",
+    "msg_0012"
+   ],
+   "distribution": {
+    "\u043b\u0435\u0441": 0.6,
+    "\u0431\u0430\u0437\u0430": 0.4
+   }
+  }
+ ],
+ "must_abstain": false
+}

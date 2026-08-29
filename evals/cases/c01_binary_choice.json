@@ -1,0 +1,10 @@
+{
+ "case_id": "c01_binary_choice",
+ "fixture": "sample",
+ "fixture_kind": "synthetic_scaffold",
+ "window_ms": [
+  1756399998000,
+  1756400010000
+ ],
+ "description": "Streamer asks a binary question aloud; chat answers with short words. Tests the audience_answer card and trigger linking."
+}

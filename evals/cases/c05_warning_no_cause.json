@@ -1,0 +1,10 @@
+{
+ "case_id": "c05_warning_no_cause",
+ "fixture": "sample",
+ "fixture_kind": "synthetic_scaffold",
+ "window_ms": [
+  1756400018000,
+  1756400024000
+ ],
+ "description": "Chat warns about an overlay covering the minimap. Nothing in speech explains it. The system MUST return trigger unknown rather than invent a cause."
+}

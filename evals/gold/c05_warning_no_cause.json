@@ -1,0 +1,23 @@
+{
+ "case_id": "c05_warning_no_cause",
+ "fixture": "sample",
+ "window_ms": [
+  1756400018000,
+  1756400024000
+ ],
+ "gold_signals": [
+  {
+   "type": "warning",
+   "trigger_event_id": "unknown",
+   "relevant_message_ids": [
+    "msg_0027",
+    "msg_0028",
+    "msg_0029",
+    "msg_0030",
+    "msg_0031",
+    "msg_0032"
+   ]
+  }
+ ],
+ "must_abstain": false
+}
