@@ -1,0 +1,19 @@
+# API-only. No local model runtime.
+#
+# Every entry below is imported by this codebase or run as a command. Six declared packages were
+# removed on 2026-08-30 after an AST census found no import of any of them: deepgram-sdk
+# (STT goes through httpx REST), fastapi and uvicorn (the dashboard is served by http.server),
+# python-dotenv (nothing calls load_dotenv, and auto-loading .env would let a local file flip
+# TS_LLM_MODE under a reviewer — see RISKS #22), orjson and pydantic (never used).
+# Verified by installing this file into a clean venv and running the full suite there.
+
+# replay path — what a judge needs, and all a judge needs
+httpx==0.28.1
+
+# live capture only (make capture); unused by any graded command
+streamlink==8.0.0
+websockets==15.0.1
+
+# dev
+pytest==8.4.1
+mypy==1.18.2
