@@ -389,3 +389,19 @@ written. Verified end to end from /tmp: setup, test, eval, inspect, baseline, re
 all with every credential unset and 0 API calls.
 Next: P5 remainder — RISKS.md review pass and build/open the archive. Then P6 video assets.
 Blockers: none. Cost $0.39 of $5.00.
+
+## 2026-08-30T14:35Z — iteration 27
+Attempted: P5 remainder — RISKS.md review pass, archive built and opened, disclosure checked.
+Result: `make test` green, 334. Reviewed by executing claims, not re-reading them. Closed #2
+(four fixtures), #12 (eleven frozen cases), #20 (33 trajectories), #21 (recorder run four times:
+47.6 min audio, 3863 messages, 72 frames), #5 (vision model called 76 times, defaulted to the
+recorded model), #35 (scanner placeholders). Rewrote the critical-path header, which still said
+no fixture existed. Opened #36 gold labels unconfirmed, #37 repo private so judges cannot access
+it, #38 the agent losing the headline metric, #39 the agent abstaining without checking frames,
+#40 and #41 for the gate defects fixed last iteration. Two stale duplicates removed.
+Archive: `make archive` added so packaging is reproducible rather than ad hoc — it zips HEAD
+(never the working tree, which holds `.env` and raw media), unzips it and scans the result.
+Verified by opening it: 524 files, 1.9 MB, no `.env`, no salt, no raw media, scan clean, and
+from the extracted zip `make test` 334 passed and `make eval` reproduced at 37 hits / 0 misses.
+Next: P6 — video shot list and a clean `make demo` walkthrough. P4 dashboard editorial after.
+Blockers: none. Cost unchanged at $0.39 of $5.00 — this iteration spent nothing.
