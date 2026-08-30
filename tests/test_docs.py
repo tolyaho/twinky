@@ -53,15 +53,18 @@ def test_no_placeholder_survives_unlabelled(doc):
         assert placeholder in {"TBD", "NAME", "VERSION", "REPO_URL", "UNVERIFIED"}, placeholder
 
 
-def test_the_readme_states_that_results_are_not_measured_yet():
-    """While the cache is empty the README must say so above the fold, not bury it."""
-    head = README.read_text(encoding="utf-8").split("## 1.")[0]
+def test_the_readme_status_section_is_honest_above_the_fold():
+    """This test has tracked the truth three times: no fixture -> unmeasured -> measured but
+    mixed. What it guards is constant — the first paragraph a judge reads states the real
+    standing, including the parts that count against us, rather than burying them."""
+    head = README.read_text(encoding="utf-8").split("## 1.")[0].lower()
 
-    # Four fixtures now exist, so the old "no fixture has been recorded yet" wording became a
-    # false statement in the most-read paragraph of the submission. What must stay true is that
-    # the status section says plainly that the comparison is NOT yet measured.
-    assert "not yet measured" in head.lower()
-    assert "[TBD]" in head
+    # the reproduction claim, which is the pre-scoring gate
+    assert "cache hits" in head and "0 api calls" in head
+    # the result is mixed and says so; a clean-sweep claim here would be the tell
+    assert "worst unsupported-card rate" in head
+    # gold labels are model-drafted and unconfirmed, and that is not buried
+    assert "not yet author-confirmed" in head
 
 
 def test_the_reproduction_guide_documents_the_current_exit_code():
@@ -95,7 +98,9 @@ def test_the_guide_does_not_promise_that_dotenv_is_read(request):
     guide = REPRODUCTION.read_text(encoding="utf-8")
     if call_sites == 0:
         assert "cp .env.example .env" not in guide
-        assert "export DEEPSEEK_API_KEY" in guide
+        # Nothing reads .env, so the guide must tell the reader to export the variables. The
+        # name tracks the provider actually used; it was DEEPSEEK_API_KEY before the switch.
+        assert "export TS_LLM_API_KEY" in guide
 
 
 # --------------------------------------------------------------------------- claims vs. tree

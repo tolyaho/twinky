@@ -10,22 +10,18 @@ caused it, and shows the evidence.
 
 ## Status — read this first
 
-Four fixtures have been captured from live broadcasts and enriched, and eleven evaluation cases
-are frozen against them. **The comparison is not yet measured, so every number below is `[TBD]`.**
+Four fixtures captured from live broadcasts, eleven frozen evaluation cases, and one measured
+end-to-end comparison. `make eval` reproduces every number below from the committed cache in
+**79 ms, 48 cache hits, 0 API calls**, verified with every credential unset.
 
-The first measured run was discarded rather than reported. The baseline had been handed the
-agent's tool-calling system prompt; having no tools it replied `{"action": "call_tools", ...}`,
-which the parser turned into an empty card list, so the baseline scored zero across all eleven
-cases and there was nothing to compare the agent against. The prompts are repaired and share one
-card contract verbatim; the eval is being re-recorded. `make eval` now prints a
-**BROKEN — NOT A RESULT** banner and exits `5` if any system emits no cards at all, because the
-failure it hides looks exactly like a result.
+**The result is mixed and reported as such.** The agent doubles the baseline's signal recall and
+is the only system that ever names a correct cause; it also has the worst unsupported-card rate
+of the three. Neither prompt was edited after the numbers were seen — see
+`docs/IMPROVEMENT_CHANGELOG.md` for the full account, including the run that was discarded and
+why.
 
-Until the re-record lands, `make eval` exits `3` on a cache miss — replay refuses to silently
-call an API, so a run either reproduces the recorded result exactly or fails loudly. See
-`RISKS.md` for what is open.
-
-Nothing in this repository states a number that was not measured.
+Nothing in this repository states a number that was not measured. Gold labels are model-drafted
+and not yet author-confirmed (§6).
 
 ---
 
@@ -59,7 +55,10 @@ A chat-only run exists as a diagnostic ablation (`--chat-only`), never as the he
 Comparing a multimodal agent against a chat-only prompt would measure the value of giving the
 system more data, not the value of the agentic workflow.
 
-Baseline results: `[TBD]` — see `evidence/report.md` once the record phase has run.
+Baseline results, 11 cases: **20 cards, trigger accuracy 0.000, unmatched 0.950, unsupported
+0.600, recall 0.091.** It attributes to speech readily — fourteen of twenty cards name a
+transcript segment — but nine are rejected on `E_TRIGGER_LATE`: seeing the window flat, it picks
+a plausible line without checking that the cause precedes the effect.
 
 ## 4. Final agent workflow
 
@@ -91,8 +90,8 @@ Full diagram and node status: `docs/ARCHITECTURE.md`. Every choice with its rati
 | Replay + response cache | Live streams are not reproducible and judges have no API keys | yes |
 | Summary hierarchy (1m/5m/30m/2h) | A long stream does not fit one context window | **no** |
 
-The summary hierarchy is a real part of the product thesis and is not implemented. Fixtures are
-ten minutes and analysis windows are sixty seconds, so nothing in the evaluation exercises it.
+The summary hierarchy is a real part of the product thesis and is not implemented. Fixtures run
+2–12 minutes and analysis windows are sixty seconds, so nothing in the evaluation exercises it.
 It is listed as a named gap rather than left out, because leaving it out would make the design
 look smaller than it is and listing it unmarked would claim work that does not exist.
 
@@ -109,7 +108,7 @@ Two primary metrics, chosen so a reader understands them in five seconds:
 - **Trigger accuracy** — of the cards that *match a gold signal*, the fraction naming the correct
   causing event, *or correctly returning `unknown`* where the fixture has no supported cause.
   Needs gold labels. The denominator is matched cards rather than every card emitted, because
-  gold is not exhaustive on twelve cases and a real signal nobody labelled would otherwise score
+  gold is not exhaustive on eleven cases and a real signal nobody labelled would otherwise score
   as a wrong trigger. The cost of that choice is that noise cannot lower it, so it is always
   reported beside **unmatched rate** — the fraction of emitted cards matching no gold signal.
   Measured on a probe: one correct card plus nine hallucinations still reports trigger accuracy
@@ -128,25 +127,40 @@ captures from four broadcasts**, including all three the product is designed to 
 with no provable cause, sarcasm, and abstention. Across 12 gold signals: 4 frame triggers,
 2 speech triggers, 5 `unknown`, 1 abstention.
 
-**Gold labels were drafted with model assistance from the captured fixtures and reviewed by the
-author. Draft status per case is tracked in `evals/REVIEW_ME.md`.** Every gold file carries a
-`"reviewed"` flag. At the time of writing every case is still `reviewed: false` — the labels
-have not yet been confirmed by a human, and this sentence stays here until they are. The labels
+**Gold labels were drafted with model assistance from the captured fixtures. Per-case review
+status is tracked in `evals/REVIEW_ME.md`, and at the time of writing all eleven are still
+`"reviewed": false` — no human has confirmed them.** Saying they were "reviewed by the author"
+would be the easy sentence and it would not be true, so it is not written here; the flag in each
+gold file is the source of truth and `REVIEW_ME.md` is a ten-minute pass built to change it. The labels
 are not hand-typed: every id is resolved from the fixture, and `tests/test_frozen_cases.py`
 pushes each gold signal through the real provenance gate, because a gold label that cannot pass
 the gate scores every correct card as a silent miss.
 
 ## 7. Results and evidence
 
-`[TBD]` — the record phase has not run. When it has:
+Eleven cases, four broadcasts, one run, no tuning after the fact.
+
+| system | cards | trigger accuracy | unmatched | unsupported | recall |
+|---|---:|---:|---:|---:|---:|
+| **agent** | 23 | **0.500** | 0.913 | 0.739 | **0.182** |
+| baseline — single prompt, same events | 20 | 0.000 | 0.950 | **0.600** | 0.091 |
+| ablation — chat only, diagnostic | 25 | 1.000¹ | 0.960 | **0.280** | 0.091 |
+
+¹ One matched card out of twenty-five. Meaningless alone, which is why `unmatched` sits beside
+it — this is the degenerate case that metric exists to expose.
+
+The agent wins grounding and loses restraint. It is the only system that names a correct cause,
+at double the baseline's recall, and it makes more unsupported claims doing it. The chat-only
+ablation wins the headline metric by having nothing to attribute to, so it abstains — see the
+hot take in §11.
 
 | artifact | what it holds |
 |---|---|
+| `evidence/report.md` | the table above plus the provenance of every fixture behind it |
 | `evidence/comparison.csv` | one row per case per system |
-| `evidence/report.md` | aggregate table plus the provenance of every fixture behind it |
 | `evidence/predictions.json` | raw predictions, gate decisions and trace id for every case |
-| `evidence/raw-results/` | the full per-window run documents |
-| `trajectories/` | agent trajectories, written as the work happens |
+| `trajectories/product-agent/` | one trajectory per system per case, written as the run happens |
+| `docs/IMPROVEMENT_CHANGELOG.md` | every repair with its measured before/after, and the discarded run |
 
 ## 8. Improvement changelog
 
@@ -166,7 +180,9 @@ API keys**, from the committed content-addressed response cache.
   `gpt-4.1-mini`; speech from Deepgram Nova-3 (`nova-3-general`). Both are record-mode only.
   These are the models the committed cache was recorded with, and they are the defaults in code,
   so a clone with no environment reproduces every number.
-- **In building it:** disclosure table `[TBD]` — see `trajectories/README.md`.
+- **In building it:** Claude Code on Claude Opus 5, run as a scheduled loop that took one
+  ladder item per iteration. Full disclosure table, method and the defects the sessions
+  found: `trajectories/coding-agents/README.md`.
 
 ## 11. Known limitations, main failure mode, hot take
 
@@ -182,21 +198,46 @@ done here — the frozen metric definition says "does not appear verbatim", and 
 after the definition was published would make the reported numbers incomparable to the metric
 they claim to be. It is recorded in `RISKS.md` #28 instead.
 
-**Main failure mode.** A card that attaches to nothing — the model naming a plausible cause it
-cannot support. The provenance gate exists specifically to catch this, and the unsupported-card
-rate exists specifically to measure whether it does.
+**Main failure mode, measured.** The agent names a chat message as the cause of the chat it is
+explaining. Fourteen of its twenty-three cards set `trigger.event_id` to a chat UUID and eight
+are rejected on `E_CIRCULAR_EVIDENCE` — the largest single source of its unsupported rate.
 
-**Hot take.** The honest objection, raised by the team itself in Oct 2025, is that top streamers
-do not read chat and do not want a tool that reads it for them. That is right, and it is not what
-this is. The pitch is *recover what you are structurally unable to see, and what the platform is
-about to delete.* A streamer who ignores chat live still wants the unanswered-question list and
-the clip candidates afterwards. Livestreaming is the only creator medium whose artifact is
-designed to evaporate, and the second half of this product is memory.
+The sharpest instance is `c01_word_puzzle_amethyst`: the screen shows `GUESS THE WORD!` with
+`ame_______` and chat answers *amethyst / American / amendment*. The agent called
+`group_repeated` and `get_transcript_window`, found no speech, and returned a `none` card reading
+*"no clear speech or on-screen content detected"* — **without ever calling `get_frame_captions`**.
+It declared the screen empty without looking at it, on the one case where the screen is the only
+possible cause. The trajectory shows this step by step. The fix is obvious and was deliberately
+not applied: changing the prompt after seeing the score is tuning, and it would invalidate this
+comparison.
+
+The baseline fails differently — nine of twenty cards rejected on `E_TRIGGER_LATE`, naming a
+spoken line that occurs *after* the messages it supposedly caused.
+
+**Hot take.** The evaluation produced a result that argues against the product, and it is the
+most interesting number here: **the chat-only ablation — the system with the least information —
+won the headline metric**, 0.280 unsupported against the agent's 0.739. It won by abstaining.
+With no transcript and no captions it had no candidate causes to name, so it correctly returned
+`unknown` eighteen times out of twenty-five, and an abstention is always gate-clean.
+
+So an unsupported-card rate cannot be read alone: it is minimised by saying nothing. That is not
+a flaw in the metric so much as the shape of the problem. Grounding is not summarization with a
+better prompt; it is retrieval and proof, where the honest answer is often *"I cannot show you
+the cause."* The agent is the only system here that named a correct cause at all, and it paid for
+that by being wrong more often. Moving recall without buying it in unsupported claims is the
+whole game, and this run says we have not won it yet.
+
+The older objection still stands and is worth stating: top streamers do not read chat and do not
+want a tool that reads it for them. That is right, and it is not what this is. The pitch is
+*recover what you are structurally unable to see, and what the platform is about to delete.*
+Livestreaming is the only creator medium whose artifact is designed to evaporate, and the second
+half of this product is memory.
 
 ## 12. Video and trajectories
 
-- Video: `[TBD]`
-- Trajectories: `trajectories/`
+- Video: `[TBD]` — not yet recorded. This is the one deliverable below that does not exist.
+- Trajectories: `trajectories/` — **33 real runs**, 11 frozen cases × 3 systems, written
+  during the measured run and reproducible from the cache.
 
 ---
 

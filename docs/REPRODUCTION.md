@@ -73,8 +73,8 @@ Prints event counts, span, and the reducer's compression ratio. No model call.
 make baseline FIXTURE=evals/fixtures/[NAME]
 ```
 
-Writes `evidence/raw-results/[NAME].baseline.json`. Runtime `[TBD]`. Cost **$0.00** — every
-response comes from the cache.
+Writes `evidence/raw-results/[NAME].baseline.json`. Runtime **~40 ms** on a 12-minute fixture.
+Cost **$0.00** — every response comes from the cache.
 
 Add `make ablation FIXTURE=...` for the chat-only diagnostic. It is not the headline baseline.
 
@@ -85,7 +85,7 @@ make replay FIXTURE=evals/fixtures/[NAME]
 ```
 
 Writes `evidence/raw-results/[NAME].agent.json` and a trajectory per window under
-`trajectories/product-agent/`. Runtime `[TBD]`. Cost **$0.00**.
+`trajectories/product-agent/`. Runtime **~40 ms** on a 12-minute fixture. Cost **$0.00**.
 
 ## 7. Evaluation
 
@@ -95,6 +95,10 @@ make eval
 
 Writes `evidence/comparison.csv`, `evidence/report.md` and `evidence/predictions.json`.
 Reproduces the results table in the README exactly.
+
+Measured 2026-08-30: **79 ms, 48 cache hits, 0 misses, $0.00**, run with every credential unset.
+Expected final line: `cache: {'hits': 48, 'misses': 0}  ->  evidence`. Add `--ablation` to
+include the chat-only diagnostic; it is cached too and adds no calls.
 
 `report.md` carries a **NOT A REPORTED RESULT** banner whenever any case ran against a fixture
 that was not captured from a real broadcast, and lists the provenance of every fixture behind the
@@ -134,11 +138,12 @@ ordered explicitly by `(ts_ms, event_id)`.
 
 ## 10. Optional — record a fixture from a live stream
 
-Needs `DEEPSEEK_API_KEY`, `DEEPGRAM_API_KEY`, `ffmpeg`, and a channel that is live right now.
+Needs `TS_LLM_API_KEY` (an OpenAI key), `DEEPGRAM_API_KEY`, `ffmpeg`, and a channel that is live
+right now.
 Non-deterministic by nature, and **not** used for any reported result.
 
 ```bash
-export DEEPSEEK_API_KEY=... DEEPGRAM_API_KEY=...
+export TS_LLM_API_KEY=... DEEPGRAM_API_KEY=...
 make capture CHANNEL=[NAME] MINUTES=10      # no keys — raw bytes only
 make enrich  FIXTURE=evals/fixtures/[NAME]  # keys; transcription and frame captions
 ```
@@ -151,7 +156,8 @@ run into live mode. See `RISKS.md` #22.
 
 Capture and enrichment are separate on purpose: capture is time-critical and free, enrichment
 runs later from the recorded bytes and is the only step that spends money. Cost per 10-minute
-segment: `[TBD]`. Running totals are in `COST_LEDGER.md`.
+segment: **~$0.056** (measured across 47.6 minutes of audio: $0.205 Deepgram Nova-3 +
+$0.060 for 76 `gpt-4.1-mini` frame captions). Running totals are in `COST_LEDGER.md`.
 
 ## 11. Before archiving
 
@@ -170,4 +176,4 @@ protect a directory that is zipped rather than committed.
 ## 12. Data
 
 `evals/DATA.md` — fixture provenance, permission, pseudonymisation, and the per-case status of
-the 12-case matrix.
+the eleven frozen cases. Gold-label review status per case: `evals/REVIEW_ME.md`.

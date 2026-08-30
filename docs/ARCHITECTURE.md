@@ -42,7 +42,7 @@ Cutting across all of it:
 | Model-call cache — the reproducibility spine | `cache.py` | ✔ three modes; a replay miss raises |
 | Clock abstraction — no wall-clock in a query path | `clock.py` | ✔ |
 | Provider adapters — text, vision, STT behind interfaces | `providers/` | ✔ |
-| Evaluation harness, gold labels, scorer | `evals/` | ✔ harness; 4 of 12 cases |
+| Evaluation harness, gold labels, scorer | `evals/` | ✔ harness; 11 frozen cases on real captures |
 | Secret gate | `scripts/scan_secrets.py` | ✔ |
 
 ## Designed, deliberately not built
@@ -60,7 +60,7 @@ verification stage was added that the original sketch did not have.
 
 **The summary hierarchy — 1m / 5m / 30m / 2h — is NOT built.** It is the answer to "a six-hour
 stream does not fit one context window", and it is genuinely part of the product thesis, but no
-module implements it and no evaluation case needs it: the fixtures are ten minutes and the
+module implements it and no evaluation case needs it: the fixtures run 2–12 minutes and the
 analysis windows are sixty seconds. It stays here as a named gap rather than an implied feature.
 
 **Live capture is demo-only.** The graded path reads a fixture. Live streams are not
