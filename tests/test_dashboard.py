@@ -1349,3 +1349,57 @@ def test_switching_fixture_hides_the_live_block():
     body = js.split("function reset()", 1)[1].split("\nfunction ", 1)[0]
 
     assert "liveBox.hidden = true;" in body
+
+
+# ---------------------------------------------------------------------------- masonry
+# Varied-height rows in flowing columns, but only where the column is genuinely wide. The point
+# is that a row with six groups and a row with one both look deliberate.
+
+def test_masonry_only_where_the_board_is_wide_enough():
+    """In a 600px column two tracks are 290px each — narrower than the quote line they carry.
+    Masonry there costs legibility and buys nothing."""
+    css = _css()
+    wide = css.split("@media (min-width: 1500px)", 1)[1].split("\n}\n", 1)[0]
+
+    assert "columns: 2" in wide
+    assert "break-inside: avoid" in wide, "a row must never be split across columns"
+    assert "columns: 2" not in css.split("@media (min-width: 1500px)", 1)[0]
+
+
+def test_rows_space_themselves_with_margins_not_a_flex_gap():
+    """`gap` does not survive the switch to columns, so the same rows would collide in masonry."""
+    css = _css()
+    rows = css.split("\n.boardrows {", 1)[1].split("}", 1)[0]
+
+    assert "display: block" in rows and "gap:" not in rows
+
+
+def test_a_row_arrives_rather_than_appears():
+    """One motion vocabulary, not two: the same short translate-and-fade the signal cards use."""
+    css = _css()
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert ".brow.in { opacity: 1; transform: none; }" in css
+    assert 'node.classList.add("in")' in js
+
+
+def test_every_row_drawn_is_a_row_made_visible():
+    """Rows start at `opacity: 0`. A row appended without the class is an invisible row, so the
+    orphan block has to be in the same list as the attributed ones."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    body = js.split("function addBoard", 1)[1].split("\nfunction ", 1)[0]
+
+    assert body.count("arriving.push(") == 2, "a node is appended without being made visible"
+    assert "for (const node of arriving)" in body
+
+
+def test_motion_is_dropped_when_the_reader_asked_for_less():
+    css = _css()
+    blocks = [b.split("}\n}", 1)[0]
+              for b in css.split("@media (prefers-reduced-motion: reduce)")[1:]]
+
+    # The global block kills the duration; this one restores the resting state, because a row
+    # that never gets its class would otherwise be an invisible row rather than a still one.
+    assert any("transition-duration: .001ms" in b for b in blocks)
+    assert any(".brow" in b and "opacity: 1" in b for b in blocks), \
+        "reduced motion must not mean an invisible board"

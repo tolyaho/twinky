@@ -826,18 +826,29 @@ html, body.live-page { height: 100%; }
 .middle-tabs .seg { padding: 2px var(--xs); font-size: 12px; }
 
 .boardrows, .signals { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+/* Block flow with margins rather than a flex column with `gap`, because the same rows become
+   masonry columns at wide viewports and `gap` does not survive that switch. */
 .boardrows {
-  display: flex; flex-direction: column; gap: var(--sm);
+  display: block;
   padding: var(--sm) var(--base);
   scrollbar-width: thin; scrollbar-color: var(--hairline-strong) transparent;
 }
 
 .brow {
+  margin-bottom: var(--sm);
   border: 1px solid var(--hairline); border-radius: var(--r-lg);
   background: var(--surface-card);
   padding: var(--sm) var(--base) var(--base);
   cursor: pointer;
-  transition: border-color .18s ease, box-shadow .18s ease;
+  /* The board feels alive during playback because rows arrive rather than appear. Same short
+     translate-and-fade the signal cards already use — one motion vocabulary, not two. */
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .28s ease, transform .28s ease,
+              border-color .18s ease, box-shadow .18s ease;
+}
+.brow.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .brow { opacity: 1; transform: none; transition: border-color .18s ease; }
 }
 .brow:hover { border-color: var(--hairline-strong); box-shadow: var(--shadow-hover); }
 .brow-h { display: flex; align-items: center; gap: var(--xs); }
@@ -989,4 +1000,19 @@ html, body.live-page { height: 100%; }
 .nextclose-fill {
   display: block; height: 100%; width: 0;
   background: var(--muted); transition: width .4s linear;
+}
+
+
+/* ---------------------------------------------------------------------- masonry
+   Only where the board is genuinely wide. Varied-height rows in flowing columns stop a row with
+   six groups and a row with one from looking like a mistake, and `break-inside: avoid` keeps a
+   row whole. Rank still reads top-left first: CSS columns fill top-to-bottom, so the strongest
+   row is the first thing under the heading, exactly as in one column.
+
+   Not applied below 1500px. In a 600px column two tracks are 290px each, which is narrower than
+   the quote line they have to carry — masonry there costs legibility and buys nothing. */
+@media (min-width: 1500px) {
+  .boardrows { columns: 2; column-gap: var(--sm); }
+  .brow { break-inside: avoid; }
+  .livebox { margin-bottom: 0; }
 }

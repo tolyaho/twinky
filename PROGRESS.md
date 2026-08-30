@@ -1125,3 +1125,45 @@ Result: `make test` 498 → **506 passed**. 8 new tests, five rows in DECISIONS.
 still the sixteen from DESIGN.md. Cost unchanged at $0.42.
 Next: chatter stats surfaced properly (§4) and the masonry board (§6).
 Blockers: none.
+
+## Iteration 54 — 2026-08-31 — FEATURES_V2 §4 checked, §6 masonry shipped
+
+Attempted: the last two of the ship-today set.
+
+**§4, chatter statistics — already done.** Checked against the spec rather than rebuilt: unique
+chatters, new chatters relative to who spoke before, messages per chatter, top-10% concentration,
+the 10s rate sparkline, peak burst and its velocity all landed in the rail in iteration 50.
+Measured on marlon w6 to confirm: 140 unique, 140 new, 1.69 per chatter, 0.291 concentration,
+peak 75 per 10s = 7.5/s, rate `[8, 26, 29, 40, 75, 59]`. Nothing in §4 is missing, and the
+things it explicitly rules out — emote leaderboards, top-chatter rankings, sentiment lines, word
+clouds — are still absent.
+
+**§6, masonry and the entry animation — shipped.** Rows now flow in two columns above 1500px
+with `break-inside: avoid`, and stay in one column below it. That breakpoint is the decision: in
+the 600px board two tracks would be 290px each, narrower than the quote line each row carries,
+so masonry there costs legibility and buys nothing. Rank survives because CSS columns fill
+top-to-bottom — the strongest row is still the first thing under the heading.
+
+`.boardrows` moved from a flex column with `gap` to block flow with margins, because `gap` does
+not survive the switch to columns and the rows would have collided the moment the viewport
+crossed the breakpoint.
+
+Rows arrive with the same short translate-and-fade the signal cards already use — one motion
+vocabulary, not two. That introduced a real failure mode and a guard for it: rows start at
+`opacity: 0`, so a node appended without its class is an invisible node. `test_every_row_drawn_is
+_a_row_made_visible` asserts the orphan block is made visible in the same pass as the attributed
+rows, and the reduced-motion block now restores the resting state rather than only zeroing the
+duration — the existing global rule kills transitions, which would have left an unclassed row
+invisible rather than still.
+
+Verified on a running server: the served stylesheet carries all four rules and `/` returns 200.
+
+Result: `make test` 506 → **511 passed**. 5 new tests, six rows in DECISIONS.md. No new hex —
+still the sixteen from DESIGN.md. Cost unchanged at $0.42.
+
+The FEATURES_V2 ship-today set is complete: grouping arm B, questions panel, chatter stats,
+masonry.
+Next: FIX_GROUNDING_AND_UI.md §1–2 — putting the window's transcript segments and frame captions
+into the model's turn with their ids — which the plan rates above D and E now that A–C have
+landed.
+Blockers: none.

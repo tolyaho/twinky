@@ -215,8 +215,11 @@ function addBoard(event) {
   clear(rowsEl);
 
   const origin = (data.window_ms || [0])[0];
-  for (const row of rows) rowsEl.appendChild(boardRow(row, origin));
-  if (orphans.length) rowsEl.appendChild(orphanBlock(orphans));
+  const arriving = [];
+  for (const row of rows) arriving.push(rowsEl.appendChild(boardRow(row, origin)));
+  if (orphans.length) arriving.push(rowsEl.appendChild(orphanBlock(orphans)));
+  /* One frame later, so the transition has a start state to move from. */
+  requestAnimationFrame(() => { for (const node of arriving) node.classList.add("in"); });
   if (!rows.length && !orphans.length) {
     rowsEl.appendChild(el("p", "empty", "Nothing in this window grouped. Every message was a one-off."));
   }
