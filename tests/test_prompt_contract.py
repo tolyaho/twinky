@@ -206,3 +206,28 @@ def test_the_default_model_is_the_one_the_cache_was_recorded_with():
     assert agent.DEFAULT_TEXT_MODEL in recorded, (
         f"default {agent.DEFAULT_TEXT_MODEL!r} was never recorded; cache holds {recorded}")
     assert single_prompt.DEFAULT_TEXT_MODEL == agent.DEFAULT_TEXT_MODEL
+
+
+# --------------------------------------------------------------- malformed replies
+@pytest.mark.parametrize("junk", [
+    ["a bare string"],
+    [None],
+    ["text", {"type": "reaction"}],
+    "not even a list",
+    [{"type": "not_a_real_type"}],
+])
+def test_a_malformed_cards_payload_never_crashes_the_run(junk):
+    """A model answering {"cards": ["some text"]} used to raise AttributeError on str.get and
+    kill the whole record mid-run, after every earlier window had already been paid for. A bad
+    answer is a bad answer, not a crash."""
+    kept, dropped = agent.cap_cards(junk)
+
+    assert isinstance(kept, list) and isinstance(dropped, int)
+    assert all(isinstance(c, dict) for c in kept)
+
+
+def test_the_cap_still_applies_to_well_formed_cards():
+    kept, dropped = agent.cap_cards([{"type": "reaction"}] * 10)
+
+    assert len(kept) == agent.MAX_CARDS
+    assert dropped == 10 - agent.MAX_CARDS

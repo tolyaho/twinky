@@ -40,8 +40,15 @@ MAX_TOOL_CALLS_PER_STEP = 4
 
 
 def cap_cards(raw):
-    """Drop unknown types, then apply the card cap. Returns (kept, dropped)."""
-    typed = [c for c in (raw or []) if c.get("type") in CARD_TYPES]
+    """Drop anything that is not a card, then apply the card cap. Returns (kept, dropped).
+
+    The isinstance check is load-bearing: a model that answers `{"cards": ["some text"]}` used to
+    crash the whole run here with AttributeError on `str.get`, mid-record, after the paid calls
+    for every earlier window had already been made. A malformed reply is a bad answer, not a
+    crash — the baseline already recorded it as a parse failure and the agent did not.
+    """
+    typed = [c for c in (raw or [])
+             if isinstance(c, dict) and c.get("type") in CARD_TYPES]
     return typed[:MAX_CARDS], max(0, len(typed) - MAX_CARDS)
 
 TOOLS_DOC = """Available tools (all take start_ms and end_ms; windows are capped):

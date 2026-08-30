@@ -113,7 +113,7 @@ def _tokens(entry: Dict[str, Any]) -> set:
     the trigger quote is verbatim transcript, and neither was authored by the summariser.
     """
     words = normalize(str((entry.get("trigger") or {}).get("quote") or "")).split()
-    for key in (entry.get("distribution") or {}):
+    for key in _distribution_of(entry):
         words += normalize(str(key)).split()
     return {w for w in words
             if len(w) >= THEME_MIN_TOKEN_LEN and not w.isdigit() and w not in STOPWORDS}
@@ -169,6 +169,18 @@ def build(cards: List[Dict[str, Any]], meta: Dict[str, Any],
 
 
 # --------------------------------------------------------------------------- rendering
+def _distribution_of(entry: Dict[str, Any]) -> Dict[str, Any]:
+    """A distribution is a mapping of answer -> share. Anything else is not one.
+
+    Observed in a recorded run: the model answered `"distribution": "single mention"`, a bare
+    string, and `.values()` on it crashed the whole debrief after the paid calls were already
+    made. The schema is a request, not a guarantee — every consumer of model output has to treat
+    the shape as untrusted, exactly as the provenance gate already treats the ids.
+    """
+    value = entry.get("distribution")
+    return value if isinstance(value, dict) else {}
+
+
 def _distribution_line(distribution: Dict[str, Any]) -> str:
     total = sum(v for v in distribution.values() if isinstance(v, (int, float)))
     parts = []
@@ -183,8 +195,8 @@ def _render_entry(entry: Dict[str, Any]) -> List[str]:
     approx = " *(window start, not the exact moment)*" if entry["ts_source"] == "window" else ""
     lines = [f"### `{at}` {entry['title'] or entry['type']}{approx}"]
 
-    if entry.get("distribution"):
-        lines.append(f"- {_distribution_line(entry['distribution'])}")
+    if _distribution_of(entry):
+        lines.append(f"- {_distribution_line(_distribution_of(entry))}")
 
     trigger = entry["trigger"]
     event_id = trigger.get("event_id") or UNKNOWN

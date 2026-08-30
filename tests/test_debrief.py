@@ -188,3 +188,29 @@ def test_debrief_reads_only_verified_cards(tmp_path, monkeypatch):
 
     md = (tmp_path / "out" / "sample.debrief.md").read_text(encoding="utf-8")
     assert "sig_bad" not in md
+
+
+def test_a_string_distribution_does_not_crash_the_debrief():
+    """Observed in a recorded run: the model answered `"distribution": "single mention"` rather
+    than a mapping, and `.values()` on it killed the debrief after the paid calls were already
+    made. Model output is untrusted in shape as well as in content."""
+    from ts.report import debrief as d
+
+    for junk in ("single mention", ["a", "b"], 7, None):
+        assert d._distribution_of({"distribution": junk}) == {}
+
+    assert d._distribution_of({"distribution": {"amethyst": 0.6}}) == {"amethyst": 0.6}
+
+
+def test_a_card_with_a_string_distribution_still_renders():
+    from ts.report import debrief as d
+
+    card = {"signal_id": "s1", "type": "reaction", "title": "chat reacts",
+            "distribution": "multiple viewers", "evidence": ["m1"],
+            "trigger": {"kind": "screen", "event_id": "frm_1", "quote": ""},
+            "window_ms": [0, 60000], "status": "verified"}
+
+    out = d.render_markdown(d.build([card], {"fixture_id": "f"}, None))
+
+    assert "chat reacts" in out
+    assert "multiple viewers" not in out, "a non-mapping must not be printed as a distribution"
