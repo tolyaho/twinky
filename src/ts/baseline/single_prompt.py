@@ -22,11 +22,27 @@ from ..cache import ResponseCache, request_hash
 from ..events import EventIndex
 from ..provenance import apply_gate
 from ..providers.base import build_request, extract_content
-from ..workflow.agent import SYSTEM, cap_cards
+from ..workflow.agent import CARD_CONTRACT, INTRO, cap_cards
 from ..workflow.trace import Trace
 
 
 DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "deepseek-v4-flash"
+
+# The baseline used to be handed the AGENT's system prompt, which specifies a tool-calling
+# protocol. Having no tools, the model did the only correct thing and replied
+# {"action": "call_tools", ...}; `.get("cards", [])` then returned [] and the run reported a
+# clean zero. Across eleven cases the baseline emitted no cards at all and the eval printed it
+# as a result, so there was nothing to compare the agent against.
+#
+# The contract below is byte-identical to the agent's - same schema, same rules, same cap. The
+# only difference is how an answer is reached, which is the difference under measurement.
+SYSTEM = INTRO + """
+
+You see the whole window at once. There are no tools and no further steps.
+Reply with ONLY a JSON object: {"cards": [...]}
+
+Each line of the input is one event, tagged CHAT, SPEECH or SCREEN, and carries the id you must
+cite for it. """ + CARD_CONTRACT
 
 
 def render_events(index: EventIndex, start_ms: int, end_ms: int, chat_only: bool = False) -> str:
@@ -63,13 +79,22 @@ def run(index: EventIndex, cache: ResponseCache, case_id: str, start_ms: int, en
     trace.model_call(model, request_hash(req), cached=cache.hits > before)
 
     dropped = 0
+    parse_error = None
+    cards: List[Dict[str, Any]] = []
     try:
+        payload = json.loads(extract_content(resp))
+        if not isinstance(payload, dict) or "cards" not in payload:
+            # A reply that parses but carries no `cards` key is a protocol failure, not an empty
+            # result. Treating the two the same is what let eleven cases report a clean zero.
+            shape = (",".join(sorted(payload)[:4]) if isinstance(payload, dict)
+                     else type(payload).__name__)
+            raise ValueError(f"reply has no 'cards' key (got: {shape})")
         # The same cap the agent gets. The eval promises both systems an identical output schema
         # and card cap; enforcing it in one place is what makes that true rather than hoped for.
-        cards, dropped = cap_cards(json.loads(extract_content(resp)).get("cards", []))
+        cards, dropped = cap_cards(payload.get("cards") or [])
     except Exception as exc:  # noqa: BLE001
+        parse_error = str(exc)
         trace.retry(f"unparseable response: {exc}", 1)
-        cards: List[Dict[str, Any]] = []
 
     for i, c in enumerate(cards):
         c.setdefault("signal_id", f"sig_{case_id}_b{i:02d}")
@@ -81,7 +106,8 @@ def run(index: EventIndex, cache: ResponseCache, case_id: str, start_ms: int, en
         trace.gate(c["signal_id"], c["gate"]["ok"], c["gate"]["violations"])
     out["trace_id"] = trace.trace_id
     out["cards_dropped_by_cap"] = dropped
+    out["parse_error"] = parse_error
     trace.result({"verified": len(out["verified"]), "rejected": len(out["rejected"]),
-                  "cards_dropped_by_cap": dropped})
+                  "cards_dropped_by_cap": dropped, "parse_error": parse_error})
     out["trace_path"] = str(trace.write())
     return out
