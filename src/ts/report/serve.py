@@ -19,11 +19,14 @@ from typing import Any, Dict, List, Optional
 
 from ..ingest.replay import load_fixture, load_meta
 from ..provenance import UNKNOWN
+from .board import board, rail
+from .board import windows as window_tiles
 from .poll import attach_drafts
 
 STATIC = Path(__file__).parent / "static"
 ROUTES = ["/", "/method", "/api/replay", "/api/fixtures",
           "/api/stream?fixture=<id>&system=<agent|baseline>&speed=<1|4|8>",
+          "/api/board?fixture=<id>&window=<n>",
           "/api/live?channel=<name>", "/api/budget", "/philosophy",
           "/static/<file>"]
 
@@ -240,18 +243,39 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
     meta = load_meta(fixture)
     fixture_id = meta.get("fixture_id") or Path(fixture).name
     path = result_path(Path(out_dir), fixture_id, system)
+    recorded: List[Dict[str, Any]] = []
     if path.exists():
         try:
             doc = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             doc = {}
-        for window in doc.get("windows") or []:
+        recorded = list(doc.get("windows") or [])
+        for window in recorded:
             bounds = window.get("window_ms") or [origin, origin]
             at = max(0, bounds[1] - origin)
             for card in window.get("verified") or []:
                 script.append((at, {"kind": "card", "state": _state(card), "card": card}))
             for card in window.get("rejected") or []:
                 script.append((at, {"kind": "card", "state": "rejected", "card": card}))
+
+    # The board and the rail, one per tile, emitted when the tile closes — the same instant the
+    # cards for it arrive, because that is the earliest the window could be described at all.
+    # Computed here rather than in the browser: the client never holds the fixture, and these
+    # numbers have to be identical to what `/api/board` serves for the same window.
+    seen: set = set()
+    for start, end in window_tiles(index):
+        chat_in = index.window(start, end, types=["chat_message"])
+        if not chat_in:
+            continue
+        cards = [c for w in recorded
+                 if start <= ((w.get("window_ms") or [0])[0]) < end
+                 for c in list(w.get("verified") or []) + list(w.get("rejected") or [])]
+        script.append((max(0, end - origin), {
+            "kind": "board",
+            "board": board(index, start, end),
+            "rail": rail(index, start, end, cards=cards, seen_authors=seen),
+        }))
+        seen.update(e.author for e in chat_in)
 
     script.sort(key=lambda s: s[0])
     return script
@@ -431,6 +455,25 @@ class ReplayHandler(BaseHTTPRequestHandler):
 
         if route == "/api/stream":
             self._stream(params)
+            return
+
+        if route == "/api/board":
+            # A window's board and rail without waiting for the stream to reach it. The page does
+            # not need this; a judge reading one window, and the tests, do.
+            target = self._resolve(params)
+            index = load_fixture(target)
+            tiles = window_tiles(index)
+            try:
+                n = int(params.get("window", "0"))
+            except ValueError:
+                n = 0
+            if not tiles or not 0 <= n < len(tiles):
+                self._json(404, {"error": "no such window", "windows": len(tiles)})
+                return
+            start, end = tiles[n]
+            self._json(200, {"fixture": target.name, "window": n, "windows": len(tiles),
+                             "board": board(index, start, end),
+                             "rail": rail(index, start, end)})
             return
 
         if route == "/api/fixtures":

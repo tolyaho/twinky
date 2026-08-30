@@ -631,11 +631,14 @@ html, body.live-page { height: 100%; }
    never this. Measured: getComputedStyle(main section).marginTop === "96px". */
 .live-page main.two-col > section { margin-top: 0; }
 
+/* Three zones, not two columns: the flood on the left, what it means in the middle, and the
+   numbers that explain both on the right. The middle is widest because it is the only one a
+   streamer reads rather than glances at. */
 .live-page main.two-col {
   flex: 1 1 auto; min-height: 0;
-  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr) minmax(0, 3fr);
   gap: var(--sm);
-  max-width: var(--measure); width: 100%; margin: 0 auto;
+  max-width: 1440px; width: 100%; margin: 0 auto;
   padding: 0 var(--lg) var(--sm);
 }
 
@@ -777,9 +780,16 @@ html, body.live-page { height: 100%; }
 .speeds { margin: 0; border-color: var(--hairline-strong); }
 .speeds .seg { padding: var(--xxs) var(--sm); font-size: 13px; }
 
+@media (max-width: 1280px) {
+  /* The rail is the first thing to go: it is the glanceable zone, and the board is not. */
+  .live-page main.two-col { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); }
+  .panel-rail { display: none; }
+}
+
 @media (max-width: 900px) {
   .live-page { height: auto; overflow: visible; }
   .live-page main.two-col { grid-template-columns: minmax(0, 1fr); padding: 0 var(--sm) var(--sm); }
+  .boardrows { max-height: 60vh; }
   .feed { max-height: 44vh; }
   .ticker { flex-direction: column; padding: 0 var(--sm) var(--sm); }
   .counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -805,3 +815,104 @@ html, body.live-page { height: 100%; }
   font-family: var(--ui); font-size: 12px; font-weight: 500; letter-spacing: 0;
 }
 .panel-chat { position: relative; }
+
+
+/* ------------------------------------------------------------------- the board
+   A row is a moment and what followed it. The strength of that link is drawn, not implied:
+   `names it` means the trigger text contains the word chat is typing, `just before` means it was
+   merely the last thing on screen. Both are hairline-quiet — neither is a gate verdict, and
+   nothing here may look like proof. */
+.middle-tabs { margin-left: auto; }
+.middle-tabs .seg { padding: 2px var(--xs); font-size: 12px; }
+
+.boardrows, .signals { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+.boardrows {
+  display: flex; flex-direction: column; gap: var(--sm);
+  padding: var(--sm) var(--base);
+  scrollbar-width: thin; scrollbar-color: var(--hairline-strong) transparent;
+}
+
+.brow {
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  background: var(--surface-card);
+  padding: var(--sm) var(--base) var(--base);
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.brow:hover { border-color: var(--hairline-strong); box-shadow: var(--shadow-hover); }
+.brow-h { display: flex; align-items: center; gap: var(--xs); }
+.brow-kind {
+  font-size: 11px; font-weight: 600; letter-spacing: .96px;
+  text-transform: uppercase; color: var(--muted);
+}
+.brow-at, .brow-n {
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.brow-n { margin-left: auto; color: var(--ink); font-size: 14px; }
+.brow-q {
+  margin: var(--xs) 0 var(--sm);
+  font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--body-strong);
+  border-left: 2px solid var(--hairline-strong); padding-left: var(--sm);
+}
+.brow-orphan { border-style: dashed; }
+
+/* The two link strengths, told apart by weight of line rather than by colour — the palette
+   carries no state colours and adding one for this would break the system. */
+.pill.link-matched { border-color: var(--ink); color: var(--ink); }
+.pill.link-preceding, .pill.link-none { border-color: var(--hairline-strong); color: var(--muted); }
+
+.gline {
+  display: grid; grid-template-columns: minmax(0, 8rem) 1fr auto;
+  align-items: center; gap: var(--xs);
+  padding: var(--xxs) 0;
+}
+.gline-label {
+  font-family: var(--mono); font-size: 13px; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* A proportional bar so 27 and 4 differ at a glance without becoming a chart. */
+.gline-bar { height: 4px; border-radius: var(--r-pill); background: var(--hairline-soft); }
+.gline-fill { display: block; height: 100%; border-radius: var(--r-pill); background: var(--muted-soft); }
+.gline-n {
+  font-family: var(--mono); font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.gline-samples {
+  grid-column: 1 / -1; margin: 0 0 var(--xxs);
+  font-size: 12px; line-height: 1.5; color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Never hide the size of what was discarded: a board showing four rows out of 237 messages
+   reads as the whole window unless it says otherwise. */
+.board-foot {
+  flex: none; margin: 0;
+  padding: var(--xs) var(--base);
+  border-top: 1px solid var(--hairline);
+  background: var(--canvas-soft);
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+}
+
+/* -------------------------------------------------------------------- the rail */
+.panel-rail .rail {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  padding: var(--sm) var(--base);
+  scrollbar-width: thin; scrollbar-color: var(--hairline-strong) transparent;
+}
+.rblock + .rblock { margin-top: var(--base); padding-top: var(--base); border-top: 1px solid var(--hairline); }
+.rblock-t {
+  margin: 0 0 var(--xs);
+  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  color: var(--muted-soft);
+}
+.rstats { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 2px var(--xs); }
+.rstats dt {
+  font-size: 12px; color: var(--body);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rstats dd {
+  margin: 0; font-family: var(--mono); font-size: 12px; color: var(--ink);
+  font-variant-numeric: tabular-nums; text-align: right;
+}
+.spark { display: flex; align-items: flex-end; gap: 2px; height: 34px; }
+.spark-bar { flex: 1 1 0; min-width: 2px; border-radius: 1px 1px 0 0; background: var(--muted-soft); }

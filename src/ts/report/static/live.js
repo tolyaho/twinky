@@ -38,6 +38,8 @@ const state = {
   queue: [],                    /* events that arrived while paused */
   counts: { chat: 0, grounded: 0, abstained: 0, rejected: 0 },
   rows: new Map(),              /* event id -> <li>, for the citation highlight */
+  boardRows: 0,
+  boardSeen: false,
 };
 
 /* ------------------------------------------------------------------ chat column */
@@ -73,8 +75,14 @@ function addMessage(event) {
 /* The one gesture that is the whole argument: when a card lands, the messages it cites light up
    in the flood beside it. This cluster, that cause. */
 function highlightCited(card) {
+  highlightIds(card.evidence || []);
+}
+
+/* Shared with the board, where clicking a row lights up every message behind it — the same
+   gesture, driven by a group's own event ids rather than a card's evidence list. */
+function highlightIds(ids) {
   const rows = [];
-  for (const id of card.evidence || []) {
+  for (const id of ids) {
     const row = state.rows.get(id);
     if (!row) continue;                       /* evicted past the 200-row cap; nothing to show */
     row.classList.add("cited");
@@ -121,6 +129,9 @@ function addCard(event) {
      header read "0" above five visible cards. */
   const shown = (state.counts.grounded || 0) + (state.counts.abstained || 0);
   document.getElementById("sig-n").textContent = String(shown);
+  if (document.getElementById("boardrows").hidden) {
+    document.getElementById("board-n").textContent = String(shown);
+  }
   document.getElementById("sig-split").textContent =
     `${state.counts.grounded || 0} grounded · ${state.counts.abstained || 0} abstained`;
 
@@ -188,10 +199,171 @@ function addCard(event) {
   highlightCited(card);
 }
 
+/* ------------------------------------------------------------------ the board
+   Deterministic and computed on the server: groups of real messages under the moment they
+   followed. A row states the strength of that link and never implies more than it has —
+   `matched` means the trigger text contains the word chat is typing, `preceding` means it was
+   merely the last thing said or shown. Neither went through the provenance gate, because
+   neither claims causation; the gate's own ledger is in the rail. */
+function addBoard(event) {
+  const data = event.board || {};
+  const rows = data.rows || [];
+  const orphans = data.unattributed || [];
+  const rowsEl = document.getElementById("boardrows");
+  clear(rowsEl);
+
+  const origin = (data.window_ms || [0])[0];
+  for (const row of rows) rowsEl.appendChild(boardRow(row, origin));
+  if (orphans.length) rowsEl.appendChild(orphanBlock(orphans));
+  if (!rows.length && !orphans.length) {
+    rowsEl.appendChild(el("p", "empty", "Nothing in this window grouped. Every message was a one-off."));
+  }
+
+  const f = data.footer || {};
+  const foot = document.getElementById("board-foot");
+  foot.hidden = false;
+  foot.textContent = `${f.messages || 0} messages · ${f.rows || 0} rows · `
+    + `${f.singletons || 0} singletons not shown`
+    + (f.rows_hidden ? ` · ${f.rows_hidden} more rows hidden` : "");
+  state.boardRows = rows.length + orphans.length;
+  state.boardSeen = true;
+  if (!document.getElementById("boardrows").hidden) {
+    document.getElementById("board-n").textContent = String(state.boardRows);
+  }
+
+  renderRail(event.rail || {});
+}
+
+function boardRow(row, origin) {
+  const box = el("article", "brow");
+  const t = row.trigger || {};
+  const head = el("header", "brow-h");
+  head.appendChild(el("span", `pill link-${t.link}`, t.link === "matched" ? "names it" : "just before"));
+  head.appendChild(el("span", "brow-kind", t.kind === "speech" ? "you said" : "on screen"));
+  head.appendChild(el("span", "brow-at", `+${clock(t.ts_ms - origin)}`));
+  head.appendChild(el("span", "brow-n", `${row.count}`));
+  box.appendChild(head);
+  box.appendChild(el("p", "brow-q", `“${(t.text || "").trim()}”`));
+
+  const max = Math.max(...row.groups.map((g) => g.count), 1);
+  for (const g of row.groups) box.appendChild(groupLine(g, max));
+  box.addEventListener("click", () => highlightIds(row.groups.flatMap((g) => g.event_ids)));
+  return box;
+}
+
+/* The count carries a proportional bar so 27 and 4 differ at a glance without a chart. */
+function groupLine(g, max) {
+  const line = el("div", "gline");
+  line.appendChild(el("span", "gline-label", g.label));
+  const bar = el("span", "gline-bar");
+  const fill = el("span", "gline-fill");
+  fill.style.width = `${Math.max(4, Math.round((g.count / max) * 100))}%`;
+  bar.appendChild(fill);
+  line.appendChild(bar);
+  line.appendChild(el("span", "gline-n", String(g.count)));
+  const samples = el("p", "gline-samples");
+  samples.textContent = g.samples.map((s) => `“${s}”`).join("  ");
+  line.appendChild(samples);
+  return line;
+}
+
+function orphanBlock(orphans) {
+  const box = el("article", "brow brow-orphan");
+  const head = el("header", "brow-h");
+  head.appendChild(el("span", "pill link-none", "unattributed"));
+  head.appendChild(el("span", "brow-kind", "no moment before it"));
+  head.appendChild(el("span", "brow-n",
+    String(orphans.reduce((n, g) => n + g.count, 0))));
+  box.appendChild(head);
+  const max = Math.max(...orphans.map((g) => g.count), 1);
+  for (const g of orphans) box.appendChild(groupLine(g, max));
+  box.addEventListener("click", () => highlightIds(orphans.flatMap((g) => g.event_ids)));
+  return box;
+}
+
+/* ------------------------------------------------------------------ the rail */
+function renderRail(r) {
+  const rail = document.getElementById("rail");
+  clear(rail);
+  if (!r || r.messages === undefined) return;
+  document.getElementById("rail-n").textContent = `${r.messages}`;
+
+  rail.appendChild(sparkline(r.rate || []));
+  rail.appendChild(railBlock("volume", [
+    ["messages", r.messages],
+    ["peak burst", `${r.peak_burst} / 10s`],
+    ["velocity", `${r.peak_per_second}/s`],
+  ]));
+  rail.appendChild(railBlock("who is talking", [
+    ["unique chatters", r.unique_chatters],
+    ["new this window", r.new_chatters],
+    ["msgs per chatter", r.messages_per_chatter],
+    /* Whether 500 messages is five people or five hundred is a completely different fact, and
+       the raw count hides it entirely. */
+    ["top 10% share", `${Math.round((r.concentration || 0) * 100)}%`],
+  ]));
+  const c = r.composition || {};
+  rail.appendChild(railBlock("composition", [
+    ["grouped into", `${c.groups || 0} groups`],
+    ["singletons", c.singletons || 0],
+    ["reaction wave", r.reaction_wave || 0],
+  ]));
+
+  const qs = r.questions || [];
+  const questions = railBlock("questions to you", qs.length
+    ? qs.slice(0, 4).map((q) => [q.text, `${q.count} asked`])
+    : [["none in this window", ""]]);
+  rail.appendChild(questions);
+
+  /* Zero speech segments is the truth on stableronaldo, and a silent window is a finding about
+     the stream rather than a hole in the data. It is stated rather than left blank. */
+  rail.appendChild(railBlock("stream context", [
+    ["speech segments", r.silent ? "silent window" : r.speech_segments],
+    ["frame captions", (r.frame_captions || []).length],
+  ]));
+
+  const g = r.gate || {};
+  const codes = Object.entries(g.codes || {});
+  rail.appendChild(railBlock("gate", [
+    ["verified", g.verified || 0],
+    ["abstained", g.abstained || 0],
+    ["rejected", g.rejected || 0],
+    ...codes.map(([code, n]) => [code, n]),
+  ]));
+}
+
+function railBlock(title, pairs) {
+  const box = el("section", "rblock");
+  box.appendChild(el("h3", "rblock-t", title));
+  const dl = el("dl", "rstats");
+  for (const [k, v] of pairs) {
+    dl.appendChild(el("dt", null, String(k)));
+    dl.appendChild(el("dd", null, String(v)));
+  }
+  box.appendChild(dl);
+  return box;
+}
+
+function sparkline(rate) {
+  const box = el("section", "rblock");
+  box.appendChild(el("h3", "rblock-t", "rate · per 10s"));
+  const chart = el("div", "spark");
+  const max = Math.max(...rate, 1);
+  for (const n of rate) {
+    const bar = el("span", "spark-bar");
+    bar.style.height = `${Math.max(2, Math.round((n / max) * 100))}%`;
+    bar.title = `${n} messages`;
+    chart.appendChild(bar);
+  }
+  box.appendChild(chart);
+  return box;
+}
+
 /* ------------------------------------------------------------------ transport */
 function apply(kind, event) {
   if (kind === "chat") addMessage(event);
   else if (kind === "card") addCard(event);
+  else if (kind === "board") addBoard(event);
 }
 
 function reset() {
@@ -202,6 +374,26 @@ function reset() {
   state.notedUngrounded = false;
   state.pinned = true;
   state.holdUntil = 0;
+  state.boardRows = 0;
+  state.boardSeen = false;
+
+  /* The board and the rail describe ONE window. Leaving the previous fixture's rows up while a
+     new stream fills the feed is the stale-identity bug that made an empty page read as loading,
+     one panel over. */
+  const rowsEl = document.getElementById("boardrows");
+  if (rowsEl) {
+    clear(rowsEl);
+    rowsEl.appendChild(el("p", "empty", "Waiting for the first window to close…"));
+  }
+  const railEl = document.getElementById("rail");
+  if (railEl) {
+    clear(railEl);
+    railEl.appendChild(el("p", "empty", "No window has closed yet."));
+  }
+  const railN = document.getElementById("rail-n");
+  if (railN) railN.textContent = "—";
+  const foot = document.getElementById("board-foot");
+  if (foot) { foot.hidden = true; foot.textContent = ""; }
   showFollow(false);
 
   /* Identity is cleared here, not only on success. A failed start() used to leave the previous
@@ -347,6 +539,30 @@ for (const button of document.querySelectorAll(".speeds .seg")) {
     }
     debounced(() => start(state.fixture, state.system, Number(button.dataset.speed)));
   });
+}
+
+/* The middle column shows one kind of thing at a time. A deterministic row and a gated card
+   drawn in the same column would read as the same kind of claim, and they are not. */
+function showMiddle(view) {
+  const board = view === "board";
+  document.getElementById("boardrows").hidden = !board;
+  document.getElementById("board-foot").hidden = !board || !state.boardSeen;
+  document.getElementById("signals").hidden = board;
+  document.getElementById("sig-split").hidden = board;
+  document.getElementById("board-h").textContent = board ? "The board" : "Signals";
+  for (const id of ["tab-board", "tab-signals"]) {
+    const b = document.getElementById(id);
+    const on = (id === "tab-board") === board;
+    b.classList.toggle("is-active", on);
+    b.setAttribute("aria-pressed", String(on));
+  }
+  document.getElementById("board-n").textContent = board
+    ? String(state.boardRows || 0)
+    : String((state.counts.grounded || 0) + (state.counts.abstained || 0));
+}
+for (const id of ["tab-board", "tab-signals"]) {
+  document.getElementById(id).addEventListener(
+    "click", () => showMiddle(id === "tab-board" ? "board" : "signals"));
 }
 
 const debug = document.getElementById("debug-toggle");

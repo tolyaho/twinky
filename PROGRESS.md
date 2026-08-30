@@ -989,3 +989,45 @@ columns. Cost unchanged at $0.42.
 Next: item C part two — wire `board()`/`rail()` into `/api/stream` and build the three-zone
 layout.
 Blockers: none.
+
+## Iteration 51 — 2026-08-31 — item C part two, the dashboard is three zones
+
+Attempted: wire `board()`/`rail()` into the server and rebuild the page around them.
+
+`stream_events` now emits a `board` event per 60s tile, carrying that window's rows and rail, at
+the moment the tile closes — the same instant its cards arrive, because that is the earliest the
+window can be described at all. `new_chatters` accumulates across tiles, so it means new rather
+than "everyone, every window". Added `/api/board?fixture=&window=n` for reading one window
+without waiting for the stream to reach it.
+
+The page is three zones: the flood on the left, what it means in the middle, the numbers behind
+both on the right. The middle column holds two different kinds of thing and shows **one at a
+time**, behind a `Board | Signals` control — a deterministic row and a gated card drawn in the
+same column read as the same kind of claim, and they are not. A row states the strength of its
+link in words (`names it` / `just before`) and in line weight, never in colour, since the palette
+has no state colours. Clicking a row highlights every message behind it in the feed, reusing the
+citation gesture, so a count of 27 is checkable rather than asserted.
+
+The rail: rate sparkline, volume and peak velocity, who is talking (unique, new, per-chatter,
+top-10% share), composition, questions, stream context with `silent window` stated rather than
+left blank, and the gate ledger by code.
+
+Verified against a running server rather than deduced. `/api/board` on marlon w6 returns
+`237 messages · 4 rows · 123 singletons`, top row speech → `violet × 27`, top question
+*"violet murders?"* asked 8 times. A 22-second SSE read of stableronaldo at 8× carried 361 chat,
+2 card and **2 board** events; the first board is `163 messages · 2 rows · 75 singletons` with
+the **matched** row (`rang…`, against a caption naming the guessed word) sorted above a larger
+`preceding` one. `/`, `/method`, `/philosophy`, `/api/fixtures` all 200; window 999 returns 404.
+
+Five existing dashboard guards failed on the new layout and were **rewritten, not deleted**: two
+panels became three, `>Signals<` moved into a tab, `highlightCited` split into `highlightIds`,
+the empty-state selector, and two new uppercase labels that had improvised tracking — those were
+brought onto the `.96px` scale rather than the assertion being loosened. No new hex entered
+`app.css`; all sixteen are still the DESIGN.md set.
+
+Result: `make test` 479 → **490 passed**. 11 new tests, six rows in DECISIONS.md.
+
+Not done: masonry (§6), the questions panel as a section rather than a rail block (§3), and the
+`REPLAY | LIVE` segmented control. Cost unchanged at $0.42.
+Next: the FEATURES_V2 ship-today set — questions panel, chatter stats surfaced properly, masonry.
+Blockers: none.

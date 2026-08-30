@@ -792,7 +792,7 @@ def test_the_waiting_state_sits_inside_the_signals_column():
     html = LIVE_HTML.read_text(encoding="utf-8")
     js = LIVE_JS.read_text(encoding="utf-8")
 
-    inner = html.split('<div class="signals" id="signals">', 1)[1].split("</div>", 1)[0]
+    inner = html.split('<div class="signals" id="signals"', 1)[1].split("</div>", 1)[0]
     assert 'id="signals-empty"' in inner, "the empty state must be a child, not a sibling"
     assert 'document.getElementById("signals").appendChild(empty)' in js
 
@@ -814,7 +814,8 @@ def test_each_pane_is_a_bounded_panel_with_its_own_header():
     assert "border-bottom: 1px solid var(--hairline-strong)" in header
     assert "background: var(--canvas-soft)" in header
 
-    assert html.count('class="panel-h"') == 2, "both panes carry a header strip"
+    # Three zones now: the flood, what it means, and the numbers behind both.
+    assert html.count('class="panel-h"') == 3, "every zone carries a header strip"
 
 
 def test_structural_lines_are_stronger_than_lines_inside_a_panel():
@@ -852,7 +853,8 @@ def test_the_signals_header_counts_what_it_shows():
     html = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)   # comments may name what they fixed
     js = LIVE_JS.read_text(encoding="utf-8")
 
-    assert ">Signals<" in html and "Grounded signals" not in html
+    # The word moved into the middle column's tab when the board took the heading.
+    assert ">Signals " in html and "Grounded signals" not in html
     assert 'id="sig-split"' in html
     assert "(state.counts.grounded || 0) + (state.counts.abstained || 0)" in js
     assert "grounded · ${state.counts.abstained" in js
@@ -1002,7 +1004,7 @@ def test_the_feed_yields_to_a_citation_instead_of_pinning_to_the_bottom():
 def test_a_missing_cited_row_is_not_an_error():
     """The DOM is capped at 200 rows, so a cited message may already be gone."""
     js = LIVE_JS.read_text(encoding="utf-8")
-    body = js.split("function highlightCited", 1)[1].split("\nfunction ", 1)[0]
+    body = js.split("function highlightIds", 1)[1].split("\nfunction ", 1)[0]
 
     assert "if (!row) continue;" in body
     assert "if (!rows.length) return;" in body
@@ -1023,3 +1025,128 @@ def test_scrolling_up_takes_control_of_the_feed():
 
     assert "atBottom" in js and "{ passive: true }" in js
     assert "state.pinned = false; showFollow(true);" in js
+
+
+# ------------------------------------------------------------------ the board and the rail
+# The middle zone is deterministic and the right zone explains it. Neither goes through the
+# provenance gate, so neither may look like it did — that distinction is drawn in markup, in CSS
+# and in the copy, and these guard all three.
+
+FIXTURES = Path(__file__).resolve().parents[1] / "evals/fixtures"
+
+
+@pytest.fixture
+def live_server():
+    """The real server over the real fixtures, so `/api/board` is exercised through routing and
+    query parsing rather than by calling the function underneath it."""
+    httpd = serve_mod.make_server(FIXTURES / "marlon_2026-08-30T0715",
+                                  Path("evidence/raw-results"), port=0, quiet=True)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    yield f"http://127.0.0.1:{httpd.server_port}"
+    httpd.shutdown()
+    httpd.server_close()
+
+
+def test_the_stream_carries_a_board_and_a_rail_per_window():
+    script = serve_mod.stream_events(FIXTURES / "stableronaldo_2026-08-30T0723",
+                                     Path("evidence/raw-results"))
+    boards = [e for _, e in script if e["kind"] == "board"]
+
+    assert boards, "a window that closed produced no board"
+    first = boards[0]
+    assert first["board"]["footer"]["messages"] == 163
+    assert first["rail"]["messages"] == 163
+    assert [r["trigger"]["link"] for r in first["board"]["rows"]][0] == "matched"
+
+
+def test_a_board_arrives_when_its_window_closes_not_before():
+    """A window cannot be described until it has finished — the same reason cards are emitted at
+    the end rather than the start."""
+    index = serve_mod.load_fixture(FIXTURES / "stableronaldo_2026-08-30T0723")
+    script = serve_mod.stream_events(FIXTURES / "stableronaldo_2026-08-30T0723",
+                                     Path("evidence/raw-results"))
+    origin = index.window(index.start_ms, index.end_ms + 1, types=["chat_message"])[0].ts_ms
+    first_board = next(offset for offset, e in script if e["kind"] == "board")
+
+    assert first_board >= (serve_mod.window_tiles(index)[0][1] - origin)
+
+
+def test_new_chatters_accumulate_across_the_stream():
+    """Everyone is new in the first window. If they were still all new in the fifth, the counter
+    would be measuring nothing."""
+    script = serve_mod.stream_events(FIXTURES / "marlon_2026-08-30T0715",
+                                     Path("evidence/raw-results"))
+    rails = [e["rail"] for _, e in script if e["kind"] == "board"]
+
+    assert rails[0]["new_chatters"] == rails[0]["unique_chatters"]
+    assert any(r["new_chatters"] < r["unique_chatters"] for r in rails[1:])
+
+
+def test_the_board_endpoint_serves_one_window(live_server):
+    body = json.loads(urllib.request.urlopen(
+        f"{live_server}/api/board?fixture=marlon_2026-08-30T0715&window=6").read())
+
+    assert body["board"]["footer"] == {"messages": 237, "rows": 4, "singletons": 123,
+                                       "rows_hidden": 0}
+    assert body["rail"]["questions"][0]["count"] == 8
+
+
+def test_the_board_endpoint_refuses_a_window_that_does_not_exist(live_server):
+    with pytest.raises(urllib.error.HTTPError) as caught:
+        urllib.request.urlopen(
+            f"{live_server}/api/board?fixture=marlon_2026-08-30T0715&window=999")
+
+    assert caught.value.code == 404
+
+
+def test_the_page_has_three_zones():
+    html = LIVE_HTML.read_text(encoding="utf-8")
+
+    for marker in ('id="feed"', 'id="boardrows"', 'id="rail"'):
+        assert marker in html, f"{marker} is missing from the dashboard"
+    assert 'class="panel panel-rail"' in html
+
+
+def test_the_middle_column_shows_one_kind_of_claim_at_a_time():
+    """A deterministic row and a gated card drawn in the same column read as the same kind of
+    claim, and they are not."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert 'id="tab-board"' in html and 'id="tab-signals"' in html
+    assert 'document.getElementById("signals").hidden = board;' in js
+    assert 'document.getElementById("boardrows").hidden = !board;' in js
+
+
+def test_the_row_states_the_strength_of_its_link():
+    js = LIVE_JS.read_text(encoding="utf-8")
+    css = _css()
+
+    assert '"names it" : "just before"' in js, "a row must say which kind of link it is"
+    assert ".pill.link-matched" in css and ".pill.link-preceding" in css
+
+
+def test_the_footer_never_hides_how_much_was_dropped():
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "singletons not shown" in js
+    assert "rows_hidden" in js, "a truncated board must say it was truncated"
+
+
+def test_switching_fixture_clears_the_board_and_the_rail():
+    """The stale-identity failure, one panel over: the previous fixture's rows sitting under a
+    new stream's chat is a wrong answer, not a slow one."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    body = js.split("function reset()", 1)[1].split("\nfunction ", 1)[0]
+
+    assert 'clear(rowsEl)' in body and 'clear(railEl)' in body
+    assert 'railN.textContent = "—"' in body
+
+
+def test_the_rail_is_the_first_zone_to_go_when_the_window_narrows():
+    """It is the glanceable zone; the board is the one a streamer reads."""
+    css = _css()
+    narrow = css.split("@media (max-width: 1280px)", 1)[1].split("}\n\n", 1)[0]
+
+    assert ".panel-rail { display: none; }" in narrow

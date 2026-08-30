@@ -72,18 +72,42 @@
     <button class="follow" id="follow" type="button" hidden>&#8595; follow live</button>
   </section>
 
-  <section class="panel panel-signals" aria-labelledby="sig-h">
-    <!-- "Signals", not "Grounded signals": the panel holds both grounded and abstained cards,
-         and a heading may not claim what its contents deny. The split is spelled out beside it. -->
+  <section class="panel panel-board" aria-labelledby="board-h">
+    <!-- The middle zone holds two different kinds of thing and shows one at a time, on purpose.
+         BOARD is deterministic: groups of real messages under the moment they followed, with the
+         strength of that link stated. SIGNALS is the agent's claims, gated. Drawing them in one
+         column would make a computed row look like a verified one. -->
     <header class="panel-h">
-      <h2 class="panel-t" id="sig-h">Signals</h2>
-      <span class="panel-n" id="sig-n">0</span>
-      <span class="panel-sub" id="sig-split">0 grounded · 0 abstained</span>
+      <h2 class="panel-t" id="board-h">The board</h2>
+      <span class="panel-n" id="board-n">0</span>
+      <div class="segmented middle-tabs" role="group" aria-label="Middle column">
+        <button class="seg is-active" id="tab-board" data-view="board" aria-pressed="true">Board</button>
+        <button class="seg" id="tab-signals" data-view="signals" aria-pressed="false">Signals <span id="sig-n">0</span></button>
+      </div>
     </header>
-    <div class="signals" id="signals">
+
+    <div class="boardrows" id="boardrows">
+      <p class="empty" id="board-empty">Waiting for the first window to close…</p>
+    </div>
+    <p class="board-foot" id="board-foot" hidden></p>
+
+    <!-- "Signals", not "Grounded signals": this holds both grounded and abstained cards, and a
+         heading may not claim what its contents deny. The split is spelled out in the footer. -->
+    <div class="signals" id="signals" hidden>
       <p class="empty" id="signals-empty">Waiting for the first window to close…</p>
     </div>
+    <p class="board-foot" id="sig-split" hidden>0 grounded · 0 abstained</p>
   </section>
+
+  <aside class="panel panel-rail" aria-labelledby="rail-h">
+    <header class="panel-h">
+      <h2 class="panel-t" id="rail-h">This window</h2>
+      <span class="panel-n" id="rail-n">&mdash;</span>
+    </header>
+    <div class="rail" id="rail">
+      <p class="empty">No window has closed yet.</p>
+    </div>
+  </aside>
 </main>
 
 <footer class="ticker">
