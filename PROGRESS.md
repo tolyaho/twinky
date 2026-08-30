@@ -2107,3 +2107,45 @@ every document is current. The remaining author-only work is now: film and cut t
 `make review` and confirm what you agree with, make the repo public, rotate `.env` and the
 Telegram credentials, and submit a draft early.
 Blockers: the video needs the author.
+
+## Iteration 74 — 2026-08-30 — the risk register had two of my own collisions in it
+
+Attempted: verify that the list the author works from in the final hours is correct. It was not,
+and both faults were mine.
+
+**Two duplicate risk numbers.** `RISKS.md` opens by saying numbers are stable across revisions
+*because other documents cite them*, and are never renumbered. On two separate days I appended
+rows reusing **36** and **37** — numbers already held by "gold labels are model-drafted" and "the
+repository is private". Both originals are cited: #36 and #37 by the critical-path summary and by
+`PROGRESS.md:399`. So the summary line *"the gold labels (#36) are model-drafted"* had two
+possible referents, one of which is a note about diary dates.
+
+The originals keep their numbers because they are the cited ones. My later additions became
+**#44** (diary dates) and **#45** (the rename). The header now explains the collision and its
+resolution rather than hiding it, and `DECISIONS.md`'s reference was corrected in place.
+`PROGRESS.md`'s is left as written — it is append-only, and a reader following it lands on a row
+whose header explains what happened.
+
+**Three dangling citations.** The critical path cites **#2, #12 and #20**, and all three rows had
+been deleted from the table when they closed. Restored as closed rows with their evidence,
+because a reference that resolves to nothing is worse than no reference. The register now holds
+45 numbers across 45 rows, with no duplicates and no dangling citations.
+
+Three guards, all of which failed before they passed:
+
+- no risk number is used twice;
+- every `#n` in the critical-path summary resolves to a row that exists;
+- the four author blockers — video, gold labels, private repository, live credentials — are each
+  present **and still marked OPEN**. If one stops being open it is either genuinely done, in which
+  case every document saying otherwise must change, or it fell off the list.
+
+The third test failed first for the wrong reason: it matched the prose summary rather than a
+table row. Narrowed to rows, since the summary is a pointer and the table is the record.
+
+Result: `make test` 642 → **645 passed**. 3 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~15.5 hours to the deadline.** The four blockers are all author-only and all still open: film
+and cut the video, `make review` and confirm the labels you agree with, make the repository
+public, rotate `.env` and the Telegram credentials. Submit a complete draft early.
+Blockers: the video needs the author.

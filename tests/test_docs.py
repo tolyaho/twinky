@@ -349,3 +349,44 @@ def test_the_disclosure_does_not_claim_zero_spend():
     import re
     total = re.findall(r"running_total=([0-9.]+)", ledger)[-1]
     assert f"${total}" in disclosure
+
+
+def test_no_risk_number_is_used_twice():
+    """`RISKS.md` says numbers are stable because other documents cite them. Two rows added on
+    the same day reused 36 and 37, which made the critical-path summary ambiguous about which
+    #36 it meant — in the list the author works from in the final hours."""
+    import collections
+    import re
+
+    numbers = re.findall(r"^\| (\d+) \|", (REPO / "RISKS.md").read_text(encoding="utf-8"), re.M)
+    duplicates = [n for n, count in collections.Counter(numbers).items() if count > 1]
+
+    assert not duplicates, f"risk numbers reused: {duplicates}"
+    assert len(numbers) >= 40
+
+
+def test_the_critical_path_points_at_risks_that_exist():
+    """The summary is the author's checklist. A `#n` in it that resolves to the wrong row, or to
+    no row, is worse than no reference."""
+    import re
+
+    text = (REPO / "RISKS.md").read_text(encoding="utf-8")
+    defined = set(re.findall(r"^\| (\d+) \|", text, re.M))
+    summary = text.split("## P0", 1)[0]
+
+    for cited in re.findall(r"#(\d+)", summary):
+        assert cited in defined, f"the critical path cites #{cited}, which has no row"
+
+
+def test_the_four_author_blockers_are_all_tracked_and_open():
+    """Video, gold labels, private repository, live credentials. If one of these is not open, it
+    is either genuinely done — in which case say so everywhere — or it fell off the list."""
+    text = (REPO / "RISKS.md").read_text(encoding="utf-8")
+
+    # Table rows only. The prose summary mentions the same things and is not the record.
+    rows = [l for l in text.splitlines() if l.startswith("| ") and not l.startswith("| # ")]
+    for phrase in ("Video not started", "Gold labels are model-drafted",
+                   "repository is private", "`.env` holds"):
+        row = next((l for l in rows if phrase in l), None)
+        assert row is not None, f"no risk row for: {phrase}"
+        assert "OPEN" in row.upper(), f"{phrase} is no longer open — update the documents too"
