@@ -137,6 +137,13 @@ def enrich(root: Path, cache: ResponseCache, *,
     # Written as each modality finishes, so a failure in the second one does not discard the
     # paid work already done by the first.
     segments = transcribe(root, cache, provider_factory=stt_factory)
+    if not segments:
+        # A fixture with no speech cannot ground any spoken trigger. Enrichment used to
+        # report success here, which would have silently produced a fixture that fails
+        # half the case matrix. Found on first contact with real audio at -57 dB mean.
+        print(f"WARNING: {root.name} produced NO transcript segments. Check the audio "
+              f"level; if the window truly has no speech, use it only for cases that do "
+              f"not need a spoken trigger.", file=__import__('sys').stderr)
     _write_jsonl(root / "transcript.jsonl", segments)
 
     captions = caption(root, cache, provider_factory=vision_factory)

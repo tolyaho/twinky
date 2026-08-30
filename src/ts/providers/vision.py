@@ -8,13 +8,15 @@ on the eval, swap the model here rather than bending the product around it.
 """
 from __future__ import annotations
 
+import os
+
 import base64
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 from .base import DeepSeekProvider, TextProvider, extract_content
 
-MODEL = "deepseek-v4-flash-vision-exp"
+MODEL = os.getenv("TS_VISION_MODEL") or "deepseek-v4-flash-vision-exp"
 MAX_TOKENS = 300
 MAX_CAPTION_CHARS = 500
 
@@ -22,10 +24,14 @@ MAX_CAPTION_CHARS = 500
 # grounded against; a hallucinated on-screen number becomes a hallucinated trigger downstream.
 FRAME_PROMPT = (
     "Describe this livestream frame factually in at most 500 characters: the game or scene, "
-    "what the streamer is doing, visible on-screen text and HUD numbers, and anything a viewer "
-    "would plausibly react to. Do not interpret, do not speculate about intent. If text is too "
-    "small or blurred to read, write \"text unclear\" rather than inventing it. Reply with the "
-    "description only."
+    "what the streamer is doing, and anything happening on screen that a viewer would "
+    "plausibly react to. "
+    "The chat is supplied to the system separately and MUST NOT be described here: never "
+    "transcribe, quote or summarise the chat overlay, and ignore viewer counts, follower "
+    "goals, subscriber bars and on-screen clocks. Describing chat would let a caption become "
+    "the claimed cause of the very messages it contains. "
+    "Do not interpret, do not speculate about intent. If text is too small or blurred to "
+    "read, write \"text unclear\" rather than inventing it. Reply with the description only."
 )
 
 
@@ -35,7 +41,7 @@ def build_vision_request(*, image_sha256: str, model: str = MODEL, prompt: str =
     """Canonical request. This dict IS the cache key. Editing FRAME_PROMPT invalidates every
     cached caption - say so in PROGRESS.md rather than silently re-recording."""
     return {
-        "provider": "deepseek-vision",
+        "provider": "vision",
         "model": model,
         "prompt": prompt,
         "image_sha256": image_sha256,

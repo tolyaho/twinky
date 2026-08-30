@@ -52,9 +52,16 @@ def build_request(*, model: str, system: str, user: str,
 class DeepSeekProvider:
     """Live/record mode only. Never called in replay."""
 
-    def __init__(self, api_key: str | None = None, base_url: str = "https://api.deepseek.com/v1") -> None:
-        self.api_key = api_key or os.getenv("DEEPSEEK_API_KEY")
-        self.base_url = base_url.rstrip("/")
+    def __init__(self, api_key: str | None = None, base_url: str | None = None) -> None:
+        # Endpoint and key come from the environment so the provider can be swapped without a
+        # code change - the adapter exists precisely so a failing model is replaced, not
+        # worked around. TS_LLM_* win; the DeepSeek names remain as fallbacks.
+        self.base_url = (
+            base_url or os.getenv("TS_LLM_BASE_URL") or "https://api.deepseek.com/v1"
+        ).rstrip("/")
+        self.api_key = (
+            api_key or os.getenv("TS_LLM_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
+        )
 
     def complete(self, request: Dict[str, Any]) -> Dict[str, Any]:
         if not self.api_key:

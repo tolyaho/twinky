@@ -17,6 +17,8 @@ so an entire trajectory replays byte-identically with no API key.
 """
 from __future__ import annotations
 
+import os
+
 import json
 from typing import Any, Callable, Dict, List, Optional
 
@@ -74,9 +76,12 @@ Rules:
 ALLOWED_TOOLS = {"group_repeated", "get_transcript_window", "get_frame_captions", "get_chat_window"}
 
 
+DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "deepseek-v4-flash"
+
+
 class AudienceSignalAgent:
     def __init__(self, index: EventIndex, cache: ResponseCache,
-                 model: str = "deepseek-v4-flash",
+                 model: str = DEFAULT_TEXT_MODEL,
                  provider: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None) -> None:
         self.index = index
         self.cache = cache

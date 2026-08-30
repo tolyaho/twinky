@@ -13,6 +13,8 @@ of the agent's advantage - otherwise the comparison would be rigged.
 """
 from __future__ import annotations
 
+import os
+
 import json
 from typing import Any, Callable, Dict, List, Optional
 
@@ -22,6 +24,9 @@ from ..provenance import apply_gate
 from ..providers.base import build_request, extract_content
 from ..workflow.agent import SYSTEM, cap_cards
 from ..workflow.trace import Trace
+
+
+DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "deepseek-v4-flash"
 
 
 def render_events(index: EventIndex, start_ms: int, end_ms: int, chat_only: bool = False) -> str:
@@ -38,7 +43,7 @@ def render_events(index: EventIndex, start_ms: int, end_ms: int, chat_only: bool
 
 
 def run(index: EventIndex, cache: ResponseCache, case_id: str, start_ms: int, end_ms: int, *,
-        chat_only: bool = False, model: str = "deepseek-v4-flash",
+        chat_only: bool = False, model: str = DEFAULT_TEXT_MODEL,
         provider: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None) -> Dict[str, Any]:
     if provider is None:
         from ..providers.base import DeepSeekProvider

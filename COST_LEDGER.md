@@ -17,3 +17,4 @@ provider's published price when a response carries no usage block.
 ---
 
 2026-08-29T20:24Z | ledger opened, no paid calls yet | calls=0 | in_tok=0 | out_tok=0 | est_usd=0.00 | running_total=0.00
+2026-08-30T08:20Z | enrich x4 fixtures (36 min audio, 72 frames); vision prompt fixed and 4 captions re-recorded | calls=~80 | est_usd=0.28 | running_total=0.30
