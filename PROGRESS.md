@@ -717,3 +717,27 @@ Reversed one test deliberately: it asserted the chat column must be "a field, no
 reading that a box re-introduces a widget. Shown the result, that was wrong for this surface, and
 the test now asserts the opposite with the reasoning recorded rather than silently deleted.
 Blockers: none. Cost unchanged at $0.41.
+
+## 2026-08-30T23:45Z — iteration 42
+Attempted: read the grounding situation, fix what is legitimately fixable, and the UI with it.
+Result: `make test` green, 411 -> 414.
+The grounding finding, restated: the agent names a cause its evidence supports on ZERO cards
+across all three fixtures. Structurally it can only cite ids it has actually seen, and when it
+answers after `group_repeated` alone the only ids in its context are chat ids — which the gate
+correctly rejects. The fix is a tool-selection change, which is #39, which is explicitly out of
+scope and would be tuning after publication. Not done, for the eleventh time, and the reason is
+recorded rather than re-argued.
+What WAS broken and is now fixed is the UI telling of it. The signals panel header read
+"Grounded signals · 0" above five visible cards, because the count showed `grounded` while the
+panel renders grounded AND abstained. Exactly the failure already fixed once on the method page —
+a heading claiming what its contents deny. The header is now "Signals", the count is what the
+panel shows, and a sub-line spells out "N grounded · M abstained".
+A run that grounds nothing now says so once, in place: "no card in this run names a cause its
+evidence supports — that is the measured result for this system, not a loading state", with one
+click to the baseline on the same window, which grounds 2. Printing the finding beats an empty
+panel that reads as broken.
+Card states are now tellable apart without colour: a solid ink left rule for grounded, a light
+one for abstained. Weight and line, never hue — the same rule the badges follow.
+Fourth guard to match its own comment. Stripping comments before checking is now the house
+pattern for every text-based assertion in this suite.
+Blockers: none. Cost unchanged at $0.41.

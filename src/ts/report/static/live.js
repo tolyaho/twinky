@@ -81,7 +81,13 @@ function addCard(event) {
   for (const name of ["grounded", "abstained", "rejected"]) {
     document.getElementById(`c-${name}`).textContent = String(state.counts[name] || 0);
   }
-  document.getElementById("sig-n").textContent = String(state.counts.grounded || 0);
+  /* The count is what the panel SHOWS, and the split says what those cards are. It used to
+     display the grounded count over a panel holding grounded and abstained together, so the
+     header read "0" above five visible cards. */
+  const shown = (state.counts.grounded || 0) + (state.counts.abstained || 0);
+  document.getElementById("sig-n").textContent = String(shown);
+  document.getElementById("sig-split").textContent =
+    `${state.counts.grounded || 0} grounded · ${state.counts.abstained || 0} abstained`;
 
   /* Rejected cards are counted and not drawn here: this column is what the run could stand
      behind. They are all present, with their violation codes, on the method page. */
@@ -89,6 +95,26 @@ function addCard(event) {
 
   const waiting = document.getElementById("signals-empty");
   if (waiting) waiting.remove();
+
+  /* If this run names no causes at all, say it once, in place, with the way to see one. That is
+     the measured result — the agent grounds nothing on any recorded fixture — and hiding it
+     behind an empty panel would be less honest than printing it. */
+  if (event.state === "abstained" && !state.counts.grounded && !state.notedUngrounded) {
+    state.notedUngrounded = true;
+    const note = el("p", "panel-note");
+    note.appendChild(document.createTextNode(
+      "No card in this run names a cause its evidence supports. That is the measured result for "
+      + "this system, not a loading state — "));
+    const swap = el("button", "linkish", "see the baseline on this window");
+    swap.type = "button";
+    swap.addEventListener("click", () => {
+      start(state.fixture, state.system === "agent" ? "baseline" : "agent", state.speed);
+      renderChips(state.fixture);
+    });
+    note.appendChild(swap);
+    note.appendChild(document.createTextNode("."));
+    document.getElementById("signals").appendChild(note);
+  }
   const box = el("article", `card is-${event.state}`);
 
   const head = el("div", "card-head");
@@ -138,6 +164,7 @@ function reset() {
   state.queue = [];
   state.rows.clear();
   state.counts = { chat: 0, grounded: 0, abstained: 0, rejected: 0 };
+  state.notedUngrounded = false;
   for (const id of ["chat-n", "sig-n", "c-chat", "c-grounded", "c-abstained", "c-rejected"]) {
     document.getElementById(id).textContent = "0";
   }

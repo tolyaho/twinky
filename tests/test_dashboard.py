@@ -842,3 +842,37 @@ def test_the_scrollbars_are_quiet():
     assert "scrollbar-width: thin" in css
     assert "::-webkit-scrollbar" in css
     assert "background: transparent" in css.split("::-webkit-scrollbar-track", 1)[1][:120]
+
+
+def test_the_signals_header_counts_what_it_shows():
+    """It read "Grounded signals · 0" above five visible abstained cards. Same failure as the
+    heading that claimed verification over abstentions: a header may not deny its contents."""
+    raw = LIVE_HTML.read_text(encoding="utf-8")
+    html = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)   # comments may name what they fixed
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert ">Signals<" in html and "Grounded signals" not in html
+    assert 'id="sig-split"' in html
+    assert "(state.counts.grounded || 0) + (state.counts.abstained || 0)" in js
+    assert "grounded · ${state.counts.abstained" in js
+
+
+def test_a_run_that_grounds_nothing_says_so_in_place():
+    """The agent grounds nothing on any recorded fixture. An empty-looking panel would read as
+    loading; the measured result is printed instead, with one click to a system that does."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "That is the measured result for" in js
+    assert "see the baseline on this window" in js
+    assert "notedUngrounded" in js, "it must say this once, not once per card"
+
+
+def test_card_states_are_distinguished_without_colour():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    grounded = css.split(".signals .card.is-grounded {", 1)[1].split("}", 1)[0]
+    abstained = css.split(".signals .card.is-abstained {", 1)[1].split("}", 1)[0]
+    assert "var(--ink)" in grounded and "var(--hairline-strong)" in abstained
+    for block in (grounded, abstained):
+        for hue in ("--success", "--error", "--orb-"):
+            assert hue not in block
