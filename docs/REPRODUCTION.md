@@ -55,7 +55,7 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-30: **447 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-30: **461 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 

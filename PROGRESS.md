@@ -875,3 +875,65 @@ pair-level precision and recall frozen before any arm runs. The team measured em
 clustering twice and got ~100 poor clusters; it goes in as a measured arm or not at all.
 Next: item B, the deterministic grouping rules.
 Blockers: none. Cost unchanged at $0.42.
+
+## Iteration 49 — 2026-08-31 — item B, the deterministic grouping rules
+
+Attempted: DASHBOARD.md §0 — grouping arm B in `workflow/reduce.py`, so the board stops drawing
+one card per chat message.
+
+The defect, in the module's own terms: `reduce_chat` groups by exact canonical equality, and its
+docstring promises to collapse duplicates and retain counts. On a word-guessing stream twenty
+people type twenty different strings, so exact matching splits one audience signal into twenty
+rows of one and the method page renders "Audience mentions 'dracula'" over and over, each with
+`Evidence — 1 message`, each rejected `E_CIRCULAR_EVIDENCE`. One message is not evidence of an
+audience reaction.
+
+Added `group_chat`, `Group`, `is_reaction` and `grouped_summary` **beside** `reduce_chat`, which
+is byte-identical. That is deliberate: `reduce_chat`'s output goes into the agent's prompt and is
+hashed into every recorded model call, so rewriting it would miss the cache on all eleven frozen
+cases and take keyless replay with it. Three rules, in order — reaction wave (laughter and
+emote-only, one counted bucket), rule B (single-word messages ≥4 chars, first 4 characters,
+groups ≥4), rule A (content token, stopwords and tokens <3 chars dropped, ≥3 messages). Each
+message joins one group only; candidate counts are read once before anything is placed, so
+placement order cannot change the result.
+
+Two defects found by measuring rather than by reading:
+
+- **marlon w6 drew `violet` twice** — 19 as a token group from the sentences, 8 as a `viol…`
+  prefix group from the single words. One signal, two rows: the bug being fixed. A prefix bucket
+  now folds into the word it prefixes, and the row reads **`violet × 27`**, which is the figure
+  DASHBOARD.md predicted, reproduced exactly.
+- **`jump` collided with itself** — reachable both as a 4-character prefix and as a content
+  token, sharing one dict key, so whichever rule ran second relabelled the other's group. Keys
+  are now namespaced by rule.
+
+Measured on the committed fixtures, no keys, no cost:
+
+| window | exact-match groups | grouped rows | top row |
+|---|---:|---:|---|
+| stableronaldo w9 | 76 | 7 | **`para… × 41`** — parade, parallel, parat |
+| stableronaldo w3 | 60 | 4 | `drac… × 55` — dracula, draconic, draculas |
+| stableronaldo w2 | 61 | 5 | `amet… × 21` — amethyst, amethyist, amethysts |
+| marlon w0 | 134 | 12 | `aura… × 38` — AURA, Aura, AURAAAAAAAAAAAAA |
+| marlon (0715) w6 | — | — | **`violet × 27`** — VIOLET MYERS, is that violet |
+
+The frame caption for stableronaldo w9 reads *"a word-guessing game is active… the partial word
+`para_`"*, and the top row is now 41 people brute-forcing it. That row is the thesis in one line
+of UI, on a stream with zero audio, computed with no model.
+
+`DASHBOARD.md` predicted `para… × 38` and `rang… × 21`; the shipped rules measure **41** and
+**20**. The plan's figures were estimated against a slightly different rule set — the reaction
+bucket is pulled first here, and prefixes fold into tokens — so the measured numbers are the ones
+published. Only `violet × 27` matched the plan exactly.
+
+No compression figure was published anywhere, so nothing had to be retracted: the only mentions
+are `compression_ratio` as a field name in `docs/REPRODUCTION.md` and `video/SHOTLIST.md`. The
+grouped-vs-exact figures above are per-window and stated as such.
+
+Result: `make test` 447 → **461 passed**. Fourteen new tests, including both measured figures
+pinned to their fixtures and a guard asserting `reduce_chat` still returns 76 groups on
+stableronaldo w9 with counts summing to the window. Six rows in DECISIONS.md.
+
+Not done: nothing in the UI reads `group_chat` yet — that is item C, the board and rail.
+Next: item C.
+Blockers: none. Cost unchanged at $0.42.
