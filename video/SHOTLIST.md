@@ -15,7 +15,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 393 passed — this is also shot 12
+make test                             # 403 passed — this is also shot 12
 ```
 
 Nothing below needs an API key or a network connection. Every command reads the committed cache.
@@ -160,12 +160,12 @@ cat evidence/report.md
 correct cause. It also has the worst unsupported-card rate of the three. I am reporting both."*
 
 **Do not put latency on screen.** It is deliberately not measured: a replay run reads cached
-responses, so timing it measures disk, not the model. Cost is real and small — **$0.39 total**,
+responses, so timing it measures disk, not the model. Cost is real and small — **$0.41 total**,
 itemised in `COST_LEDGER.md`.
 
 ### Shot 12 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 393 passed
+make test        # 403 passed
 ```
 **Proves:** with `make eval` above, a judge reproduces every number in the submission from the
 committed cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.

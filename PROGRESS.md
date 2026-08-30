@@ -626,3 +626,27 @@ the footnote inside the padding. Navbar gained section anchors with an Intersect
 underline, a hairline that appears only after scroll, and `scroll-margin-top` so headings do not
 hide behind it. "How it works" built — four steps, one line each.
 Blockers: none. Cost $0.41 of $5.00.
+
+## 2026-08-30T21:15Z — iteration 38
+Attempted: Phase 1 of the product page — time-accurate replay as the front page, evidence moved
+to /method. Phase 2 (true live) NOT started: it needs keys and money and is explicitly gated
+behind Phase 1 shipping.
+Result: `make test` green, 393 -> 403. `/api/stream` is Server-Sent Events over committed files
+only — chat emitted at `ts_ms - origin`, cards at the moment their window CLOSED, because that is
+the first instant the agent could have produced them; emitting at window start would show the
+answer before the evidence. No model call, no key, no cost, asserted by a test that greps the
+function body for a provider.
+Two things had to be got right or the page would lie. The server had to become
+`ThreadingHTTPServer`: an SSE connection is held open for the whole playback, and on the
+single-threaded server the page itself would never load while a stream ran — verified by
+requesting `/` and `/method` mid-stream. And the opening frame could not be named `open`, because
+EventSource reserves that for its own connection event, so a custom listener never fires and the
+badge would silently keep its placeholder text. Renamed to `meta`; the badge now echoes the
+server's own `mode` and `speed`, so a replay running at 8x cannot display 1x.
+Front page: two columns, chat on `canvas-soft` left, signals on `canvas` right, one hairline
+between, no boxes. Cards rise and fade in, and when one lands the messages it cites light up in
+the flood beside it — that gesture is the whole thesis. Counters at 48/300, play/pause, restart,
+1x/4x/8x. DOM capped at 200 rows, counter uncapped.
+Verified: full playback to `done` (1535 chat + 24 cards at 8x), routes all 200, page loads during
+a stream, and with an empty `evidence/` the chat still plays with zero cards rather than failing.
+Blockers: none. Cost unchanged at $0.41 — this pass spent nothing.
