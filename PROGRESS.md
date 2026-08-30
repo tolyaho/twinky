@@ -2018,3 +2018,48 @@ ledger $0.43.
 **~17 hours to the deadline.** Every document is now current and every deliverable except the
 video is complete and verified from a clean archive.
 Blockers: the video needs the author.
+
+## Iteration 72 — 2026-08-30 — does the page still work, after twenty iterations of editing it
+
+Attempted: the risk nothing in the suite covered. The server tests assert payloads and the CSS
+tests assert tokens; neither checks whether the markup and the code that drives it still agree.
+**A single `getElementById` returning `null` throws on the next property access and kills the
+script mid-stream** — in front of whoever is watching. Written the iteration before filming for
+exactly that reason.
+
+**The wiring is sound.** Every id `live.js` and `method.js` reach for was checked against the
+markup:
+
+| script → page | static id references | missing |
+|---|---:|---|
+| `live.js` → `index.html` | 37 | **none** |
+| `method.js` → `method.html` | 26 | **none** |
+
+The one apparent exception, `signals-finding`, is created by the code and read behind
+`if (!note)`. It is whitelisted by name **and its guard is asserted**, because whitelisting it
+alone would have made the test a rubber stamp. The two ids assembled at runtime — `c-${name}` in
+the ticker and `n-${name}` on the method page — were resolved from the literal lists that build
+them; all six exist.
+
+**Then the whole thing was run end to end.** The full 12-minute `yugi` fixture streamed at 8×:
+
+| | |
+|---|---:|
+| events delivered | **875** |
+| chat · tick · board · card · meta · done | 625 · 214 · 13 · 21 · 1 · **1** |
+| data frames that failed to parse as JSON | **0** |
+| errors or tracebacks in the server log | **0** |
+
+Every event type present, the stream reaching `done` rather than dying, and nothing malformed on
+the wire.
+
+Nine new tests in `tests/test_page_wiring.py`, including one that **parses** all three pages for
+balanced tags rather than trusting the eye — a stray unclosed `<section>` silently swallows
+everything after it, and one was introduced two iterations ago while moving the moderation panel
+below the results. Only a parser caught it then.
+
+Result: `make test` 626 → **635 passed**. Three rows in DECISIONS.md. Cost: **$0.00**, ledger
+$0.43.
+
+**~16.5 hours to the deadline. The demo is verified working end to end and is safe to film.**
+Blockers: the video needs the author.
