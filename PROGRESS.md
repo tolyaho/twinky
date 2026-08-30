@@ -265,3 +265,17 @@ punctuation-only message goes to a counted `∅` bucket. Checked the scaffold fi
 identically — 32 -> 15 bursts, ratio 0.469 — so nothing frozen moved.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T08:31Z — iteration 20
+Attempted: audited `evals/scorer.py`, which computes every number the submission reports.
+Result: `make test` green, 224 -> 228. Two findings. #31: metric A cannot be lowered by noise —
+measured, one correct card plus nine hallucinations reported trigger accuracy 1.0 — and README §6
+claimed a denominator of "the cards emitted" that the code never used. Kept the matched-card
+denominator, because gold is not exhaustive on twelve cases and scoring every emitted card would
+penalise a real signal nobody labelled; corrected the README to describe what is computed and
+added `unmatched_rate` beside it in the CSV and the report, where that probe now reads 1.0 / 0.9.
+#32: the same gold signal could be matched twice, so a duplicated card weighted one signal twice
+in metric A. Matching is now one-to-one in emission order. Nothing has been measured yet, so the
+frozen protocol is intact — this was the last moment to change it honestly.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
