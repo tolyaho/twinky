@@ -121,6 +121,23 @@
       <li><span class="step-n">04</span><span class="step-t">Report</span>
         <span class="step-d">What survived, what did not, and the evidence for both.</span></li>
     </ol>
+
+    <!-- Generated from workflow/agent.py, provenance.py and the committed trajectories by
+         report/graph.py, so a diagram that disagrees with the system is a failing test rather
+         than a picture nobody re-checked. An <img>, not inline script: it draws with no network
+         and with JavaScript off. -->
+    <figure class="graph">
+      <img src="/static/agent-graph.svg" alt="One window becomes a card: sources and reduce are
+        deterministic, the model picks tools and writes card JSON, and a deterministic provenance
+        gate with eight card checks and two abstention checks decides what is verified and what is
+        rejected." width="980" height="470">
+      <figcaption>
+        The two dashed boxes are the only places a model is involved. Everything else is
+        arithmetic that can be re-run and checked. The numbers on the tools are real call counts
+        from the recorded runs — and <code>get_frame_captions</code> is the smallest of them,
+        which is the grounding failure in one figure rather than in a paragraph.
+      </figcaption>
+    </figure>
   </section>
 
   <section id="measured" hidden>

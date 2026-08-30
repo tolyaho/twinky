@@ -1053,3 +1053,19 @@ html, body.live-page { height: 100%; }
 .live-controls .picker-input { width: 15rem; }
 /* The paid escalation says it is paid, on the button, before it is clicked. */
 .live-controls .go-live { white-space: nowrap; }
+
+
+/* ---------------------------------------------------------------- the agent graph
+   An image, so it draws with no network and with JavaScript off. It carries the DESIGN.md
+   palette internally because an <img> cannot read the page's stylesheet. */
+.graph { margin: var(--xl) 0 0; }
+.graph img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  background: var(--surface-card);
+}
+.graph figcaption {
+  margin-top: var(--sm);
+  max-width: 68ch;
+  font-size: 13px; line-height: 1.6; color: var(--muted);
+}

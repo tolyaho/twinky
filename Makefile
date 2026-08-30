@@ -7,7 +7,7 @@ PIP := .venv/bin/pip
 FIXTURE ?= evals/fixtures/stableronaldo_2026-08-30T0723
 CASES ?= all
 
-.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval debrief demo scan archive clean
+.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval graph debrief demo scan archive clean
 
 PYTHON ?= python3
 
@@ -67,6 +67,11 @@ ablation:
 # than the README quotes is a reproducibility trap.
 eval:
 	TS_LLM_MODE=replay $(PY) -m evals.run_eval --cases $(CASES) --ablation --out evidence
+
+# The diagram is generated, never drawn by hand: it reads the agent's own constants, the gate's
+# own codes and the committed trajectories. Regenerate it whenever any of those move.
+graph:
+	TS_LLM_MODE=replay $(PY) -m ts.report.graph
 
 # The post-stream artifact. No model call - it reorganises what `make replay` already verified.
 debrief:

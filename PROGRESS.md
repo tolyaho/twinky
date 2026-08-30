@@ -1434,3 +1434,47 @@ DECISIONS.md. `make eval` still **48 hits / 0 misses**, published files byte-ide
 **~23 hours to the deadline. The video does not exist.**
 Next: E) the agent graph SVG on the Method page — the last build item before the video gate.
 Blockers: none.
+
+## Iteration 60 — 2026-08-30 — item E, the agent graph
+
+Attempted: DASHBOARD §4 — the agent graph on the Method page.
+
+**Generated, not drawn.** New `report/graph.py` reads `ALLOWED_TOOLS`, `MAX_CARDS`,
+`MAX_TOOL_CALLS_PER_STEP`, the gate's own error codes and the 118 committed trajectories, and
+emits the SVG. `make graph` regenerates it and a test asserts the committed file is byte-equal to
+what the generator produces today, so a diagram that disagrees with the system is a failing test
+rather than a picture nobody re-checked.
+
+**That caught two stale numbers in the plan immediately.** It calls for "five bounded tools" and
+"eight codes". `ALLOWED_TOOLS` has **four**; `check_card` has **eight** codes and
+`check_abstention` a further **two**, which the diagram now states separately. Those figures were
+wrong before a line was drawn — which is the argument for generating it.
+
+The picture makes the engineering claim before the caption does: two dashed, empty boxes are the
+only places a model is involved; everything else is solid, filled and deterministic. **The tool
+edges carry real call counts** from the recorded runs — `group_repeated` 57, `get_transcript_
+window` 8, `get_chat_window` 3, **`get_frame_captions` 2** — so the grounding failure is a figure
+rather than a paragraph. Gate outcomes are real too: 70 verified, 166 rejected.
+
+Published as an `<img>`: it draws with no network and with JavaScript off. The DESIGN.md palette
+is baked in because an image cannot read the page's stylesheet, and a test asserts every hex in
+the SVG is one `app.css` already uses — all seven are.
+
+Two of my own assertions were wrong and got fixed rather than loosened: `http://` in the check
+for network access matched the SVG **namespace URI**, and `url(` matched the arrowhead marker
+defined in the same file. The test now names the vectors that actually fetch (`<script`,
+`@import`, `href`, `src=`, `url(http`, `@font-face`) and asserts the file's single `http`
+occurrence is the namespace.
+
+Layout tightened after reading the emitted coordinates: the gate's code list moved from y=300 to
+y=194, into the empty band under `sources`/`reduce`, and the canvas came down from 470 to 412.
+
+Result: `make test` 545 → **555 passed**. 10 new tests in `tests/test_agent_graph.py`, a `graph`
+Makefile target, five rows in DECISIONS.md. `/method` 200 and the SVG serves at 6.1 KB. Cost:
+**$0.00**, ledger $0.43.
+
+**Items A–E are complete.** ~22.5 hours to the deadline.
+**F — THE VIDEO — is now the only thing that matters, and its 8-hour gate is the next hard stop.**
+Next: the video. `video/SHOTLIST.md` exists; the remaining work is filming against the running
+product, which is author-only.
+Blockers: none technical. The video needs the author.
