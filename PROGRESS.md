@@ -650,3 +650,25 @@ the flood beside it — that gesture is the whole thesis. Counters at 48/300, pl
 Verified: full playback to `done` (1535 chat + 24 cards at 8x), routes all 200, page loads during
 a stream, and with an empty `evidence/` the chat still plays with zero cards rather than failing.
 Blockers: none. Cost unchanged at $0.41 — this pass spent nothing.
+
+## 2026-08-30T22:00Z — iteration 39
+Attempted: bound the chat window, from screenshots the author took — the first time anyone has
+actually looked at this page.
+Result: `make test` green, 403 -> 406.
+The chat column grew without limit, so the counter row — the one line saying what the flood
+turned into — was pushed off the bottom of the screen. The shell is now exactly `100vh` with
+`overflow: hidden`, and only the two columns scroll. The load-bearing detail is `min-height: 0`
+on the grid and on each column: without it a flex/grid child refuses to shrink below its content
+and the page scrolls instead of the panes. The ticker is `flex: none` so the counters cannot be
+scrolled away. Chips and the disclosure line now share one compact strip instead of stacking into
+a ~300px void above the columns.
+Diagnosed rather than assumed: the screenshot showed 158 messages with all three card counters at
+zero, which looks broken. It is not — the first card lands at 56.5s after 163 messages, so the
+capture was five messages early. But a blank panel for the first minute reads as broken to anyone
+watching, so the server now sends `first_card_ms` and the column states "analysis windows are 60
+seconds, the first closes at 0:56" with a progress bar. A run that produced no cards at all says
+that instead of waiting forever.
+Third time the colour guard tripped on its own documentation — a comment naming the `#000` it
+forbids. Made it read declarations only, the way the `unknown unknown` and `Math.random` guards
+already do. A check that fires on prose gets deleted rather than fixed.
+Blockers: none. Cost unchanged at $0.41 — this pass spent nothing.

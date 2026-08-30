@@ -356,6 +356,9 @@ class ReplayHandler(BaseHTTPRequestHandler):
             "total_chat": sum(1 for _, e in script if e["kind"] == "chat"),
             "total_cards": sum(1 for _, e in script if e["kind"] == "card"),
             "duration_ms": script[-1][0] if script else 0,
+            # so an empty signals column can say when to expect something instead of sitting
+            # blank for a minute, which reads as broken rather than pending
+            "first_card_ms": next((o for o, e in script if e["kind"] == "card"), None),
         }):
             return
 

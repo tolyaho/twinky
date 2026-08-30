@@ -13,6 +13,11 @@ const UNKNOWN = "unknown";
 const MAX_ROWS = 200;          /* the DOM is capped; the counter is not */
 const CITE_HIGHLIGHT_MS = 1200;
 
+const clock = (ms) => {
+  const s = Math.max(0, Math.round(ms / 1000));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+};
+
 const el = (tag, className, text) => {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -50,6 +55,11 @@ function addMessage(event) {
   state.counts.chat += 1;
   document.getElementById("chat-n").textContent = String(state.counts.chat);
   document.getElementById("c-chat").textContent = String(state.counts.chat);
+
+  if (state.waitBar && state.firstCardMs) {
+    const elapsed = (Date.now() - state.startedAt) * state.speed;
+    state.waitBar.style.width = `${Math.min(100, (elapsed / state.firstCardMs) * 100)}%`;
+  }
 }
 
 /* The one gesture that is the whole argument: when a card lands, the messages it cites light up
@@ -136,7 +146,11 @@ function reset() {
   }
   const empty = document.getElementById("signals-empty");
   empty.hidden = false;
-  empty.textContent = "Waiting for the first window to close…";
+  empty.className = "waiting";
+  while (empty.firstChild) empty.removeChild(empty.firstChild);
+  empty.appendChild(document.createTextNode("Connecting to the recording…"));
+  state.waitBar = null;
+  state.firstCardMs = null;
 }
 
 function start(fixtureId, system, speed) {
@@ -162,6 +176,26 @@ function start(fixtureId, system, speed) {
       `${String(open.mode).toUpperCase()} · ${open.speed}\u00D7`));
     document.getElementById("captured-at").textContent =
       `${open.channel} · captured ${open.captured_utc || "\u2014"} · ${open.total_chat} messages`;
+
+    /* An empty right-hand column for the first minute reads as broken. Say what it is waiting
+       for and how far along it is — the window has to close before a card can exist. */
+    state.firstCardMs = open.first_card_ms;
+    state.speed = open.speed || state.speed;
+    const empty = document.getElementById("signals-empty");
+    while (empty.firstChild) empty.removeChild(empty.firstChild);
+    empty.className = "waiting";
+    if (open.first_card_ms == null) {
+      empty.appendChild(document.createTextNode(
+        "This run produced no cards. The chat still plays."));
+    } else {
+      empty.appendChild(el("span", null,
+        `Analysis windows are 60 seconds. The first closes at ${clock(open.first_card_ms)}.`));
+      const bar = el("div", "waiting-bar");
+      bar.appendChild(el("span"));
+      empty.appendChild(bar);
+      state.waitBar = bar.firstChild;
+      state.startedAt = Date.now();
+    }
   });
   source.addEventListener("chat", (e) => queueOrApply("chat", JSON.parse(e.data)));
   source.addEventListener("card", (e) => queueOrApply("card", JSON.parse(e.data)));

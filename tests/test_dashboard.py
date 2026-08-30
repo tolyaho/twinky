@@ -121,7 +121,10 @@ def _design_tokens():
 
 
 def test_the_stylesheet_improvises_no_colour():
-    used = {h.lower() for h in HEX.findall((STATIC / "app.css").read_text(encoding="utf-8"))}
+    # Comments may name a colour they forbid; only declarations count. Third time this guard has
+    # tripped on its own documentation, so it now reads code the way the other two do.
+    css = re.sub(r"/\*.*?\*/", " ", (STATIC / "app.css").read_text(encoding="utf-8"), flags=re.S)
+    used = {h.lower() for h in HEX.findall(css)}
 
     assert used <= _design_tokens(), f"not in DESIGN.md: {sorted(used - _design_tokens())}"
 
@@ -741,3 +744,41 @@ def test_the_method_page_is_reachable_and_routed():
 
     assert '"/method"' in serve and "method.html" in serve
     assert 'href="/method"' in html
+
+
+def test_the_product_page_is_bounded_to_the_viewport():
+    """The chat is an unbounded stream. Left to grow it pushed the counter row off the bottom of
+    the screen, so the reader lost the one line saying what the flood turned into. The shell is
+    fixed at viewport height and only the two columns scroll."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    shell = css.split("\n.live-page {", 1)[1].split("}", 1)[0]   # not `body.live-page`
+
+    assert "height: 100vh" in shell
+    assert "overflow: hidden" in shell, "the page itself must never scroll"
+
+    for selector in (".feed {", ".signals {"):
+        block = css.split(selector, 1)[1].split("}", 1)[0]
+        assert "overflow-y: auto" in block and "min-height: 0" in block, selector
+
+    # min-height:0 on the grid and the columns is what lets children scroll instead of the page
+    assert css.split("main.two-col {", 1)[1].split("}", 1)[0].count("min-height: 0") == 1
+    assert "the line that lets the children scroll instead of the page" in css
+
+
+def test_the_ticker_cannot_be_scrolled_away():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    block = css.split(".ticker {", 1)[1].split("}", 1)[0]
+
+    assert "flex: none" in block, "the counters are the payoff; they stay on screen"
+
+
+def test_an_empty_signals_column_says_when_to_expect_something():
+    """A blank panel for the first minute reads as broken. Analysis windows are 60 seconds, so
+    the first card cannot exist before one closes — say that, and show progress toward it."""
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert '"first_card_ms"' in serve
+    assert "The first closes at" in js
+    assert "waiting-bar" in js
+    assert "This run produced no cards" in js, "a run with nothing must say so, not wait forever"
