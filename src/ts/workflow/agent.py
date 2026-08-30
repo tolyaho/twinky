@@ -95,7 +95,12 @@ Gather what you need, then answer. """ + CARD_CONTRACT
 ALLOWED_TOOLS = {"group_repeated", "get_transcript_window", "get_frame_captions", "get_chat_window"}
 
 
-DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "deepseek-v4-flash"
+# The default IS the recorded model, so a fresh clone with no .env reproduces from the cache.
+# The model name is part of the cache key: when this defaulted to a model the runs were never
+# recorded with, `make eval` missed every entry and exited 3 for anyone without the author's
+# environment - which is every judge, and reproducibility is a pre-scoring gate.
+# The env var stays, as the override used when RE-recording.
+DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "gpt-4.1-nano"
 
 
 class AudienceSignalAgent:

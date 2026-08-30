@@ -26,7 +26,12 @@ from ..workflow.agent import CARD_CONTRACT, INTRO, cap_cards
 from ..workflow.trace import Trace
 
 
-DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "deepseek-v4-flash"
+# The default IS the recorded model, so a fresh clone with no .env reproduces from the cache.
+# The model name is part of the cache key: when this defaulted to a model the runs were never
+# recorded with, `make eval` missed every entry and exited 3 for anyone without the author's
+# environment - which is every judge, and reproducibility is a pre-scoring gate.
+# The env var stays, as the override used when RE-recording.
+DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "gpt-4.1-nano"
 
 # The baseline used to be handed the AGENT's system prompt, which specifies a tool-calling
 # protocol. Having no tools, the model did the only correct thing and replied
@@ -41,20 +46,31 @@ SYSTEM = INTRO + """
 You see the whole window at once. There are no tools and no further steps.
 Reply with ONLY a JSON object: {"cards": [...]}
 
-Each line of the input is one event, tagged CHAT, SPEECH or SCREEN, and carries the id you must
-cite for it. """ + CARD_CONTRACT
+Each line of the input is one event, tagged CHAT, SPEECH or SCREEN. Cite the value of `id=`.
+The `ts=` value is a timestamp, never an id. """ + CARD_CONTRACT
 
 
 def render_events(index: EventIndex, start_ms: int, end_ms: int, chat_only: bool = False) -> str:
+    """One event per line, with the id it must be cited by labelled explicitly.
+
+    The previous format led with a bare bracketed timestamp — `[1788074707878] SCREEN
+    frm_b78f94d5a1: ...` — and every system cited that leading number as the id. Measured: the
+    baseline returned `evidence: ["1788074707878"]` and was rejected on E_UNKNOWN_MSG, so no card
+    could ever match gold or clear the gate. The id was present but not marked as the id.
+
+    The agent is unaffected: its tools hand back JSON objects with an explicit `id` key. Fixing
+    this makes the BASELINE stronger, which is the direction a repair is allowed to move.
+    """
     types = ["chat_message"] if chat_only else None
     lines = []
     for e in index.window(start_ms, end_ms, types=types, final_only=True):
         if e.type == "chat_message":
-            lines.append(f"[{e.ts_ms}] CHAT {e.event_id} {e.author}: {e.text}")
+            lines.append(f"CHAT   id={e.event_id} ts={e.ts_ms} author={e.author} | {e.text}")
         elif e.type == "transcript_segment":
-            lines.append(f"[{e.ts_ms}] SPEECH {e.event_id}: {e.text}")
+            speaker = e.payload.get("speaker")
+            lines.append(f"SPEECH id={e.event_id} ts={e.ts_ms} speaker={speaker} | {e.text}")
         else:
-            lines.append(f"[{e.ts_ms}] SCREEN {e.event_id}: {e.text}")
+            lines.append(f"SCREEN id={e.event_id} ts={e.ts_ms} | {e.text}")
     return "\n".join(lines)
 
 

@@ -16,7 +16,7 @@ from typing import Any, Dict, Optional
 
 from .base import DeepSeekProvider, TextProvider, extract_content
 
-MODEL = os.getenv("TS_VISION_MODEL") or "deepseek-v4-flash-vision-exp"
+MODEL = os.getenv("TS_VISION_MODEL") or "gpt-4.1-mini"   # the recorded model; see cache key note
 MAX_TOKENS = 300
 MAX_CAPTION_CHARS = 500
 
