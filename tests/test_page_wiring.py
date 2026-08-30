@@ -96,3 +96,47 @@ def test_no_script_writes_untrusted_text_as_html(script):
     from conftest import strip_js_comments
 
     assert "innerHTML" not in strip_js_comments((STATIC / script).read_text(encoding="utf-8"))
+
+
+# ------------------------------------------------------------------ keyboard access
+# Clicking a row to light up the messages behind it is the product's central gesture. Four of
+# those targets were plain <article> and <div> elements with a click handler: reachable with a
+# mouse and by nothing else.
+
+def test_every_rich_click_target_goes_through_the_activatable_helper(js_source):
+    js = js_source("live.js")
+
+    assert "function activatable(" in js
+    # the four rich regions: a board row, the unattributed block, a live group line, a question
+    assert js.count("activatable(") == 5, "a rich click target is bypassing the helper"
+    for bypass in ('box.addEventListener("click"', 'line.addEventListener("click"',
+                   'row.addEventListener("click"'):
+        assert bypass not in js, f"{bypass} is a mouse-only target again"
+
+
+def test_the_helper_makes_a_region_operable_not_merely_clickable(js_source):
+    js = js_source("live.js")
+    body = js.split("function activatable", 1)[1].split("\nfunction ", 1)[0]
+
+    assert 'setAttribute("role", "button")' in body
+    assert 'setAttribute("tabindex", "0")' in body
+    assert 'setAttribute("aria-label"' in body, "a focusable region needs to say what it does"
+    assert '"Enter"' in body and '" "' in body, "Enter and Space both activate a button"
+    assert "preventDefault()" in body, "Space would scroll the page instead"
+
+
+def test_each_target_says_what_activating_it_will_do():
+    """`aria-label="Highlight the 27 messages behind this row"` — not "row"."""
+    js = (STATIC / "live.js").read_text(encoding="utf-8")
+
+    for label in ("messages behind this row", "unattributed messages",
+                  "messages in ${g.label}", "messages asking"):
+        assert label in js, f"a target has no meaningful label: {label}"
+
+
+def test_focus_is_restyled_and_never_removed():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert ":focus-visible" in css
+    assert "outline: 2px solid var(--focus-ring)" in css
+    assert "outline: none" not in css and "outline: 0" not in css

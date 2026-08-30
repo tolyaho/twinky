@@ -244,6 +244,27 @@ function renderFinding() {
   note.appendChild(document.createTextNode("."));
 }
 
+/* The product's central gesture is clicking a row to light up the messages behind it. Four of
+   those targets were plain <article> and <div> elements with a click handler — reachable with a
+   mouse and by nothing else. A rich block is not a <button> (a button may only contain phrasing
+   content), so this is the standard composite pattern: role, tab stop, and Enter/Space.
+
+   Focus styling needs nothing new — `:focus-visible` already draws the ink ring on anything
+   focusable, so making these focusable is the whole fix. */
+function activatable(node, label, run) {
+  node.setAttribute("role", "button");
+  node.setAttribute("tabindex", "0");
+  node.setAttribute("aria-label", label);
+  node.addEventListener("click", run);
+  node.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+      e.preventDefault();          /* Space scrolls the page otherwise */
+      run();
+    }
+  });
+  return node;
+}
+
 /* One cited message. An id the fixture does not contain renders as unresolvable rather than
    being dropped — a citation that cannot be checked is a finding, not a gap. */
 function citedLine(m) {
@@ -322,7 +343,8 @@ function renderQuestions(q) {
       ans.appendChild(document.createTextNode(`“${item.answered.text}”`));
       row.appendChild(ans);
     }
-    row.addEventListener("click", () => highlightIds(item.event_ids || []));
+    activatable(row, `Highlight the ${item.count} messages asking “${item.text}”`,
+                () => highlightIds(item.event_ids || []));
     box.appendChild(row);
   }
 
@@ -346,7 +368,9 @@ function boardRow(row, origin) {
 
   const max = Math.max(...row.groups.map((g) => g.count), 1);
   for (const g of row.groups) box.appendChild(groupLine(g, max));
-  box.addEventListener("click", () => highlightIds(row.groups.flatMap((g) => g.event_ids)));
+  const behind = row.groups.reduce((n, g) => n + g.count, 0);
+  activatable(box, `Highlight the ${behind} messages behind this row`,
+              () => highlightIds(row.groups.flatMap((g) => g.event_ids)));
   return box;
 }
 
@@ -383,7 +407,9 @@ function orphanBlock(orphans) {
   box.appendChild(head);
   const max = Math.max(...orphans.map((g) => g.count), 1);
   for (const g of orphans) box.appendChild(groupLine(g, max));
-  box.addEventListener("click", () => highlightIds(orphans.flatMap((g) => g.event_ids)));
+  const behind = orphans.reduce((n, g) => n + g.count, 0);
+  activatable(box, `Highlight the ${behind} unattributed messages`,
+              () => highlightIds(orphans.flatMap((g) => g.event_ids)));
   return box;
 }
 
@@ -403,7 +429,8 @@ function addTick(event) {
   const max = Math.max(...groups.map((g) => g.count), 1);
   for (const g of groups) {
     const line = groupLine(g, max);
-    line.addEventListener("click", () => highlightIds(g.event_ids || []));
+    activatable(line, `Highlight the ${g.count} messages in ${g.label}`,
+                () => highlightIds(g.event_ids || []));
     list.appendChild(line);
   }
 

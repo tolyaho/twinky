@@ -2454,3 +2454,50 @@ ledger $0.43.
 **20.7 hours to the deadline; the video gate is 12.7 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 82 — 2026-08-31 — the central gesture was mouse-only
+
+Attempted: focus and keyboard access — the highest-severity category in the UX guidance and one
+this page had never been checked against.
+
+**Clicking a row to light up the messages behind it is the product's central gesture, and it was
+unreachable from a keyboard.** Four targets carried a click handler on a non-interactive element:
+
+| target | what it does |
+|---|---|
+| `.brow` — a board row | highlights every message behind the row |
+| `.brow-orphan` — the unattributed block | highlights the unattributed messages |
+| `.gline` — a live group line | highlights that group's messages |
+| `.qrow` — a question | highlights the messages that asked it |
+
+All four are `<article>` or `<div>`: no tab stop, no role, no key handler. A judge navigating by
+keyboard could not perform the one interaction the product is built around.
+
+Fixed with one shared `activatable()` helper rather than four patches. A `<button>` was not an
+option — a button may contain only phrasing content, and a board row is a header, a quote, group
+lines and three verbatim samples. The correct pattern for a composite region is `role="button"`,
+`tabindex="0"` and Enter/Space, with `preventDefault()` on Space so it does not scroll the page
+while activating.
+
+Each region names what activating it will do: *"Highlight the 27 messages behind this row"*,
+*"Highlight the 4 messages asking 'violet murders?'"*. A focusable thing that does not say what it
+does is a tab stop, not a control.
+
+**No new focus CSS was needed.** `:focus-visible` already draws the ink ring on anything
+focusable, so making the regions focusable was the entire fix — which is what a design system is
+for.
+
+Audited the other twelve click handlers while there: all are real `<button>` elements, either
+built with `el("button", …)` or fetched from the markup. The two that looked uncertain were my own
+helper's internal line and `.speeds .seg`, which are `<button>`s in `index.html`. Verified rather
+than assumed.
+
+Four guards: no rich target may bypass the helper, the helper must set role, tab stop, label and
+handle both keys, every label must be meaningful, and `outline: none` must never appear.
+
+Result: `make test` 663 → **667 passed**. 4 new tests, four rows in DECISIONS.md. No CSS change at
+all, so still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**20.6 hours to the deadline; the video gate is 12.6 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
