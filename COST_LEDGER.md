@@ -20,3 +20,4 @@ provider's published price when a response carries no usage block.
 2026-08-30T08:20Z | enrich x4 fixtures (36 min audio, 72 frames); vision prompt fixed and 4 captions re-recorded | calls=~80 | est_usd=0.28 | running_total=0.30
 2026-08-30T12:55Z | eval: discarded first run (44 calls) + repaired re-record with --ablation (48 calls) + 2 smoke runs, all gpt-4.1-nano | calls=94 | in_tok=528500 | out_tok=14134 | est_usd=0.06 | running_total=0.36
 2026-08-30T14:10Z | tiled replay+baseline recorded for yugi and stableronaldo so make replay/baseline/debrief/demo run from cache | calls=79 | est_usd=0.03 | running_total=0.39
+2026-08-30T20:05Z | tiled replay+baseline recorded for marlon_0715, to test whether the agent grounds any card on a third fixture (it does not) | calls=~30 | est_usd=0.02 | running_total=0.41

@@ -603,3 +603,26 @@ numbers at 48/300.
 (8) Cards as objects: the quote is now the emphasis at 18px italic with a hairline rule, the type
 badge is quiet with no fill, the drawer caret rotates and the evidence rows stagger in.
 Blockers: none. Cost unchanged at $0.39 of $5.00 — this pass spent nothing.
+
+## 2026-08-30T20:10Z — iteration 37
+Attempted: UI pass 2 — information architecture, in the numbered order.
+Result: `make test` green, 386 -> 393.
+Item 1's premise did not hold, and checking it was worth the $0.02. The brief says default to
+yugi or marlon because stableronaldo produces no grounded cards. Measured across every recorded
+run: **the agent grounds nothing on any fixture** — stableronaldo 0, yugi 0, and marlon 0 after
+recording its tiles specifically to test the hypothesis. yugi is in fact WORSE than stableronaldo
+for the agent: 0 verified of any kind against 5. Only the baseline grounds anything (6 / 2 / 1).
+So no default fixture fixes the empty section; it is RISKS #38/#39 surfacing in the UI.
+That turned the picker into the answer rather than a nice-to-have: it switches **system** as well
+as fixture, so the empty agent state becomes the comparison the product is actually about instead
+of an apology. `/api/fixtures` lists enriched fixtures with recorded runs; `/api/replay` takes
+`fixture` and `system`. A fixture name off a query string is passed through `Path(...).name` and
+must resolve beside the served fixture — verified by requesting `../../../etc`, which falls back.
+Three sections collapsed into one with a segmented control and counts in the labels — they were
+always one thing, every card the run produced, in three outcomes. Cards 2-up, six visible, show
+all beneath. Empty states are one line with no reserved height, which is what produced the 300px
+voids. Hero proof card rebuilt as one object at full card width with the title on one line and
+the footnote inside the padding. Navbar gained section anchors with an IntersectionObserver
+underline, a hairline that appears only after scroll, and `scroll-margin-top` so headings do not
+hide behind it. "How it works" built — four steps, one line each.
+Blockers: none. Cost $0.41 of $5.00.
