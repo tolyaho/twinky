@@ -18,8 +18,13 @@
     <a class="mark" href="/" aria-label="Twitch Agent — home"><svg class="mark-glyph" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1"/><circle cx="21" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="8" r="3.5" fill="currentColor"/></svg><span class="mark-name">Twitch&nbsp;Agent</span></a>
     <span class="pill" id="mode-badge">—</span>
   </div>
+  <nav class="bar-nav" aria-label="Sections">
+    <a href="#signals">Signals</a>
+    <a href="#how">How it works</a>
+    <a href="#measured">Results</a>
+    <a href="#changelog">Method</a>
+  </nav>
   <div class="bar-right">
-    <span class="meta" id="fixture-line">loading…</span>
     <button class="btn-outline" id="debug-toggle" aria-expanded="false">Debug</button>
   </div>
  </div>
@@ -44,6 +49,18 @@
       this?”</em> is a rating. Chat is only interpretable against the stimulus that caused it —
       and the stimulus is in the audio and on the screen, not in the chat.
     </p>
+      <form class="picker" id="picker" autocomplete="off">
+        <label class="sr-only" for="picker-input">Channel</label>
+        <input class="picker-input" id="picker-input" type="text"
+               placeholder="try: yugi, marlon, stableronaldo…" list="picker-list">
+        <datalist id="picker-list"></datalist>
+        <button class="btn-primary" type="submit">Show</button>
+      </form>
+      <div class="chips" id="picker-chips"></div>
+      <p class="picker-note" id="picker-note">
+        Recorded windows, not a live stream. Live capture uses the same pipeline and is documented
+        in the reproduction guide.
+      </p>
     </div>
     <div class="hero-proof">
     <!-- The stage replays REAL messages from this run and collapses them into the cards the
@@ -67,35 +84,46 @@
     <p class="note" id="hero-note"></p>
   </section>
 
-  <span class="eyebrow">01 — what the audience said</span>
-  <h2 class="display sub" id="headline">Signals with a cause</h2>
-  <p class="lede" id="lede">
-    Each card links a cluster of chat to the stream moment that caused it. Open one to see the
-    evidence it is standing on.
-  </p>
+  <section id="signals">
+    <span class="eyebrow">01 — what the run produced</span>
+    <h2 class="display sub">Every card, and what happened to it</h2>
+    <p class="lede" id="run-line">…</p>
 
-  <div id="rail"></div>
-  <p class="empty" id="rail-empty" hidden></p>
+    <div class="segmented" role="tablist" aria-label="Card outcome">
+      <button role="tab" class="seg is-active" data-seg="grounded" aria-selected="true">
+        Grounded <span class="seg-n" id="n-grounded">0</span>
+      </button>
+      <button role="tab" class="seg" data-seg="abstained" aria-selected="false">
+        Abstained <span class="seg-n" id="n-abstained">0</span>
+      </button>
+      <button role="tab" class="seg" data-seg="rejected" aria-selected="false">
+        Rejected <span class="seg-n" id="n-rejected">0</span>
+      </button>
+    </div>
+    <p class="seg-lede" id="seg-lede"></p>
 
-  <section id="abstained-block" hidden>
-    <span class="eyebrow">01b — signals without a provable cause</span>
-    <h2 class="display sub">Abstentions</h2>
-    <p class="lede">
-      Real audience reactions the system could not tie to any stream moment. It says so instead
-      of naming a plausible one — an abstention is the correct answer when the evidence is not
-      there, and it is scored as such.
-    </p>
-    <div id="abstained-rail"></div>
+    <div id="rail"></div>
+    <p class="empty" id="rail-empty" hidden></p>
+    <button class="btn-outline show-all" id="show-all" hidden>Show all</button>
   </section>
 
-  <section id="rejected-block" hidden>
-    <span class="eyebrow">02 — what did not survive</span>
-    <h2 class="display sub">Rejected by the provenance gate</h2>
+  <section id="how">
+    <span class="eyebrow">02 — how it works</span>
+    <h2 class="display sub">Four steps, no magic</h2>
     <p class="lede">
-      These cards were produced and then thrown away because their evidence did not check out.
-      They are shown because a system that hides its rejects cannot be audited.
+      Every number on this page comes out of the same four steps, replayed from a committed cache
+      with no API keys.
     </p>
-    <div id="rejected-rail"></div>
+    <ol class="steps">
+      <li><span class="step-n">01</span><span class="step-t">Capture</span>
+        <span class="step-d">Chat, audio and frames off a live broadcast. No keys, no model.</span></li>
+      <li><span class="step-n">02</span><span class="step-t">Ground</span>
+        <span class="step-d">Speech and screen become events beside the chat, on one timeline.</span></li>
+      <li><span class="step-n">03</span><span class="step-t">Verify</span>
+        <span class="step-d">A deterministic gate checks every citation. Unprovable cards are rejected.</span></li>
+      <li><span class="step-n">04</span><span class="step-t">Report</span>
+        <span class="step-d">What survived, what did not, and the evidence for both.</span></li>
+    </ol>
   </section>
 
   <section id="measured" hidden>

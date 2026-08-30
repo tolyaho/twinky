@@ -13,14 +13,15 @@ from __future__ import annotations
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from ..ingest.replay import load_fixture, load_meta
 from ..provenance import UNKNOWN
 from .poll import attach_drafts
 
 STATIC = Path(__file__).parent / "static"
-ROUTES = ["/", "/api/replay", "/api/replay?system=baseline", "/static/<file>"]
+ROUTES = ["/", "/api/replay", "/api/replay?fixture=<id>&system=<agent|baseline>",
+          "/api/fixtures", "/static/<file>"]
 
 PLACEHOLDER = """<!doctype html>
 <meta charset="utf-8"><title>Twitch Agent — replay output</title>
@@ -177,6 +178,36 @@ def hero(fixtures_root: Path | str, out_dir: Path | str) -> Optional[Dict[str, A
     }
 
 
+def available(fixtures_root: Path | str, out_dir: Path | str) -> List[Dict[str, Any]]:
+    """Fixtures a judge can actually switch to: enriched, and with a recorded run to show.
+
+    This is a picker over RECORDED WINDOWS, not live capture. Nothing here starts a stream, and
+    the UI has to say so — a picker that looks live would be claiming a capability the judge
+    cannot verify and that costs money to exercise.
+    """
+    root, out = Path(fixtures_root), Path(out_dir)
+    if not root.is_dir():
+        return []
+    found = []
+    for d in sorted(root.iterdir()):
+        if not (d / "meta.json").is_file():
+            continue
+        meta = load_meta(d)
+        fixture_id = meta.get("fixture_id") or d.name
+        systems = [s for s in ("agent", "baseline") if result_path(out, fixture_id, s).exists()]
+        if not systems or not meta.get("enriched"):
+            continue
+        found.append({
+            "fixture_id": fixture_id,
+            "channel": meta.get("channel"),
+            "captured_utc": meta.get("captured_utc"),
+            "duration_s": meta.get("duration_s"),
+            "chat_messages": meta.get("chat_messages"),
+            "systems": systems,
+        })
+    return found
+
+
 def evaluation(out_dir: Path | str) -> Optional[Dict[str, Any]]:
     """The measured comparison, read from what `make eval` wrote.
 
@@ -222,12 +253,25 @@ class ReplayHandler(BaseHTTPRequestHandler):
         route, _, query = self.path.partition("?")
         params = dict(p.split("=", 1) for p in query.split("&") if "=" in p)
 
+        if route == "/api/fixtures":
+            self._json(200, {"fixtures": available(self.fixture.parent, self.out_dir),
+                             "selected": self.fixture.name})
+            return
+
         if route == "/api/replay":
+            # The picker may name another fixture, but only one that sits beside the served one:
+            # a filename from a query string must never become a path.
+            name = Path(params.get("fixture", "") or self.fixture.name).name
+            target = self.fixture.parent / name
+            if not (target / "meta.json").is_file():
+                target = self.fixture
+            system = params.get("system", "agent")
+            if system not in ("agent", "baseline"):
+                system = "agent"
             try:
-                self._json(200, payload(self.fixture, self.out_dir,
-                                        params.get("system", "agent")))
+                self._json(200, payload(target, self.out_dir, system))
             except FileNotFoundError as exc:
-                self._json(404, {"error": str(exc)})
+                self._json(404, {"error": str(exc), "fixture": target.name, "system": system})
             return
 
         if route in ("/", "/index.html"):

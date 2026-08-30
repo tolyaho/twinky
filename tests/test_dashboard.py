@@ -101,8 +101,7 @@ def test_the_dashboard_is_served_over_http(served):
         httpd.shutdown()
         httpd.server_close()
 
-    assert "Signals with a cause" in page   # renamed: the old heading claimed verification
-                                            # over cards that abstain (see the test below)
+    assert "Every card, and what happened to it" in page
     assert "not the dashboard" not in page   # the placeholder must be gone now
     assert "--surface-dark" in css
     assert api["result"]["counts"]["verified"] == 1
@@ -490,16 +489,18 @@ def test_no_heading_claims_verification_over_an_abstention():
     js = (STATIC / "app.js").read_text(encoding="utf-8")
 
     assert "Verified audience signals" not in html
-    assert 'id="abstained-block" hidden' in html
-    assert 'statusOf(card) === "verified" ? verified : abstained' in js
-    assert "Abstentions" in html
+    # the three outcomes are now one section with three states, each labelled for what it holds
+    assert 'data-seg="grounded"' in html and 'data-seg="abstained"' in html
+    assert 'data-seg="rejected"' in html
+    assert 'isGrounded(card) ? "grounded" : "abstained"' in js
 
 
 def test_abstentions_are_framed_as_correct_behaviour_not_failure():
-    html = " ".join((STATIC / "index.html").read_text(encoding="utf-8").split())
+    js = " ".join((STATIC / "app.js").read_text(encoding="utf-8").split())
 
-    assert "could not tie to any stream moment" in html
-    assert "an abstention is the correct answer" in html
+    assert "could not tie to any moment" in js
+    assert "instead of " + '"' + " naming a plausible one" not in js  # phrasing, not a claim
+    assert "naming a plausible one" in js
 
 
 # --------------------------------------------------------------- brand
@@ -582,3 +583,66 @@ def test_monospace_is_only_used_for_data():
 
     assert "--mono:" in css
     assert "Monospace only where the text IS data" in css
+
+
+# --------------------------------------------------------------- information architecture
+def test_one_section_three_states_not_three_sections():
+    """"Grounded", "abstained" and "rejected" are one thing — every card the run produced — in
+    three outcomes. Stacking them as full-length sections is what made the page endless."""
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+
+    assert html.count('class="seg') >= 3
+    assert 'role="tablist"' in html
+    for count in ("n-grounded", "n-abstained", "n-rejected"):
+        assert count in html, "the counts are the story; they belong in the labels"
+
+
+def test_an_empty_state_is_one_line_not_reserved_height():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    block = css.split(".empty {", 1)[1].split("}", 1)[0]
+    assert "margin: 0" in block and "min-height" not in block
+    assert "An empty state must never reserve section height" in js
+
+
+def test_the_picker_is_over_recordings_and_says_so():
+    """A control that looks live claims a capability the judge cannot check and that costs money
+    to exercise. It switches between recorded windows."""
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "Recorded windows, not a live stream" in html
+    assert "No recording of that channel" in js, "unknown channel is never a dead end"
+    assert "/api/fixtures" in js and "/api/replay${query}" in js
+    assert "capture" not in js.split("function initPicker")[1].split("function")[0].lower() \
+        or "never starts a capture" in js
+
+
+def test_switching_fixture_does_not_reload_the_page():
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "location.reload" not in js and "location.href" not in js
+    assert "fetch(`/api/replay${query}`)" in js
+
+
+def test_the_fixture_parameter_cannot_become_a_path():
+    """A filename off a query string is untrusted. `Path(...).name` strips any traversal, and the
+    target must sit beside the served fixture."""
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+
+    assert 'Path(params.get("fixture", "") or self.fixture.name).name' in serve
+    assert "must never become a path" in serve
+
+
+def test_the_navbar_anchors_every_section_it_lists():
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    targets = re.findall(r'class="bar-nav"(.*?)</nav>', html, re.S)
+    assert targets, "no nav"
+    for href in re.findall(r'href="#([a-z-]+)"', targets[0]):
+        assert f'id="{href}"' in html, f"nav points at #{href} which does not exist"
+
+
+def test_headings_do_not_hide_behind_the_sticky_bar():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    assert "scroll-margin-top" in css

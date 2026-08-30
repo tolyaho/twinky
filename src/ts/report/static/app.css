@@ -415,7 +415,6 @@ footer {
 @keyframes reveal { from { opacity: 0; transform: translateX(-6px); } }
 .missing { color: var(--muted-soft); font-style: italic; }
 .violations { margin: var(--sm) 0 0; color: var(--muted); font-size: 14px; }
-.empty { color: var(--muted); max-width: 70ch; }
 
 .dist { margin: var(--base) 0 0; }
 .dist-row { display: grid; grid-template-columns: 12ch 1fr 7ch; align-items: center; gap: var(--sm); font-size: 14px; }
@@ -489,3 +488,101 @@ footer {
   .display { font-size: 28px; letter-spacing: -.28px; }
   .evidence li, .dist-row { grid-template-columns: 1fr; }
 }
+
+/* ---------------------------------------------------------------- navbar with sections */
+.bar { height: 64px; border-bottom: 1px solid transparent; transition: border-color .2s ease; }
+.bar.is-scrolled { border-bottom-color: var(--hairline); }
+.bar-nav { display: flex; align-items: center; gap: var(--lg); }
+.bar-nav a {
+  color: var(--muted); text-decoration: none;
+  font-size: 15px; font-weight: 500; letter-spacing: 0;
+  padding-bottom: 2px; border-bottom: 1px solid transparent;
+}
+.bar-nav a:hover { color: var(--ink); }
+.bar-nav a.is-active { color: var(--ink); border-bottom-color: var(--ink); }
+main > section, section[id] { scroll-margin-top: 80px; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (max-width: 900px) { .bar-nav { display: none; } }
+
+/* ---------------------------------------------------------------- the picker */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.picker { display: flex; gap: var(--xs); margin: var(--lg) 0 0; max-width: 520px; }
+.picker-input {
+  flex: 1; min-width: 0; height: 44px;
+  padding: 0 var(--base);
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-pill);
+  background: var(--surface-card);
+  font-family: var(--ui); font-size: 15px; letter-spacing: .15px; color: var(--ink);
+}
+.picker-input::placeholder { color: var(--muted-soft); }
+.picker .btn-primary { height: 44px; }
+.chips { display: flex; flex-wrap: wrap; align-items: center; gap: var(--xs); margin-top: var(--sm); }
+.chip-btn {
+  padding: var(--xxs) var(--sm);
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-pill);
+  background: transparent; color: var(--muted);
+  font-family: var(--ui); font-size: 13px; letter-spacing: 0;
+}
+.chip-btn:hover { color: var(--ink); border-color: var(--ink); }
+.chip-btn.is-active { background: var(--surface-card); color: var(--ink); border-color: var(--ink); }
+.chip-sep { color: var(--muted-soft); padding: 0 var(--xxs); }
+.picker-note { margin: var(--sm) 0 0; color: var(--muted); font-size: 14px; letter-spacing: 0; max-width: 56ch; }
+
+/* ---------------------------------------------------------------- segmented control */
+.segmented {
+  display: inline-flex; gap: var(--xxs);
+  padding: var(--xxs);
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  background: var(--canvas-soft);
+  margin: 0 0 var(--base);
+}
+.seg {
+  display: inline-flex; align-items: center; gap: var(--xs);
+  padding: var(--xs) var(--base);
+  border: 0; border-radius: var(--r-pill);
+  background: transparent; color: var(--muted);
+  font-family: var(--ui); font-size: 15px; font-weight: 500; letter-spacing: 0;
+}
+.seg:hover { color: var(--ink); }
+.seg.is-active { background: var(--surface-card); color: var(--ink); border: 1px solid var(--hairline); }
+.seg-n { font-variant-numeric: tabular-nums; color: var(--muted); }
+.seg.is-active .seg-n { color: var(--ink); }
+.seg-lede { color: var(--body); max-width: 66ch; margin: 0 0 var(--lg); }
+.show-all { margin-top: var(--lg); }
+
+/* An empty state is one line, never reserved height. */
+.empty { color: var(--muted); max-width: 70ch; margin: 0; }
+
+/* ---------------------------------------------------------------- hero proof card, rebuilt */
+.stage-body { display: block; }
+.mini {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--xs);
+  border: 0; background: transparent; padding: 0;
+}
+.mini .mini-type { color: var(--muted); }
+.mini .mini-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stage-cards { position: static; inset: auto; opacity: 0; }
+.stage-cards.in { opacity: 1; }
+.stage-trigger {
+  position: static; left: auto; right: auto; bottom: auto;
+  margin: var(--base) 0 0;
+  font-size: 14px; color: var(--muted); letter-spacing: 0;
+}
+.stage-body { min-height: 268px; }
+
+/* ---------------------------------------------------------------- how it works */
+.steps {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--xl); margin: var(--lg) 0 0; padding: 0; list-style: none;
+}
+.steps li { display: grid; gap: var(--xxs); border-top: 1px solid var(--hairline); padding-top: var(--base); }
+.step-n { font-family: var(--mono); font-size: 13px; color: var(--muted-soft); letter-spacing: 0; }
+.step-t { font-weight: 300; font-size: 24px; line-height: 1.2; color: var(--ink); }
+.step-d { color: var(--body); font-size: 15px; line-height: 1.47; letter-spacing: .15px; }
+@media (max-width: 900px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

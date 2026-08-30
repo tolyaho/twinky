@@ -396,61 +396,180 @@ function renderStage(hero) {
   if (!still) stagePlay(hero);
 }
 
-function render(data) {
-  const { meta, result, events, evaluation, hero } = data;
-  const startMs = result.span_ms ? result.span_ms[0] : (meta.start_ms || 0);
+const SEG_LEDE = {
+  grounded: "Each card links a cluster of chat to the moment that caused it.",
+  abstained: "Real reactions the system could not tie to any moment. It says so instead of "
+           + "naming a plausible one.",
+  rejected: "Produced, then thrown away because the evidence did not check out. Shown because a "
+          + "system that hides its rejects cannot be audited.",
+};
+const PAGE_SIZE = 6;
 
-  document.getElementById("mode-badge").textContent = result.mode;
-  document.getElementById("fixture-line").textContent =
-    `${result.fixture_id} · ${result.counts.windows} windows · ${result.counts.verified} verified`;
-  document.getElementById("footer-line").textContent =
-    `Served from ${result.fixture} — nothing on this page is generated. Reproduce with ` +
-    `make replay FIXTURE=${result.fixture}`;
-  renderDebug(data);
-  renderHero(result, evaluation);
-  renderStage(hero);
-  renderScores(evaluation);
+let buckets = { grounded: [], abstained: [], rejected: [] };
+let activeSeg = "grounded";
+let expanded = false;
+let pageEvents = {};
+let pageStart = 0;
 
-  /* The gate's "verified" bucket holds both. A heading reading "Verified audience signals" over
-     a card badged ABSTAINED claims something the card denies, so they are separated here and
-     each gets a heading that matches what is under it. */
-  const verified = [], abstained = [], rejected = [];
+/* Grounded means the card named a cause its evidence supports — the same test the hero uses.
+   Splitting on it is what lets one section carry three outcomes instead of three sections. */
+function isGrounded(card) {
+  const t = card.trigger || {};
+  return (card.gate && card.gate.ok) && card.type !== "none"
+    && t.event_id && t.event_id !== UNKNOWN && !!t.quote && (card.evidence || []).length > 0;
+}
+
+function paint() {
+  const rail = document.getElementById("rail");
+  const empty = document.getElementById("rail-empty");
+  const more = document.getElementById("show-all");
+  while (rail.firstChild) rail.removeChild(rail.firstChild);
+
+  document.getElementById("seg-lede").textContent = SEG_LEDE[activeSeg];
+  const cards = buckets[activeSeg];
+
+  if (!cards.length) {
+    /* One line. An empty state must never reserve section height it is not filling — that is
+       what produced the 300px voids. */
+    empty.hidden = false;
+    empty.textContent = activeSeg === "grounded"
+      ? "No card in this run named a cause its evidence could support — try the baseline, or "
+        + "another channel."
+      : `Nothing ${activeSeg} in this run.`;
+    more.hidden = true;
+    return;
+  }
+  empty.hidden = true;
+
+  const shown = expanded ? cards : cards.slice(0, PAGE_SIZE);
+  for (const card of shown) rail.appendChild(renderCard(card, pageEvents, pageStart));
+
+  more.hidden = cards.length <= PAGE_SIZE;
+  more.textContent = expanded ? "Show fewer" : `Show all ${cards.length}`;
+}
+
+function selectSeg(name) {
+  activeSeg = name;
+  expanded = false;
+  for (const button of document.querySelectorAll(".seg")) {
+    const on = button.dataset.seg === name;
+    button.classList.toggle("is-active", on);
+    button.setAttribute("aria-selected", on ? "true" : "false");
+  }
+  paint();
+}
+
+function renderRun(data) {
+  const { meta, result, events, hero } = data;
+  pageEvents = events;
+  pageStart = result.span_ms ? result.span_ms[0] : (meta.start_ms || 0);
+
+  buckets = { grounded: [], abstained: [], rejected: [] };
   for (const window of result.windows || []) {
     for (const card of window.verified || []) {
-      (statusOf(card) === "verified" ? verified : abstained).push(card);
+      buckets[isGrounded(card) ? "grounded" : "abstained"].push(card);
     }
-    for (const card of window.rejected || []) rejected.push(card);
+    for (const card of window.rejected || []) buckets.rejected.push(card);
+  }
+  for (const name of Object.keys(buckets)) {
+    document.getElementById(`n-${name}`).textContent = String(buckets[name].length);
   }
 
-  const rail = document.getElementById("rail");
-  if (!verified.length) {
-    const note = document.getElementById("rail-empty");
-    note.hidden = false;
-    note.textContent =
-      "No card in this run named a cause its evidence could support. That is a result, not an " +
-      "error — it is what the system is supposed to say when it cannot prove anything.";
-  } else {
-    for (const card of verified) rail.appendChild(renderCard(card, events, startMs));
-  }
+  document.getElementById("mode-badge").textContent = result.mode;
+  document.getElementById("run-line").textContent =
+    `${result.fixture_id} · ${result.counts.windows} windows · ${result.system} · `
+    + `replayed from cache, no API calls.`;
+  document.getElementById("footer-line").textContent =
+    `Served from ${result.fixture} — nothing on this page is generated. Reproduce with `
+    + `make replay FIXTURE=${result.fixture}`;
 
-  if (abstained.length) {
-    document.getElementById("abstained-block").hidden = false;
-    const bin = document.getElementById("abstained-rail");
-    for (const card of abstained) bin.appendChild(renderCard(card, events, startMs));
-  }
+  renderDebug(data);
+  renderHero(result, data.evaluation);
+  renderStage(hero);
+  selectSeg(activeSeg);
+}
 
-  if (rejected.length) {
-    document.getElementById("rejected-block").hidden = false;
-    const bin = document.getElementById("rejected-rail");
-    for (const card of rejected) bin.appendChild(renderCard(card, events, startMs));
+/* ------------------------------------------------------------------ the picker
+   A picker over RECORDED windows. It never starts a capture, and the note under it says so:
+   a control that looked live would claim a capability a judge cannot check and that costs
+   money to exercise. */
+let catalogue = [];
+let currentSystem = "agent";
+
+function load(fixtureId, system) {
+  const query = `?fixture=${encodeURIComponent(fixtureId)}&system=${encodeURIComponent(system)}`;
+  return fetch(`/api/replay${query}`)
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    .then(renderRun);
+}
+
+function renderChips(selected) {
+  const box = document.getElementById("picker-chips");
+  while (box.firstChild) box.removeChild(box.firstChild);
+  for (const entry of catalogue) {
+    const chip = el("button", "chip-btn", entry.channel);
+    chip.type = "button";
+    if (entry.fixture_id === selected) chip.classList.add("is-active");
+    chip.addEventListener("click", () => {
+      currentSystem = "agent";
+      load(entry.fixture_id, currentSystem).then(() => renderChips(entry.fixture_id));
+    });
+    box.appendChild(chip);
+  }
+  const sep = el("span", "chip-sep", "·");
+  box.appendChild(sep);
+  for (const system of ["agent", "baseline"]) {
+    const chip = el("button", "chip-btn", system);
+    chip.type = "button";
+    if (system === currentSystem) chip.classList.add("is-active");
+    chip.addEventListener("click", () => {
+      currentSystem = system;
+      const current = selected || (catalogue[0] || {}).fixture_id;
+      load(current, system).then(() => renderChips(current));
+    });
+    box.appendChild(chip);
   }
 }
 
-function fail(message) {
-  document.getElementById("headline").textContent = "Nothing to show yet";
-  document.getElementById("lede").textContent = message;
-  document.getElementById("fixture-line").textContent = "no replay output";
+function initPicker(selected) {
+  return fetch("/api/fixtures")
+    .then((r) => r.json())
+    .then((data) => {
+      catalogue = data.fixtures || [];
+      const list = document.getElementById("picker-list");
+      for (const entry of catalogue) {
+        const option = document.createElement("option");
+        option.value = entry.channel;
+        list.appendChild(option);
+      }
+      renderChips(selected);
+
+      document.getElementById("picker").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const typed = document.getElementById("picker-input").value.trim().toLowerCase();
+        const match = catalogue.find(
+          (e) => (e.channel || "").toLowerCase() === typed
+              || (e.fixture_id || "").toLowerCase() === typed);
+        const note = document.getElementById("picker-note");
+        if (!match) {
+          /* Never a dead end: say what exists and leave the chips one click away. */
+          note.textContent = "No recording of that channel. These are the streams we captured:";
+          return;
+        }
+        note.textContent = "Recorded windows, not a live stream. Live capture uses the same "
+          + "pipeline and is documented in the reproduction guide.";
+        load(match.fixture_id, currentSystem).then(() => renderChips(match.fixture_id));
+      });
+    });
 }
+
+for (const button of document.querySelectorAll(".seg")) {
+  button.addEventListener("click", () => selectSeg(button.dataset.seg));
+}
+document.getElementById("show-all").addEventListener("click", () => {
+  expanded = !expanded;
+  paint();
+});
 
 const toggle = document.getElementById("debug-toggle");
 toggle.addEventListener("click", () => {
@@ -461,5 +580,35 @@ toggle.addEventListener("click", () => {
 
 fetch("/api/replay")
   .then((r) => r.json().then((body) => ({ ok: r.ok, body })))
-  .then(({ ok, body }) => (ok ? render(body) : fail(body.error)))
+  .then(({ ok, body }) => {
+    if (!ok) return fail(body.error);
+    renderRun(body);
+    return initPicker(body.result.fixture_id);
+  })
   .catch((err) => fail(String(err)));
+
+/* Active section underline. IntersectionObserver rather than a scroll handler so it costs
+   nothing per frame, and it degrades to no underline if unsupported. */
+if (window.IntersectionObserver) {
+  const links = new Map();
+  for (const a of document.querySelectorAll(".bar-nav a")) links.set(a.getAttribute("href").slice(1), a);
+  const spy = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const link = links.get(entry.target.id);
+      if (link && entry.isIntersecting) {
+        for (const other of links.values()) other.classList.remove("is-active");
+        link.classList.add("is-active");
+      }
+    }
+  }, { rootMargin: "-72px 0px -60% 0px" });
+  for (const id of links.keys()) {
+    const section = document.getElementById(id);
+    if (section) spy.observe(section);
+  }
+}
+
+/* The bar's hairline appears only once the page has moved. */
+const bar = document.querySelector(".bar");
+const onScroll = () => bar.classList.toggle("is-scrolled", window.scrollY > 8);
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
