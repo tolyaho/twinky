@@ -3,7 +3,7 @@ PIP := .venv/bin/pip
 FIXTURE ?= evals/fixtures/sample
 CASES ?= all
 
-.PHONY: setup test inspect capture enrich replay baseline ablation eval debrief demo scan clean
+.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval debrief demo scan archive clean
 
 PYTHON ?= python3
 
@@ -70,6 +70,17 @@ demo:
 scan:
 	@echo "Scanning for secrets before archiving..."
 	$(PY) scripts/scan_secrets.py
+
+# Package exactly what is committed — never the working tree, which holds .env, .venv and raw
+# media. `git archive` cannot include an untracked file by accident, which is the property that
+# matters here: .gitignore does not protect a directory that is zipped rather than committed.
+archive:
+	git archive --format=zip -o /tmp/twitch-agent.zip HEAD
+	@rm -rf /tmp/twitch-agent-check && mkdir -p /tmp/twitch-agent-check
+	@unzip -qq /tmp/twitch-agent.zip -d /tmp/twitch-agent-check
+	@$(PY) scripts/scan_secrets.py --root /tmp/twitch-agent-check
+	@echo "OK  /tmp/twitch-agent.zip  ($$(find /tmp/twitch-agent-check -type f | wc -l | tr -d ' ') files)"
+	@echo "Now open it: cd /tmp/twitch-agent-check && make setup && make test && make eval"
 
 clean:
 	rm -rf .venv __pycache__ .pytest_cache
