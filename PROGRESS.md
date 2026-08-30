@@ -1478,3 +1478,55 @@ Makefile target, five rows in DECISIONS.md. `/method` 200 and the SVG serves at 
 Next: the video. `video/SHOTLIST.md` exists; the remaining work is filming against the running
 product, which is author-only.
 Blockers: none technical. The video needs the author.
+
+## Iteration 61 — 2026-08-30 — F, the shot list rewritten against the built product
+
+Attempted: the only part of the video I can do unattended. Filming needs the author; a shot list
+that matches reality does not.
+
+**It had gone badly stale, and in ways that would have cost takes on the day.** It quoted
+**447 passed** against a real 555. It described a two-column page — "the card rail — 13 windows"
+— that has not existed since the three-zone dashboard landed. It mentioned none of the board, the
+rail, the questions panel, Tier 0 live chat, the live counts or the generated agent graph, which
+between them are most of the last twelve iterations. And shot 15 had the author saying the
+grounding fix *"I did not apply it, because changing a prompt after seeing the score invalidates
+the comparison"* — **that sentence stopped being true when the grounded arm was recorded.** Saying
+it on camera would have been a false statement about our own work.
+
+Rewritten with every figure re-measured first, not assumed:
+
+| shot | figure | measured |
+|---|---|---|
+| 4 | stableronaldo w0 board | `163 messages · 2 rows · 75 singletons`, top row `screen · names it` → `rang… × 20` |
+| 5 | marlon w6 board | `237 messages · 4 rows · 123 singletons`, top row → **`violet × 27`** |
+| 7 | yugi questions | 38 questions, 45 asked, **2 answered**; marlon's top unanswered `violet murders?` × 14 |
+| 9 | agent graph | 4 tools, 8 + 2 gate checks, 118 runs, `get_frame_captions` 2 |
+| 10 | Tier 0 live | 168 messages, 6 refreshes, 14 s, 50 chatters on `#jynxzi` |
+| 11 | results table | unchanged, verified against `evidence/report.md` |
+| 15 | grounded arm | 70 hits / 0 misses on replay, cost $0.0122 |
+
+The cut now leads with the board rather than the card list, and **shot 15 is the strongest forty
+seconds in the video**: a diagnosis counted out of the cache, a fix applied as a second arm, a
+measured loss, and a refusal to adopt it. Added a cut-order line naming the five shots that may
+never be dropped.
+
+**Four guards so it cannot rot silently again**: the test count, every figure in the published
+results table, the absence of the old interface's vocabulary, and that the grounded arm is
+described as tried-and-not-adopted rather than shipped. `"I did not apply it"` is now an
+assertion that fails.
+
+Fixed a latent flaw while there: both test-count guards compared a documented number against
+`request.session.items`, so running `pytest tests/test_docs.py` alone failed them for the wrong
+reason. They now skip below a full collection. A judge running one file is exactly the person who
+should not meet a red herring.
+
+Result: `make test` 555 → **559 passed**. 4 new tests, four rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~22 hours to the deadline. Items A–E are complete and the shot list is filmable as written.**
+Remaining author-only work, in priority order: **film and cut the video**; confirm
+`evals/REVIEW_ME.md` (all 11 gold labels still read `reviewed: false`); make the repo public;
+rotate `.env` and the Telegram credentials; submit a complete draft early.
+Next unattended: FEATURES_V2 §5, the read-only NEEDS A LOOK moderation panel — deterministic,
+free, and the prompt-injection row is a security story as much as a moderation one.
+Blockers: the video needs the author.
