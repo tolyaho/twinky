@@ -57,8 +57,12 @@ baseline:
 ablation:
 	TS_LLM_MODE=replay $(PY) -m ts.cli baseline --fixture $(FIXTURE) --chat-only --out evidence/raw-results
 
+# --ablation is included so this command reproduces the COMMITTED evidence/report.md exactly.
+# It was opt-in while recording, because each extra system was 11 more paid calls; on replay it
+# is free, and a documented command that silently rewrites the committed table with fewer rows
+# than the README quotes is a reproducibility trap.
 eval:
-	TS_LLM_MODE=replay $(PY) -m evals.run_eval --cases $(CASES) --out evidence
+	TS_LLM_MODE=replay $(PY) -m evals.run_eval --cases $(CASES) --ablation --out evidence
 
 # The post-stream artifact. No model call - it reorganises what `make replay` already verified.
 debrief:

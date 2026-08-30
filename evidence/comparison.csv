@@ -11,7 +11,7 @@ c03_failure_laughter,agent,1,1,0,1,0,1,1,False,,,,0.0,0.0,1.0,1.0
 c05_warning_no_cause,baseline,1,1,0,0,1,0,0,False,,,,,1.0,0.0,0.0
 c05_warning_no_cause,ablation_chat_only,1,1,0,0,1,1,0,False,,,,,1.0,1.0,0.0
 c05_warning_no_cause,agent,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
-c06_two_speakers_laughter,baseline,0,1,0,0,0,0,0,False,,,,,,,0.0
+c06_two_speakers_laughter,baseline,1,1,0,0,1,1,0,False,,,,,1.0,1.0,0.0
 c06_two_speakers_laughter,ablation_chat_only,3,1,0,0,3,0,0,False,,,,,1.0,0.0,0.0
 c06_two_speakers_laughter,agent,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
 c07_frame_only_dracorex,baseline,1,1,0,0,1,1,0,False,,,,,1.0,1.0,0.0

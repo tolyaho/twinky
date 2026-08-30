@@ -780,8 +780,35 @@
   ],
   "trace_id": "trc_fbca54f9",
   "trace_path": "trajectories/product-agent/c06_two_speakers_laughter_trc_fbca54f9.json",
-  "parse_error": "'str' object has no attribute 'get'",
-  "cards": []
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_8ff4efd979",
+    "type": "audience_answer",
+    "title": "Yugi's Focus",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_8ff4efd979",
+     "quote": "I've been shooting it for a nice measly three about two years now"
+    },
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_fbca54f9",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_NO_EVIDENCE",
+       "detail": "card cites no representative messages"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
  },
  {
   "case_id": "c06_two_speakers_laughter",
