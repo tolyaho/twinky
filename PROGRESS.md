@@ -224,3 +224,16 @@ self-contradiction; a passing one is labelled `abstained`; the drawer says there
 check rather than "0 messages". A test asserts the path did not become a hole in the gate.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T07:05Z — iteration 17
+Attempted: continued auditing the gate for places where it fails at its own job. Found #27.
+Result: `make test` green, 210 -> 213. `events.window` is half-open and the agent's tools follow
+it, but `check_card` accepted an inclusive end. Demonstrated on the sample fixture: a message at
+exactly a tile boundary is invisible to window 1's tools and belongs to window 2, yet the gate
+verified a window-1 card citing it. Tiles are adjacent, so this was a boundary case on every
+window, and it understated the unsupported-card rate — the headline metric — by admitting
+evidence the agent provably never saw. Now half-open. Checked that all four frozen gold cards
+still pass the gate afterwards, and added a test that keeps that true, so a future tightening
+cannot silently invalidate the frozen set.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
