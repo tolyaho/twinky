@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
+<!-- Atmosphere only: soft, blurred, low-opacity, behind everything, carrying no meaning. -->
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
 <header class="bar">
   <div class="bar-left">
     <span class="mark">Twitch Agent</span>
@@ -36,6 +39,21 @@
       this?”</em> is a rating. Chat is only interpretable against the stimulus that caused it —
       and the stimulus is in the audio and on the screen, not in the chat.
     </p>
+    <!-- The stage replays REAL messages from this run and collapses them into the cards the
+         system actually produced. There is no synthetic loop and no invented text: if the run
+         has no verified card, the stage does not render at all. -->
+    <section class="stage" id="stage" hidden>
+      <div class="stage-head">
+        <span class="stage-label" id="stage-label">chat, as it arrives</span>
+        <button class="btn-outline" id="stage-toggle" aria-pressed="false">Replay</button>
+      </div>
+      <div class="stage-body">
+        <ul class="stream" id="stage-stream"></ul>
+        <div class="stage-cards" id="stage-cards"></div>
+        <p class="stage-trigger" id="stage-trigger"></p>
+      </div>
+    </section>
+
     <dl class="stat-row" id="hero-stats"></dl>
     <p class="note" id="hero-note"></p>
   </section>

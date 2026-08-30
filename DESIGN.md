@@ -8,7 +8,8 @@
 >
 > So this file needs no correction and remains the single source of truth. Where the two could
 > ever disagree: the reference wins on **values**, this file wins on the rules the tests enforce
-> (every hex in `app.css` exists here, display weight ≤ 300, hairlines not shadows, no saturated
+> (every hex in `app.css` exists here, display weight ≤ 300, one hairline-level shadow tier only,
+> no saturated
 > accent). The `npx getdesign` CLI needs a Node toolchain, which this machine does not have; the
 > template was taken straight from the published npm tarball instead, which is the same artifact.
 

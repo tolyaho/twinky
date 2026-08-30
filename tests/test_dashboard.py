@@ -130,10 +130,40 @@ def test_display_type_never_exceeds_weight_300():
 
 
 def test_hairlines_not_shadows():
+    """DESIGN.md defines exactly one shadow tier — `--shadow-hover`, "the ONLY shadow tier" —
+    and puts it on hovered cards. This used to forbid `box-shadow` outright, which was stricter
+    than the design it enforces. Tightened rather than relaxed: the value must be the token, the
+    token must be the documented one, and it may only appear on a hover state."""
     css = (STATIC / "app.css").read_text(encoding="utf-8")
 
-    assert "box-shadow" not in css
-    assert css.count("border: 1px solid") >= 3
+    # the stylesheet's tier must be the one DESIGN.md documents, whitespace aside
+    norm = lambda s: re.sub(r"\s+", "", s)
+    design = (REPO_ROOT / "DESIGN.md").read_text(encoding="utf-8")
+    documented = re.search(r"--shadow-hover:\s*([^;]+);", design)
+    declared = re.search(r"--shadow-hover:\s*([^;]+);", css)
+    assert documented and declared, "the shadow tier is not declared in both files"
+    assert norm(declared.group(1)) == norm(documented.group(1)), (
+        f"stylesheet tier {declared.group(1)!r} != DESIGN.md {documented.group(1)!r}")
+
+    declarations = re.findall(r"box-shadow:\s*([^;]+);", css)
+    assert declarations, "the one hover tier should be in use"
+    for value in declarations:
+        assert value.strip() == "var(--shadow-hover)", f"improvised shadow: {value.strip()}"
+
+    # ...and only ever on hover.
+    for rule in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        if "box-shadow:" in rule[1] and "--shadow-hover" not in rule[0]:
+            assert ":hover" in rule[0], f"shadow off a hover state: {rule[0].strip()[:70]}"
+
+    # hairlines remain the structural device
+    assert css.count("border: 1px solid") >= 8
+
+
+def test_only_one_shadow_tier_is_defined():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    tiers = re.findall(r"--shadow[a-z-]*:", css)
+
+    assert len(tiers) == 1, f"the system allows one shadow tier, found {tiers}"
 
 
 def test_the_page_fetches_nothing_from_the_network():
@@ -275,3 +305,72 @@ def test_every_hex_still_comes_from_the_design_tokens():
     used = {m.lower() for m in re.findall(r"#[0-9a-fA-F]{6}", _css())}
 
     assert used <= allowed, f"improvised colour: {sorted(used - allowed)}"
+
+
+# --------------------------------------------------------------- the visual pass
+def test_signal_status_is_never_conveyed_by_colour():
+    """A product decision, not a style one. verified / abstained / rejected are carried by label,
+    weight and hairline. Colour-coding a status invites the reader to skim it instead of opening
+    the evidence, which is the one thing this product asks them to do."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    for state in (".pill.verified", ".pill.abstained", ".pill.rejected"):
+        block = css.split(state, 1)[1].split("}", 1)[0]
+        for chromatic in ("--success", "--error", "--orb-"):
+            assert chromatic not in block, f"{state} is colour-coded via {chromatic}"
+
+
+def test_the_orbs_are_atmosphere_and_nothing_else():
+    """Pastel orbs are weather: soft, blurred, low opacity, behind content, meaningless. Never a
+    fill behind text, never a text colour, never a state or chart colour."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    orb = css.split(".orb {", 1)[1].split("}", 1)[0]
+
+    assert "z-index: -1" in orb, "orbs must sit behind content"
+    assert "blur(" in orb
+    assert "pointer-events: none" in orb
+    opacity = float(re.search(r"opacity:\s*([\d.]+)", orb).group(1))
+    assert 0.25 <= opacity <= 0.45, f"orb opacity {opacity} is outside atmosphere range"
+
+    # the orb tokens may only be used by the orbs themselves
+    for block in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        if "--orb-" in block[1] and "--orb-mint:" not in block[1]:
+            assert ".orb" in block[0], f"orb colour used outside atmosphere: {block[0].strip()[:60]}"
+
+
+def test_the_stage_plays_real_data_or_nothing():
+    """The hero is the product's argument. If the run verified no card there is no argument to
+    make, so it must stay hidden rather than animate a claim the system never produced."""
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+
+    assert 'id="stage" hidden' in html
+    assert "if (!data) return;" in js
+    assert "Math.random" not in js
+    # every string it shows comes from the payload
+    assert "events[id]" in js and "card.title" in js
+
+
+def test_the_stage_is_deterministic_so_it_can_be_filmed():
+    """Two plays must be identical: the video opens on this shot, and a jittering hero cannot be
+    cut against a voiceover."""
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "Math.random" not in js
+    assert "STAGE_STEP_MS" in js, "timing must be a named constant, not improvised"
+    assert "stageStop" in js, "the loop has to be stoppable"
+
+
+def test_reduced_motion_is_respected():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "prefers-reduced-motion" in css
+    assert "prefers-reduced-motion" in js
+
+
+def test_nothing_scrolls_horizontally():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert "overflow-x: hidden" in css, "the orbs extend past the viewport by design"
+    assert "max-width: var(--measure)" in css

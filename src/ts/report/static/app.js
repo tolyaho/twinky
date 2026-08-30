@@ -285,6 +285,133 @@ function renderScores(evaluation) {
   if (rows) document.getElementById("measured").hidden = false;
 }
 
+
+/* ------------------------------------------------------------------ the stage
+   The hero argument, played with REAL data from this run: the messages a verified card actually
+   cites, the message it froze on, and the cards the system actually produced.
+
+   Three things this deliberately is not. It is not a synthetic loop — every string comes from
+   `events` or from a card the gate verified. It has no randomness — timing is index-derived, so
+   two plays are identical and a camera can be pointed at it. And it never runs on an empty run:
+   with no verified card there is nothing to argue, so the stage stays hidden rather than
+   animating a claim the system did not make. */
+const STAGE_STEP_MS = 260;      /* between messages */
+const STAGE_FREEZE_MS = 1500;   /* the hold on one meaningless message */
+const STAGE_COLLAPSE_MS = 700;
+
+/* The message that best makes the point is the shortest one a card is standing on: alone it is
+   noise, and the card says what caused it. Shortest, then earliest id, so the pick is stable. */
+function frozenPick(texts) {
+  let best = 0;
+  for (let i = 1; i < texts.length; i += 1) {
+    if (texts[i].text.length < texts[best].text.length) best = i;
+  }
+  return best;
+}
+
+function stageData(result, events) {
+  const verified = [];
+  for (const window of result.windows || []) {
+    for (const card of window.verified || []) {
+      if (card.type !== "none" && (card.evidence || []).length) verified.push(card);
+    }
+  }
+  if (!verified.length) return null;
+
+  const cards = verified.slice(0, 3);
+  const seen = new Set();
+  const texts = [];
+  for (const card of cards) {
+    for (const id of card.evidence || []) {
+      const event = events[id];
+      if (event && event.text && !seen.has(id)) {
+        seen.add(id);
+        texts.push({ id: id, text: event.text });
+      }
+    }
+  }
+  if (texts.length < 2) return null;
+  return { cards: cards, texts: texts.slice(0, 12), trigger: cards[0].trigger || {} };
+}
+
+let stageTimers = [];
+function stageStop() {
+  for (const id of stageTimers) clearTimeout(id);
+  stageTimers = [];
+}
+
+function stagePlay(data) {
+  stageStop();
+  const stream = document.getElementById("stage-stream");
+  const cards = document.getElementById("stage-cards");
+  const trigger = document.getElementById("stage-trigger");
+  const label = document.getElementById("stage-label");
+
+  while (stream.firstChild) stream.removeChild(stream.firstChild);
+  while (cards.firstChild) cards.removeChild(cards.firstChild);
+  cards.classList.remove("in");
+  trigger.classList.remove("in");
+  label.textContent = "chat, as it arrives";
+
+  const freeze = frozenPick(data.texts);
+  const rows = data.texts.map((entry) => {
+    const li = el("li", null, entry.text);
+    stream.appendChild(li);
+    return li;
+  });
+
+  /* accelerating: each message lands a little sooner than the last */
+  let at = 0;
+  rows.forEach((li, i) => {
+    at += Math.max(90, STAGE_STEP_MS - i * 14);
+    stageTimers.push(setTimeout(() => li.classList.add("in"), at));
+  });
+
+  stageTimers.push(setTimeout(() => {
+    rows[freeze].classList.add("frozen");
+    label.textContent = "meaningless on its own";
+  }, at + 220));
+
+  const collapseAt = at + 220 + STAGE_FREEZE_MS;
+  stageTimers.push(setTimeout(() => {
+    for (const li of rows) li.classList.add("out");
+    label.textContent = "grounded in one stream moment";
+  }, collapseAt));
+
+  stageTimers.push(setTimeout(() => {
+    for (const card of data.cards) {
+      const box = el("div", "mini");
+      box.appendChild(el("div", "mini-type", card.type));
+      box.appendChild(el("div", "mini-title", card.title || ""));
+      cards.appendChild(box);
+    }
+    cards.classList.add("in");
+    const quote = (data.trigger.quote || "").trim();
+    const id = data.trigger.event_id;
+    trigger.textContent = quote
+      ? `caused by ${data.trigger.kind || "event"} ${id} — “${quote}”`
+      : `cause recorded as ${id || UNKNOWN}`;
+    trigger.classList.add("in");
+  }, collapseAt + STAGE_COLLAPSE_MS));
+}
+
+function renderStage(result, events) {
+  const data = stageData(result, events);
+  if (!data) return;                       /* nothing verified: no argument to play */
+  document.getElementById("stage").hidden = false;
+
+  const button = document.getElementById("stage-toggle");
+  button.addEventListener("click", () => stagePlay(data));
+
+  const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!still) stagePlay(data);
+  else {
+    /* Reduced motion: show the end state, which is the part that carries the meaning. */
+    stageTimers.push(setTimeout(() => stagePlay(data), 0));
+    stageStop();
+  }
+}
+
 function render(data) {
   const { meta, result, events, evaluation } = data;
   const startMs = result.span_ms ? result.span_ms[0] : (meta.start_ms || 0);
@@ -297,6 +424,7 @@ function render(data) {
     `make replay FIXTURE=${result.fixture}`;
   renderDebug(data);
   renderHero(result, evaluation);
+  renderStage(result, events);
   renderScores(evaluation);
 
   const verified = [], rejected = [];
