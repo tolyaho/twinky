@@ -52,11 +52,26 @@
 </section>
 
 <div class="toolbar">
-  <div class="toolbar-group">
+  <!-- The control is INTENT; the badge in the header is FACT, written only from what the server
+       reports. They are deliberately two different things, so a tab that thinks it is live over a
+       server that is replaying cannot say so. -->
+  <div class="segmented modes" role="group" aria-label="Source">
+    <button class="seg is-active" id="mode-replay" data-mode="replay" aria-pressed="true">Replay</button>
+    <button class="seg" id="mode-live" data-mode="live" aria-pressed="false">Live</button>
+  </div>
+
+  <div class="toolbar-group" id="replay-controls">
     <span class="toolbar-label">Channel</span>
     <div class="chips" id="picker-chips"></div>
   </div>
-  <button class="btn-outline go-live" id="go-live" type="button">Go live</button>
+
+  <form class="toolbar-group live-controls" id="live-controls" hidden autocomplete="off">
+    <label class="sr-only" for="live-channel">Twitch channel</label>
+    <input class="picker-input" id="live-channel" type="text" placeholder="a channel that is live now">
+    <button class="btn-primary" id="live-go" type="submit">Watch chat</button>
+    <button class="btn-outline go-live" id="go-live" type="button">Add speech &amp; screen &mdash; costs money</button>
+  </form>
+
   <span class="live-spend" id="live-spend" hidden></span>
   <p class="picker-note" id="picker-note">Recorded windows, replayed at their true cadence.</p>
 </div>

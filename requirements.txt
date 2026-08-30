@@ -20,3 +20,8 @@ httpx==0.28.1
 # dev
 pytest==8.4.1
 mypy==1.18.2
+
+# Tier 0 live chat: anonymous Twitch IRC, no key, no model, no cost. It belongs in the BASE
+# install rather than requirements-record.txt because it is part of the free path a judge can
+# run — and unlike streamlink it needs only Python 3.9, which is what macOS ships.
+websockets==15.0.1

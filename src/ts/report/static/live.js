@@ -41,6 +41,7 @@ const state = {
   boardRows: 0,
   boardSeen: false,
   origin: null,
+  mode: "replay",               /* what the CONTROL says; the badge says what the server says */
   codes: {},                    /* gate violation census, for the finding line */
   questionCount: 0,
   view: "board",
@@ -793,6 +794,92 @@ function clear(node) {
 }
 
 document.getElementById("go-live").addEventListener("click", goLive);
+
+/* ---------------------------------------------------------------- REPLAY | LIVE
+   Tier 0: a real channel's chat over anonymous IRC, grouped by the same rules replay uses. No
+   key, no model, no cost. It has no audio and no video, so no group has a cause and every row is
+   unattributed — which the status line says outright rather than leaving the empty board to
+   imply something worse. */
+function showMode(mode) {
+  const live = mode === "live";
+  state.mode = mode;
+  document.getElementById("replay-controls").hidden = live;
+  document.getElementById("live-controls").hidden = !live;
+  for (const id of ["mode-replay", "mode-live"]) {
+    const on = (id === "mode-live") === live;
+    document.getElementById(id).classList.toggle("is-active", on);
+    document.getElementById(id).setAttribute("aria-pressed", String(on));
+  }
+  document.getElementById("picker-note").textContent = live
+    ? "Anonymous IRC. No key, no model call, no cost — and no cause, because this tier has no audio or screen."
+    : "Recorded windows, replayed at their true cadence.";
+  if (!live) {
+    if (state.source) { state.source.close(); state.source = null; }
+    start(state.fixture, state.system, state.speed);
+  }
+}
+for (const id of ["mode-replay", "mode-live"]) {
+  document.getElementById(id).addEventListener(
+    "click", () => showMode(id === "mode-live" ? "live" : "replay"));
+}
+
+document.getElementById("live-controls").addEventListener("submit", (e) => {
+  e.preventDefault();
+  watchLiveChat(document.getElementById("live-channel").value.trim().toLowerCase());
+});
+
+function watchLiveChat(channel) {
+  const note = document.getElementById("picker-note");
+  const badge = document.getElementById("mode-badge");
+  if (!channel) { note.textContent = "Name a channel that is live right now."; return; }
+
+  reset();
+  const epoch = ++state.epoch;
+  const current = () => epoch === state.epoch;
+  const source = new EventSource(`/api/live_chat?channel=${encodeURIComponent(channel)}`);
+  state.source = source;
+
+  source.addEventListener("status", (e) => {
+    if (!current()) return;
+    const s = JSON.parse(e.data);
+    /* Written from the SERVER's mode, never from what this tab thinks it clicked. */
+    clear(badge);
+    badge.appendChild(el("span", "dot"));
+    badge.appendChild(document.createTextNode(`${s.mode.toUpperCase()} · TIER ${s.tier} · $0.00`));
+    document.getElementById("captured-at").textContent = `#${s.channel} · live now`;
+    note.textContent = s.message;
+  });
+
+  source.addEventListener("chat", (e) => {
+    if (current()) addMessage(JSON.parse(e.data));
+  });
+
+  source.addEventListener("tick", (e) => {
+    if (!current()) return;
+    const t = JSON.parse(e.data);
+    /* Straight into the same live block replay uses: one board, one set of rules. */
+    addTick({ groups: t.groups, at_ms: 0, next_close_ms: null });
+    renderRail(t.rail || {});
+    renderQuestions({ total: (t.questions || []).length,
+                      asked: (t.questions || []).reduce((n, q) => n + q.count, 0),
+                      unanswered: (t.questions || []).length,
+                      questions: t.questions || [], hidden: 0 });
+    const f = t.summary || {};
+    const foot = document.getElementById("board-foot");
+    foot.hidden = false;
+    foot.textContent = `${f.messages || 0} messages · ${f.groups || 0} groups · `
+      + `${f.ungrouped || 0} singletons · no cause on this tier`;
+  });
+
+  source.addEventListener("stopped", (e) => {
+    if (!current()) return;
+    source.close();
+    note.textContent = JSON.parse(e.data).message;
+  });
+  source.addEventListener("error", () => {
+    if (current()) failStream("The live chat connection dropped.");
+  });
+}
 document.getElementById("follow").addEventListener("click", resumeFollowing);
 
 /* Scrolling up is a deliberate act: stop following and leave the affordance until they come

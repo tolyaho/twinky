@@ -27,7 +27,8 @@ STATIC = Path(__file__).parent / "static"
 ROUTES = ["/", "/method", "/api/replay", "/api/fixtures",
           "/api/stream?fixture=<id>&system=<agent|baseline>&speed=<1|4|8>",
           "/api/board?fixture=<id>&window=<n>",
-          "/api/live?channel=<name>", "/api/budget", "/philosophy",
+          "/api/live?channel=<name>", "/api/live_chat?channel=<name>",
+          "/api/budget", "/philosophy",
           "/static/<file>"]
 
 PLACEHOLDER = """<!doctype html>
@@ -441,6 +442,38 @@ class ReplayHandler(BaseHTTPRequestHandler):
         except Exception as exc:                 # noqa: BLE001
             emit("stopped", {"kind": "stopped", "reason": "error", "message": str(exc)})
 
+    def _live_chat(self, params: Dict[str, str]) -> None:
+        """Tier 0: a real channel's chat, grouped, with no key and no cost.
+
+        Deliberately a separate route from `/api/live`. That one spends money per window; this
+        one cannot spend anything, and a viewer must never reach the paid path by accident.
+        """
+        from ..live_chat import session
+
+        channel = re.sub(r"[^a-zA-Z0-9_]", "", params.get("channel", ""))[:25].lower()
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Connection", "close")
+        self.end_headers()
+
+        def emit(event: str, data: Any) -> bool:
+            try:
+                self.wfile.write(
+                    f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+                    .encode("utf-8"))
+                self.wfile.flush()
+                return True
+            except (BrokenPipeError, ConnectionResetError, ValueError):
+                return False
+
+        if not channel:
+            emit("stopped", {"reason": "no_channel", "message": "Name a channel to watch."})
+            return
+        for event in session(channel):
+            if not emit(event["kind"], event):
+                return          # the browser left; the generator's finally closes the socket
+
     def _stream(self, params: Dict[str, str]) -> None:
         """Server-Sent Events: the recorded run replayed at its true cadence.
 
@@ -526,6 +559,10 @@ class ReplayHandler(BaseHTTPRequestHandler):
 
         if route == "/api/live":
             self._live(params)
+            return
+
+        if route == "/api/live_chat":
+            self._live_chat(params)
             return
 
         if route == "/api/stream":

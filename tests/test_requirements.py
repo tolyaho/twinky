@@ -64,16 +64,37 @@ def test_the_replay_path_needs_exactly_one_runtime_package():
     assert not {"fastapi", "uvicorn", "langchain", "langgraph"} & set(declared())
 
 
-def test_capture_only_packages_are_not_on_the_graded_path():
-    """`make setup` runs before anything is scored, so it must not depend on a package no
-    graded command imports. streamlink requires Python 3.10+; declaring it here made a clean
-    clone fail on macOS system Python 3.9 with a pip resolver error, before `make test` ran.
+def test_nothing_in_the_base_install_needs_more_than_python_39():
+    """The real invariant. `make setup` runs before anything is scored, and streamlink requires
+    Python 3.10+ — declaring it in the base file made a clean clone fail on macOS system Python
+    3.9 with a pip resolver error, before `make test` could run.
+
+    `websockets` was swept into the same file at the time and does not have that problem: it
+    declares `>=3.9`. Measured, then moved back, because Tier 0 live chat is keyless, model-free
+    and free, and a free path a judge can run has to work on the base install.
     """
     core = set(_parse("requirements.txt"))
 
     assert "streamlink" not in core, "capture-only dependency is blocking `make setup`"
-    assert "websockets" not in core
-    assert {"streamlink", "websockets"} <= set(_parse("requirements-record.txt"))
+    assert "streamlink" in set(_parse("requirements-record.txt"))
+
+    import importlib.metadata as meta
+    for package in core:
+        try:
+            needs = meta.metadata(package).get("Requires-Python") or ""
+        except meta.PackageNotFoundError:
+            continue
+        assert "3.10" not in needs, f"{package} requires {needs}; that breaks setup on 3.9"
+
+
+def test_tier_zero_live_chat_works_on_the_base_install():
+    """It calls no model and needs no key, so it must not need the recording extras either."""
+    core = set(_parse("requirements.txt"))
+
+    assert "websockets" in core
+    source = (REPO / "src/ts/live_chat.py").read_text(encoding="utf-8")
+    assert "deepgram" not in source and "streamlink" not in source
+    assert "ResponseCache" not in source, "Tier 0 must not touch the model-call cache at all"
 
 
 def test_setup_installs_only_the_graded_requirements():

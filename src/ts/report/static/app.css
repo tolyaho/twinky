@@ -1042,3 +1042,14 @@ html, body.live-page { height: 100%; }
 .cites-more[open] summary::before { content: "− "; }
 .cites-note { margin: var(--xxs) 0 0; font-size: 11px; color: var(--muted-soft); }
 .controls-note { font-size: 11px; color: var(--muted-soft); }
+
+
+/* -------------------------------------------------------------- REPLAY | LIVE
+   The control carries intent; the badge in the header carries what the server actually reports.
+   Two different things, drawn differently, so they can disagree visibly if they ever do. */
+.modes { margin-right: var(--xs); }
+.modes .seg { padding: var(--xxs) var(--sm); font-size: 12px; }
+.live-controls { display: flex; align-items: center; gap: var(--xs); }
+.live-controls .picker-input { width: 15rem; }
+/* The paid escalation says it is paid, on the button, before it is clicked. */
+.live-controls .go-live { white-space: nowrap; }

@@ -1388,3 +1388,49 @@ still the sixteen from DESIGN.md. Cost this iteration: $0.00, ledger $0.43.
 **~23.5 hours to the deadline. The video does not exist.**
 Next: D) the REPLAY|LIVE segmented control with Tier 0 keyless live chat.
 Blockers: none.
+
+## Iteration 59 — 2026-08-30 — item D, REPLAY | LIVE with Tier 0 keyless live chat
+
+Attempted: DASHBOARD §1's segmented control and the free live tier.
+
+New `src/ts/live_chat.py` and `/api/live_chat`: anonymous Twitch IRC (`justinfan` / `PASS
+SCHMOOPIIE`), the same grouping rules the replay board uses, the same rail, the same trailing
+60-second window, recomputed every 2 seconds. **No key, no model call, no cost, and nothing
+written to disk** — no fixture, no cache entry, no trajectory, so a live session cannot
+contaminate anything a judge reproduces.
+
+**What the tier cannot do is the honest part, and it says so.** There is no audio and no screen,
+so no group has a cause and every row is unattributed. The status line states that outright; an
+empty board left to imply a bug would be worse than the limitation. It is the chat-only ablation's
+argument, running live.
+
+**Verified against a real broadcast**, not a mock: `#jynxzi` returned **168 messages and 6 ticks
+in 14 seconds**, with groups forming and counts climbing — `truth × 5`, `vape × 5`, `true × 3`
+— 50 unique chatters, peak burst 41, `silent: true`, zero frame captions. Authors arrive
+pseudonymised (`u_28e1aa4cd6`), and `git status` was clean afterwards apart from my own source
+edits.
+
+The toolbar now carries a real `Replay | Live` control. **The control is intent; the badge in the
+header is fact** — it is built only from the `mode` and `tier` the server sent, so a tab that
+thinks it is live over a replaying server cannot say so. Live mode swaps the fixture chips for a
+free-text channel field, and the paid escalation is a separate button reading *"Add speech &
+screen — costs money"* before anyone clicks it.
+
+**`websockets` moved into the base requirements.** It had been grouped with `streamlink` when
+that was split out for needing Python 3.10+ — but `websockets` declares `>=3.9`, which is what
+macOS ships. Tier 0 is part of the free path, so it must work on the base install. The guard that
+forbade it was rewritten to assert the real invariant instead of naming a package: nothing in the
+base install may require Python 3.10, checked against installed metadata. That is a stronger test
+than the one it replaced.
+
+Fifth occurrence of the same self-inflicted test failure: a guard grepping raw source fired on
+the docstring explaining why the forbidden thing is absent. Fixed properly this time with a
+`code()` helper that strips comments and docstrings via `tokenize` before any text assertion.
+
+Result: `make test` 530 → **545 passed**. 14 new tests in `tests/test_tier0.py`, six rows in
+DECISIONS.md. `make eval` still **48 hits / 0 misses**, published files byte-identical. Cost:
+**$0.00**, ledger $0.43.
+
+**~23 hours to the deadline. The video does not exist.**
+Next: E) the agent graph SVG on the Method page — the last build item before the video gate.
+Blockers: none.
