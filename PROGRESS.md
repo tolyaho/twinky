@@ -122,3 +122,18 @@ and the defects the sessions found; no chat transcript is claimed because none w
 `trajectories/README.md` now lists all three systems as owed and `[TBD]`.
 Next: C4 — RISKS.md review pass. C2 needs a populated cache and waits on B.
 Blockers: #20, no real trajectory for any system, is downstream of #2. B needs P0-3 fixtures.
+
+## 2026-08-30T03:52Z — iteration 10
+Attempted: C4 — review pass over `RISKS.md`.
+Result: `make test` green, 151 -> 152. Verified claims instead of trusting earlier entries, and
+two of them were wrong or incomplete. #11 said three unused dependencies; it is six — the
+`deepgram` import hits are this repo's own `ts.providers.deepgram`, not the SDK. New #22:
+`load_dotenv` is called nowhere, so a correctly filled `.env` is read by nobody and the record
+phase fails with "DEEPGRAM_API_KEY is unset"; `docs/REPRODUCTION.md` §10 told the author to fill
+`.env`, which was a false instruction, now corrected and guarded by a test. New #21: the
+recorder has never run against a live stream — its own docstring says so — and it is the
+critical path tonight. #5 downgraded to partly resolved, #9 superseded by #14/#15, #3 verified by
+running with the environment stripped. File reordered by severity with a critical-path header.
+Next: B is still blocked on #2. Remaining unblocked work is #11 (drop six unused deps) and the
+editorial page sections that wait on measured numbers.
+Blockers: #2 gates B, C2, #12, #20 and the video. #16, #17 need the author: rotate, then exclude.
