@@ -28,6 +28,13 @@ agent calling `group_repeated` and `get_transcript_window`, finding no speech, a
 `get_frame_captions`**. That is the main failure mode in `docs/IMPROVEMENT_CHANGELOG.md`, visible
 step by step rather than asserted.
 
+**A note on re-running.** `make eval` and `make replay` rewrite these files, and each step
+carries an `at_ms` field — wall-clock milliseconds elapsed within that run. So a re-run produces
+*content-identical* trajectories that are not *byte-identical*, and `git status` will show them
+as modified. Nothing that feeds a published number is affected: cache keys, card contents, gate
+decisions and every figure in `evidence/` are byte-stable, which is what `make eval` reproducing
+at 48 hits / 0 misses demonstrates.
+
 The directory previously held 55 files, all test artifacts with case ids like `t3` that no
 evaluation case has. They were removed on 2026-08-30 and the suite now writes to a temporary
 directory via `TS_TRACE_DIR`, so regenerable test output cannot re-enter a graded deliverable.

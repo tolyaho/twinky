@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 2396,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "5587ea3937f8b27b5201d04bb208cd4a2a392a4a1a0e4c6017e99277abea08e2",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 892
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -38,16 +38,16 @@
    "result": {
     "n": 73
    },
-   "at_ms": 895
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "57b36e963eadc4db3971bd91818796c297e112258fe34e1089299be1d4855f74",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 2396
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -87,7 +87,7 @@
      "detail": "1788075248098 not in fixture"
     }
    ],
-   "at_ms": 2396
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -97,7 +97,7 @@
     "steps": 2,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 2396
+   "at_ms": 0
   }
  ]
 }

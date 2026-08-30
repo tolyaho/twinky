@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 1,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -47,7 +47,7 @@
    "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -59,7 +59,7 @@
      "detail": "1788074767986 not in fixture"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -71,7 +71,7 @@
      "detail": "1788074771004 not in fixture"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -83,7 +83,7 @@
      "detail": "1788074774861 not in fixture"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -93,7 +93,7 @@
     "steps": 2,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 1
+   "at_ms": 0
   }
  ]
 }

@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 4437,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "12d3782cabaa953407f1cb0b5a0b652ff29b8e4b03025a411c79add0d3a470b3",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1125
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -38,16 +38,16 @@
    "result": {
     "n": 1
    },
-   "at_ms": 1125
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "c6a98c588605ca515e803be8aa7db1a64a00294cd11d693b16a08ad321a078b9",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 2135
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -60,16 +60,16 @@
    "result": {
     "n": 0
    },
-   "at_ms": 2135
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "578fecf57a3602e4c66f3f19e3e383170520e4ab4b0b8b7609a417e95c8ea695",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 3123
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -82,23 +82,23 @@
    "result": {
     "n": 0
    },
-   "at_ms": 3123
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "f2757fa7c44432b1b8f851ebf7df230ad62b7efda636c439d40a81a1ddf4995a",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 4437
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "unknown_event_1",
    "ok": true,
    "violations": [],
-   "at_ms": 4437
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -108,7 +108,7 @@
     "steps": 4,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 4437
+   "at_ms": 0
   }
  ]
 }

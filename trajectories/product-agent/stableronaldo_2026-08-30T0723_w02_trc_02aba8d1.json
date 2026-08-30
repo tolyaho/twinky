@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 1,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -47,7 +47,7 @@
    "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -60,7 +60,7 @@
    "result": {
     "n": 0
    },
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "model_call",
@@ -69,14 +69,14 @@
    "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "unknown_event",
    "ok": true,
    "violations": [],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -86,7 +86,7 @@
     "steps": 3,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 1
+   "at_ms": 0
   }
  ]
 }

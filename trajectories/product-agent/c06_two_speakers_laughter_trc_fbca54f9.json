@@ -28,18 +28,24 @@
    "at_ms": 0
   },
   {
-   "kind": "retry",
-   "why": "unparseable response: 'str' object has no attribute 'get'",
-   "attempt": 1,
+   "kind": "provenance_gate",
+   "signal_id": "tr_8ff4efd979",
+   "ok": false,
+   "violations": [
+    {
+     "code": "E_NO_EVIDENCE",
+     "detail": "card cites no representative messages"
+    }
+   ],
    "at_ms": 0
   },
   {
    "kind": "result",
    "payload": {
     "verified": 0,
-    "rejected": 0,
+    "rejected": 1,
     "cards_dropped_by_cap": 0,
-    "parse_error": "'str' object has no attribute 'get'"
+    "parse_error": null
    },
    "at_ms": 0
   }

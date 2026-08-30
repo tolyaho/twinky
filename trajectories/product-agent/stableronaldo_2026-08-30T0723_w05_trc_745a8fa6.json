@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 3985,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "35f3c80c320c7e1c6c013a7830f8da7a2543d132c9c7dee5fa557113917b6c82",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1068
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -38,37 +38,37 @@
    "result": {
     "n": 58
    },
-   "at_ms": 1072
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "a76b5f40482380040462a423abbdf649b9f92ae0035625d8cece49b785c73777",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 3985
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "0ab18844-f9b2-4263-ae39-2e04a8ad611c",
    "ok": true,
    "violations": [],
-   "at_ms": 3985
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "55fb9dd5-a4d4-43b7-8346-6af50027c23c",
    "ok": true,
    "violations": [],
-   "at_ms": 3985
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "73b50903-8239-4386-bd85-d4994b0a23ae",
    "ok": true,
    "violations": [],
-   "at_ms": 3985
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -78,7 +78,7 @@
     "steps": 2,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 3985
+   "at_ms": 0
   }
  ]
 }

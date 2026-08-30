@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 3746,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "a5e43f7a54633ee90eeda0f7fbd0616caa780503da8f08afbf52c5d2b83ebbee",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 895
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -38,16 +38,16 @@
    "result": {
     "n": 82
    },
-   "at_ms": 896
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "adf76614e8a67557bf32daedd74a2467d8ad31df36d25d5ef16ae6b5c5a4dd67",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 3746
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -59,7 +59,7 @@
      "detail": "374d234a-aafe-43e4-8a94-909ed046fcb0 is cited as evidence for the signal it supposedly caused"
     }
    ],
-   "at_ms": 3746
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -71,7 +71,7 @@
      "detail": "dbd94f0f-45d2-4d6a-8a54-db0e287dc5a3 is cited as evidence for the signal it supposedly caused"
     }
    ],
-   "at_ms": 3746
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -83,7 +83,7 @@
      "detail": "dd2d8d4e-eca4-4c1f-b67f-1ed5d464e209 is cited as evidence for the signal it supposedly caused"
     }
    ],
-   "at_ms": 3746
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -93,7 +93,7 @@
     "steps": 2,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 3746
+   "at_ms": 0
   }
  ]
 }

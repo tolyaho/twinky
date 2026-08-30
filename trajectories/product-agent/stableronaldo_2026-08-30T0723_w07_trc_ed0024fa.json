@@ -10,7 +10,7 @@
   ],
   "max_steps": 4
  },
- "duration_ms": 3021,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "15386854c4d81892a1adfd54ae0f0888ed410419d31e80b40ee4d131e11c3dcf",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1019
+   "at_ms": 0
   },
   {
    "kind": "tool_call",
@@ -38,16 +38,16 @@
    "result": {
     "n": 79
    },
-   "at_ms": 1020
+   "at_ms": 0
   },
   {
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "153aba6c93964d8c5289fb114fdd61ab158078d45f0d34d18c8573c8669eb3cf",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 3021
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -59,7 +59,7 @@
      "detail": "trigger 24c7fff8-8298-427c-8c8d-071f2a6d4e22 at 1788075014084 is after earliest cited message 1788075008185"
     }
    ],
-   "at_ms": 3021
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -69,7 +69,7 @@
     "steps": 2,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 3021
+   "at_ms": 0
   }
  ]
 }
