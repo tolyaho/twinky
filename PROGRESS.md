@@ -524,3 +524,31 @@ Block C item 5 was already done: deleting `legacy/frontend/` in block A took the
 glass-liquid and gradient bars with it — zero matches left in `report/static/`.
 Next: block C item 3, the hero driven by real replay data, then item 4, drawer motion.
 Blockers: none. Cost unchanged at $0.39 of $5.00 — this block spent nothing.
+
+## 2026-08-30T17:40Z — iteration 34
+Attempted: the frontend visual pass — reference reconciliation, then type, space, atmosphere,
+the hero stage, card and drawer treatment, and the editorial results table.
+Result: `make test` green, 359 -> 366. The dashboard is now the LIGHT editorial system the
+reference and DESIGN.md both describe — off-white canvas, white cards at radius 16 with a 1px
+hairline, ink type — instead of the dark developer-tools canvas it had been, which DESIGN.md
+never asked for. Two soft orbs as atmosphere: fixed, blurred 110px, opacity .38, z-index -1,
+pointer-events none, drifting on a 46/58s alternate; a test pins them inside the atmosphere range
+and forbids an orb colour appearing anywhere but the orbs.
+Signal status is now monochrome. `verified` / `abstained` / `rejected` are carried by label,
+weight and hairline, never by colour — a product decision, not a style one: a colour-coded status
+invites skimming instead of opening the evidence, which is the one thing the product asks for.
+`--success` and `--error` no longer appear in the stylesheet.
+The hero stage plays REAL replay data: the messages a verified card actually cites, accelerating,
+freezing on the shortest one — on stableronaldo that is "mitosis", meaningless alone — then
+collapsing into the cards the system actually produced, with the trigger line beneath. No
+randomness, index-derived timing, a stop control and a Replay button, so it can be filmed
+without jitter. If a run verified nothing there is no argument to make and the stage stays
+hidden rather than animating a claim the system never produced.
+Tightened rather than weakened one test: it forbade `box-shadow` outright, which was stricter
+than DESIGN.md, whose `--shadow-hover` is documented as "the ONLY shadow tier" on hovered cards.
+It now requires the value to be that token, the token to match DESIGN.md, and every use to sit on
+a `:hover` selector — and a second test asserts only one tier is ever defined.
+Caught while verifying: a stale server was holding port 8000, so my first check of
+`make demo FIXTURE=yugi` was actually reading the previous stableronaldo instance. Re-ran clean.
+Next: the box has an hour or so left. The video is not started and is the hard deliverable.
+Blockers: none. Cost unchanged at $0.39 of $5.00 — this pass spent nothing.
