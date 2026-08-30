@@ -111,6 +111,17 @@ def write_outputs(scores: List[CaseScore], out: Path,
     systems = sorted({s.system for s in scores})
     lines = ["# Evaluation report", ""]
 
+    # A system that emits nothing at all over every case is broken plumbing, not a weak system:
+    # its metrics come out `null` and the comparison silently stops existing. The first measured
+    # run reported exactly this for the baseline and the ablation and looked like a result.
+    mute = [s for s in systems
+            if sum(x.n_cards for x in scores if x.system == s) == 0]
+    if mute:
+        lines += [f"> **BROKEN — NOT A RESULT.** {', '.join(mute)} emitted zero cards across "
+                  f"every case. A system that returns nothing cannot be compared, so the rows "
+                  f"below do not constitute a measured comparison. Diagnose before reporting.",
+                  ""]
+
     # A judge opening this file must not be able to mistake a pipeline smoke-run for a result.
     unreportable = {n: f for n, f in fixtures.items() if f["kind"] != REPORTABLE_KIND}
     if unreportable:
@@ -184,6 +195,7 @@ def main(argv=None) -> int:
                     "fixture": case["fixture"], "window_ms": case["window_ms"],
                     "trace_id": result.get("trace_id"),
                     "trace_path": result.get("trace_path"),
+                    "parse_error": result.get("parse_error"),
                     "cards": cards,
                 })
     except CacheMiss as exc:
@@ -196,6 +208,16 @@ def main(argv=None) -> int:
     print(json.dumps({s: aggregate([x for x in scores if x.system == s])
                       for s in sorted({x.system for x in scores})}, indent=2))
     print(f"cache: {cache.stats()}  ->  {args.out}")
+
+    errors = sorted({p["parse_error"] for p in predictions if p.get("parse_error")})
+    for e in errors[:3]:
+        print(f"parse failure: {e}", file=sys.stderr)
+    mute = sorted({p["system"] for p in predictions} -
+                  {p["system"] for p in predictions if p["cards"]})
+    if mute:
+        print(f"\nBROKEN: {', '.join(mute)} emitted zero cards across every case. "
+              f"That is not a result — nothing can be compared to it.", file=sys.stderr)
+        return 5
     return 0
 
 
