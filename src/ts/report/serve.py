@@ -85,7 +85,96 @@ def payload(fixture: Path | str, out_dir: Path | str, system: str = "agent") -> 
         attach_drafts(window.get("verified") or [])
 
     return {"meta": meta, "result": result, "events": cited_events(result, fixture),
-            "evaluation": evaluation(out_dir)}
+            "evaluation": evaluation(out_dir),
+            "hero": hero(Path(fixture).parent, out_dir)}
+
+
+# The hero makes the product's argument, so it is pinned to the window where the argument is
+# provable rather than to whatever fixture happens to be loaded. On this capture nobody is
+# speaking — Deepgram returned zero utterances for the whole 12 minutes — chat is typing guesses
+# at an on-screen word game, and the only possible cause is the frame. Everything below the fold
+# still follows the loaded fixture.
+HERO_FIXTURE = "stableronaldo_2026-08-30T0723"
+
+
+def _grounded(card: Dict[str, Any]) -> bool:
+    """A card that actually shows a cause: gate-clean, not an abstention, naming a real event
+    with a verbatim quote. Anything less is not evidence of the thesis."""
+    trigger = card.get("trigger") or {}
+    return bool(
+        (card.get("gate") or {}).get("ok")
+        and card.get("type") not in (None, "none")
+        and trigger.get("event_id") not in (None, "", "unknown")
+        and trigger.get("quote")
+        and card.get("evidence")
+    )
+
+
+def _lead_up_to(chat, cited, span: int = 12):
+    """The last `span` messages ending on the first cited one, so the freeze is the payoff."""
+    stop = next((i for i, e in enumerate(chat) if e.event_id in cited), None)
+    window = chat[max(0, stop - span + 1):stop + 1] if stop is not None else chat[:span]
+    return [{"id": e.event_id, "text": e.text, "cited": e.event_id in cited} for e in window]
+
+
+def hero(fixtures_root: Path | str, out_dir: Path | str) -> Optional[Dict[str, Any]]:
+    """One grounded card from a recorded run, with the real chat around it.
+
+    Deliberately one card and not three. The page previously showed three cards reading "Chat
+    mention of X" over the line "caused by unknown unknown" — echoes, not signals, under a
+    headline about causation. One card that names its cause is worth more than three that do not,
+    and if none exists this returns None and the stage does not render.
+
+    Screen triggers are preferred because they are the argument a chat-only system cannot make.
+    """
+    root, out = Path(fixtures_root), Path(out_dir)
+    fixture_dir = root / HERO_FIXTURE
+    if not fixture_dir.exists():
+        return None
+
+    found = []
+    for system in ("agent", "baseline"):
+        path = result_path(out, HERO_FIXTURE, system)
+        if not path.exists():
+            continue
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for window in doc.get("windows") or []:
+            for card in window.get("verified") or []:
+                if _grounded(card):
+                    found.append((system, window.get("window_ms"), card))
+    if not found:
+        return None
+
+    # deterministic: screen triggers first, then earliest window, then card id
+    found.sort(key=lambda f: ((f[2].get("trigger") or {}).get("kind") != "screen",
+                              f[1][0] if f[1] else 0, str(f[2].get("signal_id"))))
+    system, window_ms, card = found[0]
+
+    index = load_fixture(fixture_dir)
+    start, end = window_ms
+    chat = [e for e in index.window(start, end, types=["chat_message"])]
+    cited = set(card.get("evidence") or [])
+    trigger_id = (card.get("trigger") or {}).get("event_id")
+    trigger_event = index.get(trigger_id)
+
+    return {
+        "system": system,
+        "fixture_id": HERO_FIXTURE,
+        "window_ms": window_ms,
+        "card": card,
+        "speech_in_window": len(index.window(start, end, types=["transcript_segment"])),
+        "trigger": {"id": trigger_id, "ts_ms": trigger_event.ts_ms if trigger_event else None,
+                    "text": trigger_event.text if trigger_event else None},
+        # Real messages, in order, ending on the one the card cites — the stream has to arrive
+        # AT the frozen message, so it is built backwards from the citation rather than taken
+        # from the top of the window. Taking the first N left the freeze off the end entirely.
+        "stream": _lead_up_to(chat, cited),
+        "cited": [{"id": i, "text": index.get(i).text} for i in card.get("evidence") or []
+                  if index.get(i)],
+    }
 
 
 def evaluation(out_dir: Path | str) -> Optional[Dict[str, Any]]:

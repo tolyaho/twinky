@@ -80,7 +80,7 @@ def test_an_unknown_trigger_is_not_looked_up(served):
 def test_payload_carries_meta_result_and_events(served):
     got = serve_mod.payload(served / "fixture", served / "out")
 
-    assert set(got) == {"meta", "result", "events", "evaluation"}
+    assert set(got) == {"meta", "result", "events", "evaluation", "hero"}
     assert got["events"]["tr_0001"]["type"] == "transcript_segment"
     # No eval has been run in this fixture, so the editorial section has nothing to show and
     # says so with None rather than an empty table that would read as a measured zero.
@@ -345,10 +345,10 @@ def test_the_stage_plays_real_data_or_nothing():
     html = (STATIC / "index.html").read_text(encoding="utf-8")
 
     assert 'id="stage" hidden' in html
-    assert "if (!data) return;" in js
+    assert "if (!hero || !hero.card" in js, "no grounded card means no stage"
     assert "Math.random" not in js
     # every string it shows comes from the payload
-    assert "events[id]" in js and "card.title" in js
+    assert "hero.stream" in js and "card.title" in js
 
 
 def test_the_stage_is_deterministic_so_it_can_be_filmed():
@@ -430,3 +430,53 @@ def test_the_sections_carry_the_story_in_order():
     order = re.findall(r'class="eyebrow">(\d+) — ([^<]+)<', html)
 
     assert [n for n, _ in order] == ["01", "02", "03", "04"], f"story order broken: {order}"
+
+
+# --------------------------------------------------------------- the hero, pinned and grounded
+def test_the_hero_shows_one_grounded_card_not_three_echoes():
+    """The hero used to render three cards reading "Chat mention of X" under the line
+    "caused by unknown unknown" — echoes, under a headline about causation. A card that cannot
+    name its cause cannot carry this argument."""
+    assert serve_mod._grounded({
+        "gate": {"ok": True}, "type": "reaction", "evidence": ["m1"],
+        "trigger": {"event_id": "frm_1", "quote": "librarian", "kind": "screen"}})
+
+    for bad in (
+        {"gate": {"ok": False}, "type": "reaction", "evidence": ["m"], "trigger": {"event_id": "f", "quote": "q"}},
+        {"gate": {"ok": True}, "type": "none", "evidence": ["m"], "trigger": {"event_id": "f", "quote": "q"}},
+        {"gate": {"ok": True}, "type": "reaction", "evidence": ["m"], "trigger": {"event_id": "unknown", "quote": "q"}},
+        {"gate": {"ok": True}, "type": "reaction", "evidence": ["m"], "trigger": {"event_id": "f"}},
+        {"gate": {"ok": True}, "type": "reaction", "evidence": [], "trigger": {"event_id": "f", "quote": "q"}},
+    ):
+        assert not serve_mod._grounded(bad), bad
+
+
+def test_the_words_unknown_unknown_appear_nowhere():
+    """The exact string a reader saw on the page. Checked against what can reach the DOM —
+    comments are allowed to name the bug they fixed, and one does."""
+    for name in ("app.js", "index.html", "app.css"):
+        text = (STATIC / name).read_text(encoding="utf-8")
+        code = re.sub(r"/\*.*?\*/", " ", text, flags=re.S)
+        code = re.sub(r"^\s*//.*$", " ", code, flags=re.M)
+        code = re.sub(r"<!--.*?-->", " ", code, flags=re.S)
+        assert "unknown unknown" not in code.lower(), name
+
+
+def test_a_chart_never_renders_with_fewer_than_two_buckets():
+    """One bucket produced a column of indices, empty grey bars and a vertical one-character
+    label down the right edge. A chart with nothing to compare is worse than no chart."""
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "MIN_CHART_BUCKETS = 2" in js
+    assert "entries.length < MIN_CHART_BUCKETS" in js
+    assert "distinct === 1" in js, "all-equal buckets carry no information either"
+    assert "dist-flat" in js, "the fallback must still state the fact as text"
+
+
+def test_the_hero_names_the_system_that_produced_the_card():
+    """The pinned card comes from the single-prompt baseline on that window, not the agent.
+    Showing it unlabelled under the product's own headline would be a quiet misrepresentation."""
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "single-prompt baseline" in js
+    assert "hero.system" in js
