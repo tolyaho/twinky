@@ -2372,3 +2372,42 @@ $0.43.
 **21.0 hours to the deadline.** Author-only and unchanged: film and cut the video; `git push`
 (origin/main is 33+ commits behind); make the repository public after pushing; `make review`;
 rotate `.env` and the Telegram credentials. `make preflight` reports all of it.
+
+## Iteration 80 — 2026-08-31 — the type scale, finished and pinned
+
+Attempted: the question deferred last iteration — the 13px tier and the stray 11px selectors.
+
+**Checking first changed the answer.** Five sizes were off-scale, not two: 11, 13, 26, 28 and 40.
+But **26, 28 and 40 appear only inside `@media` blocks** — deliberate mobile step-downs, which is
+what a responsive scale is for and not drift at all. That left 11px and 13px.
+
+**13px is documented rather than removed.** Nineteen selectors use it, including `.gline-label` —
+the group label on a board row, already ellipsised inside an 8rem column. Forcing those to 14px
+widens text by ~8% and costs characters off the product's most important element to satisfy a
+table. It was in use before it was written down, which is the wrong order; the fix is to write it
+down with the reason, not to pretend the table was already right. DESIGN.md now carries a 13px
+"dense UI and monospace" step and a paragraph saying exactly why, dated.
+
+The five stray 11px selectors moved to that step. **No top-level `font-size` in `app.css` is now
+off-scale.**
+
+**The durable fix is the guard that was never there.** Colours have been pinned to DESIGN.md by
+test since early on; type never was — which is how the scale drifted on both sides at once with
+everything green. `test_every_type_size_comes_from_the_documented_scale` now parses the scale out
+of DESIGN.md, strips `@media` blocks by brace counting, and fails on any top-level size the
+document does not define. A second test asserts the responsive exemption is a sentence in
+DESIGN.md rather than an assumption in the test.
+
+Verified in both directions, as with the history scanner: a planted `17px` rule at top level
+fails the guard; the same rule inside `@media` passes. File restored afterwards.
+
+Served page re-checked: three routes 200, **zero** `font-size: 11px` in the served stylesheet,
+33 declarations at the 12px badge step, no errors in the log.
+
+Result: `make test` 659 → **661 passed**. 2 new tests, four rows in DECISIONS.md. 16 hexes
+unchanged, no new colour. Cost: **$0.00**, ledger $0.43.
+
+**20.8 hours to the deadline; the video gate is 12.8 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+`make preflight` reports all of it.

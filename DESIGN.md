@@ -146,8 +146,21 @@ keep the metrics, which carry most of the effect:
 | 16px | 500 | 1.50 | +0.16px | Body strong |
 | 15px | 400 | 1.47 | +0.15px | Small body |
 | 14px | 400 | 1.50 | 0 | Captions |
+| 13px | 400 | 1.50 | 0 | Dense UI and monospace |
 | 12px | 600 | 1.40 | +0.96px | Uppercase badges |
 | 15px | 500 | 1.00 | 0 | Buttons |
+
+**On the 13px step.** This scale was written for an editorial page whose display sizes start at
+64px. The product dashboard is a dense surface with bounded panels, and it needs one step between
+captions and badges — monospace ids, group labels, cited messages. It was in use before it was
+written down here, which is the wrong order; documented on 2026-08-31 rather than removed,
+because forcing those nineteen selectors up to 14px widens text by ~8% and the group label on a
+board row is already ellipsised in an 8rem column. Losing characters off the product's most
+important element to satisfy a table is the wrong trade.
+
+**Responsive step-downs may use intermediate sizes.** The table above is the desktop scale.
+`40px`, `28px` and `26px` appear only inside `@media` blocks, which is what a responsive scale is
+for, and they are not drift.
 
 Positive body tracking (+0.15–0.18px) is what makes it read editorial rather than SaaS. Do not
 skip it.

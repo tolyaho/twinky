@@ -994,7 +994,7 @@ html, body.live-page { height: 100%; }
   font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--body-strong);
 }
-.livebox-sub { margin-left: auto; font-size: 11px; color: var(--muted-soft); }
+.livebox-sub { margin-left: auto; font-size: 13px; color: var(--muted-soft); }
 .nextclose {
   height: 1px; margin-top: var(--xs);
   background: var(--hairline-strong); border-radius: var(--r-pill); overflow: hidden;
@@ -1031,7 +1031,7 @@ html, body.live-page { height: 100%; }
 }
 .cite-who {
   display: inline-block; min-width: 5.5rem;
-  font-family: var(--mono); font-size: 11px; color: var(--muted-soft);
+  font-family: var(--mono); font-size: 13px; color: var(--muted-soft);
 }
 /* A cited id the fixture does not contain is a finding, not a gap — the gate made visible. */
 .cite.is-missing { color: var(--muted-soft); font-style: italic; }
@@ -1042,8 +1042,8 @@ html, body.live-page { height: 100%; }
 .cites-more summary::-webkit-details-marker { display: none; }
 .cites-more summary::before { content: "+ "; }
 .cites-more[open] summary::before { content: "− "; }
-.cites-note { margin: var(--xxs) 0 0; font-size: 11px; color: var(--muted-soft); }
-.controls-note { font-size: 11px; color: var(--muted-soft); }
+.cites-note { margin: var(--xxs) 0 0; font-size: 13px; color: var(--muted-soft); }
+.controls-note { font-size: 13px; color: var(--muted-soft); }
 
 
 /* -------------------------------------------------------------- REPLAY | LIVE
@@ -1097,7 +1097,7 @@ html, body.live-page { height: 100%; }
 .mod-row-t { margin: 0; font-size: 15px; font-weight: 300; color: var(--body-strong); }
 .mod-row-meta {
   margin: var(--xxs) 0 0;
-  font-family: var(--mono); font-size: 11px; color: var(--muted-soft);
+  font-family: var(--mono); font-size: 13px; color: var(--muted-soft);
 }
 .mod-sample {
   margin: var(--xs) 0 0; padding-left: var(--sm);

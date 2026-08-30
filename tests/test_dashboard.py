@@ -1524,3 +1524,47 @@ def test_playback_defaults_to_four_times():
     assert '<button class="seg is-active" data-speed="4"' in html
     assert "speed: 4," in js
     assert "speed restarts playback" in html, "changing speed restarts; say so"
+
+
+def test_every_type_size_comes_from_the_documented_scale():
+    """Colours have been pinned to DESIGN.md since early on. Type never was, so the scale drifted
+    on both sides at once: `app.css` grew 11px and 13px steps that DESIGN.md did not define, and
+    nothing failed. Five uppercase labels reached 11px that way.
+
+    Responsive step-downs inside `@media` are exempt and DESIGN.md says so — a responsive scale
+    needs intermediate values, and 40/28/26px appear only there.
+    """
+    css = _css()
+    design = DESIGN.read_text(encoding="utf-8")
+    documented = {float(x) for x in re.findall(r"^\| (\d+)px \|", design, re.M)}
+    assert documented, "DESIGN.md no longer states a type scale"
+
+    # strip @media blocks, brace-counting so a nested rule cannot end the block early
+    stripped, i = [], 0
+    while i < len(css):
+        at = css.find("@media", i)
+        if at == -1:
+            stripped.append(css[i:])
+            break
+        stripped.append(css[i:at])
+        depth, j = 0, css.find("{", at)
+        while j < len(css):
+            depth += css[j] == "{"
+            depth -= css[j] == "}"
+            if depth == 0:
+                break
+            j += 1
+        i = j + 1
+    top_level = "".join(stripped)
+
+    used = {float(x) for x in re.findall(r"font-size:\s*([0-9.]+)px", top_level)}
+    off = sorted(used - documented)
+    assert not off, f"font sizes not in the DESIGN.md scale: {off}"
+
+
+def test_the_responsive_exemption_is_documented_not_assumed():
+    """A test that exempts a case must be able to point at the sentence that allows it."""
+    design = " ".join(DESIGN.read_text(encoding="utf-8").split())
+
+    assert "Responsive step-downs may use intermediate sizes" in design
+    assert "they are not drift" in design
