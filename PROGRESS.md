@@ -350,3 +350,18 @@ to a model nothing was ever recorded with, so `make eval` reproduced only for so
 environment set `TS_TEXT_MODEL` — a broken reproducibility gate for every judge.
 Next: P3 — fill the `[TBD]`s from `evidence/`, and diagnose the unsupported-rate loss.
 Blockers: none. Cost to date $0.36 of $5.00.
+
+## 2026-08-30T13:20Z — iteration 25
+Attempted: P3 — fill every `[TBD]` from `evidence/` and diagnose the agent's unsupported rate.
+Result: `make test` green, 309. Every `[TBD]` closed except the video, which genuinely does not
+exist. Diagnosis: the agent sets `trigger.event_id` to a chat UUID in 14 of 23 cards, so 8 are
+rejected on E_CIRCULAR_EVIDENCE — its single largest failure. The baseline fails oppositely,
+9 of 20 on E_TRIGGER_LATE, naming a spoken line that occurs after the messages it caused.
+`docs/IMPROVEMENT_CHANGELOG.md` written in full: measured before/after per repair, the discarded
+run, the largest contributor (repair 1 — without it there was no baseline and nothing to
+measure), three removed experiments with their results, the failure mode with a case id, and the
+hot take. Corrected stale claims found while filling: trajectories/README said "empty" with 33
+real runs on disk, ARCHITECTURE said "4 of 12 cases", README said fixtures are ten minutes, and
+§6 asserted labels were "reviewed by the author" while every gold file says `reviewed: false`.
+Next: P4 dashboard editorial sections, or P5 gate. P5 is worth more.
+Blockers: none. Cost unchanged at $0.36 of $5.00 — this iteration spent nothing.
