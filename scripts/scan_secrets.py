@@ -135,11 +135,76 @@ def is_git_ignored(path: Path, root: Path) -> bool:
     return done.returncode == 0
 
 
+SKIP_IN_HISTORY = ("cache/", "evals/fixtures/", "trajectories/", "evidence/raw-results/")
+
+
+def scan_history() -> List[str]:
+    """Every version of every text file ever committed, not just the current ones.
+
+    Making a repository public exposes its whole history. A credential that was committed once
+    and removed in the next commit is still there, and `git log --name-only` will not find it
+    because the leak is in the CONTENT, not the filename. Uses `cat-file --batch` — one process
+    for the whole history rather than one per object.
+    """
+    import subprocess
+
+    listing = subprocess.run(["git", "rev-list", "--objects", "--all"],
+                             capture_output=True, text=True, timeout=120)
+    named = []
+    for line in listing.stdout.splitlines():
+        parts = line.split(maxsplit=1)
+        if len(parts) == 2 and not parts[1].startswith(SKIP_IN_HISTORY):
+            named.append(parts)
+    if not named:
+        return []
+
+    batch = subprocess.run(["git", "cat-file", "--batch"],
+                           input="\n".join(sha for sha, _ in named).encode(),
+                           capture_output=True, timeout=300)
+    out, findings, pos = batch.stdout, [], 0
+    for sha, path in named:
+        header_end = out.find(b"\n", pos)
+        if header_end == -1:
+            break
+        header = out[pos:header_end].split()
+        if len(header) < 3:
+            pos = header_end + 1
+            continue
+        size = int(header[2])
+        body, pos = out[header_end + 1:header_end + 1 + size], header_end + 2 + size
+        if b"\0" in body[:1024] or Path(path).name in ALLOWLIST:
+            continue
+        text = body.decode("utf-8", "replace")
+        lines = text.splitlines()
+        for name, rule in RULES:
+            for m in rule.finditer(text):
+                lineno = text[:m.start()].count("\n")
+                if lineno < len(lines) and PLACEHOLDER.search(lines[lineno]):
+                    continue
+                findings.append(f"{path}@{sha[:8]}:{lineno + 1}  [{name}]")
+    return findings
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", type=Path, default=REPO)
+    ap.add_argument("--history", action="store_true",
+                    help="scan every version of every file ever committed. Making a repository "
+                         "public exposes all of it, and a filename check cannot see a key that "
+                         "was pasted into a doc and removed the next commit.")
     args = ap.parse_args(argv)
     root = args.root.resolve()
+
+    if args.history:
+        findings = scan_history()
+        if findings:
+            print("SECRET IN GIT HISTORY — publishing this repository would expose it:",
+                  file=sys.stderr)
+            for line in findings:
+                print(f"  {line}", file=sys.stderr)
+            return 1
+        print("history clean — no credential pattern in any committed version of any file")
+        return 0
 
     blockers: List[str] = []
     leaks: List[str] = []

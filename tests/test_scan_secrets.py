@@ -287,3 +287,53 @@ def test_outside_a_git_checkout_nothing_is_excused(tmp_path):
     done = _scan(tmp_path)
 
     assert done.returncode == 1
+
+
+# ---------------------------------------------------------- history, not just the working tree
+
+def test_a_secret_removed_in_a_later_commit_is_still_found(tmp_path):
+    """Making a repository public exposes every version of every file. A key committed once and
+    deleted in the next commit is still in the pack, and `git log --name-only` cannot see it
+    because the leak is in the content, not the filename."""
+    import subprocess
+    import sys
+
+    run = lambda *a: subprocess.run(a, cwd=tmp_path, capture_output=True, text=True, check=False)
+    run("git", "init", "-q", ".")
+    run("git", "config", "user.email", "t@t")
+    run("git", "config", "user.name", "t")
+    (tmp_path / "config.py").write_text(
+        'KEY = "sk-proj-abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH"\n', encoding="utf-8")
+    run("git", "add", "-A")
+    run("git", "commit", "-qm", "oops")
+    (tmp_path / "config.py").write_text('KEY = os.getenv("K")\n', encoding="utf-8")
+    run("git", "add", "-A")
+    run("git", "commit", "-qm", "removed")
+
+    done = subprocess.run([sys.executable, str(REPO / "scripts/scan_secrets.py"), "--history"],
+                          cwd=tmp_path, capture_output=True, text=True)
+
+    assert done.returncode == 1
+    assert "SECRET IN GIT HISTORY" in done.stderr
+    assert "config.py@" in done.stderr
+
+
+def test_this_repository_has_a_clean_history():
+    """The result that matters before the repository is made public. Re-run rather than trusted:
+    it takes under a second."""
+    import subprocess
+    import sys
+
+    done = subprocess.run([sys.executable, str(REPO / "scripts/scan_secrets.py"), "--history"],
+                          cwd=REPO, capture_output=True, text=True, timeout=300)
+
+    assert done.returncode == 0, done.stderr[-1500:]
+    assert "history clean" in done.stdout
+
+
+def test_the_scanner_own_test_fixtures_do_not_trip_the_history_scan():
+    """This file is full of synthetic keys on purpose. It is allowlisted by name, and if that
+    ever stops working the history scan turns into permanent noise."""
+    source = (REPO / "scripts/scan_secrets.py").read_text(encoding="utf-8")
+
+    assert "Path(path).name in ALLOWLIST" in source

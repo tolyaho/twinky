@@ -85,6 +85,18 @@ def check_secrets():
         FAIL, "scan_secrets found something shippable")
 
 
+def check_history():
+    """Publishing a repository exposes every version of every file, not the current ones.
+
+    A key committed once and removed in the next commit is still in the pack, and no filename
+    check finds it because the leak is in the content.
+    """
+    done = run(sys.executable, "scripts/scan_secrets.py", "--history")
+    if done.returncode == 0:
+        return OK, "no credential in any committed version"
+    return FAIL, "a secret is in git history — DO NOT PUBLISH until it is purged and rotated"
+
+
 def check_gold():
     files = sorted((REPO / "evals/gold").glob("*.json"))
     confirmed = sum(json.loads(f.read_text(encoding="utf-8")).get("reviewed") is True
@@ -115,6 +127,7 @@ CHECKS = [
     ("pushed to origin", check_pushed, True),
     ("repository public", check_visibility, True),
     ("no secret ships", check_secrets, True),
+    ("no secret in history", check_history, True),
     ("tests green", check_tests, True),
     ("eval reproduces keyless", check_eval, True),
     ("working tree committed", check_uncommitted, True),
