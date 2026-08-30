@@ -2244,3 +2244,42 @@ opened at P0 and #37 corrected. Cost: **$0.00**, ledger $0.43.
 **~14.5 hours to the deadline. Run `make preflight` before submitting.** The order is: push,
 make public, film and cut the video, `make review`, rotate the credentials.
 Blockers: the video needs the author, and so does the push.
+
+## Iteration 77 — 2026-08-30 — three captures nobody asked for, and preflight learning to tell them apart
+
+Attempted: finish the preflight work, and deal with what it surfaced.
+
+Immediately after committing, `make preflight` still failed on "working tree committed". The
+cause was three **new fixture directories** — `hasanabi`, `yugi` and `zackrawrr`, all stamped
+`2026-08-30T2035`, roughly the current time — that were not created by these sessions.
+
+Inspected before touching: each holds **`meta.json` and a gitignored `raw/` and nothing else**.
+No `chat.jsonl`, no transcript, no frames index — so no code in the repository can read them.
+52 MB in total.
+
+**Left exactly where they are.** Committing incomplete capture data would put unreviewed material
+of real broadcasts into the submission, and `raw/` never ships anyway. Deleting them is not this
+session's call — they are capture data and somebody may want them. Recorded as **RISKS #48**,
+informational.
+
+Preflight now separates **uncommitted source** (a blocker) from **untracked captures** (reported,
+not blocking):
+
+```
+  [PASS] working tree committed     no uncommitted source; 3 untracked capture(s) on disk,
+                                    correctly not committed
+```
+
+That distinction matters more than it looks: a checklist that cries wolf once stops being read,
+and this one will be read at three in the morning.
+
+I also miscounted the test total by one when updating the documents — wrote 657 where the suite
+collects 656. The guard caught it immediately, which is what it is for.
+
+Result: `make test` 655 → **656 passed**. 1 new test, two rows in DECISIONS.md, RISKS #48.
+Cost: **$0.00**, ledger $0.43.
+
+**~14 hours to the deadline.** `make preflight` is the single command to run before submitting.
+Order: **push** (the remote is 31 commits behind), make public, film and cut, `make review`,
+rotate credentials.
+Blockers: the video and the push both need the author.

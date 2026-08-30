@@ -29,9 +29,21 @@ def run(*args, **kw):
 
 
 def check_uncommitted():
-    dirty = run("git", "status", "--porcelain").stdout.strip()
-    n = len(dirty.splitlines())
-    return (OK, "working tree clean") if not dirty else (FAIL, f"{n} uncommitted change(s)")
+    """Uncommitted SOURCE is a blocker. A capture left on disk is not.
+
+    Three partial captures appeared mid-session — `meta.json` and a gitignored `raw/`, no derived
+    events. Blocking a submission on those would be a false alarm at three in the morning, and a
+    checklist that cries wolf once stops being read.
+    """
+    lines = [l for l in run("git", "status", "--porcelain").stdout.splitlines() if l.strip()]
+    captures = [l for l in lines if l.startswith("??") and "/fixtures/" in l]
+    real = [l for l in lines if l not in captures]
+
+    note = f"; {len(captures)} untracked capture(s) on disk, correctly not committed" \
+        if captures else ""
+    if real:
+        return FAIL, f"{len(real)} uncommitted change(s){note}"
+    return OK, f"no uncommitted source{note}"
 
 
 def check_pushed():

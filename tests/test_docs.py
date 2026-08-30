@@ -427,3 +427,14 @@ def test_a_network_check_that_cannot_run_says_so():
 
     assert "cannot reach origin" in source
     assert "gh unavailable" in source
+
+
+def test_preflight_does_not_block_on_an_untracked_capture():
+    """Three partial captures appeared on disk mid-session. Blocking a submission on capture data
+    that is correctly not committed is a false alarm, and a checklist that cries wolf once stops
+    being read."""
+    source = (REPO / "scripts/preflight.py").read_text(encoding="utf-8")
+
+    assert '"/fixtures/" in l' in source
+    assert "correctly not committed" in source
+    assert "uncommitted source" in source
