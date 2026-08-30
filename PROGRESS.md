@@ -424,3 +424,23 @@ baseline went 20 -> 21 cards and unsupported 0.600 -> 0.619. Propagated to every
 declared as Repair 5 in the changelog rather than quietly re-run — it narrows the gap against us.
 Next: P4 dashboard editorial sections, the last unstarted ladder item.
 Blockers: none. Cost unchanged at $0.39 of $5.00.
+
+## 2026-08-30T15:35Z — iteration 29
+Attempted: P4 — the dashboard editorial sections that needed measured numbers.
+Result: `make test` green, 334 -> 339. Hero, measured-improvement and changelog sections added
+to `report/static/`, rendered live and verified: all three system rows populate, 0 server errors.
+The numbers are READ, never recomputed in the browser: `make eval` now also writes
+`evidence/summary.json`, the machine-readable twin of the printed table, and `serve.payload`
+carries it through as `evaluation`. `evals/scorer.py` stays the single owner of every published
+metric — a rate derived a second time in JavaScript would eventually disagree with the one in
+`report.md`, and a test now forbids deriving any of the four published rates client-side.
+Without an eval the section stays hidden rather than rendering zeros that read like a measured
+result. No colour was improvised: every hex in `app.css` is still a DESIGN.md token, display
+weight stays 300, hairlines not shadows, 96px section rhythm.
+The editorial copy states the result that counts against the product — "wins grounding, loses
+restraint", the worst unsupported rate of the three, and the ablation's accuracy resting on a
+single matched card — and a test asserts those sentences stay there, so the page cannot be
+quietly reworded into a win.
+Next: the ladder is complete. Everything remaining is author-only: video, gold review, repo
+visibility, credential rotation, submission.
+Blockers: none. Cost unchanged at $0.39 of $5.00.
