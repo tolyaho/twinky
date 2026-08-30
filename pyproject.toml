@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "twitch-agent"
+version = "0.1.0"
+description = "Turns an unreadable live chat into a small number of verified audience signals, each linked to the stream moment that caused it."
+requires-python = ">=3.10"
+
+# Runtime dependencies deliberately live in requirements.txt, not here: they are pinned exactly,
+# split into replay / live-capture / dev groups, and `make setup` installs that file. Declaring
+# them twice is how the two lists drift apart.
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

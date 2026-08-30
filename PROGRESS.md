@@ -82,3 +82,16 @@ Next: A7 — `README.md`, `docs/REPRODUCTION.md`, `docs/PRE_EXISTING.md`, number
 Blockers: none. The editorial marketing sections of DESIGN.md's page sequence (hero, how it
 works, measured improvement, changelog) wait on A7 and B-phase numbers — deliberately not built
 against `[TBD]`.
+
+## 2026-08-30T02:11Z — iteration 7
+Attempted: A7 — `README.md`, `docs/REPRODUCTION.md`, `docs/PRE_EXISTING.md`.
+Result: `make test` green, 124 -> 133. Fixed RISKS #10 first, because a truthful reproduction
+guide is impossible while every documented command dies with `ModuleNotFoundError`: added
+`pyproject.toml` (src layout) and `pip install -e .` to `make setup`; verified `python -m ts.cli`
+runs with no `PYTHONPATH` and every target reaches its own exit code. Added a missing `inspect`
+target. All three docs rewritten, numbers `[TBD]` where unmeasured. New `tests/test_docs.py`
+guards doc/Makefile drift and asserts the documented test count against the real one — it had
+already drifted by nine within the same iteration.
+Next: B1 — record phase, but it is blocked. No fixture exists (RISKS #2). The next unblocked
+work is C1 `make scan` and C4, or fixing RISKS #11 (three declared dependencies nothing imports).
+Blockers: A-phase is complete except what needs real captures. B cannot start without P0-3.
