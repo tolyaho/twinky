@@ -2283,3 +2283,47 @@ Cost: **$0.00**, ledger $0.43.
 Order: **push** (the remote is 31 commits behind), make public, film and cut, `make review`,
 rotate credentials.
 Blockers: the video and the push both need the author.
+
+## Iteration 78 — 2026-08-30 — the scan that had never looked at git history
+
+Attempted: keep asking *what will the author actually do next, and does it work?* Next action
+after pushing is **making the repository public** — and publishing a repository exposes **every
+version of every file**, not the ones currently checked out.
+
+`make scan` had only ever walked the working tree. A credential committed once and removed in the
+next commit is still in the pack, and `git log --name-only` cannot find it because the leak is in
+the **content**, not the filename. That gap sat directly under a P0 the author is about to act on.
+
+**The result: this repository's history is clean.** 2110 named objects, 1185 of them text,
+scanned against the same rules the working-tree scanner uses:
+
+- `.env` and `.capture_salt` have **never** appeared in any commit.
+- The only pattern hits in the entire history are in `tests/test_scan_secrets.py` — the scanner's
+  own synthetic fixtures. Inspected by shape rather than value: `your_password`, `changeme`,
+  `replace-me`, `YOUR_KEY_HERE`, `localhost`, `127.0.0.1`, and the alphabet string written for
+  those tests. That file is allowlisted by name, which is why the working-tree scan is quiet too.
+
+**A scanner that reports "clean" is worthless until it has been shown to report "dirty".** So I
+planted `sk-proj-…` in a throwaway repository, removed it in the next commit, and confirmed the
+working tree looked innocent while the history scan found the removed blob at its own sha:
+
+```
+SECRET IN GIT HISTORY — publishing this repository would expose it:
+  config.py@7b2cc5f7:1  [openai-style-key]
+```
+
+It uses `git cat-file --batch` — one process for the whole history rather than one per object.
+**0.6 seconds for 2110 objects**, because a check slow enough to skip is one that gets skipped at
+the hour it matters. Now a hard check in `make preflight`:
+
+```
+  [PASS] no secret ships            no secret can reach the archive
+  [PASS] no secret in history       no credential in any committed version
+```
+
+Result: `make test` 656 → **659 passed**. 3 new tests, three rows in DECISIONS.md, RISKS #49
+opened and closed. Cost: **$0.00**, ledger $0.43.
+
+**~13.5 hours to the deadline.** Three blockers remain, all author-only: the video, the push
+(33 commits), and making the repository public — which is now safe to do, on the evidence.
+Blockers: the video and the push need the author.
