@@ -279,3 +279,18 @@ in metric A. Matching is now one-to-one in emission order. Nothing has been meas
 frozen protocol is intact — this was the last moment to change it honestly.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T09:01Z — iteration 21
+Attempted: audited the agent controller, the largest scored criterion and the least examined.
+Result: `make test` green, 228 -> 233. #33: the "at most 3 cards" cap lived only in the prompt.
+Measured — a model returning ten cards had all ten kept, in the agent AND in the baseline, while
+`03-EVAL_DESIGN.md` promises the baseline the same output schema and card cap. An unenforced cap
+contaminates the comparison: the system that ignores it gets more chances at recall and more
+cards over which the unsupported rate is averaged, so the eval would have measured obedience to a
+prompt rather than the workflow. `cap_cards` now applies it in one place used by both, unknown
+types are filtered first so junk cannot fill the cap, and the dropped count reaches the run
+document and the trajectory. #34: tool calls past the fourth were truncated without telling the
+model, which cannot distinguish that from a tool returning nothing; the results payload now names
+what was not executed.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
