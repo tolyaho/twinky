@@ -1972,3 +1972,49 @@ ledger $0.43.
 **~17.5 hours to the deadline. Every deliverable except the video is complete, current and
 verified from a clean archive.**
 Blockers: the video needs the author.
+
+## Iteration 71 — 2026-08-30 — the coding-agent disclosure, which contained a false statement
+
+Attempted: audit the two honesty-critical documents left — the risk register and the
+coding-agent disclosure.
+
+**The disclosure was wrong, in the document whose entire purpose is accurate attribution.** Its
+last section read: *"`trajectories/product-agent/` … is **empty today** because no run has been
+recorded yet."* There are **118 trajectories**. That statement was true when written and stopped
+being true at the first recorded run, and nobody went back.
+
+Corrected in place **with a note saying it was corrected**, because a disclosure that silently
+repairs its own errors is not a disclosure. Three other things were stale:
+
+- It described a **30-minute** loop against `NIGHT_LOOP.md`. The cadence became 10 minutes and the
+  specification changed four times; all of that is now stated, with 70 iterations logged.
+- It claimed the guardrails *"kept paid calls at zero"*. **Ten paid calls totalling $0.43** have
+  happened since, every one itemised. The claim is replaced by the true one: replay-by-default,
+  where a cache miss raises rather than calling an API.
+- Its "what the sessions found" list stopped at the early defects — while the largest findings
+  came later. Added: the **first evaluation was invalid and thrown away** (the baseline had the
+  agent's tool-calling prompt and scored zero cards); **keyless reproduction was silently broken**
+  by a default model the runs were never recorded with; all three systems were **citing timestamps
+  as event ids**; bare `make replay` **exited 3** while the README promised it worked; `make scan`
+  **could never pass** on a developer machine; the **agent had never once read the screen**, with
+  the counts that prove it; and a moderation rule **flagged the product's own best output**.
+
+Added a scale table — 129 commits, 70 iterations, 303 decisions, 42 risks, 626 tests, $0.43 — so
+the disclosure gives a reader something to calibrate against rather than adjectives.
+
+**RISKS #39** was updated too. It read as an unexamined open failure; it is now *"OPEN in the
+shipped system — diagnosed, fixed as an arm, measured, not adopted"*, carrying the counts (chat in
+70 of 70 conversations, frame captions in 2; 57 opening turns with zero event ids) and the
+outcome of the fix. It stays open because the shipped agent still has the failure — but the record
+should show it was quantified and acted on, not merely noticed.
+
+Three guards: the disclosure must state the real trajectory count, must still list what the
+sessions found and not only what they built, and must not claim zero spend while the ledger says
+otherwise.
+
+Result: `make test` 623 → **626 passed**. 3 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~17 hours to the deadline.** Every document is now current and every deliverable except the
+video is complete and verified from a clean archive.
+Blockers: the video needs the author.

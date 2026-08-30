@@ -313,3 +313,39 @@ def test_the_guide_describes_the_scanner_as_it_now_behaves():
 
     assert "cannot enter the zip by construction" in guide
     assert "outside a git checkout" in guide
+
+
+def test_the_coding_agent_disclosure_states_the_real_trajectory_count():
+    """It said the directory was "empty today because no run has been recorded yet". That was
+    true when written and false for most of the project's life — in the one document whose whole
+    purpose is accurate attribution."""
+    import glob
+
+    disclosure = (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8")
+    actual = len(glob.glob(str(REPO / "trajectories/product-agent/*.json")))
+
+    assert f"**{actual} trajectories**" in disclosure
+    assert "empty today" not in disclosure.split("*(This section previously read")[0]
+
+
+def test_the_disclosure_records_failures_as_well_as_output():
+    """A disclosure that only claims productivity is not a disclosure."""
+    disclosure = " ".join(
+        (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8").split())
+
+    for found in ("BROKEN — NOT A RESULT", "Keyless reproduction was silently broken",
+                  "could never pass on a developer machine",
+                  "flagged the product's own best output"):
+        assert found in disclosure, f"the disclosure no longer mentions: {found}"
+
+
+def test_the_disclosure_does_not_claim_zero_spend():
+    """Paid calls happened. Ten of them, itemised."""
+    disclosure = " ".join(
+        (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8").split())
+    ledger = (REPO / "COST_LEDGER.md").read_text(encoding="utf-8")
+
+    assert "kept paid calls at zero" not in disclosure
+    import re
+    total = re.findall(r"running_total=([0-9.]+)", ledger)[-1]
+    assert f"${total}" in disclosure
