@@ -2327,3 +2327,48 @@ opened and closed. Cost: **$0.00**, ledger $0.43.
 **~13.5 hours to the deadline.** Three blockers remain, all author-only: the video, the push
 (33 commits), and making the repository public — which is now safe to do, on the evidence.
 Blockers: the video and the push need the author.
+
+## Iteration 79 — 2026-08-31 — frontend polish: the type scale
+
+Focus changed to frontend polish; loop cadence moved to 30 minutes (40 does not divide 60, so
+`*/40` would fire at :00 and :40 with uneven 40/20 gaps).
+
+**First correction, and it is mine: the stated time remaining was wrong.** I had been decrementing
+an estimate each iteration instead of reading the clock — reporting *~13.5 hours* when the real
+figure is **21.0**. The video gate is **13 hours away**, not imminent. From now the number is
+computed, not carried forward.
+
+Attempted: the type scale, checked against DESIGN.md rather than against taste.
+
+`app.css` used **five adjacent body sizes** — 11, 12, 13, 14, 15px across 83 declarations.
+DESIGN.md defines 20 / 18 / 16 / 15 / 14 / 12 for Inter and 64 / 48 / 36 / 32 / 24 for display.
+**11px and 13px are not in it.**
+
+One suspicion I had was wrong and checking killed it: I thought `.15px` and `.16px` tracking were
+a duplication to unify. They are not — DESIGN.md specifies +0.15px for 15px small body and
++0.16px for 16px body. Both are correct. Left alone.
+
+The real finding: **seven uppercase micro-labels sat at 11px**, where DESIGN.md specifies
+uppercase badges as **12px / 600 / 1.40 / +0.96px** — `.toolbar-label`, `.stat dt`, `.brow-kind`,
+`.rblock-t`, `.qstate`, `.livebox-t`, `.mod-t`. Six of the seven I wrote during the dashboard
+work. The most repeated element on the page — every panel header, every rail block, every
+moderation rule — was the least consistent thing on it. All seven now match the spec.
+
+Checked for clipping before changing: `.toolbar`'s `min-height: 44px` is a floor, not a cap, and
+`.stat dt`'s apparent fixed height was `line-height`. Both false alarms, confirmed before acting.
+
+**Why it slipped is the more useful part.** The guard `test_uppercase_labels_use_the_scale_not_an_
+improvised_value` existed and passed throughout — because it asserted **tracking only**. A guard
+that checks one property of a spec licenses drift in the others. It now asserts size and weight
+too, and would have failed on every one of those seven.
+
+Left deliberately for its own iteration: five non-uppercase 11px selectors and the 13px tier
+(19 selectors, including monospace). Neither size is in DESIGN.md, but moving them is a genuine
+density change inside bounded panels and deserves the layout checked, not a sweep at midnight.
+
+Result: `make test` **659 passed**, 16 hexes unchanged, no new colour. Cost: **$0.00**, ledger
+$0.43.
+
+**21.0 hours to the deadline.** Author-only and unchanged: film and cut the video; `git push`
+(origin/main is 33+ commits behind); make the repository public after pushing; `make review`;
+rotate `.env` and the Telegram credentials. `make preflight` reports all of it.

@@ -289,6 +289,10 @@ def test_uppercase_labels_use_the_scale_not_an_improvised_value():
     for block in css.split("text-transform: uppercase")[:-1]:
         tail = block.rsplit("{", 1)[-1]
         assert "letter-spacing: .96px" in tail, f"uppercase label off-scale: {tail.strip()[:80]}"
+        # SIZE too, not only tracking. This guard checked tracking alone, so seven uppercase
+        # labels drifted to 11px — a size DESIGN.md does not define — without failing anything.
+        assert "font-size: 12px" in tail, f"uppercase label is not 12px: {tail.strip()[:80]}"
+        assert "font-weight: 600" in tail, f"uppercase label is not 600: {tail.strip()[:80]}"
 
 
 def test_body_keeps_the_positive_editorial_tracking():

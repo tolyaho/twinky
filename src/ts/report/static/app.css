@@ -615,7 +615,7 @@ html, body.live-page { height: 100%; }
 }
 .toolbar-group { display: flex; align-items: center; gap: var(--xs); }
 .toolbar-label {
-  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--muted-soft);
 }
 /* Measured scrollWidth 750 against clientWidth 348: the sentence was clipped to under half.
@@ -764,7 +764,7 @@ html, body.live-page { height: 100%; }
 }
 .stat.stat-key { border-color: var(--ink); }
 .stat dt {
-  font-size: 11px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
+  font-size: 12px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
   text-transform: uppercase; color: var(--muted);
 }
 .stat dd {
@@ -855,7 +855,7 @@ html, body.live-page { height: 100%; }
 .brow:hover { border-color: var(--hairline-strong); box-shadow: var(--shadow-hover); }
 .brow-h { display: flex; align-items: center; gap: var(--xs); }
 .brow-kind {
-  font-size: 11px; font-weight: 600; letter-spacing: .96px;
+  font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px;
   text-transform: uppercase; color: var(--muted);
 }
 .brow-at, .brow-n {
@@ -915,7 +915,7 @@ html, body.live-page { height: 100%; }
 .rblock + .rblock { margin-top: var(--base); padding-top: var(--base); border-top: 1px solid var(--hairline); }
 .rblock-t {
   margin: 0 0 var(--xs);
-  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--muted-soft);
 }
 .rstats { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 2px var(--xs); }
@@ -956,7 +956,7 @@ html, body.live-page { height: 100%; }
 }
 .qrow.is-answered .qdot { background: transparent; border-color: var(--muted-soft); }
 .qstate {
-  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--muted);
 }
 .qrow.is-open .qstate { color: var(--ink); }
@@ -991,7 +991,7 @@ html, body.live-page { height: 100%; }
 }
 .livebox-h { display: flex; align-items: baseline; gap: var(--xs); margin-bottom: var(--xxs); }
 .livebox-t {
-  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--body-strong);
 }
 .livebox-sub { margin-left: auto; font-size: 11px; color: var(--muted-soft); }
@@ -1084,7 +1084,7 @@ html, body.live-page { height: 100%; }
 }
 .mod-t {
   margin: 0;
-  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--body-strong);
 }
 .mod-n {
