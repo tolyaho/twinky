@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twitch Agent — signal rail</title>
+<!-- No CDN, no build step, no webfont fetch. A judge with no network still sees the real thing. -->
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="bar">
+  <div class="bar-left">
+    <span class="mark">Twitch Agent</span>
+    <span class="pill" id="mode-badge">—</span>
+  </div>
+  <div class="bar-right">
+    <span class="meta" id="fixture-line">loading…</span>
+    <button class="btn-outline" id="debug-toggle" aria-expanded="false">Debug</button>
+  </div>
+</header>
+
+<section class="debug" id="debug" hidden>
+  <dl id="debug-body"></dl>
+  <p class="note">
+    Latency and cost are not shown because this is a replay: every model response comes from the
+    committed cache, so timing it would measure disk, not the model. Per-run cost is recorded in
+    <code>COST_LEDGER.md</code>.
+  </p>
+</section>
+
+<main>
+  <h1 class="display" id="headline">Verified audience signals</h1>
+  <p class="lede" id="lede">
+    Each card links a cluster of chat to the exact stream moment that caused it. Open one to see
+    the evidence it is standing on.
+  </p>
+
+  <div id="rail"></div>
+
+  <section id="rejected-block" hidden>
+    <h2 class="display sub">Rejected by the provenance gate</h2>
+    <p class="lede">
+      These cards were produced and then thrown away because their evidence did not check out.
+      They are shown because a system that hides its rejects cannot be audited.
+    </p>
+    <div id="rejected-rail"></div>
+  </section>
+</main>
+
+<footer>
+  <span id="footer-line"></span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

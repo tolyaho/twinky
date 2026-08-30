@@ -1,0 +1,175 @@
+/* Tokens are from DESIGN.md and are authoritative. No colour here is improvised.
+   The page is the dark product canvas: hairlines instead of shadows, pill geometry on every
+   badge, display type at weight 300 and never heavier, and no saturated accent anywhere. */
+:root {
+  --primary:            #292524;
+  --primary-active:     #0c0a09;
+  --canvas:             #f5f5f5;
+  --surface-dark:       #0c0a09;
+  --surface-dark-elev:  #1c1917;
+  --body:               #4e4e4e;
+  --muted:              #777169;
+  --muted-soft:         #a8a29e;
+  --success:            #16a34a;
+  --error:              #dc2626;
+
+  --xxs: 4px;  --xs: 8px;   --sm: 12px;  --base: 16px;
+  --md: 20px;  --lg: 24px;  --xl: 32px;  --xxl: 48px;  --section: 96px;
+
+  --r-md: 8px; --r-xl: 16px; --r-pill: 9999px;
+
+  /* On the dark canvas the light hairline tokens are invisible, so the hairline is --primary,
+     which is a token of this system rather than an invented value. */
+  --hairline-dark: var(--primary);
+
+  --ui: Inter, "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--surface-dark);
+  color: var(--canvas);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: .16px;   /* the positive tracking is what makes it read editorial */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- display type: weight 300 */
+.display {
+  font-weight: 300;
+  letter-spacing: -.96px;
+  line-height: 1.08;
+  font-size: 48px;
+  margin: 0 0 var(--base);
+}
+.display.sub { font-size: 32px; letter-spacing: -.32px; line-height: 1.13; }
+.card h3 {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.lede { color: var(--muted-soft); max-width: 62ch; margin: 0 0 var(--xl); }
+
+/* ---------------------------------------------------------------- frame */
+.bar {
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--xl);
+  border-bottom: 1px solid var(--hairline-dark);
+}
+.bar-left, .bar-right { display: flex; align-items: center; gap: var(--sm); }
+.mark { font-weight: 500; letter-spacing: .18px; }
+.meta { color: var(--muted); font-size: 14px; letter-spacing: 0; }
+
+main { max-width: 1200px; margin: 0 auto; padding: var(--section) var(--xl) var(--xxl); }
+footer {
+  max-width: 1200px; margin: 0 auto; padding: var(--xl);
+  border-top: 1px solid var(--hairline-dark);
+  color: var(--muted); font-size: 14px; letter-spacing: 0;
+}
+
+/* ---------------------------------------------------------------- pills and buttons */
+.pill {
+  display: inline-flex; align-items: center; gap: var(--xxs);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline-dark);
+  padding: var(--xxs) var(--sm);
+  font-size: 12px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  color: var(--muted-soft);
+}
+.pill .dot { width: 6px; height: 6px; border-radius: var(--r-pill); background: currentColor; }
+.pill.verified  { color: var(--success); }
+.pill.abstained { color: var(--muted-soft); }
+.pill.rejected  { color: var(--error); }
+
+.btn-outline {
+  background: transparent; color: var(--canvas);
+  border: 1px solid var(--hairline-dark); border-radius: var(--r-pill);
+  height: 40px; padding: 10px 20px;
+  font: 500 15px/1 var(--ui); cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--muted); }
+
+/* ---------------------------------------------------------------- cards */
+.card {
+  background: var(--surface-dark-elev);
+  border: 1px solid var(--hairline-dark);
+  border-radius: var(--r-xl);
+  padding: var(--lg);
+  margin-bottom: var(--base);
+}
+.card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--base); }
+.badges { display: flex; gap: var(--xs); flex-wrap: wrap; justify-content: flex-end; }
+
+.trigger { margin: var(--base) 0 0; color: var(--canvas); }
+.trigger .label { color: var(--muted); font-size: 14px; letter-spacing: 0; display: block; }
+.trigger.unknown { color: var(--muted-soft); }
+.quote { font-style: italic; }
+
+.dist { display: flex; flex-direction: column; gap: var(--xs); margin: var(--base) 0 0; }
+.dist-row { display: grid; grid-template-columns: 10ch 1fr 7ch; align-items: center; gap: var(--sm); }
+.dist-bar { height: 6px; border-radius: var(--r-pill); background: var(--primary); }
+.dist-bar > span { display: block; height: 100%; border-radius: var(--r-pill); background: var(--muted-soft); }
+.dist-num { color: var(--muted); font-size: 14px; letter-spacing: 0; text-align: right; }
+
+details.drawer { margin-top: var(--base); border-top: 1px solid var(--hairline-dark); padding-top: var(--sm); }
+details.drawer > summary {
+  cursor: pointer; color: var(--muted-soft);
+  font-size: 14px; letter-spacing: 0; list-style: none;
+}
+details.drawer > summary::-webkit-details-marker { display: none; }
+details.drawer > summary::before { content: "▸ "; }
+details.drawer[open] > summary::before { content: "▾ "; }
+
+.evidence { margin: var(--sm) 0 0; padding: 0; list-style: none; }
+.evidence li {
+  display: grid; grid-template-columns: 12ch 9ch 1fr; gap: var(--sm);
+  padding: var(--xs) 0; border-bottom: 1px solid var(--hairline-dark);
+  font-size: 15px; letter-spacing: .15px;
+}
+.evidence li:last-child { border-bottom: 0; }
+.evidence code { color: var(--muted); font-size: 14px; letter-spacing: 0; }
+.evidence .missing { color: var(--error); }
+
+.violations { margin: var(--sm) 0 0; padding-left: var(--md); color: var(--error); font-size: 15px; }
+
+/* ---------------------------------------------------------------- debug panel */
+.debug {
+  border-bottom: 1px solid var(--hairline-dark);
+  padding: var(--md) var(--xl);
+  background: var(--surface-dark-elev);
+}
+.debug dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sm); margin: 0; }
+.debug dt { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase; }
+.debug dd { margin: var(--xxs) 0 0; }
+.note { color: var(--muted); font-size: 14px; letter-spacing: 0; max-width: 80ch; margin: var(--base) 0 0; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.empty { color: var(--muted-soft); border: 1px dashed var(--hairline-dark); border-radius: var(--r-md);
+         padding: var(--lg); }
+
+/* ---------------------------------------------------------------- the one outward action */
+.approval { margin-top: var(--base); }
+.btn-primary {
+  background: var(--primary); color: var(--canvas);
+  border: 1px solid var(--primary); border-radius: var(--r-pill);
+  height: 40px; padding: 10px 20px;
+  font: 500 15px/1 var(--ui); cursor: pointer;
+}
+.btn-primary:hover { background: var(--primary-active); border-color: var(--primary-active); }
+.btn-primary:disabled { cursor: default; color: var(--muted-soft); }
+
+.draft {
+  margin-top: var(--sm); padding: var(--base);
+  border: 1px solid var(--hairline-dark); border-radius: var(--r-md);
+}
+.draft-q { margin: 0 0 var(--xs); font-weight: 500; }
+.draft-options { margin: 0; padding-left: var(--md); color: var(--muted-soft); }
+.draft-warning { color: var(--muted-soft); font-size: 14px; letter-spacing: 0; margin: var(--xs) 0 0; }

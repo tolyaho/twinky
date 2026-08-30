@@ -68,3 +68,17 @@ exposed: recurring themes were counting words out of model-written titles and re
 "says", "the" — now sourced from trigger quotes and answer distributions only.
 Next: A6 — dashboard on real replay output; `DESIGN.md` is authoritative.
 Blockers: none. RISKS #10 and #12 still open.
+
+## 2026-08-30T01:38Z — iteration 6
+Attempted: A6 — dashboard on real replay output, `DESIGN.md` authoritative.
+Result: `make test` green, 113 -> 124. Fresh dashboard in `report/static/` (index.html, app.css,
+app.js), served by the existing `serve`; the placeholder page is gone. Renders every scored UI
+element from `/api/replay` — mode badge, type, share, confidence, trigger quote or explicit
+unknown, evidence drawer with message text, gate status, trace id, judge debug panel. Rejected
+cards get their own labelled block. `/api/replay` now ships only the events cards cite.
+Conformance is tested: every hex must exist in DESIGN.md, display weight <= 300, no shadows, no
+network fetch, no `Math.random`, no `innerHTML` assignment. RISKS #4 downgraded; #13 opened.
+Next: A7 — `README.md`, `docs/REPRODUCTION.md`, `docs/PRE_EXISTING.md`, numbers as `[TBD]`.
+Blockers: none. The editorial marketing sections of DESIGN.md's page sequence (hero, how it
+works, measured improvement, changelog) wait on A7 and B-phase numbers — deliberately not built
+against `[TBD]`.
