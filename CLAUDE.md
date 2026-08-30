@@ -7,6 +7,12 @@ Only the latest *complete* submission is evaluated.
 Strategy notes live in `../notes/`. Read `../notes/01-PRODUCT.md` and `../notes/02-SCOPE.md`
 before proposing anything. The build loop is `../LOOP_PROMPT.md`.
 
+`../notes/` is an internal working directory and is deliberately **not** part of this repository —
+its own index says it never ships. Every `../notes/...` path below and in `RISKS.md`,
+`evals/DATA.md`, `evals/scorer.py` and `legacy/README.md` therefore resolves only in the author's
+tree. Nothing in `src/`, `tests/` or `evals/` reads from it, so a clone is complete and
+`make test` is unaffected.
+
 ## Product invariant — do not drift
 
 > Twitch Agent turns an unreadable live chat into a small number of verified audience signals:
