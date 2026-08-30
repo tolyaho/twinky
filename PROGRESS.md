@@ -937,3 +937,55 @@ stableronaldo w9 with counts summing to the window. Six rows in DECISIONS.md.
 Not done: nothing in the UI reads `group_chat` yet — that is item C, the board and rail.
 Next: item C.
 Blockers: none. Cost unchanged at $0.42.
+
+## Iteration 50 — 2026-08-31 — item C part one, the board and rail computed
+
+Attempted: DASHBOARD.md §1 and WHAT_WE_SHOW.md — turn a window into rows and real statistics.
+New module `report/board.py`: `board()`, `rail()`, `questions()`, `is_question()`, `windows()`.
+Deterministic, free, no key, no model — which is also Tier 0 of live mode, so it has to hold up
+where no paid provider is reachable at all.
+
+**A row is a trigger → the groups that followed it, with counts and verbatim messages.** The
+first attempt used nearest-preceding speech or frame caption and it produced something false:
+on stableronaldo w9 it attached `para… × 41` — forty-one people brute-forcing an on-screen word
+puzzle — to a caption reading *"three people sleeping in a dimly lit room"*. A row header reads
+as causal however it is captioned, so attribution is now two-tier and the tier is on the row:
+
+- **`matched`** — the trigger text contains the word chat is typing. stableronaldo w0: the
+  caption names the guessed word `ranger` and the top group is `rang… × 20`.
+- **`preceding`** — only the last thing said or shown before the wave started. Adjacency.
+
+Measured across all 15 recorded fixtures: **104 rows over 36 windows — 16 matched, 88 preceding,
+12 unattributed groups.** Matched rows sort first. Neither tier goes through the provenance gate,
+because neither claims causation; the gate ledger sits in the same rail counting the agent's
+cards separately, so the two are never mistaken for each other.
+
+marlon w6 reproduces the WHAT_WE_SHOW.md example on real data: speech *"Hey, man. They're coming
+for you, bro… What the fuck is going on?"* → **`violet × 27`**, samples *"violet murders?"*,
+*"VIOLET MYERS"*, *"VIOLET."* — the streamer is mid-sentence asking what is going on and the room
+answered a minute ago. Footer: **237 messages · 4 rows · 123 singletons**. The doc predicted 4
+rows and 179 singletons; rows match, singletons do not, because arm B groups more than the
+estimate did. The measured figure is the published one.
+
+The rail: rate sparkline in 10s buckets, peak burst and per-second velocity, unique chatters,
+new chatters against who spoke before, messages per chatter, concentration (top 10% share),
+composition `N → M → K`, reaction-wave count, questions, speech segments with an explicit
+`silent` flag, frame captions, and the gate ledger by code.
+
+Questions needed two corrections, both found by measuring. Anchoring the question word at
+position zero lost "whats the game" and "yo what game"; allowing an auxiliary in second position
+turned *"Capri is 19"* and *"There is a whole P star right there"* into questions. Final rule:
+wh-word in either of the first two tokens, auxiliary only in the first, and a content token
+required either way. On marlon 0715 w6 the bare `ends with ?` rule returns **29** hits, at least
+6 of them literally `?`-only; the filter returns 22 rows over 31 asked. FEATURES_V2 quoted 54 for
+"one marlon window" without saying which — 29 is what this window measures, so 29 is published.
+
+Result: `make test` 461 → **479 passed**. 18 new tests in `tests/test_board.py`, including both
+attribution tiers, the unattributed path, the flagship marlon row, the silent-window truth on
+stableronaldo, and the gate ledger. Six rows in DECISIONS.md.
+
+Not done: nothing renders this yet. `serve.py` does not call `board()` and the page still has two
+columns. Cost unchanged at $0.42.
+Next: item C part two — wire `board()`/`rail()` into `/api/stream` and build the three-zone
+layout.
+Blockers: none.
