@@ -109,3 +109,51 @@ def test_the_real_tree_is_scanned_including_legacy():
 
     assert "legacy" in scanned
     assert ".venv" not in scanned
+
+
+# --------------------------------------------------------------- placeholders (RISKS #35)
+@pytest.mark.parametrize("line", [
+    "DB_PASSWORD=your_password",
+    "DEEPGRAM_API_KEY=your_key",
+    "TWITCH_OAUTH=your_token",
+    'API_KEY="YOUR_KEY_HERE"',
+    "SECRET=changeme",
+    "CLIENT_ID=replace-me",
+    "DB_HOST=localhost",
+    "DB_HOST=127.0.0.1",
+    "PASSWORD=xxxxxx",
+    "ACCESS_TOKEN=<your token>",
+    "the row says `DB_PASSWORD=your_password`, which is a placeholder",
+])
+def test_a_documentation_placeholder_is_not_a_credential(line):
+    """`legacy/README.original.md` is six lines of `DB_PASSWORD=your_password` inside a
+    'Create .env:' block. It outranked the eight real credentials in `.env` as the project's
+    top finding for a full day (RISKS #16, withdrawn). A scanner that cries wolf on its own
+    README gets switched off — which is exactly what the #18 rewrite already cost once."""
+    assert scan_secrets.is_placeholder(line), line
+
+
+@pytest.mark.parametrize("line", [
+    "DB_PASSWORD=hunter2correcthorse",
+    "DEEPGRAM_API_KEY=8f3c1a9b2d7e4f6a0c5b8e1d",
+    "SECRET=yourself_is_not_a_placeholder_prefix_9182",
+])
+def test_a_real_looking_value_is_still_reported(line):
+    """The placeholder rule must not become a hole: anything that is not obviously a stand-in
+    still fires."""
+    assert not scan_secrets.is_placeholder(line), line
+
+
+def test_the_project_tree_has_no_committed_secret():
+    """The gate condition itself, run against this repository rather than a fixture."""
+    from pathlib import Path
+
+    root = Path(scan_secrets.__file__).resolve().parents[1]
+    leaks = []
+    for path in scan_secrets.candidate_files(root):
+        if path.name in scan_secrets.ALLOWLIST or path.name in scan_secrets.LOCAL_ONLY:
+            continue
+        for lineno, rule in scan_secrets.scan_file(path):
+            leaks.append(f"{path.relative_to(root)}:{lineno} [{rule}]")
+
+    assert not leaks, f"committed secrets: {leaks}"
