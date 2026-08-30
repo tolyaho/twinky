@@ -95,3 +95,17 @@ already drifted by nine within the same iteration.
 Next: B1 — record phase, but it is blocked. No fixture exists (RISKS #2). The next unblocked
 work is C1 `make scan` and C4, or fixing RISKS #11 (three declared dependencies nothing imports).
 Blockers: A-phase is complete except what needs real captures. B cannot start without P0-3.
+
+## 2026-08-30T02:44Z — iteration 8
+Attempted: B is blocked with no fixture (RISKS #2), so took the next unblocked item — C1
+`make scan`, no secrets anywhere.
+Result: `make test` green, 133 -> 143. The scan was giving false assurance in three separate
+ways (RISKS #18): `grep -r .` on macOS never reached `.env`, the pattern list lived in the
+Makefile so it matched itself and was permanently red, and `legacy/` was excluded while staying
+in the tree. Replaced with `scripts/scan_secrets.py`, 10 tests, two severities, never prints a
+matched value. It immediately found two P0s: `legacy/README.original.md:18-23` holds a DB
+connection block, a Deepgram key and a Twitch OAuth token (#16), and `.env` holds eight live
+credentials while `.gitignore` is inert because this is not a git repository (#17).
+Next: C3 — confirm trajectories exist for the agent and both baselines, fill the disclosure
+table. C2's fresh-clone run needs a populated cache, so it waits on B.
+Blockers: B needs P0-3 fixtures. #16 and #17 need the author: rotate, then exclude from archive.
