@@ -57,7 +57,10 @@ def test_the_readme_states_that_results_are_not_measured_yet():
     """While the cache is empty the README must say so above the fold, not bury it."""
     head = README.read_text(encoding="utf-8").split("## 1.")[0]
 
-    assert "no fixture has been recorded yet" in head.lower()
+    # Four fixtures now exist, so the old "no fixture has been recorded yet" wording became a
+    # false statement in the most-read paragraph of the submission. What must stay true is that
+    # the status section says plainly that the comparison is NOT yet measured.
+    assert "not yet measured" in head.lower()
     assert "[TBD]" in head
 
 
