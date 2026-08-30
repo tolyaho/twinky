@@ -47,8 +47,11 @@
   </p>
 </section>
 
-<div class="picker-row">
-  <div class="chips" id="picker-chips"></div>
+<div class="toolbar">
+  <div class="toolbar-group">
+    <span class="toolbar-label">Channel</span>
+    <div class="chips" id="picker-chips"></div>
+  </div>
   <p class="picker-note" id="picker-note">
     Recorded windows replayed at their true cadence. Live capture uses the same pipeline and is
     documented in the reproduction guide.
@@ -56,13 +59,21 @@
 </div>
 
 <main class="two-col">
-  <section class="col col-chat" aria-labelledby="chat-h">
-    <h2 class="col-h" id="chat-h">Live chat <span class="col-n" id="chat-n">0</span></h2>
+  <section class="panel panel-chat" aria-labelledby="chat-h">
+    <header class="panel-h">
+      <h2 class="panel-t" id="chat-h">Live chat</h2>
+      <span class="panel-n" id="chat-n">0</span>
+      <span class="panel-sub">raw, unfiltered</span>
+    </header>
     <ol class="feed" id="feed"></ol>
   </section>
 
-  <section class="col col-signals" aria-labelledby="sig-h">
-    <h2 class="col-h" id="sig-h">Grounded signals <span class="col-n" id="sig-n">0</span></h2>
+  <section class="panel panel-signals" aria-labelledby="sig-h">
+    <header class="panel-h">
+      <h2 class="panel-t" id="sig-h">Grounded signals</h2>
+      <span class="panel-n" id="sig-n">0</span>
+      <span class="panel-sub">cause proven, evidence attached</span>
+    </header>
     <div class="signals" id="signals">
       <p class="empty" id="signals-empty">Waiting for the first window to close…</p>
     </div>
@@ -71,10 +82,10 @@
 
 <footer class="ticker">
   <dl class="counters">
-    <div><dt>messages</dt><dd id="c-chat">0</dd></div>
-    <div><dt>grounded</dt><dd id="c-grounded">0</dd></div>
-    <div><dt>abstained</dt><dd id="c-abstained">0</dd></div>
-    <div><dt>rejected</dt><dd id="c-rejected">0</dd></div>
+    <div class="stat"><dt>messages in</dt><dd id="c-chat">0</dd></div>
+    <div class="stat stat-key"><dt>grounded</dt><dd id="c-grounded">0</dd></div>
+    <div class="stat"><dt>abstained</dt><dd id="c-abstained">0</dd></div>
+    <div class="stat"><dt>rejected</dt><dd id="c-rejected">0</dd></div>
   </dl>
   <div class="controls">
     <button class="btn-outline" id="pp" aria-pressed="false">Pause</button>

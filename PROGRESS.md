@@ -693,3 +693,27 @@ Two guards needed anchoring after the CSS moved: both split on a selector string
 added shared rule also matched. Same class as the comment-matching guards — a check that binds to
 text rather than structure drifts silently.
 Blockers: none. Cost unchanged at $0.41 — this pass spent nothing.
+
+## 2026-08-30T23:10Z — iteration 41
+Attempted: the product page reads as a dashboard rather than an editorial page — author feedback
+on a fourth screenshot: hard to parse, components not distinguishable, lines not clear.
+Result: `make test` green, 409 -> 411. The tension was real and worth naming: DESIGN.md is an
+editorial marketing system — airy, hairline-only, generous whitespace — and this page is an
+operator surface where a streamer scans for signal at a glance. Tokens are unchanged and every
+hex still comes from DESIGN.md; what changed is density and structure.
+Panels: each pane is now a bounded `surface-card` panel with a `hairline-strong` border, a radius
+and its own header strip on `canvas-soft` carrying the title, a mono count chip and a one-line
+purpose ("raw, unfiltered" / "cause proven, evidence attached"). The page sits on
+`surface-strong`, so the panels read as objects on a deck.
+Lines given a hierarchy: `hairline-strong` for anything structural — panel borders, header rules,
+the bar — and the lighter tiers only inside a panel. Previously everything was one weight, which
+is why nothing separated.
+The flood became a table: zebra rows on `canvas-soft`, per-row bottom rules, hover, a 3px left
+rule reserved for the citation highlight, ids right-aligned. Counters became four bordered KPI
+tiles with `grounded` outlined in ink as the one that matters. Controls grouped into their own
+bordered cluster. The floating chips row became a labelled toolbar, which also removed the
+~60px dead band above the columns.
+Reversed one test deliberately: it asserted the chat column must be "a field, not a box" on the
+reading that a box re-introduces a widget. Shown the result, that was wrong for this surface, and
+the test now asserts the opposite with the reasoning recorded rather than silently deleted.
+Blockers: none. Cost unchanged at $0.41.

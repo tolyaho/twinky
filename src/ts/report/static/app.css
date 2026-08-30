@@ -588,177 +588,178 @@ html { scroll-behavior: smooth; }
 @media (max-width: 900px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ================================================================== the product page
-   Two columns: the flood on the left, what it meant on the right. The gap between them is the
-   whole argument, so nothing boxes them in — one hairline separates, and the chat sits on the
-   soft canvas so the signals column reads as the foreground.
-
-   The page is EXACTLY the viewport and never taller. The chat is an unbounded stream: left to
-   grow it pushed the counters off the bottom of the screen and the reader lost the one row that
-   says what the flood turned into. So the shell is fixed, and only the two columns scroll. */
+   An operator dashboard, not an editorial page. A streamer parsing this at a glance needs
+   panels with edges, dense rows and labels that carry weight — the airy magazine treatment
+   left it reading as one flat wash with nothing to grab. Same tokens throughout; what changes
+   is density and structure: visible boundaries, `hairline-strong` for anything structural,
+   `hairline` only inside a panel. */
 html, body.live-page { height: 100%; }
 .live-page {
   display: flex; flex-direction: column;
   height: 100vh;
-  overflow: hidden;            /* nothing scrolls the page itself */
+  overflow: hidden;
+  background: var(--surface-strong);   /* the deck the panels sit on */
 }
-.live-page .bar { flex: none; }
-.live-page .debug { flex: none; }
+.live-page .bar, .live-page .debug { flex: none; }
+.live-page .bar { border-bottom: 1px solid var(--hairline-strong); background: var(--canvas); }
 
-/* One compact strip: chips and the disclosure share a line instead of stacking into a void. */
-.picker-row {
+/* ---- toolbar: a control strip, attached, not floating in whitespace ---- */
+.toolbar {
   flex: none;
   display: flex; align-items: center; gap: var(--base);
   max-width: var(--measure); width: 100%; margin: 0 auto;
-  padding: var(--xs) var(--xl);
-  min-height: 40px;
+  padding: var(--xs) var(--lg);
+  min-height: 44px;
 }
-.picker-row .picker-note {
-  margin: 0; font-size: 13px; line-height: 1.4; color: var(--muted-soft);
-  flex: 1 1 auto; min-width: 0;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.toolbar-group { display: flex; align-items: center; gap: var(--xs); }
+.toolbar-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  color: var(--muted-soft);
 }
-@media (max-width: 1100px) { .picker-row .picker-note { display: none; } }
+.toolbar .picker-note {
+  margin: 0 0 0 auto; font-size: 12px; color: var(--muted-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46ch;
+}
+@media (max-width: 1200px) { .toolbar .picker-note { display: none; } }
 
+/* ---- the grid of panels ---- */
 .live-page main.two-col {
-  flex: 1 1 auto;
-  min-height: 0;               /* the line that lets the children scroll instead of the page */
+  flex: 1 1 auto; min-height: 0;
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 0;
+  gap: var(--sm);
   max-width: var(--measure); width: 100%; margin: 0 auto;
-  padding: 0 var(--xl);
+  padding: 0 var(--lg) var(--sm);
 }
-.col {
-  display: flex; flex-direction: column;
-  min-height: 0;               /* same reason, one level down */
-  padding: var(--base) 0 var(--lg);
+
+.panel {
+  display: flex; flex-direction: column; min-height: 0;
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-lg);
+  overflow: hidden;                    /* the header strip shares the panel's corners */
 }
-.col-chat {
-  /* A tint, not a box. The brief is one hairline between the columns and nothing around them;
-     a bounded grey rectangle reads as a widget and re-introduces the container it replaced.
-     The tint bleeds past the column edges so it has no visible corner. */
-  position: relative;
-  border-right: 1px solid var(--hairline);
-  padding-right: var(--xl);
-}
-.col-chat::before {
-  content: "";
-  position: absolute; inset: 0 0 0 -100vw;
-  background: var(--canvas-soft);
-  z-index: -1;
-  pointer-events: none;
-}
-.col-signals { padding-left: var(--lg); }
-.col-h {
+.panel-h {
   flex: none;
   display: flex; align-items: baseline; gap: var(--xs);
-  margin: 0 0 var(--sm);
+  padding: var(--xs) var(--base);
+  background: var(--canvas-soft);
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.panel-t {
+  margin: 0;
   font-size: 12px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
-  text-transform: uppercase; color: var(--muted);
+  text-transform: uppercase; color: var(--body-strong);
 }
-.col-n { font-variant-numeric: tabular-nums; color: var(--muted-soft); }
+.panel-n {
+  font-family: var(--mono); font-size: 13px; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  padding: 0 var(--xs);
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-sm);
+  background: var(--surface-card);
+}
+.panel-sub { margin-left: auto; font-size: 12px; color: var(--muted-soft); letter-spacing: 0; }
+@media (max-width: 1100px) { .panel-sub { display: none; } }
 
-/* Quiet, thin, inside the gutter — the default macOS overlay bar reads as a dark slab dropped
-   on the text and is the first thing the eye goes to. */
-.feed, .signals {
-  scrollbar-width: thin;
-  scrollbar-color: var(--hairline-strong) transparent;
-}
-.feed::-webkit-scrollbar, .signals::-webkit-scrollbar { width: 6px; }
+/* ---- quiet scrollbars, inside the gutter ---- */
+.feed, .signals { scrollbar-width: thin; scrollbar-color: var(--hairline-strong) transparent; }
+.feed::-webkit-scrollbar, .signals::-webkit-scrollbar { width: 8px; }
 .feed::-webkit-scrollbar-track, .signals::-webkit-scrollbar-track { background: transparent; }
 .feed::-webkit-scrollbar-thumb, .signals::-webkit-scrollbar-thumb {
   background: var(--hairline-strong); border-radius: var(--r-pill);
+  border: 2px solid var(--surface-card);
 }
-.feed:hover::-webkit-scrollbar-thumb, .signals:hover::-webkit-scrollbar-thumb {
-  background: var(--muted-soft);
-}
+.feed:hover::-webkit-scrollbar-thumb, .signals:hover::-webkit-scrollbar-thumb { background: var(--muted-soft); }
 
-.feed {
-  flex: 1 1 auto; min-height: 0; overflow-y: auto;
-  margin: 0; padding: 0 var(--xs) 0 0; list-style: none;
-  /* the flood fades out at the top edge rather than being cut by a hard line */
-  /* Only the alpha of this gradient matters, so it uses a documented token rather than an
-     improvised #000 — the rule is that no hex in this file is invented, masks included. */
-  mask-image: linear-gradient(to bottom, transparent 0, var(--ink) 24px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--ink) 24px);
-}
+/* ---- the flood: a dense table, zebra-ruled so the eye can track a row at speed ---- */
+.feed { flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 0; padding: 0; list-style: none; }
 .msg {
-  display: grid; grid-template-columns: 10ch minmax(0, 1fr); gap: var(--base);
+  display: grid; grid-template-columns: 11ch minmax(0, 1fr); gap: var(--sm);
   align-items: baseline;
-  padding: 5px 0 5px var(--xs);
-  border-left: 2px solid transparent;
-  transition: border-color .2s ease, background .2s ease, color .2s ease;
+  padding: 4px var(--base);
+  border-left: 3px solid transparent;
+  border-bottom: 1px solid var(--hairline-soft);
+  transition: background .15s ease, border-color .15s ease;
 }
+.msg:nth-child(even) { background: var(--canvas-soft); }
+.msg:hover { background: var(--surface-strong); }
 .msg-who {
-  font-family: var(--mono); font-size: 12px; letter-spacing: 0;
-  color: var(--muted-soft);
-  text-align: right;                     /* the ids end where the messages begin: one hard edge */
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--mono); font-size: 12px; color: var(--muted-soft); letter-spacing: 0;
+  text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.msg-text {
-  font-size: 15px; line-height: 1.5; letter-spacing: .15px; color: var(--body);
-  overflow-wrap: anywhere;
-}
+.msg-text { font-size: 15px; line-height: 1.45; letter-spacing: .15px; color: var(--body-strong); overflow-wrap: anywhere; }
 /* the citation gesture: this cluster, that cause */
-.msg.cited { border-left-color: var(--ink); background: var(--surface-card); }
-.msg.cited .msg-text { color: var(--ink); }
+.msg.cited { background: var(--surface-strong); border-left-color: var(--ink); }
+.msg.cited .msg-text { color: var(--ink); font-weight: 500; }
 
+/* ---- signals ---- */
 .signals {
   flex: 1 1 auto; min-height: 0; overflow-y: auto;
-  display: flex; flex-direction: column; gap: var(--base);
-  padding-right: var(--xs);
+  display: flex; flex-direction: column; gap: var(--sm);
+  padding: var(--sm);
 }
 .signals > * { flex: none; }
-.signals .card { opacity: 0; transform: translateY(12px); transition: opacity .24s ease, transform .24s ease; }
-.signals .card.in { opacity: 1; transform: none; }
-.card-cites { margin: var(--sm) 0 0; color: var(--muted); font-size: 14px; letter-spacing: 0; }
-
-/* Waiting is not nothing: say when the first window closes so an empty column reads as pending
-   rather than broken. A judge who watches a blank panel for a minute concludes it is broken. */
-/* At the top of the column, where the reader is looking — not pushed to the bottom by a
-   flex:1 sibling, which is where it used to land. */
-.waiting {
-  display: grid; gap: var(--sm);
-  margin: 0; padding: var(--base) 0 0;
-  color: var(--muted); font-size: 15px; max-width: 44ch;
+.signals .card {
+  padding: var(--base);
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-md);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .24s ease, transform .24s ease, border-color .15s ease;
 }
-.waiting-bar { height: 2px; background: var(--hairline); border-radius: var(--r-pill); overflow: hidden; }
+.signals .card.in { opacity: 1; transform: none; }
+.signals .card h3 { font-size: 20px; margin: var(--xs) 0 0; }
+.signals .card .quote { font-size: 16px; margin: var(--sm) 0 0; padding-left: var(--sm); }
+.card-cites { margin: var(--sm) 0 0; color: var(--muted); font-size: 13px; letter-spacing: 0; }
+.waiting {
+  display: grid; gap: var(--xs);
+  margin: 0; padding: var(--sm) var(--xs);
+  color: var(--muted); font-size: 14px; max-width: 46ch;
+}
+.waiting-bar { height: 3px; background: var(--hairline); border-radius: var(--r-pill); overflow: hidden; }
 .waiting-bar span { display: block; height: 100%; width: 0; background: var(--ink); transition: width .4s linear; }
 
-.picker { margin: 0; max-width: 420px; }
-.picker-go { min-width: 44px; padding: 0 var(--base); }
+.picker { margin: 0; max-width: 360px; }
+.picker-input { height: 36px; font-size: 14px; }
+.picker-go { min-width: 40px; height: 36px; padding: 0 var(--sm); }
 .bar-left .picker { margin-left: var(--base); }
 
-/* the one place numbers get to be large */
+/* ---- the stat bar: KPI tiles with edges, not numbers floating on the page ---- */
 .ticker {
   flex: none;
-  display: flex; align-items: center; justify-content: space-between; gap: var(--lg);
+  display: flex; align-items: stretch; justify-content: space-between; gap: var(--sm);
   max-width: var(--measure); width: 100%; margin: 0 auto;
-  padding: var(--sm) var(--xl) var(--base);
-  border-top: 1px solid var(--hairline);
-  background: var(--canvas);
+  padding: 0 var(--lg) var(--sm);
+  border-top: 0;
 }
-.counters { display: flex; gap: var(--xxl); margin: 0; }
-.counters div { margin: 0; }
-.counters dt {
-  font-size: 12px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
+.counters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sm); margin: 0; flex: 1 1 auto; }
+.stat {
+  margin: 0; padding: var(--xs) var(--base);
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-md);
+}
+.stat.stat-key { border-color: var(--ink); }
+.stat dt {
+  font-size: 11px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
   text-transform: uppercase; color: var(--muted);
 }
-.counters dd {
+.stat dd {
   margin: 0;
-  font-weight: 300; font-size: 40px; line-height: 1.1; letter-spacing: -.8px; color: var(--ink);
+  font-weight: 300; font-size: 32px; line-height: 1.15; letter-spacing: -.32px; color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
-.controls { display: flex; align-items: center; gap: var(--xs); }
-.speeds { margin: 0; }
-.speeds .seg { padding: var(--xs) var(--sm); font-size: 14px; }
+.controls {
+  display: flex; align-items: center; gap: var(--xs);
+  padding: var(--xs);
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-md);
+}
+.controls .btn-outline { height: 34px; padding: 0 var(--base); font-size: 14px; }
+.speeds { margin: 0; border-color: var(--hairline-strong); }
+.speeds .seg { padding: var(--xxs) var(--sm); font-size: 13px; }
 
 @media (max-width: 900px) {
   .live-page { height: auto; overflow: visible; }
-  .live-page main.two-col { grid-template-columns: minmax(0, 1fr); padding: 0 var(--md); }
-  .col-chat { border-right: 0; border-bottom: 1px solid var(--hairline); padding-right: 0; }
-  .col-signals { padding-left: 0; }
+  .live-page main.two-col { grid-template-columns: minmax(0, 1fr); padding: 0 var(--sm) var(--sm); }
   .feed { max-height: 44vh; }
-  .counters { gap: var(--lg); }
-  .counters dd { font-size: 28px; letter-spacing: -.28px; }
-  .ticker { flex-direction: column; align-items: flex-start; }
+  .ticker { flex-direction: column; padding: 0 var(--sm) var(--sm); }
+  .counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat dd { font-size: 26px; }
 }

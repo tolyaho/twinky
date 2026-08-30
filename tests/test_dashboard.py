@@ -761,9 +761,9 @@ def test_the_product_page_is_bounded_to_the_viewport():
         block = css.split(selector, 1)[1].split("}", 1)[0]
         assert "overflow-y: auto" in block and "min-height: 0" in block, selector
 
-    # min-height:0 on the grid and the columns is what lets children scroll instead of the page
-    assert css.split("main.two-col {", 1)[1].split("}", 1)[0].count("min-height: 0") == 1
-    assert "the line that lets the children scroll instead of the page" in css
+    # min-height:0 on the grid is what lets children scroll instead of the page
+    assert "min-height: 0" in css.split("main.two-col {", 1)[1].split("}", 1)[0]
+    assert "min-height: 0" in css.split("\n.panel {", 1)[1].split("}", 1)[0]
 
 
 def test_the_ticker_cannot_be_scrolled_away():
@@ -796,15 +796,44 @@ def test_the_waiting_state_sits_inside_the_signals_column():
     assert 'document.getElementById("signals").appendChild(empty)' in js
 
 
-def test_the_chat_column_is_a_field_not_a_box():
-    """One hairline between the columns and nothing around them. A bounded grey rectangle reads
-    as a widget and re-introduces the container the two-column layout replaced."""
+def test_each_pane_is_a_bounded_panel_with_its_own_header():
+    """Reversed deliberately. This used to assert the opposite — a field with one hairline and no
+    container — on the reading that a box re-introduces a widget. Shown the result, the author
+    called it unparseable: an operator scanning signals at a glance needs edges to tell one
+    component from another, and the airy treatment read as a single flat wash. Panels it is."""
     css = (STATIC / "app.css").read_text(encoding="utf-8")
-    block = css.split(".col-chat {", 1)[1].split("}", 1)[0]
+    html = LIVE_HTML.read_text(encoding="utf-8")
 
-    assert "background:" not in block, "the tint belongs on the bleed layer, not the column"
-    assert "border-right: 1px solid var(--hairline)" in block
-    assert ".col-chat::before" in css and "inset: 0 0 0 -100vw" in css
+    panel = css.split("\n.panel {", 1)[1].split("}", 1)[0]
+    assert "border: 1px solid var(--hairline-strong)" in panel
+    assert "background: var(--surface-card)" in panel
+    assert "border-radius" in panel
+
+    header = css.split(".panel-h {", 1)[1].split("}", 1)[0]
+    assert "border-bottom: 1px solid var(--hairline-strong)" in header
+    assert "background: var(--canvas-soft)" in header
+
+    assert html.count('class="panel-h"') == 2, "both panes carry a header strip"
+
+
+def test_structural_lines_are_stronger_than_lines_inside_a_panel():
+    """"The lines should be more clear." Structure uses `hairline-strong`; only rules inside a
+    panel use the lighter tiers, so the hierarchy is legible rather than uniform."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    for selector in ("\n.panel {", ".panel-h {"):
+        block = css.split(selector, 1)[1].split("}", 1)[0]
+        assert "hairline-strong" in block, selector
+    row = css.split("\n.msg {", 1)[1].split("}", 1)[0]
+    assert "border-bottom: 1px solid var(--hairline-soft)" in row, "in-panel rules stay light"
+
+
+def test_the_counters_are_tiles_not_floating_numbers():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    block = css.split("\n.stat {", 1)[1].split("}", 1)[0]
+
+    assert "border: 1px solid var(--hairline-strong)" in block
+    assert "background: var(--surface-card)" in block
 
 
 def test_the_scrollbars_are_quiet():
