@@ -17,6 +17,9 @@ evidence/raw-results/
 evals/fixtures/**/audio.opus
 evals/fixtures/**/raw/
 
+# fixture-farm scaffolding output, not product
+.farmlogs/
+
 # capture salt - keeps pseudonyms stable locally, must never be distributed
 .capture_salt
 
