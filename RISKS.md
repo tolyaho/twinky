@@ -16,8 +16,9 @@ time to fix it.
 
 Decision gate is Sunday 20:00 MSK; submission is Monday 21:00 MSK (18:00 UTC).
 
-Before any of that, rotate the credentials in #16 and #17. They are live, and two of the three
-were already exposed once.
+Before any of that, rotate the credentials in #17 and #1. They are live, and were already exposed
+once. (#16 claimed a third copy in `legacy/`; it was a scanner false positive — see the fixed
+table and #35.)
 
 ---
 
@@ -25,8 +26,7 @@ were already exposed once.
 
 | # | Risk | Status | What to do |
 |---|---|---|---|
-| 16 | `legacy/README.original.md` lines 18–23 hold a full DB connection block, a Deepgram key and a Twitch OAuth token | **OPEN — highest severity** | Rotate, then exclude or redact. Found 2026-08-30 by the rewritten `make scan`; the old scan excluded `legacy/` and never saw it. This is a second copy of the credentials #1 already flagged. Left unmodified on purpose: `docs/PRE_EXISTING.md` states `legacy/` is preserved as-is, and reversing that is the author's call. |
-| 17 | `.env` holds eight live credentials, and `.gitignore` protects nothing — this directory is not a git repository | **OPEN** | Verified: `git rev-parse` fails, so every ignore rule is inert. Zipping the directory ships Twitch, Deepgram, Anthropic, OpenAI, DeepSeek and DB credentials. Exclude explicitly at packaging time. `make scan` reports it as a shipping blocker. |
+| 17 | `.env` holds eight live credentials | **OPEN** | Twitch, Deepgram, Anthropic, OpenAI, DeepSeek and DB credentials. Now genuinely ignored: the tree became a git repository 2026-08-30 and `.env` is covered by `.gitignore`, verified with `git check-ignore`. The ignore rule does not protect a **zip**, so still exclude it explicitly at packaging time. `make scan` reports it as a shipping blocker. |
 | 1 | Credentials pasted in the team Telegram group (Twitch secret, MySQL creds, Anthropic key) | **OPEN** | Rotate regardless of the hackathon. Never commit the export. Still live — see #16, #17. |
 | 2 | No fixtures recorded; P0-3 needs streams live | **OPEN — the critical path** | 3 × ~10 min. Self-stream one as a guaranteed fallback. Everything below marked "downstream of #2" unblocks the moment this lands. |
 | 21 | The fixture recorder has never been run against a live stream | **OPEN — narrowed 2026-08-30** | The network boundary is still unexercised: no Twitch egress here. Everything below it now is — frame stamping, retry safety, the ffmpeg failure path, the empty-capture guard, and the capture → enrich → `load_fixture` seam, 8 tests. Two real defects were fixed in the process: a re-run stamped already-timestamped frames from zero against a new start time, and a capture that produced nothing returned success and wrote a `meta.json` declaring a good fixture. Still run it once on a 60-second segment and check `make inspect` before committing to three full captures. |
@@ -50,6 +50,7 @@ were already exposed once.
 | 14 | Twitch VOD retention figures (7 / 14 / 60 days by tier) come from planning notes, not a source | **OPEN — UNVERIFIED** | Carries the product's second thesis, so source it before it enters the README or the video. Currently stated qualitatively, with no numbers. |
 | 15 | Jan/Mar 2026 per-message cost and tail-latency figures are team recollection | **OPEN — UNVERIFIED** | The README states the failure qualitatively and quotes no figure. A number for the video has to be re-measured, not recalled. Supersedes the old #9. |
 | 11 | `requirements.txt` declared six packages nothing imports | **Fixed 2026-08-30** | Removed `deepgram-sdk`, `fastapi`, `uvicorn`, `python-dotenv`, `orjson`, `pydantic`, and `pytest-asyncio` (zero async tests). Proved rather than asserted: a clean venv built from the reduced file plus `-e .` runs the full suite green. The replay path is now one runtime package, `httpx`. A test fails the build if a declared package is never imported. |
+| 35 | `make scan` reports a placeholder docs block as the project's highest-severity secret | **OPEN — new 2026-08-30** | `scripts/scan_secrets.py` treats `KEY=value` as a credential unless the value is empty or `<angle-bracketed>`. It does not recognise the `your_*` convention, so `legacy/README.original.md` — six lines of `DB_PASSWORD=your_password` — outranked the eight real credentials in `.env`. Cost: #16 sat as the top P0 for a full day. Add the placeholder form and re-run; the fix belongs with a test per form, like the #18 rewrite. |
 | 5 | Vision model choice | **Partly resolved 2026-08-30** | `deepseek-v4-flash-vision-exp` is now chosen in `providers/vision.py`, and V4-Flash is documented as text-only. It has never actually been called, so schema compliance is unverified until B1. Captions are cached, so replay is unaffected either way. |
 
 ## Mitigated or fixed
@@ -62,6 +63,7 @@ were already exposed once.
 | 18 | `make scan` gave false assurance for the whole project | **Fixed 2026-08-30** | Three defects at once: `grep -r .` on macOS never reached `.env`; the pattern list lived in the Makefile so it matched itself and was permanently red; `legacy/` was excluded while remaining in the tree. Replaced by `scripts/scan_secrets.py`, 10 tests including a regression for each. |
 | 19 | `trajectories/product-agent/` held 55 test artifacts and no real trace | **Fixed 2026-08-30** | Removed; `TS_TRACE_DIR` redirects the suite so the class of problem cannot recur. A test rejects any trace whose case id is not a frozen case or a tiled window. |
 | 9 | Pricing/latency figures from unsourced planning docs | Superseded | Split into the specific claims #14 and #15 rather than a general policy line. |
+| 16 | `legacy/README.original.md` lines 18–23 hold live credentials | **Withdrawn 2026-08-30 — scanner false positive** | Read the file instead of trusting the scan: the lines are `DB_PASSWORD=your_password`, `DEEPGRAM_API_KEY=your_key`, `TWITCH_OAUTH=your_token`, inside a "Create `.env`:" instruction block. Placeholders, not credentials, so there is nothing to rotate and `legacy/` stays preserved as-is per `docs/PRE_EXISTING.md`. The scan is what needs fixing: `scan_secrets.py` recognises `<your key here>` and empty values as placeholders but not the `your_*` form, so it reports a six-line docs example as the highest-severity finding in the project. Left open as #35 — a scanner that cries wolf on its own README gets ignored, which is the failure mode #18 already cost this project once. |
 
 ## Environment
 
