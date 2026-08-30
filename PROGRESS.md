@@ -1778,3 +1778,53 @@ frozen, and the marginal cost is a fraction of a cent. The team measured embeddi
 twice and got ~100 poor clusters; running it here turns that from a remembered result into a
 measured one, or overturns it.
 Blockers: the video needs the author.
+
+## Iteration 67 — 2026-08-30 — arm C, embeddings. Measured. Not adopted.
+
+Attempted: FEATURES_V2 §1, the last open item. Embeddings as a third arm against the frozen
+labels, never as the answer.
+
+**The first number looked like the team's prior was wrong.** Best pooled F1 **0.583 at threshold
+0.40**, against the shipped arm B's 0.403 — a 45% improvement.
+
+**Splitting it by window showed the number was an artifact.** The same threshold produces:
+
+| window | precision | recall | F1 |
+|---|---:|---:|---:|
+| `stableronaldo` w2 — the word game | **1.000** | 0.626 | **0.770** |
+| `yugi` w9 — varied | **0.164** | 0.786 | 0.272 |
+
+At 0.40 arm C is the best result anything has produced on one window and close to worthless on the
+other — precision 0.164 means five of every six pairs it proposes are wrong. The pooled figure
+averages a triumph with a failure and reports neither. **The threshold does not transfer**, and
+that is precisely the instability the team recorded in Oct 2025 and Mar 2026 — now reproduced with
+a number attached and a reason: word-game chat is near-duplicate short strings and separates
+cleanly; varied chat is uniformly short and colloquial, so one threshold collapses the window.
+
+At a single transferable threshold C is modestly ahead — C@0.55 at precision **0.973** / recall
+**0.289** beats B's 0.926 / 0.257 on both axes.
+
+**Not adopted, and not because it lost.** The gain is small and the cost is categorical: B is
+free, keyless and deterministic, and the whole grouping path runs in Tier 0 live chat with no
+provider at all. The winning threshold was chosen by looking at the labels — tuning on the test
+set, said in those words in the write-up. And a day before the deadline, swapping the shipped arm
+would move the board, the rail, the questions panel and the live counts at once.
+
+The **full sweep** is published rather than the best row, and a test fails if it ever leaves the
+write-up, because C has a free parameter that A and B do not. A replay miss on an embedding
+**raises** rather than returning nothing — unlike a cosmetic label, a missing embedding means the
+arm cannot be scored, and a silent zero would read like a measurement.
+
+Cost: **$0.00001** — two calls, 723 tokens. The measurement was never the expensive part.
+
+Written up as *Removed experiment #3* in `docs/IMPROVEMENT_CHANGELOG.md`, which now carries three
+experiments that were tried, measured and rolled back — one of them because it won on the wrong
+metric.
+
+Result: `make test` 603 → **610 passed**. 7 new tests, four rows in DECISIONS.md. Ledger $0.43.
+
+**FEATURES_V2 is complete. Every item on the build list is done.**
+**~19 hours to the deadline. The video is the only thing left that scores, and it needs the
+author:** film and cut, confirm `evals/REVIEW_ME.md`, make the repo public, rotate `.env` and the
+Telegram credentials, submit a draft early.
+Blockers: the video needs the author.

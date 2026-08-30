@@ -204,3 +204,50 @@ TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence
 
 70 cache hits, 0 misses, $0.00. Recording it cost **$0.0122** (22 calls, 107,546 input and 3,589
 output tokens at `gpt-4.1-nano` list price), logged in `COST_LEDGER.md`.
+
+---
+
+## Removed experiment #3 — embedding clustering, measured and still not adopted
+
+The team ran embedding clustering twice, in October 2025 and March 2026, and recorded the same
+result both times: *"it splits into 100 clusters, but they're all different… with not-great
+accuracy."* It went in here as **an arm, never as the answer** — measured against pair-level
+intent labels frozen in a commit that contained no arm code.
+
+**Arm C's best pooled score beats the shipped arm.** `text-embedding-3-small`, single-link
+agglomeration, best threshold 0.40: **F1 0.583 against arm B's 0.403.**
+
+**And that number is an artifact.** Split by window, the same threshold gives:
+
+| window | precision | recall | F1 |
+|---|---:|---:|---:|
+| `stableronaldo` w2 — a word-guessing game | **1.000** | 0.626 | **0.770** |
+| `yugi` w9 — varied chat | **0.164** | 0.786 | 0.272 |
+
+At 0.40 arm C is the best result anything has produced on one window and close to worthless on
+the other — precision 0.164 means five of every six pairs it proposes are wrong. The pooled figure
+averages a triumph with a failure and reports neither. **The threshold does not transfer**, which
+is the instability the team recorded twice, now reproduced with a number on it and an explanation:
+word-game chat is near-duplicate short strings and separates cleanly; varied chat is uniformly
+short and colloquial, so one threshold collapses the window.
+
+At a single transferable threshold, C is modestly ahead — C@0.55 scores precision 0.973 and recall
+0.289 against B's 0.926 and 0.257, better on both axes.
+
+**Not adopted, and not because it lost.** The gain is small and the cost is categorical: arm B is
+free, keyless and deterministic, and the entire grouping path runs in Tier 0 live chat with no
+provider at all. The winning threshold was chosen by looking at the labels, which is tuning on the
+test set. And this landed one day before the deadline, when swapping the shipped arm would move
+the board, the rail, the questions panel and the live counts at once.
+
+Reproduce it with no keys and no cost:
+
+```
+python -m evals.grouping.score_arms                     # arms A and B
+python -m pytest tests/test_arm_embeddings.py           # arm C, from the committed cache
+```
+
+Recording the embeddings cost **$0.00001** — two calls, 723 tokens. The measurement was never the
+expensive part; deciding what it meant was.
+
+**All figures inherit `reviewed: false`.** Two windows, 164 messages, model-drafted labels.
