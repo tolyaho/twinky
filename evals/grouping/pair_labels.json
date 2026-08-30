@@ -1,0 +1,1014 @@
+{
+ "purpose": "Pair-level intent labels for comparing grouping arms A, B and C.",
+ "provenance": "MODEL-DRAFTED, NOT HUMAN-REVIEWED. Assigned by reading the messages before any grouping arm was run or written. Treat exactly as evals/gold: a draft that has not been confirmed by a person.",
+ "reviewed": false,
+ "rule": "Two messages are a positive pair when they share an intent id. `x<n>` ids are clusters of one and never pair with anything. `unsure` messages are excluded from scoring in both directions.",
+ "windows": [
+  {
+   "fixture": "stableronaldo_2026-08-30T0723",
+   "window": 2,
+   "window_ms": [
+    1788074707878,
+    1788074767878
+   ],
+   "messages": 79,
+   "labels": [
+    {
+     "index": 0,
+     "id": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc",
+     "text": "armament",
+     "intent": "unsure"
+    },
+    {
+     "index": 1,
+     "id": "047d1c2c-d44f-4f74-b39f-27603305e158",
+     "text": "@wetnutsock12 yeah you’re retarded",
+     "intent": "banter"
+    },
+    {
+     "index": 2,
+     "id": "49074b47-f279-43b0-964e-711c34a15329",
+     "text": "American",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 3,
+     "id": "2012f66e-ce20-400a-b967-21530d56f66f",
+     "text": "Americans",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 4,
+     "id": "e98d4fb0-c8bc-494e-84a5-f6013d3f0fd2",
+     "text": "amendment",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 5,
+     "id": "4ea489b7-e377-406d-b9d0-5dae65489dec",
+     "text": "americna",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 6,
+     "id": "4b8dcbcc-24f1-4cf2-ab48-5829f2ced974",
+     "text": "amemetrn",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 7,
+     "id": "6d379d8a-9945-4aec-b713-73e2463c1517",
+     "text": "amitturure",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 8,
+     "id": "3598f0c7-5ab4-4582-a4c4-3d0599e26d9f",
+     "text": "amenities",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 9,
+     "id": "43b6b562-c6c9-4aac-9394-9c5321ab437e",
+     "text": "america",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 10,
+     "id": "801fbfaf-e318-4b77-a50e-96525ba94662",
+     "text": "amazingdih",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 11,
+     "id": "5d88b206-cada-495a-8367-a3f2cf0622bc",
+     "text": "America",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 12,
+     "id": "81a677c5-6d41-4528-b7f0-e76a8edd6907",
+     "text": "@ifillc0ffinzz I just came in here to make fun of u guys",
+     "intent": "banter"
+    },
+    {
+     "index": 13,
+     "id": "8e492361-4767-4e1d-abc0-ac31eed56757",
+     "text": "amendment",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 14,
+     "id": "f8ad1680-b30e-49b5-965f-5aaba5b4803c",
+     "text": "american",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 15,
+     "id": "6b31ca8e-4c40-4565-84d9-8269f54f618b",
+     "text": "american",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 16,
+     "id": "eed3593f-d6d2-4a8b-9392-dbff9a7fd4a8",
+     "text": "ameiture",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 17,
+     "id": "215909ac-792c-4f26-8823-5a2dc76457ea",
+     "text": "americas",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 18,
+     "id": "516ef4e7-bffe-486b-829d-5b3d5c918b44",
+     "text": "amenities",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 19,
+     "id": "5eab5021-e4e7-465d-8cce-a72edbafbba3",
+     "text": "amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 20,
+     "id": "9dc0b730-6b19-43bb-9434-39fd286b6c49",
+     "text": "amendment",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 21,
+     "id": "c41f9738-9851-4cd4-a08c-fc593f3d39bc",
+     "text": "James lango",
+     "intent": "x21"
+    },
+    {
+     "index": 22,
+     "id": "f08d538c-327e-4b0b-bab8-20544a6289f5",
+     "text": "anesthetist",
+     "intent": "unsure"
+    },
+    {
+     "index": 23,
+     "id": "d51bb9f2-04d5-41f6-9b5d-9db3dbf9bad0",
+     "text": "they faking",
+     "intent": "x23"
+    },
+    {
+     "index": 24,
+     "id": "d1cd1032-2dcd-4144-a7e4-ea45f8f248e2",
+     "text": "amethyist",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 25,
+     "id": "01f030db-8c88-4261-905b-6df957aec3fa",
+     "text": "amethysts",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 26,
+     "id": "0da8c705-2730-4e88-8247-4b405bc8d657",
+     "text": "Amsterdam",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 27,
+     "id": "22b98842-455e-4aec-856c-07a8b6c774a2",
+     "text": "amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 28,
+     "id": "e097dea9-78f7-485e-a54d-c5346b4936fc",
+     "text": "ametiture",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 29,
+     "id": "d9e226b4-eb35-498f-8e42-9f1b4fbb60f3",
+     "text": "Ron",
+     "intent": "x29"
+    },
+    {
+     "index": 30,
+     "id": "670ce4a8-f389-4a7f-a90c-3a5fddaa713c",
+     "text": "amethode",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 31,
+     "id": "bdb8275f-9963-43c8-a87b-5e49e13c2bd5",
+     "text": "Amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 32,
+     "id": "9b37d036-1374-43e5-aaa7-fb444e35cdf4",
+     "text": "A M E T H Y S T",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 33,
+     "id": "2ab6d284-cc42-4972-95ef-bcb7e14bb6c3",
+     "text": "ametropias",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 34,
+     "id": "85180a12-db35-4a05-b1db-98de2a4cf5d0",
+     "text": "stabeCAUGHT stabeCAUGHT stabeCAUGHT stabeCAUGHT stabeDance stabeDance stabeDance stabeDance stabeTwerkk stabeDonoWall stabeDonoWall stabeDonoWall",
+     "intent": "emote"
+    },
+    {
+     "index": 35,
+     "id": "56054aac-4627-4799-9e55-ec95d7ef30c5",
+     "text": "amethyst’s",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 36,
+     "id": "3bf777ac-b325-4f21-850e-5557e7ece45b",
+     "text": "amethasine",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 37,
+     "id": "bc1cafe6-7ec6-4024-9052-25bed87dc3b1",
+     "text": "amethathine",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 38,
+     "id": "271f16c7-2c90-4f99-82f1-f2e9f750c31d",
+     "text": "Amethysts",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 39,
+     "id": "a5cfd731-fe2c-4002-bc21-5136dbf43144",
+     "text": "amatterdaddy?",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 40,
+     "id": "87e6edb0-40d2-44e0-a282-84865efbbbb7",
+     "text": "amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 41,
+     "id": "2e90150e-eb45-4dfb-9b13-6df76c155e9a",
+     "text": "amething",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 42,
+     "id": "11ec2935-d09a-4f12-bb77-6e66bc82e38e",
+     "text": "amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 43,
+     "id": "4acdbb54-1727-4cf7-ad79-86dde6bf6432",
+     "text": "amethystine",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 44,
+     "id": "796631ff-4a2e-42e4-83c7-70debeb28dc3",
+     "text": "amethesine",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 45,
+     "id": "99d09528-d329-43b8-9153-76b39523ab46",
+     "text": "amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 46,
+     "id": "d8e6bdce-5085-4839-b0c6-7e66aa5c6098",
+     "text": "amethysts",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 47,
+     "id": "3fd70dfc-11eb-49d7-b923-132aef47eb9f",
+     "text": "amethyst",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 48,
+     "id": "fb49e571-aa91-467b-99d2-8f7d904b8d93",
+     "text": "amethysttine",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 49,
+     "id": "6effa443-357c-4657-877c-7fe9c99326cb",
+     "text": "amethstine",
+     "intent": "guess_ame"
+    },
+    {
+     "index": 50,
+     "id": "e4899e18-f8ce-478f-b1c9-915075e6d252",
+     "text": "drunkin",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 51,
+     "id": "02aecc0e-8918-4e55-8c34-979161a2b905",
+     "text": "dragom",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 52,
+     "id": "98182269-f646-49da-8d73-53903c20b6f5",
+     "text": "drinking",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 53,
+     "id": "3942210e-bcba-453f-820e-b4c4b796800d",
+     "text": "drawing",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 54,
+     "id": "bc71c38e-cb66-4117-b989-d35eb81f76b7",
+     "text": "dresser",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 55,
+     "id": "382341b6-03de-46a2-9a98-455194112905",
+     "text": "drwozy",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 56,
+     "id": "babec761-b0d3-4ea2-a43e-29746db5d685",
+     "text": "dragon",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 57,
+     "id": "9a671744-4dd3-4918-b41f-dc4c8755ee13",
+     "text": "driven",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 58,
+     "id": "dc228284-1ed2-4956-90d8-9f8c9552d74b",
+     "text": "dramatically",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 59,
+     "id": "35560f9d-3f44-43fa-9957-1b8d51935d20",
+     "text": "dragging",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 60,
+     "id": "2bb37ffb-740b-442e-9718-ef1ae0e65f5c",
+     "text": "dr pepper",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 61,
+     "id": "a4c9b5a6-0ebd-4afb-aefe-b13e2c5c6f9b",
+     "text": "dressage",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 62,
+     "id": "67fb7cea-2be8-4aed-b0dc-521d4060eaa0",
+     "text": "drooling",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 63,
+     "id": "303ece31-51ed-4f06-b7ce-3210c0cd1a0e",
+     "text": "drivers",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 64,
+     "id": "04e9abcb-d806-4226-b5ba-6ff91f0355a1",
+     "text": "dragon",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 65,
+     "id": "ff27eca7-bbeb-44f1-a5cb-14e4c423c186",
+     "text": "driven",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 66,
+     "id": "2d26236c-85e1-4b14-a6e5-cbd88d42257a",
+     "text": "drinking",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 67,
+     "id": "c7d65203-68f9-46d1-a854-017bad1460f8",
+     "text": "!watchtime",
+     "intent": "x67"
+    },
+    {
+     "index": 68,
+     "id": "f60d8659-440e-4e4b-9851-70320df5572c",
+     "text": "DREAMER",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 69,
+     "id": "ab58feac-2482-4f4f-bcd3-e9c42b81ff82",
+     "text": "Dramatic",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 70,
+     "id": "9c524abf-9b29-46e7-abf6-b66e944cb2b6",
+     "text": "definitely",
+     "intent": "unsure"
+    },
+    {
+     "index": 71,
+     "id": "52909398-1e7f-41c9-a9d3-b3e7e4df4b35",
+     "text": "drawer",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 72,
+     "id": "9fbe6086-48a0-4dc0-812f-7c820982789e",
+     "text": "dragondeeznuts",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 73,
+     "id": "4e6b9f4c-c6f0-4c80-80e3-00cc33218ddb",
+     "text": "driving",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 74,
+     "id": "9304dc73-f60b-4644-93d6-7a0dcc41d67e",
+     "text": "DREAMING",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 75,
+     "id": "1629ba9c-74c5-4b1c-8476-7983811a4ca3",
+     "text": "driven",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 76,
+     "id": "1d3cc770-8e5f-4954-89f4-6b7748b1a094",
+     "text": "omgBruh",
+     "intent": "emote"
+    },
+    {
+     "index": 77,
+     "id": "6946ea74-c25d-4bcb-8242-153e55bd4b06",
+     "text": "drunking",
+     "intent": "guess_dr"
+    },
+    {
+     "index": 78,
+     "id": "ca1e20ce-13cb-43e1-9997-ae70ce3272da",
+     "text": "AAAWWWWWWW",
+     "intent": "emote"
+    }
+   ]
+  },
+  {
+   "fixture": "yugi_2026-08-30T0723",
+   "window": 9,
+   "window_ms": [
+    1788075128171,
+    1788075188171
+   ],
+   "messages": 85,
+   "labels": [
+    {
+     "index": 0,
+     "id": "c79fab3f-28f7-472e-84fd-a5abb8f5342b",
+     "text": "LOL",
+     "intent": "laugh"
+    },
+    {
+     "index": 1,
+     "id": "d5c7dd00-74fb-4cd9-8613-da6743670a5b",
+     "text": "astao a lil slut",
+     "intent": "astao"
+    },
+    {
+     "index": 2,
+     "id": "70907a43-1f2c-46b8-974f-e5ec0659836e",
+     "text": "LO",
+     "intent": "laugh"
+    },
+    {
+     "index": 3,
+     "id": "0807c509-43ad-4629-8ebe-f06ffc57f788",
+     "text": "EL OEL",
+     "intent": "laugh"
+    },
+    {
+     "index": 4,
+     "id": "1431fc5c-a51e-49cb-8e59-897bb816c099",
+     "text": "he be everywhere sob",
+     "intent": "x4"
+    },
+    {
+     "index": 5,
+     "id": "47e9f78c-fd75-4224-b540-2c2adfdab93a",
+     "text": "@cosmiclarry i must live under a rock",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 6,
+     "id": "8dcf905d-7b36-4c66-ad03-87df42327d4a",
+     "text": "he code switches for sure sob",
+     "intent": "codeswitch"
+    },
+    {
+     "index": 7,
+     "id": "78077c66-555e-4f48-899f-6b79db576c50",
+     "text": "astao a hoe",
+     "intent": "astao"
+    },
+    {
+     "index": 8,
+     "id": "979dff0e-4ab4-4ceb-9eaf-a4f20200a6ea",
+     "text": "L yugi",
+     "intent": "x8"
+    },
+    {
+     "index": 9,
+     "id": "44aca429-f6a9-4058-847e-5862089b2930",
+     "text": "I FW ASTAO",
+     "intent": "astao"
+    },
+    {
+     "index": 10,
+     "id": "025fd639-8c5e-4449-870e-d78fb7672fbb",
+     "text": "@eightyysixx KODE mhm",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 11,
+     "id": "ff3c718a-c856-4b74-be4b-dc08272041e6",
+     "text": "LOL",
+     "intent": "laugh"
+    },
+    {
+     "index": 12,
+     "id": "6c88f260-420e-4887-9e38-7ab0b3b63d1f",
+     "text": "WOW",
+     "intent": "shock"
+    },
+    {
+     "index": 13,
+     "id": "30f53690-aac4-48b9-a77f-02341a1eb3d8",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 14,
+     "id": "48d8fe96-e49f-429a-8e83-41f3cc12878a",
+     "text": "what",
+     "intent": "shock"
+    },
+    {
+     "index": 15,
+     "id": "ad89077f-79de-4ee5-b3c8-ba02baed0f16",
+     "text": "?",
+     "intent": "qmark"
+    },
+    {
+     "index": 16,
+     "id": "8873dbcc-0038-47b5-8e14-672ddfd4b51a",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 17,
+     "id": "d4764969-ad54-4db9-a3f8-cabdf29139a5",
+     "text": "yusufs crying  ͏",
+     "intent": "yusuf_chopped"
+    },
+    {
+     "index": 18,
+     "id": "c40e6287-48e4-46e1-8f5b-a8080ef5c52a",
+     "text": "LOL",
+     "intent": "laugh"
+    },
+    {
+     "index": 19,
+     "id": "a90cae15-5270-4dc0-81c8-1f9d49a6308a",
+     "text": "?",
+     "intent": "qmark"
+    },
+    {
+     "index": 20,
+     "id": "58c0ad0d-ac3a-4dd3-9d19-577abb47ae3e",
+     "text": "o",
+     "intent": "o_reaction"
+    },
+    {
+     "index": 21,
+     "id": "2bf58df0-6560-4392-9306-ae409483195d",
+     "text": "o",
+     "intent": "o_reaction"
+    },
+    {
+     "index": 22,
+     "id": "8ad71b7f-ae1d-4351-b7fc-e06050822201",
+     "text": "OH NAH",
+     "intent": "shock"
+    },
+    {
+     "index": 23,
+     "id": "75098d66-fed7-46a6-b3d1-f6bf8afc8124",
+     "text": "word ima a asta watcher n u dont fw me",
+     "intent": "astao"
+    },
+    {
+     "index": 24,
+     "id": "3bd686c2-7e75-4f75-a45e-c765de469ff6",
+     "text": "ngl you cant play too much in girl chats",
+     "intent": "x24"
+    },
+    {
+     "index": 25,
+     "id": "62b510b7-7c9b-418f-ab3e-a0320686bd55",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 26,
+     "id": "ed101734-31c8-4fbd-aa59-c8bdaa189577",
+     "text": "lmaooooooooooo",
+     "intent": "laugh"
+    },
+    {
+     "index": 27,
+     "id": "eff00ec8-5818-4487-b504-dd4a0aefd930",
+     "text": "smh",
+     "intent": "x27"
+    },
+    {
+     "index": 28,
+     "id": "d1869479-d14f-4987-afa6-c65616a9288e",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 29,
+     "id": "36fcbc50-0dca-45bb-9649-e438bec388da",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 30,
+     "id": "f84653a0-66e1-45a3-a761-81704470e31d",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 31,
+     "id": "5fbac642-ad9b-4564-8cea-acb5e7ce8359",
+     "text": "Redify?",
+     "intent": "x31"
+    },
+    {
+     "index": 32,
+     "id": "2818ff23-c061-4328-886a-0cd65a7c8837",
+     "text": "WHATTT",
+     "intent": "shock"
+    },
+    {
+     "index": 33,
+     "id": "e0fdcc6b-eddc-4311-bab9-84cbe5f6a2fd",
+     "text": "what!!!!",
+     "intent": "shock"
+    },
+    {
+     "index": 34,
+     "id": "d523a79d-eb61-48e0-adc4-a6aa312f8b73",
+     "text": "yusuf chopped",
+     "intent": "yusuf_chopped"
+    },
+    {
+     "index": 35,
+     "id": "cafa90d1-7a35-4903-a6fa-9a896a500f01",
+     "text": "@euphoricccccccc think he runs shit omePfft",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 36,
+     "id": "b4746437-9724-474b-a24d-8fefdbe1b815",
+     "text": "say u swear to glob",
+     "intent": "swear_to_glob"
+    },
+    {
+     "index": 37,
+     "id": "a0f5542a-87c6-44f7-8bb8-ac7edd55329a",
+     "text": "yugis chat is israel",
+     "intent": "x37"
+    },
+    {
+     "index": 38,
+     "id": "097d8703-aa01-4bd7-a940-a24fb06f6b0b",
+     "text": "he does do that",
+     "intent": "x38"
+    },
+    {
+     "index": 39,
+     "id": "7b75e24b-0548-4662-9844-160e2e216dce",
+     "text": "say you swear to glob",
+     "intent": "swear_to_glob"
+    },
+    {
+     "index": 40,
+     "id": "f09f9a88-a055-41f8-8278-de7ac0a914f2",
+     "text": "omg him and joe jumbo would be best friends @Yugi @Yugi",
+     "intent": "x40"
+    },
+    {
+     "index": 41,
+     "id": "81044268-a9f9-4ae3-9393-3b7c3905e3be",
+     "text": "say u swear u glbo",
+     "intent": "swear_to_glob"
+    },
+    {
+     "index": 42,
+     "id": "a1383a3a-cea8-4765-b098-89231b1e5fd0",
+     "text": "yugi broke his leg!",
+     "intent": "x42"
+    },
+    {
+     "index": 43,
+     "id": "b8d07b9c-ec5f-4f8e-8f24-3971695f2f85",
+     "text": "LOL",
+     "intent": "laugh"
+    },
+    {
+     "index": 44,
+     "id": "3db1ed73-e538-48ae-8825-90bef0066d92",
+     "text": "omgBruh i hate code switchers",
+     "intent": "codeswitch"
+    },
+    {
+     "index": 45,
+     "id": "08d94173-b055-47e4-b20e-5a1dff92d997",
+     "text": "WTF",
+     "intent": "shock"
+    },
+    {
+     "index": 46,
+     "id": "3a7c7edc-b3b0-405f-a72a-24b269201c1d",
+     "text": "WOW astao",
+     "intent": "astao"
+    },
+    {
+     "index": 47,
+     "id": "21058778-8543-41c3-84c4-7ee805d0bc3e",
+     "text": "he says it with a m tho",
+     "intent": "unsure"
+    },
+    {
+     "index": 48,
+     "id": "b107ecdf-564f-4c39-a963-fb52ba25e351",
+     "text": "LMFAO",
+     "intent": "laugh"
+    },
+    {
+     "index": 49,
+     "id": "b55092a9-9a0f-48db-94b7-0cebac698883",
+     "text": "@astao45 ?????",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 50,
+     "id": "b7c1c431-32bd-4561-8925-8cec42ca2e34",
+     "text": "yusef chopped ong",
+     "intent": "yusuf_chopped"
+    },
+    {
+     "index": 51,
+     "id": "a8f8cb47-ace5-4cb6-a9f8-d9fb335e42ef",
+     "text": "is he?",
+     "intent": "unsure"
+    },
+    {
+     "index": 52,
+     "id": "d8f0b83c-38f1-4932-9067-33d1bd1194e1",
+     "text": "LMFAO ͏",
+     "intent": "laugh"
+    },
+    {
+     "index": 53,
+     "id": "b925d9ec-323c-46ac-9797-a8a65f452a3e",
+     "text": "sob",
+     "intent": "x53"
+    },
+    {
+     "index": 54,
+     "id": "1f47096e-229e-4411-b23b-217d59f899ac",
+     "text": "🦮🦮🦮🦮🦮",
+     "intent": "emote_only"
+    },
+    {
+     "index": 55,
+     "id": "6389635c-8138-468f-94ea-04c2f9947a41",
+     "text": "jasont2WEIRD jasont2WEIRD jasont2WEIRD",
+     "intent": "emote_only"
+    },
+    {
+     "index": 56,
+     "id": "b1447b06-5647-4754-9c4d-cdcc70f5e8c3",
+     "text": "ong ur weird",
+     "intent": "x56"
+    },
+    {
+     "index": 57,
+     "id": "7751363e-3f7e-41b5-86cc-f8b96344208d",
+     "text": "he gets a pass",
+     "intent": "unsure"
+    },
+    {
+     "index": 58,
+     "id": "babb78a7-9132-431f-9898-72a37195d4ab",
+     "text": "ong it is",
+     "intent": "x58"
+    },
+    {
+     "index": 59,
+     "id": "d134e60c-f885-4b82-8a7f-2af1136db4f3",
+     "text": "yugi u cooked u getting slam",
+     "intent": "x59"
+    },
+    {
+     "index": 60,
+     "id": "6e3cfd23-9691-4423-99a0-7e037961f648",
+     "text": "he not wrong this chat is...",
+     "intent": "x60"
+    },
+    {
+     "index": 61,
+     "id": "548f5274-10da-4bfe-8804-a427a2a9c5c2",
+     "text": "yusuf chopped ong",
+     "intent": "yusuf_chopped"
+    },
+    {
+     "index": 62,
+     "id": "9f7f63cc-0c2f-4624-a08a-a6c855e5f3e0",
+     "text": "🦮🦮🦮",
+     "intent": "emote_only"
+    },
+    {
+     "index": 63,
+     "id": "c33dab74-0f4f-41c2-be98-5d514f7d5b59",
+     "text": "@xenoezy can u leave me alone",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 64,
+     "id": "07052add-a34e-4b9e-b96b-9325fa7d401e",
+     "text": "wideSpeedNod",
+     "intent": "emote_only"
+    },
+    {
+     "index": 65,
+     "id": "07ba12de-ab0b-4a15-b20c-481e1997c5fe",
+     "text": "ME?",
+     "intent": "me_question"
+    },
+    {
+     "index": 66,
+     "id": "9705b320-8166-4edc-bb6f-ea93e09adce7",
+     "text": "ME?",
+     "intent": "me_question"
+    },
+    {
+     "index": 67,
+     "id": "124bb3eb-0f22-4b87-8bc0-ee4081598b78",
+     "text": "im not",
+     "intent": "x67"
+    },
+    {
+     "index": 68,
+     "id": "1815a8e7-293b-4a18-9883-bb57dc0d3988",
+     "text": "so chat elisSit  am from Asta's . do yall get wild up in here or what",
+     "intent": "x68"
+    },
+    {
+     "index": 69,
+     "id": "e6386092-c47d-45a4-b3df-5f9c7284cd47",
+     "text": "LOL",
+     "intent": "laugh"
+    },
+    {
+     "index": 70,
+     "id": "6e3ea14a-33d4-4a7f-af83-11805110b186",
+     "text": "FirstTimeWisdom",
+     "intent": "emote_only"
+    },
+    {
+     "index": 71,
+     "id": "a5aef4d8-9053-4b9f-9d97-4d7730a52b93",
+     "text": "code switcher k ow how to get lit",
+     "intent": "codeswitch"
+    },
+    {
+     "index": 72,
+     "id": "3b7a99aa-a523-473c-a681-fd1e40b8b65d",
+     "text": "astao be taking the lit pill he Cool",
+     "intent": "astao"
+    },
+    {
+     "index": 73,
+     "id": "feb53302-941f-479e-9780-de85f8bcd0c6",
+     "text": "lol",
+     "intent": "laugh"
+    },
+    {
+     "index": 74,
+     "id": "94b9cff0-d41a-474d-be90-fac3159fd867",
+     "text": "Mf wearing pimple patches for no reason",
+     "intent": "x74"
+    },
+    {
+     "index": 75,
+     "id": "cbba2880-4939-49c6-8c65-4992e1afc8bf",
+     "text": "cap",
+     "intent": "x75"
+    },
+    {
+     "index": 76,
+     "id": "85600b53-5e00-4d2b-bd78-b1564d44eba1",
+     "text": "FUCK A CODE SWITCHER",
+     "intent": "codeswitch"
+    },
+    {
+     "index": 77,
+     "id": "bdf10ae9-4d05-438b-acb1-ff1a9ed6e838",
+     "text": "SON",
+     "intent": "x77"
+    },
+    {
+     "index": 78,
+     "id": "b452509e-52af-4c25-bec0-bf69e70e23a8",
+     "text": "if u code switch u not real ong on bro on yugi life",
+     "intent": "codeswitch"
+    },
+    {
+     "index": 79,
+     "id": "edf23eae-58bd-4bcc-a765-db5c104e43df",
+     "text": "slow down",
+     "intent": "x79"
+    },
+    {
+     "index": 80,
+     "id": "9bdb70ad-6e6e-46be-9e22-2f99c541db39",
+     "text": "@Adriel_B nope",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 81,
+     "id": "d6b3c7cd-d335-4c27-8bb0-2bb55d7e4f03",
+     "text": "how far",
+     "intent": "x81"
+    },
+    {
+     "index": 82,
+     "id": "fe65a975-f4b9-44da-8281-7afb8c85c6f0",
+     "text": "@eightyysixx and you are ben",
+     "intent": "reply_to_a_chatter"
+    },
+    {
+     "index": 83,
+     "id": "b4617650-8d3c-4887-ab64-a84492b8213e",
+     "text": "yea ok",
+     "intent": "x83"
+    },
+    {
+     "index": 84,
+     "id": "ca4a3674-6e2f-4e77-957f-14f682323faa",
+     "text": "@euphoricccccccc cry to the mod again sob",
+     "intent": "reply_to_a_chatter"
+    }
+   ]
+  }
+ ]
+}
