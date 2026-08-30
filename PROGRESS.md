@@ -38,3 +38,13 @@ Fixed a determinism defect found on the way: `trace_id` came from `uuid4`, so tw
 fixture produced different published documents. Now derived from `(agent, case_id)`.
 Next: RISKS #10 — `python -m ts.cli` fails from a fresh clone without `PYTHONPATH=src`. P0, blocks C2.
 Blockers: none for A2. Cache is still empty, so `make replay` exits 3 by design until B1.
+
+## 2026-08-30T00:12Z — iteration 3
+Attempted: A3 — wire baseline and agent into `evals/run_eval.py`, verify with fake providers.
+Result: `make test` green, 84 -> 94. Both systems run over the identical window per frozen case
+and are scored on EVERY emitted card, not just gate survivors — scoring survivors only would
+force unsupported-rate to 0 for both and make the headline metric vacuous. Adds
+`evidence/predictions.json` (protocol item 4) and an opt-in `--ablation`. `make eval` on an
+empty cache exits 3 with no paid call (verified by hand).
+Next: A4 — build the remaining 10 eval cases against the sample fixture; cases 5, 11, 12 first.
+Blockers: none. RISKS #10 still open (`python -m ts.cli` needs `PYTHONPATH=src`), P0 for gate C2.
