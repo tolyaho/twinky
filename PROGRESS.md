@@ -251,3 +251,17 @@ proving causation. A minimum quote length would close it, but the frozen metric 
 the numbers incomparable to the metric they claim to be. Documented in README §11 instead.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T08:02Z — iteration 19
+Attempted: moved the audit from the gate to the reducer, the last unaudited named component.
+Result: `make test` green, 217 -> 224. Found #30, a product-level defect: `canonical` stripped
+`[^\w\s]+`, which removes symbols as well as punctuation, so an emote-only message canonicalised
+to nothing and `reduce_chat` dropped it outright. Measured before the fix: 5 messages in, 4 lost,
+burst counts summing to 1 — while the module's docstring claims counts and source ids are
+preserved. On Twitch an emote flood is the most common reaction there is, so the reducer was
+deleting exactly the signal the reaction card exists to catch, and every distribution built on it
+under-counted. Punctuation is now stripped by Unicode category so symbols survive, and a
+punctuation-only message goes to a counted `∅` bucket. Checked the scaffold fixture reduces
+identically — 32 -> 15 bursts, ratio 0.469 — so nothing frozen moved.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
