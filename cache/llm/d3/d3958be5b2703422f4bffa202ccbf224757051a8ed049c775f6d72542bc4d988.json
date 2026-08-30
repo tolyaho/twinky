@@ -1,0 +1,53 @@
+{
+ "request": {
+  "audio_sha256": "86efba6437577a3342b790ce629b4feaeba62702e5c4cd3f1dff54f7a5fa9e9f",
+  "diarize": true,
+  "language": "multi",
+  "model": "nova-3-general",
+  "provider": "deepgram",
+  "smart_format": true,
+  "utterances": true
+ },
+ "response": {
+  "metadata": {
+   "channels": 1,
+   "created": "2026-08-30T08:04:05.040Z",
+   "diarize_info": {
+    "arch": "v1",
+    "model_uuid": "a9f85c2b-5afb-4b9d-b49b-492c43a01cfb"
+   },
+   "duration": 714.944,
+   "model_info": {
+    "b6e78fa4-ac4f-4f32-93f0-2b6906832fb5": {
+     "arch": "nova-3",
+     "name": "general-nova-3",
+     "version": "2026-01-27.9107"
+    }
+   },
+   "models": [
+    "b6e78fa4-ac4f-4f32-93f0-2b6906832fb5"
+   ],
+   "request_id": "01a051ad-a4e4-70d1-8f17-cf62b4b30fe2",
+   "sha256": "86efba6437577a3342b790ce629b4feaeba62702e5c4cd3f1dff54f7a5fa9e9f",
+   "transaction_key": "deprecated"
+  },
+  "results": {
+   "channels": [
+    {
+     "alternatives": [
+      {
+       "confidence": 0.0,
+       "paragraphs": {
+        "paragraphs": [],
+        "transcript": "\n"
+       },
+       "transcript": "",
+       "words": []
+      }
+     ]
+    }
+   ],
+   "utterances": []
+  }
+ }
+}

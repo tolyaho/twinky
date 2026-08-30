@@ -1,0 +1,46 @@
+{
+ "request": {
+  "image_sha256": "b917d45f3feb0b924f433c3e116334346bde3b50b8dd0d15b7b661ce302a4211",
+  "max_tokens": 300,
+  "model": "gpt-4.1-mini",
+  "prompt": "Describe this livestream frame factually in at most 500 characters: the game or scene, what the streamer is doing, and anything happening on screen that a viewer would plausibly react to. The chat is supplied to the system separately and MUST NOT be described here: never transcribe, quote or summarise the chat overlay, and ignore viewer counts, follower goals, subscriber bars and on-screen clocks. Describing chat would let a caption become the claimed cause of the very messages it contains. Do not interpret, do not speculate about intent. If text is too small or blurred to read, write \"text unclear\" rather than inventing it. Reply with the description only.",
+  "provider": "vision",
+  "temperature": 0.0
+ },
+ "response": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "annotations": [],
+     "content": "The livestream frame shows a nighttime outdoor scene with several people gathered near a building with bright lights. One person in the foreground wears a black outfit and head covering, looking off to the side. Others in the background appear to be engaged in conversation or activity. The setting suggests a casual or organized gathering, possibly related to a live event or social interaction. Text on screen includes viewer count and a progress bar.",
+     "refusal": null,
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1788076693,
+  "id": "chatcmpl-EIUibPXEAoHGliJwAIh87vT34JPIs",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": "fp_6d15e4ed70",
+  "usage": {
+   "completion_tokens": 81,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "audio_tokens": 0,
+    "reasoning_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens": 1632,
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cached_tokens": 0
+   },
+   "total_tokens": 1713
+  }
+ }
+}

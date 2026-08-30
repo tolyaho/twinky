@@ -1,0 +1,46 @@
+{
+ "request": {
+  "image_sha256": "020545cccd5dbf5ad2a74b60b831ab438ae349379b881549adc8a2980eb9e73a",
+  "max_tokens": 300,
+  "model": "gpt-4.1-mini",
+  "prompt": "Describe this livestream frame factually in at most 500 characters: the game or scene, what the streamer is doing, and anything happening on screen that a viewer would plausibly react to. The chat is supplied to the system separately and MUST NOT be described here: never transcribe, quote or summarise the chat overlay, and ignore viewer counts, follower goals, subscriber bars and on-screen clocks. Describing chat would let a caption become the claimed cause of the very messages it contains. Do not interpret, do not speculate about intent. If text is too small or blurred to read, write \"text unclear\" rather than inventing it. Reply with the description only.",
+  "provider": "vision",
+  "temperature": 0.0
+ },
+ "response": {
+  "choices": [
+   {
+    "finish_reason": "stop",
+    "index": 0,
+    "logprobs": null,
+    "message": {
+     "annotations": [],
+     "content": "The livestream frame shows three people seated inside a vehicle at night. The person in the front passenger seat is looking down at a phone, wearing a white shirt, a black headband, and a seatbelt. Two others are seated in the back, one with blonde hair and the other with light-colored hair, both looking downward. The overlay text indicates the stream is heading to \"Kode Party.\" The setting appears calm with no visible game or active on-screen event.",
+     "refusal": null,
+     "role": "assistant"
+    }
+   }
+  ],
+  "created": 1788077405,
+  "id": "chatcmpl-EIUu5P5bZry7N6XAlDG1XN1PhD9ff",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": "fp_c721606bd7",
+  "usage": {
+   "completion_tokens": 93,
+   "completion_tokens_details": {
+    "accepted_prediction_tokens": 0,
+    "audio_tokens": 0,
+    "reasoning_tokens": 0,
+    "rejected_prediction_tokens": 0
+   },
+   "prompt_tokens": 1632,
+   "prompt_tokens_details": {
+    "audio_tokens": 0,
+    "cached_tokens": 0
+   },
+   "total_tokens": 1725
+  }
+ }
+}

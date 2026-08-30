@@ -1,0 +1,707 @@
+{
+ "request": {
+  "audio_sha256": "8df1c2fae45ee4fdda47b4ce8581223159ec523d52cd5bac280e00e706b09faa",
+  "diarize": true,
+  "language": "multi",
+  "model": "nova-3-general",
+  "provider": "deepgram",
+  "smart_format": true,
+  "utterances": true
+ },
+ "response": {
+  "metadata": {
+   "channels": 1,
+   "created": "2026-08-30T07:44:57.024Z",
+   "diarize_info": {
+    "arch": "v1",
+    "model_uuid": "a9f85c2b-5afb-4b9d-b49b-492c43a01cfb"
+   },
+   "duration": 114.944,
+   "model_info": {
+    "b6e78fa4-ac4f-4f32-93f0-2b6906832fb5": {
+     "arch": "nova-3",
+     "name": "general-nova-3",
+     "version": "2026-01-27.9107"
+    }
+   },
+   "models": [
+    "b6e78fa4-ac4f-4f32-93f0-2b6906832fb5"
+   ],
+   "request_id": "01a051a0-5bea-7c73-93ac-35255f950558",
+   "sha256": "8df1c2fae45ee4fdda47b4ce8581223159ec523d52cd5bac280e00e706b09faa",
+   "transaction_key": "deprecated"
+  },
+  "results": {
+   "channels": [
+    {
+     "alternatives": [
+      {
+       "confidence": 0.98535156,
+       "languages": [
+        "en"
+       ],
+       "paragraphs": {
+        "paragraphs": [
+         {
+          "end": 107.27894,
+          "num_words": 23,
+          "sentences": [
+           {
+            "end": 3.6799998,
+            "start": 3.28,
+            "text": "Yeah."
+           },
+           {
+            "end": 4.96,
+            "start": 3.6799998,
+            "text": "Chill, we're not making that, bro."
+           },
+           {
+            "end": 96.145,
+            "start": 94.225,
+            "text": "Well, I can't really get closer."
+           },
+           {
+            "end": 98.225,
+            "start": 96.145004,
+            "text": "Like, what do you want in the zone?"
+           },
+           {
+            "end": 107.27894,
+            "start": 106.465,
+            "text": "Boat up."
+           }
+          ],
+          "speaker": 0,
+          "start": 3.28
+         },
+         {
+          "end": 108.478935,
+          "num_words": 5,
+          "sentences": [
+           {
+            "end": 108.478935,
+            "start": 107.27894,
+            "text": "Bro, I'm not gonna die."
+           }
+          ],
+          "speaker": 0,
+          "start": 107.27894
+         }
+        ],
+        "transcript": "\nSpeaker 0: Yeah. Chill, we're not making that, bro. Well, I can't really get closer. Like, what do you want in the zone? Boat up.\n\nBro, I'm not gonna die."
+       },
+       "transcript": "Yeah. Chill, we're not making that, bro. Well, I can't really get closer. Like, what do you want in the zone? Boat up. Bro, I'm not gonna die.",
+       "words": [
+        {
+         "confidence": 0.7355957,
+         "end": 3.6799998,
+         "language": "en",
+         "punctuated_word": "Yeah.",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 3.28,
+         "word": "yeah"
+        },
+        {
+         "confidence": 0.77815753,
+         "end": 3.9199998,
+         "language": "en",
+         "punctuated_word": "Chill,",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 3.6799998,
+         "word": "chill"
+        },
+        {
+         "confidence": 0.9333496,
+         "end": 4.08,
+         "language": "en",
+         "punctuated_word": "we're",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 3.9199998,
+         "word": "we're"
+        },
+        {
+         "confidence": 0.9980469,
+         "end": 4.16,
+         "language": "en",
+         "punctuated_word": "not",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 4.08,
+         "word": "not"
+        },
+        {
+         "confidence": 0.9970703,
+         "end": 4.48,
+         "language": "en",
+         "punctuated_word": "making",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 4.16,
+         "word": "making"
+        },
+        {
+         "confidence": 0.97753906,
+         "end": 4.7999997,
+         "language": "en",
+         "punctuated_word": "that,",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 4.48,
+         "word": "that"
+        },
+        {
+         "confidence": 0.9562988,
+         "end": 4.96,
+         "language": "en",
+         "punctuated_word": "bro.",
+         "speaker": 0,
+         "speaker_confidence": 0.8465968,
+         "start": 4.7999997,
+         "word": "bro"
+        },
+        {
+         "confidence": 0.84375,
+         "end": 94.625,
+         "language": "en",
+         "punctuated_word": "Well,",
+         "speaker": 0,
+         "speaker_confidence": 0.9432032,
+         "start": 94.225,
+         "word": "well"
+        },
+        {
+         "confidence": 1.0,
+         "end": 94.705,
+         "language": "en",
+         "punctuated_word": "I",
+         "speaker": 0,
+         "speaker_confidence": 0.9432032,
+         "start": 94.625,
+         "word": "i"
+        },
+        {
+         "confidence": 0.9995117,
+         "end": 95.025,
+         "language": "en",
+         "punctuated_word": "can't",
+         "speaker": 0,
+         "speaker_confidence": 0.9432032,
+         "start": 94.705,
+         "word": "can't"
+        },
+        {
+         "confidence": 0.9902344,
+         "end": 95.185,
+         "language": "en",
+         "punctuated_word": "really",
+         "speaker": 0,
+         "speaker_confidence": 0.9432032,
+         "start": 95.025,
+         "word": "really"
+        },
+        {
+         "confidence": 0.99902344,
+         "end": 95.425,
+         "language": "en",
+         "punctuated_word": "get",
+         "speaker": 0,
+         "speaker_confidence": 0.9432032,
+         "start": 95.185,
+         "word": "get"
+        },
+        {
+         "confidence": 0.8989258,
+         "end": 96.145,
+         "language": "en",
+         "punctuated_word": "closer.",
+         "speaker": 0,
+         "speaker_confidence": 0.9432032,
+         "start": 95.425,
+         "word": "closer"
+        },
+        {
+         "confidence": 0.99316406,
+         "end": 96.545,
+         "language": "en",
+         "punctuated_word": "Like,",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 96.145004,
+         "word": "like"
+        },
+        {
+         "confidence": 0.9873047,
+         "end": 96.785,
+         "language": "en",
+         "punctuated_word": "what",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 96.545,
+         "word": "what"
+        },
+        {
+         "confidence": 0.99902344,
+         "end": 96.945,
+         "language": "en",
+         "punctuated_word": "do",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 96.785,
+         "word": "do"
+        },
+        {
+         "confidence": 1.0,
+         "end": 97.025,
+         "language": "en",
+         "punctuated_word": "you",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 96.945,
+         "word": "you"
+        },
+        {
+         "confidence": 0.9970703,
+         "end": 97.265,
+         "language": "en",
+         "punctuated_word": "want",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 97.025,
+         "word": "want"
+        },
+        {
+         "confidence": 0.8256836,
+         "end": 97.505,
+         "language": "en",
+         "punctuated_word": "in",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 97.265,
+         "word": "in"
+        },
+        {
+         "confidence": 0.4260254,
+         "end": 97.665,
+         "language": "en",
+         "punctuated_word": "the",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 97.505,
+         "word": "the"
+        },
+        {
+         "confidence": 0.97387695,
+         "end": 98.225,
+         "language": "en",
+         "punctuated_word": "zone?",
+         "speaker": 0,
+         "speaker_confidence": 0.8323389,
+         "start": 97.665,
+         "word": "zone"
+        },
+        {
+         "confidence": 0.49658203,
+         "end": 107.185,
+         "language": "en",
+         "punctuated_word": "Boat",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 106.465,
+         "word": "boat"
+        },
+        {
+         "confidence": 0.4418335,
+         "end": 107.27894,
+         "language": "en",
+         "punctuated_word": "up.",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 106.87894,
+         "word": "up"
+        },
+        {
+         "confidence": 0.93725586,
+         "end": 107.518936,
+         "language": "en",
+         "punctuated_word": "Bro,",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 107.27894,
+         "word": "bro"
+        },
+        {
+         "confidence": 0.99658203,
+         "end": 107.758934,
+         "language": "en",
+         "punctuated_word": "I'm",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 107.518936,
+         "word": "i'm"
+        },
+        {
+         "confidence": 0.9902344,
+         "end": 107.91894,
+         "language": "en",
+         "punctuated_word": "not",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 107.758934,
+         "word": "not"
+        },
+        {
+         "confidence": 0.98535156,
+         "end": 108.07893,
+         "language": "en",
+         "punctuated_word": "gonna",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 107.91894,
+         "word": "gonna"
+        },
+        {
+         "confidence": 0.75146484,
+         "end": 108.478935,
+         "language": "en",
+         "punctuated_word": "die.",
+         "speaker": 0,
+         "speaker_confidence": 0.8331097,
+         "start": 108.07893,
+         "word": "die"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "utterances": [
+    {
+     "channel": 0,
+     "confidence": 0.91086537,
+     "end": 4.96,
+     "id": "6721fc9b-9ae8-420a-a666-605d3ef26987",
+     "languages": [
+      "en"
+     ],
+     "speaker": 0,
+     "start": 3.28,
+     "transcript": "Yeah. Chill, we're not making that, bro.",
+     "words": [
+      {
+       "confidence": 0.7355957,
+       "end": 3.6799998,
+       "language": "en",
+       "punctuated_word": "Yeah.",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 3.28,
+       "word": "yeah"
+      },
+      {
+       "confidence": 0.77815753,
+       "end": 3.9199998,
+       "language": "en",
+       "punctuated_word": "Chill,",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 3.6799998,
+       "word": "chill"
+      },
+      {
+       "confidence": 0.9333496,
+       "end": 4.08,
+       "language": "en",
+       "punctuated_word": "we're",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 3.9199998,
+       "word": "we're"
+      },
+      {
+       "confidence": 0.9980469,
+       "end": 4.16,
+       "language": "en",
+       "punctuated_word": "not",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 4.08,
+       "word": "not"
+      },
+      {
+       "confidence": 0.9970703,
+       "end": 4.48,
+       "language": "en",
+       "punctuated_word": "making",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 4.16,
+       "word": "making"
+      },
+      {
+       "confidence": 0.97753906,
+       "end": 4.7999997,
+       "language": "en",
+       "punctuated_word": "that,",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 4.48,
+       "word": "that"
+      },
+      {
+       "confidence": 0.9562988,
+       "end": 4.96,
+       "language": "en",
+       "punctuated_word": "bro.",
+       "speaker": 0,
+       "speaker_confidence": 0.8465968,
+       "start": 4.7999997,
+       "word": "bro"
+      }
+     ]
+    },
+    {
+     "channel": 0,
+     "confidence": 0.9238281,
+     "end": 98.225,
+     "id": "e7a9962f-f130-4f92-98a6-92e4050ceeab",
+     "languages": [
+      "en"
+     ],
+     "speaker": 0,
+     "start": 94.225,
+     "transcript": "Well, I can't really get closer. Like, what do you want in the zone?",
+     "words": [
+      {
+       "confidence": 0.84375,
+       "end": 94.625,
+       "language": "en",
+       "punctuated_word": "Well,",
+       "speaker": 0,
+       "speaker_confidence": 0.9432032,
+       "start": 94.225,
+       "word": "well"
+      },
+      {
+       "confidence": 1.0,
+       "end": 94.705,
+       "language": "en",
+       "punctuated_word": "I",
+       "speaker": 0,
+       "speaker_confidence": 0.9432032,
+       "start": 94.625,
+       "word": "i"
+      },
+      {
+       "confidence": 0.9995117,
+       "end": 95.025,
+       "language": "en",
+       "punctuated_word": "can't",
+       "speaker": 0,
+       "speaker_confidence": 0.9432032,
+       "start": 94.705,
+       "word": "can't"
+      },
+      {
+       "confidence": 0.9902344,
+       "end": 95.185,
+       "language": "en",
+       "punctuated_word": "really",
+       "speaker": 0,
+       "speaker_confidence": 0.9432032,
+       "start": 95.025,
+       "word": "really"
+      },
+      {
+       "confidence": 0.99902344,
+       "end": 95.425,
+       "language": "en",
+       "punctuated_word": "get",
+       "speaker": 0,
+       "speaker_confidence": 0.9432032,
+       "start": 95.185,
+       "word": "get"
+      },
+      {
+       "confidence": 0.8989258,
+       "end": 96.145,
+       "language": "en",
+       "punctuated_word": "closer.",
+       "speaker": 0,
+       "speaker_confidence": 0.9432032,
+       "start": 95.425,
+       "word": "closer"
+      },
+      {
+       "confidence": 0.99316406,
+       "end": 96.545,
+       "language": "en",
+       "punctuated_word": "Like,",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 96.145004,
+       "word": "like"
+      },
+      {
+       "confidence": 0.9873047,
+       "end": 96.785,
+       "language": "en",
+       "punctuated_word": "what",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 96.545,
+       "word": "what"
+      },
+      {
+       "confidence": 0.99902344,
+       "end": 96.945,
+       "language": "en",
+       "punctuated_word": "do",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 96.785,
+       "word": "do"
+      },
+      {
+       "confidence": 1.0,
+       "end": 97.025,
+       "language": "en",
+       "punctuated_word": "you",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 96.945,
+       "word": "you"
+      },
+      {
+       "confidence": 0.9970703,
+       "end": 97.265,
+       "language": "en",
+       "punctuated_word": "want",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 97.025,
+       "word": "want"
+      },
+      {
+       "confidence": 0.8256836,
+       "end": 97.505,
+       "language": "en",
+       "punctuated_word": "in",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 97.265,
+       "word": "in"
+      },
+      {
+       "confidence": 0.4260254,
+       "end": 97.665,
+       "language": "en",
+       "punctuated_word": "the",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 97.505,
+       "word": "the"
+      },
+      {
+       "confidence": 0.97387695,
+       "end": 98.225,
+       "language": "en",
+       "punctuated_word": "zone?",
+       "speaker": 0,
+       "speaker_confidence": 0.8323389,
+       "start": 97.665,
+       "word": "zone"
+      }
+     ]
+    },
+    {
+     "channel": 0,
+     "confidence": 0.7999006,
+     "end": 108.478935,
+     "id": "d1bd9a71-a32a-458c-b66e-74da102de5cf",
+     "languages": [
+      "en"
+     ],
+     "speaker": 0,
+     "start": 106.465,
+     "transcript": "Boat up. Bro, I'm not gonna die.",
+     "words": [
+      {
+       "confidence": 0.49658203,
+       "end": 107.185,
+       "language": "en",
+       "punctuated_word": "Boat",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 106.465,
+       "word": "boat"
+      },
+      {
+       "confidence": 0.4418335,
+       "end": 107.27894,
+       "language": "en",
+       "punctuated_word": "up.",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 106.87894,
+       "word": "up"
+      },
+      {
+       "confidence": 0.93725586,
+       "end": 107.518936,
+       "language": "en",
+       "punctuated_word": "Bro,",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 107.27894,
+       "word": "bro"
+      },
+      {
+       "confidence": 0.99658203,
+       "end": 107.758934,
+       "language": "en",
+       "punctuated_word": "I'm",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 107.518936,
+       "word": "i'm"
+      },
+      {
+       "confidence": 0.9902344,
+       "end": 107.91894,
+       "language": "en",
+       "punctuated_word": "not",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 107.758934,
+       "word": "not"
+      },
+      {
+       "confidence": 0.98535156,
+       "end": 108.07893,
+       "language": "en",
+       "punctuated_word": "gonna",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 107.91894,
+       "word": "gonna"
+      },
+      {
+       "confidence": 0.75146484,
+       "end": 108.478935,
+       "language": "en",
+       "punctuated_word": "die.",
+       "speaker": 0,
+       "speaker_confidence": 0.8331097,
+       "start": 108.07893,
+       "word": "die"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
