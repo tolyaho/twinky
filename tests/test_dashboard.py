@@ -374,3 +374,59 @@ def test_nothing_scrolls_horizontally():
 
     assert "overflow-x: hidden" in css, "the orbs extend past the viewport by design"
     assert "max-width: var(--measure)" in css
+
+
+# --------------------------------------------------------------- accessibility + glass
+def test_focus_is_restyled_never_removed():
+    """HIGH severity in the UX guidance, and absent entirely before this pass: every operable
+    control needs a visible focus indicator. Removing the outline without a replacement is the
+    named anti-pattern."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert ":focus-visible" in css
+    block = css.split(":focus-visible", 1)[1].split("}", 1)[0]
+    assert "outline:" in block and "none" not in block.split("outline:")[1].split(";")[0]
+    assert "outline-offset" in block
+    # nothing may strip the indicator elsewhere
+    assert "outline: none" not in css and "outline:none" not in css
+
+
+def test_clickable_things_say_so():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert re.search(r"button,\s*summary,\s*a\s*\{[^}]*cursor:\s*pointer", css)
+
+
+def test_glass_is_translucent_white_not_a_new_colour():
+    """Frosted surfaces carry no hue of their own, so the palette is unchanged and text keeps
+    the contrast it already had against the canvas."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    design = (REPO_ROOT / "DESIGN.md").read_text(encoding="utf-8")
+
+    for token in ("--glass-bg", "--glass-border", "--glass-blur"):
+        assert token in css and token in design, f"{token} must exist in both"
+
+    blur = int(re.search(r"--glass-blur:\s*(\d+)px", css).group(1))
+    assert 10 <= blur <= 20, f"blur {blur}px is outside the frosted-glass band"
+    assert "-webkit-backdrop-filter" in css, "Safari needs the prefixed property"
+
+
+def test_the_glass_is_only_on_surfaces_that_overlap_content():
+    """Glass everywhere is a gimmick. It belongs on the sticky bar and the stage header — the
+    two things that sit over scrolling content."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    users = [sel.strip() for sel, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css)
+             if "backdrop-filter" in body and "--glass-blur:" not in body]
+
+    assert users, "the glass tokens are defined but unused"
+    for selector in users:
+        assert ".bar" in selector or ".stage-head" in selector, f"glass on {selector}"
+
+
+def test_the_sections_carry_the_story_in_order():
+    """The page is an argument: what the audience said, what did not survive, whether it is
+    actually better, how it got here. The eyebrows make that order legible."""
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    order = re.findall(r'class="eyebrow">(\d+) — ([^<]+)<', html)
+
+    assert [n for n, _ in order] == ["01", "02", "03", "04"], f"story order broken: {order}"

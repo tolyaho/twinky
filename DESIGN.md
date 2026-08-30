@@ -100,6 +100,20 @@ That is how ElevenLabs itself handles contrast. It is a system decision, not a c
   --r-pill: 9999px;          /* every button and badge */
 
   --shadow-hover: 0 4px 16px rgba(0,0,0,.04);   /* the ONLY shadow tier */
+
+  /* Frosted surfaces. Translucent white over the canvas, not a new colour: the glass carries
+     no hue of its own, so the palette is unchanged and text sits on the canvas contrast it
+     already had. Blur stays in the 10-20px band; below it reads as a mistake, above it as a
+     gimmick. Used for the sticky bar and the stage header only — surfaces that overlap
+     scrolling content and need to stay legible without becoming opaque panels. */
+  --glass-bg:     rgba(255, 255, 255, .62);
+  --glass-border: rgba(255, 255, 255, .70);
+  --glass-blur:   16px;
+
+  /* Focus is never removed, only restyled. Two tokens so the ring reads on both light
+     surfaces and the one dark band. */
+  --focus-ring:   var(--primary);
+  --focus-offset: 2px;
 }
 ```
 

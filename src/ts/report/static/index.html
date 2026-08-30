@@ -12,6 +12,7 @@
 <div class="orb orb-a" aria-hidden="true"></div>
 <div class="orb orb-b" aria-hidden="true"></div>
 <header class="bar">
+ <div class="bar-inner">
   <div class="bar-left">
     <span class="mark">Twitch Agent</span>
     <span class="pill" id="mode-badge">—</span>
@@ -20,6 +21,7 @@
     <span class="meta" id="fixture-line">loading…</span>
     <button class="btn-outline" id="debug-toggle" aria-expanded="false">Debug</button>
   </div>
+ </div>
 </header>
 
 <section class="debug" id="debug" hidden>
@@ -58,6 +60,7 @@
     <p class="note" id="hero-note"></p>
   </section>
 
+  <span class="eyebrow">01 — what the audience said</span>
   <h2 class="display sub" id="headline">Verified audience signals</h2>
   <p class="lede" id="lede">
     Each card links a cluster of chat to the exact stream moment that caused it. Open one to see
@@ -67,6 +70,7 @@
   <div id="rail"></div>
 
   <section id="rejected-block" hidden>
+    <span class="eyebrow">02 — what did not survive</span>
     <h2 class="display sub">Rejected by the provenance gate</h2>
     <p class="lede">
       These cards were produced and then thrown away because their evidence did not check out.
@@ -76,6 +80,7 @@
   </section>
 
   <section id="measured" hidden>
+    <span class="eyebrow">03 — is it actually better</span>
     <h2 class="display sub">Measured improvement</h2>
     <p class="lede">
       Eleven frozen cases across four real broadcasts, scored on every card each system emits —
@@ -96,6 +101,7 @@
   </section>
 
   <section id="changelog">
+    <span class="eyebrow">04 — how it got here</span>
     <h2 class="display sub">What changed, and what it cost</h2>
     <p class="lede">
       Every repair with its measured before and after — including a first run that was discarded
