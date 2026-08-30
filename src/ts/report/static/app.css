@@ -181,21 +181,36 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 main > section { margin-top: var(--section); }
 
 .hero { margin-top: var(--xl); padding-bottom: var(--xl); border-bottom: 1px solid var(--hairline-dark); }
-.hero-title { font-size: 48px; max-width: 20ch; }
+.hero-title {
+  /* display-mega, the reference's homepage-hero row: 64px / 300 / 1.05 / -1.92px.
+     It was rendering at the 48px display-xl row, which is the single biggest reason the page
+     read as a tool rather than an editorial surface. Weight stays 300 — never heavier. */
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -1.92px;
+  max-width: 18ch;
+}
+@media (max-width: 760px) {
+  .hero-title { font-size: 40px; letter-spacing: -.8px; line-height: 1.1; }
+}
 .hero-lede { max-width: 62ch; }
 .hero-lede code { color: var(--canvas); }
 
 .stat-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);   /* the 12-column grid, where it earns its keep */
   gap: var(--xl);
-  margin: var(--xl) 0 0;
+  margin: var(--xxl) 0 0;
   padding: 0;
 }
+.stat-row div { grid-column: span 3; }
+@media (max-width: 760px) { .stat-row div { grid-column: span 6; } }
 .stat-row div { margin: 0; }
 .stat-row dt {
   font-size: 12px;
-  letter-spacing: .8px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .96px;      /* caption-uppercase row; 0.8px was improvised */
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -222,7 +237,9 @@ main > section { margin-top: var(--section); }
 .scores th {
   font-weight: 400;
   font-size: 12px;
-  letter-spacing: .8px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .96px;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -243,8 +260,10 @@ main > section { margin-top: var(--section); }
   padding: 2px var(--sm);
   border: 1px solid var(--hairline-dark);
   border-radius: var(--r-pill);
-  font-size: 11px;
-  letter-spacing: .8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .96px;
   text-transform: uppercase;
   color: var(--muted);
 }

@@ -18,6 +18,7 @@ from ts.report import serve as serve_mod
 REPO = Path(__file__).resolve().parents[1]
 SAMPLE = REPO / "evals" / "fixtures" / "sample"
 STATIC = serve_mod.STATIC
+REPO_ROOT = Path(__file__).resolve().parents[1]
 DESIGN = REPO / "DESIGN.md"
 
 HEX = re.compile(r"#[0-9a-fA-F]{3,8}\b")
@@ -218,3 +219,59 @@ def test_the_changelog_section_names_the_removed_experiment_and_the_failure_mode
     assert "zero additional" in html.lower()
     assert "get_frame_captions" in html
     assert "largest contributor" in html
+
+
+# --------------------------------------------------------------- type scale (block C)
+def _css():
+    return (STATIC / "app.css").read_text(encoding="utf-8")
+
+
+def test_the_hero_uses_the_display_mega_row():
+    """DESIGN.md's display scale is identical to the fetched ElevenLabs reference, and its
+    homepage-hero row is 64px / 300 / 1.05 / -1.92px. The hero was rendering at the 48px
+    display-xl row, which is most of why the page read as a tool rather than an editorial
+    surface."""
+    css = _css()
+    block = css.split(".hero-title {", 1)[1].split("}", 1)[0]
+
+    assert "font-size: 64px" in block
+    assert "letter-spacing: -1.92px" in block
+    assert "line-height: 1.05" in block
+
+
+def test_uppercase_labels_use_the_scale_not_an_improvised_value():
+    """caption-uppercase is 12px / 600 / 1.4 / +0.96px. Two labels added for the editorial
+    sections had improvised 0.8px tracking and no weight, so they did not match the badges
+    already on the page."""
+    css = _css()
+
+    assert "letter-spacing: .8px" not in css, "an improvised tracking value is back"
+    for block in css.split("text-transform: uppercase")[:-1]:
+        tail = block.rsplit("{", 1)[-1]
+        assert "letter-spacing: .96px" in tail, f"uppercase label off-scale: {tail.strip()[:80]}"
+
+
+def test_body_keeps_the_positive_editorial_tracking():
+    """+0.16px on body is what makes it read editorial rather than SaaS. DESIGN.md says not to
+    skip it, and it is the cheapest part of the whole look."""
+    assert "letter-spacing: .16px" in _css()
+
+
+def test_display_type_is_never_heavier_than_300_anywhere():
+    css = _css()
+    for block in css.split(".display")[1:]:
+        body = block.split("}", 1)[0]
+        for weight in ("400", "500", "600", "700", "bold"):
+            assert f"font-weight: {weight}" not in body
+
+
+def test_every_hex_still_comes_from_the_design_tokens():
+    """Re-asserted here because the type pass touched the stylesheet: the reference and
+    DESIGN.md agree on all 19 colour tokens, and app.css may use only those."""
+    import re
+
+    design = (REPO_ROOT / "DESIGN.md").read_text(encoding="utf-8")
+    allowed = {m.lower() for m in re.findall(r"#[0-9a-fA-F]{6}", design)}
+    used = {m.lower() for m in re.findall(r"#[0-9a-fA-F]{6}", _css())}
+
+    assert used <= allowed, f"improvised colour: {sorted(used - allowed)}"

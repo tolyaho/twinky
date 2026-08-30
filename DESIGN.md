@@ -1,5 +1,17 @@
 # DESIGN.md — the design system for this project
 
+> **Provenance, verified 2026-08-30.** Reconciled against the upstream reference published as
+> `getdesign@0.6.25`, template `elevenlabs.md`. The result was a no-op: **all 19 colour tokens
+> match exactly**, in both directions — nothing here is absent from the reference and nothing in
+> the reference is missing here — and the display and Inter scales are identical row for row,
+> including the 64px/300/1.05/−1.92px hero.
+>
+> So this file needs no correction and remains the single source of truth. Where the two could
+> ever disagree: the reference wins on **values**, this file wins on the rules the tests enforce
+> (every hex in `app.css` exists here, display weight ≤ 300, hairlines not shadows, no saturated
+> accent). The `npx getdesign` CLI needs a Node toolchain, which this machine does not have; the
+> template was taken straight from the published npm tarball instead, which is the same artifact.
+
 Read before writing any UI. Derived from the ElevenLabs `DESIGN.md` in
 VoltAgent/awesome-design-md. Tokens are authoritative; do not improvise colours.
 
