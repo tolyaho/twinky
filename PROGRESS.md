@@ -331,3 +331,22 @@ its own tool-free system prompt, trigger constraint stated, no-`cards` reply rec
 failure, `make eval` banners and exits 5 on a zero-card system. 13 regression tests;
 `make test` 293 -> 306. All 44 text cache entries are now stale by design — the prompts changed,
 so P2b must re-record. Nothing in `cache/` was deleted.
+
+## 2026-08-30T12:55Z — iteration 24
+Attempted: P2b — re-record and re-measure. Smoke-tested one case first rather than paying for
+eleven blind, which found two further plumbing defects before the full run.
+Result: all three systems now emit cards and `make eval` reproduces from cache with 48 hits /
+0 misses, verified with every credential unset. Measured, 11 cases:
+  agent    23 cards | trigger 0.500 | unmatched 0.913 | unsupported 0.739 | recall 0.182
+  baseline 20 cards | trigger 0.000 | unmatched 0.950 | unsupported 0.600 | recall 0.091
+  ablation 25 cards | trigger 1.000 | unmatched 0.960 | unsupported 0.280 | recall 0.091
+The agent doubles the baseline's recall and is the only system to attribute a trigger correctly
+at all, and it LOSES the headline metric: 0.739 unsupported against the baseline's 0.600.
+Reported, not tuned. The ablation's 1.000 trigger accuracy is 1 matched card out of 25 — which is
+exactly why unmatched rate is printed beside it. Two defects found by the smoke test: every
+system was citing the `ts` value as the event id because `render_events` led with a bare
+bracketed timestamp (fixing it makes the BASELINE stronger), and `DEFAULT_TEXT_MODEL` defaulted
+to a model nothing was ever recorded with, so `make eval` reproduced only for someone whose
+environment set `TS_TEXT_MODEL` — a broken reproducibility gate for every judge.
+Next: P3 — fill the `[TBD]`s from `evidence/`, and diagnose the unsupported-rate loss.
+Blockers: none. Cost to date $0.36 of $5.00.
