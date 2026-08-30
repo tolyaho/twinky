@@ -54,6 +54,39 @@ produced numbers that were broken rather than bad, and the work was to make the 
 **Largest single contributor:** Repair 1. Without it there was no baseline, therefore no
 comparison, therefore nothing to measure. Every other number in this file is downstream of it.
 
+## An iteration that was proposed, checked, and not made
+
+**Hypothesis:** the agent's `E_CIRCULAR_EVIDENCE` failures come from an under-specified shared
+contract — the prompt says "never invent a cause" but never says a trigger must be a speech or
+frame event. One sentence in the shared spec would change all three systems identically, which
+would be repair rather than asymmetric tuning.
+
+**Checked before writing it.** The sentence is already there, added as Repair 2 above:
+
+> `trigger.event_id` is what CAUSED that chat, so it is a SPEECH id (a transcript segment) or a
+> SCREEN id (a frame caption). It is NEVER a chat id, and never an id that also appears in
+> `evidence` — a message cannot be its own cause.
+
+Verified in the cache rather than in the source: **129 of the 173 recorded text requests carry
+that rule**, and the 44 that do not are the discarded first run. Every request behind the
+published table was sent with it.
+
+**What the residual failures actually are.** All eight surviving `E_CIRCULAR_EVIDENCE` cards set
+`trigger.event_id` to a chat UUID *that also appears in their own evidence list* — the exact
+thing the two clauses above forbid. Three of them additionally set `trigger.kind` to `"unknown"`
+while naming a concrete id, which contradicts the same paragraph. These are not ambiguities being
+exploited; they are stated rules not being followed by `gpt-4.1-nano`.
+
+**Decision: no change, no re-measure.** The specified repair is already applied and its effect is
+measured — `E_CIRCULAR_EVIDENCE` 19/20 → 8/23, unsupported 0.95 → 0.739. Any *further* change
+aimed at those eight cards would be chosen after seeing the score and would lower the agent's
+headline metric, which is the definition of tuning. Enforcing the rule in the controller the way
+`cap_cards` enforces the card cap is defensible in principle and was rejected for the same reason:
+the agent names a chat trigger 14 times to the baseline's once, so a "symmetric" guard would be
+asymmetric in effect. Recorded in `RISKS.md` #38 as model behaviour rather than a contract defect,
+and left for the next build, where it can be measured on a fresh run instead of retrofitted to
+this one.
+
 ## Removed experiments, with their measured results
 
 | Experiment | Measured result | Outcome |

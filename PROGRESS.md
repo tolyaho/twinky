@@ -481,3 +481,25 @@ reads HEAD and the deletion was only staged. The check found it, which is the po
 the archive rather than trusting the target.
 Next: block B — the shared-spec re-measure. It is paid and changes all three systems identically.
 Blockers: none. Cost unchanged at $0.39 of $5.00.
+
+## 2026-08-30T16:25Z — iteration 32
+Attempted: block B — the shared-spec re-measure, whose premise is that the shared prompt never
+states a trigger must be a speech or frame event.
+Result: `make test` green, 354. The premise is false and the change was not made. That sentence
+is already in `CARD_CONTRACT`, added as Repair 2 in iteration 23, and in stronger terms than the
+brief proposes — it forbids a chat id explicitly and forbids reusing an evidence id as the
+trigger. Checked in the cache rather than the source: 129 of 173 recorded text requests carry the
+rule, and the 44 that do not are the discarded first run, so every request behind the published
+table was sent with it.
+Examined all eight surviving E_CIRCULAR_EVIDENCE cards: every one names a chat UUID that is also
+in its own evidence list, which two clauses forbid, and three set `kind: "unknown"` beside a
+concrete id, contradicting the same paragraph. Not ambiguity being exploited — stated rules not
+being followed by gpt-4.1-nano.
+Rejected two follow-ups as tuning: rewording the rule again, and enforcing it in the controller
+the way `cap_cards` enforces the card cap. The second is defensible in principle and still wrong
+here — the agent names a chat trigger 14 times to the baseline's once, so a symmetric guard is
+asymmetric in effect, and it was chosen after seeing the score. Published as a proposed-and-not-
+made iteration in the changelog with the evidence; #38 narrowed from "contract defect" to "model
+behaviour".
+Next: block C, the frontend, time-boxed 3 hours.
+Blockers: none. Cost unchanged at $0.39 of $5.00 — this block spent nothing.
