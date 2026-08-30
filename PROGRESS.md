@@ -109,3 +109,16 @@ credentials while `.gitignore` is inert because this is not a git repository (#1
 Next: C3 — confirm trajectories exist for the agent and both baselines, fill the disclosure
 table. C2's fresh-clone run needs a populated cache, so it waits on B.
 Blockers: B needs P0-3 fixtures. #16 and #17 need the author: rotate, then exclude from archive.
+
+## 2026-08-30T03:16Z — iteration 9
+Attempted: C3 — confirm trajectories exist for the agent and both baselines, fill the
+coding-agent disclosure table.
+Result: `make test` green, 143 -> 151. Half of C3 was blocked and the other half was worse than
+blocked: `trajectories/product-agent/` held 55 files, all test artifacts with case ids like `t3`
+that no evaluation case has, and zero real traces. Added `TS_TRACE_DIR`, redirected the suite in
+conftest, removed the 55, verified none regenerate. Filled the disclosure table in
+`trajectories/coding-agents/README.md` — Claude Code 2.1.246 on Claude Opus 5, the loop method,
+and the defects the sessions found; no chat transcript is claimed because none was exported.
+`trajectories/README.md` now lists all three systems as owed and `[TBD]`.
+Next: C4 — RISKS.md review pass. C2 needs a populated cache and waits on B.
+Blockers: #20, no real trajectory for any system, is downstream of #2. B needs P0-3 fixtures.
