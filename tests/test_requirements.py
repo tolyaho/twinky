@@ -18,11 +18,18 @@ IMPORT_NAME = {"python-dotenv": "dotenv", "deepgram-sdk": "deepgram",
 COMMAND_LINE_TOOLS = {"mypy"}
 
 
-def declared():
-    text = (REPO / "requirements.txt").read_text(encoding="utf-8")
+def _parse(name):
+    text = (REPO / name).read_text(encoding="utf-8")
     return [re.split(r"[=<>~!\[]", line.strip())[0]
             for line in text.splitlines()
-            if line.strip() and not line.strip().startswith("#")]
+            if line.strip() and not line.strip().startswith("#")
+            and not line.strip().startswith("-r ")]
+
+
+def declared():
+    """Everything installed by `make setup` plus the capture extras, since the no-dead-package
+    rule applies to both files."""
+    return _parse("requirements.txt") + _parse("requirements-record.txt")
 
 
 def imported():
@@ -52,5 +59,26 @@ def test_nothing_is_installed_that_nothing_uses():
 
 def test_the_replay_path_needs_exactly_one_runtime_package():
     """The property worth protecting: a judge who only replays installs almost nothing."""
-    assert "httpx" in declared()
+    core = set(_parse("requirements.txt"))
+    assert "httpx" in core
     assert not {"fastapi", "uvicorn", "langchain", "langgraph"} & set(declared())
+
+
+def test_capture_only_packages_are_not_on_the_graded_path():
+    """`make setup` runs before anything is scored, so it must not depend on a package no
+    graded command imports. streamlink requires Python 3.10+; declaring it here made a clean
+    clone fail on macOS system Python 3.9 with a pip resolver error, before `make test` ran.
+    """
+    core = set(_parse("requirements.txt"))
+
+    assert "streamlink" not in core, "capture-only dependency is blocking `make setup`"
+    assert "websockets" not in core
+    assert {"streamlink", "websockets"} <= set(_parse("requirements-record.txt"))
+
+
+def test_setup_installs_only_the_graded_requirements():
+    make = (REPO / "Makefile").read_text(encoding="utf-8")
+    setup = make.split("setup:")[1].split("\nsetup-record:")[0]
+
+    assert "requirements.txt" in setup
+    assert "requirements-record.txt" not in setup

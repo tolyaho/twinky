@@ -1,0 +1,11 @@
+# Live capture only — `make capture`. NOT needed to reproduce any reported number.
+#
+# Split out of requirements.txt on 2026-08-30: streamlink requires Python 3.10+, and installing
+# it as part of `make setup` made a clean clone fail on macOS system Python 3.9 before the test
+# suite could run. No graded command imports either package; both are used solely by
+# src/ts/ingest/capture.py, which pulls raw bytes off a live broadcast and needs no API key.
+
+-r requirements.txt
+
+streamlink==8.0.0
+websockets==15.0.1

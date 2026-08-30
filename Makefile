@@ -5,12 +5,30 @@ CASES ?= all
 
 .PHONY: setup test inspect capture enrich replay baseline ablation eval debrief demo scan clean
 
+PYTHON ?= python3
+
+# Everything the graded path needs, on whatever `python3` the reviewer has. Capture-only
+# packages are NOT installed here: streamlink needs 3.10+, and requiring it made this target
+# fail from a clean clone on macOS system Python 3.9, before `make test` could even run.
 setup:
-	python3 -m venv .venv
+	@$(PYTHON) -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)' || \
+		{ echo ""; \
+		  echo "  This project needs CPython 3.10+ (it uses dataclass slots)."; \
+		  echo "  '$(PYTHON)' is $$($(PYTHON) -V 2>&1) — macOS ships 3.9 as the system python3."; \
+		  echo ""; \
+		  echo "  Re-run naming a newer interpreter, e.g.:"; \
+		  echo "      make setup PYTHON=python3.12"; \
+		  echo ""; exit 1; }
+	$(PYTHON) -m venv .venv
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 	$(PIP) install -e .
-	@echo "OK. Copy .env.example to .env only if you intend to run 'make record'."
+	@echo "OK. No API keys needed for test, inspect, baseline, replay, eval, debrief or demo."
+
+# Only for `make capture`, which reads a live broadcast. Needs Python 3.10+.
+setup-record:
+	$(PIP) install -r requirements-record.txt
+	@echo "OK. Capture extras installed. Export TS_LLM_API_KEY and DEEPGRAM_API_KEY to enrich."
 
 test:
 	$(PY) -m pytest tests -q
