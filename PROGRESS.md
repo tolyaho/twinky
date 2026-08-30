@@ -58,3 +58,13 @@ prints each fixture's provenance. Case inventory with per-case blockers in `eval
 Next: A5 — `report/debrief.py`, roll verified cards into the post-stream document.
 Blockers: 8 of 12 cases need real captures (RISKS #12, downstream of #2). Case 11 (sarcasm) is
 one of the three the product wins on and cannot be written without a real fixture.
+
+## 2026-08-30T01:09Z — iteration 5
+Attempted: A5 — `report/debrief.py`, roll verified cards into the post-stream document.
+Result: `make test` green, 98 -> 113. `build()` + `render_markdown()` implemented, wired as
+`ts.cli debrief` and `make debrief`; writes `<fixture>.debrief.md` and `.json`. Six sections, all
+derived from verified cards with no model call. Rendered the artifact by hand and fixed what it
+exposed: recurring themes were counting words out of model-written titles and returned "chat",
+"says", "the" — now sourced from trigger quotes and answer distributions only.
+Next: A6 — dashboard on real replay output; `DESIGN.md` is authoritative.
+Blockers: none. RISKS #10 and #12 still open.
