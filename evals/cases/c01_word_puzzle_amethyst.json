@@ -1,0 +1,10 @@
+{
+ "case_id": "c01_word_puzzle_amethyst",
+ "fixture": "stableronaldo_2026-08-30T0723",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788074707878,
+  1788074767878
+ ],
+ "description": "A word-guessing overlay shows the prompt 'ame_______'. Chat answers with words starting 'ame'. There is no speech at all in the window, so the cause is visible only in the frame caption. Tests audience_answer with a frame trigger and an answer distribution."
+}

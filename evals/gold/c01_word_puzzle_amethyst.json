@@ -1,0 +1,38 @@
+{
+ "case_id": "c01_word_puzzle_amethyst",
+ "fixture": "stableronaldo_2026-08-30T0723",
+ "window_ms": [
+  1788074707878,
+  1788074767878
+ ],
+ "gold_signals": [
+  {
+   "type": "audience_answer",
+   "trigger_event_id": "frm_b78f94d5a1",
+   "relevant_message_ids": [
+    "5eab5021-e4e7-465d-8cce-a72edbafbba3",
+    "22b98842-455e-4aec-856c-07a8b6c774a2",
+    "bdb8275f-9963-43c8-a87b-5e49e13c2bd5",
+    "87e6edb0-40d2-44e0-a282-84865efbbbb7",
+    "11ec2935-d09a-4f12-bb77-6e66bc82e38e",
+    "49074b47-f279-43b0-964e-711c34a15329",
+    "f8ad1680-b30e-49b5-965f-5aaba5b4803c",
+    "6b31ca8e-4c40-4565-84d9-8269f54f618b",
+    "e98d4fb0-c8bc-494e-84a5-f6013d3f0fd2",
+    "8e492361-4767-4e1d-abc0-ac31eed56757",
+    "9dc0b730-6b19-43bb-9434-39fd286b6c49",
+    "01f030db-8c88-4261-905b-6df957aec3fa",
+    "271f16c7-2c90-4f99-82f1-f2e9f750c31d",
+    "d8e6bdce-5085-4839-b0c6-7e66aa5c6098"
+   ],
+   "distribution": {
+    "amethyst": 0.6,
+    "american": 0.2,
+    "amendment": 0.2
+   }
+  }
+ ],
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
+}

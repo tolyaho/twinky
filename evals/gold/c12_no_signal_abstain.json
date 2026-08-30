@@ -1,10 +1,12 @@
 {
  "case_id": "c12_no_signal_abstain",
- "fixture": "sample",
+ "fixture": "yugi_2026-08-30T0723",
  "window_ms": [
-  1756400013500,
-  1756400019500
+  1788074603171,
+  1788074663171
  ],
  "gold_signals": [],
- "must_abstain": true
+ "must_abstain": true,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
 }

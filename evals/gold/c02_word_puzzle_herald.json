@@ -1,0 +1,40 @@
+{
+ "case_id": "c02_word_puzzle_herald",
+ "fixture": "stableronaldo_2026-08-30T0723",
+ "window_ms": [
+  1788074917878,
+  1788074977878
+ ],
+ "gold_signals": [
+  {
+   "type": "audience_answer",
+   "trigger_event_id": "frm_1c9aa32f6e",
+   "relevant_message_ids": [
+    "2566e7a7-d455-4eb0-9b69-55419800d061",
+    "604349b7-fe4e-4836-ba3b-577921dd9ae4",
+    "bc61f29c-f8c4-4081-b864-904e6bfc7464",
+    "2662fab6-e20a-4ffe-8885-5336ed0bd222",
+    "33d396fc-ce41-4602-91b9-2ab92d3b1489",
+    "b31b87c8-f6f9-4a4c-9fe6-77fe0515a2be",
+    "0576c0f6-30ed-4caa-9b61-c3801b182b97",
+    "4bd14608-fd1a-4e7f-bbbe-7b321dac6b5e",
+    "36091cb9-062b-430c-ae70-62dc1c520113",
+    "fb6cb13c-6513-4a1a-a4b6-0e32b64290a7",
+    "41661d58-4f78-4338-aa21-51a79421ca9c",
+    "3708846e-2bf0-40b6-8275-3e4ce38f6ca6",
+    "7a18bbbd-c4d8-4b2a-a0bf-4ca01beb800d",
+    "0815473b-36de-4d9d-a5fe-7a4408508f45"
+   ],
+   "distribution": {
+    "herald": 0.5,
+    "heaven": 0.2,
+    "heater": 0.1,
+    "heather": 0.1,
+    "heroes": 0.1
+   }
+  }
+ ],
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
+}

@@ -1,0 +1,10 @@
+{
+ "case_id": "c07_frame_only_dracorex",
+ "fixture": "stableronaldo_2026-08-30T0723",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788074767878,
+  1788074827878
+ ],
+ "description": "Prompt 'dra_____' with zero transcript segments in the window. Chat converges through draconian / dracula / dragons onto 'dracorex'. A chat-only or speech-only system is structurally unable to explain this; the evidence exists only in the frame caption."
+}

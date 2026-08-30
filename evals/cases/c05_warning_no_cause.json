@@ -1,10 +1,10 @@
 {
  "case_id": "c05_warning_no_cause",
- "fixture": "sample",
- "fixture_kind": "synthetic_scaffold",
+ "fixture": "marlon_2026-08-30T0701",
+ "fixture_kind": "capture",
  "window_ms": [
-  1756400018000,
-  1756400024000
+  1788073323294,
+  1788073383294
  ],
- "description": "Chat warns about an overlay covering the minimap. Nothing in speech explains it. The system MUST return trigger unknown rather than invent a cause."
+ "description": "Chat warns that a co-streamer has no microphone. There is NO speech in the window and the frames show a game scene, so nothing explains the complaint. The system MUST return trigger unknown rather than invent a cause."
 }

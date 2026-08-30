@@ -1,0 +1,10 @@
+{
+ "case_id": "c08_pool_jump_reaction",
+ "fixture": "marlon_2026-08-30T0701",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788073366308,
+  1788073426308
+ ],
+ "description": "The frame shows a crowd around a pool with someone crouching on the roof above it; chat responds 'GG' and 'eww'. Tests a reaction whose cause is a frame, in a window that also contains unrelated speech."
+}

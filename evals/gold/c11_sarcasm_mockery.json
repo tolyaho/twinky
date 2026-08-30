@@ -1,0 +1,27 @@
+{
+ "case_id": "c11_sarcasm_mockery",
+ "fixture": "marlon_2026-08-30T0715",
+ "window_ms": [
+  1788074296000,
+  1788074356000
+ ],
+ "gold_signals": [
+  {
+   "type": "reaction",
+   "trigger_event_id": "unknown",
+   "relevant_message_ids": [
+    "9eb1b2e2-a429-4d9f-8385-3a425fc50029",
+    "42bf5eff-e1b3-43d1-8219-91dc14435510",
+    "851c4c1a-2947-4d19-9cf9-f98b0144959a",
+    "8d27ee74-9205-44d3-a7e2-8091bf3cc48c",
+    "93f5ec0f-17eb-41bf-8f3e-1e3f749dba86",
+    "05b3c36a-6daf-4900-9483-d165937a89ce",
+    "014523bc-e18e-4bfc-98f8-26b3f4906af7",
+    "6d8fb18b-0a47-4521-9833-76a59f6ea7d0"
+   ]
+  }
+ ],
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
+}

@@ -1,0 +1,34 @@
+{
+ "case_id": "c08_pool_jump_reaction",
+ "fixture": "marlon_2026-08-30T0701",
+ "window_ms": [
+  1788073366308,
+  1788073426308
+ ],
+ "gold_signals": [
+  {
+   "type": "reaction",
+   "trigger_event_id": "frm_d88784255a",
+   "relevant_message_ids": [
+    "e453fd81-c7c9-4252-b9cc-0f41d5884369",
+    "694faf7f-0f62-4d03-a71b-2fc8f96832f0",
+    "1dbe5629-f2a7-4ec3-aeff-f7d3884ca661",
+    "dfbfe19f-63eb-4f5e-9c8b-f48b68f7156c",
+    "a301b1f0-942e-4246-8cad-26b0f0d66756",
+    "2e7b8216-fe66-42b0-85b4-4e6344b2b2fa",
+    "d9a2a514-eb6f-4f3f-b5b0-8e15c17edb77",
+    "44c97085-18eb-408d-bef7-d871e4b4c96c",
+    "b45b447e-7582-4e96-bdd0-fbea3d3f003d",
+    "435f14d4-3576-49ec-b948-a34acf859526",
+    "8c9cd398-cef8-456c-90a9-a2cf5cd3d927",
+    "9ab33452-67c8-4181-9d80-5b457a173fd2",
+    "cc659bab-d8db-4583-9873-e5112f7940d9",
+    "a46a26c1-3d74-4ad4-888e-deff6b6ad04a",
+    "31248c28-1588-4b70-80eb-ab6278f4ffb2"
+   ]
+  }
+ ],
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
+}

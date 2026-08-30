@@ -1,26 +1,29 @@
 {
  "case_id": "c03_failure_laughter",
- "fixture": "sample",
+ "fixture": "marlon_2026-08-30T0715",
  "window_ms": [
-  1756400010000,
-  1756400018000
+  1788074254219,
+  1788074314219
  ],
  "gold_signals": [
   {
    "type": "reaction",
-   "trigger_event_id": "tr_0002",
+   "trigger_event_id": "tr_3515c2c347",
    "relevant_message_ids": [
-    "msg_0018",
-    "msg_0019",
-    "msg_0020",
-    "msg_0021",
-    "msg_0022",
-    "msg_0023",
-    "msg_0024",
-    "msg_0025",
-    "msg_0026"
+    "37d69b09-e79c-4aaf-af88-eeb8a2ba7a80",
+    "0cbb3829-fef4-494d-87cb-b5051fec13a4",
+    "a25fe6a8-934d-473c-9b7c-020facc8fe7d",
+    "ce2eaf70-e83a-49a3-85c2-7c6d6752f831",
+    "c21e7ec2-6d09-4c04-a8e5-36724286e493",
+    "07e403d1-3f4d-4b8f-920c-ab73fc5c9abd",
+    "ac3b6fc7-f50e-4a6f-8015-9abb79143b2c",
+    "1e157a13-e78e-46a3-be34-cdf699a4d4fb",
+    "a2a9d882-3bc3-414f-92ec-e4bfc93f1ab1",
+    "d88002c6-a2f4-4b24-b099-2209387d4160"
    ]
   }
  ],
- "must_abstain": false
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
 }

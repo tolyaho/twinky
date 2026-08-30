@@ -2,10 +2,13 @@
 
 ## Fixtures
 
-| Fixture | Source | Duration | Permission | Notes |
-|---|---|---|---|---|
-| `self_*` | Own stream, recorded by the author | ~10 min | Owned | Scripted ground truth: N questions asked aloud, M deliberately left unanswered |
-| <!-- TODO --> | | | | |
+| Fixture | Source | Duration | Chat | Speech | Frames | Notes |
+|---|---|---|---|---|---|---|
+| `stableronaldo_2026-08-30T0723` | Public Twitch broadcast | 720 s | 1288 | **0 seg** | 24 | Sleep stream at 03:23 local with an automated word-guessing overlay. No speech — see below |
+| `yugi_2026-08-30T0723` | Public Twitch broadcast | 720 s | 625 | 138 seg | 24 | IRL/podcast, two diarized speakers in a vehicle |
+| `marlon_2026-08-30T0715` | Public Twitch broadcast | 600 s | 1535 | 97 seg | 20 | IRL party stream, heavy chat, copypasta campaigns |
+| `marlon_2026-08-30T0701` | Public Twitch broadcast | 120 s | 415 | 3 seg | 4 | Short capture, game footage, chat complaining about audio |
+| `sample` | Hand-written | 24 s | 32 | 3 | 2 | Synthetic scaffold so the repo runs on first clone. **Never a reported result** |
 
 ## Pseudonymisation
 
@@ -28,28 +31,57 @@ Case numbers follow the matrix in `../../notes/03-EVAL_DESIGN.md`. `fixture_kind
 file declares where its numbers come from; only `capture` is reportable, and `make eval` puts a
 "NOT A REPORTED RESULT" banner at the top of `report.md` for anything else.
 
-| # | Case | Status | Blocked on |
-|---|---|---|---|
-| 1 | Binary choice asked aloud | `c01_binary_choice` | — |
-| 2 | Numeric rating, bare numbers in chat | **not built** | P0-3: no fixture contains a rating question |
-| 3 | Gameplay failure triggers laughter | `c03_failure_laughter` | — |
-| 4 | Name mention triggers a meme flood | **not built** | P0-3 |
-| 5 | Warning with no cause in speech → `unknown` | `c05_warning_no_cause` | — |
-| 6 | Teammate speech misattributed (diarization) | **not built** | P0-3 — needs real diarized audio; cannot be hand-written |
-| 7 | Frame matters while speech is silent | **not built** | P0-3 |
-| 8 | Speech matters while the frame is uninformative | **not built** | P0-3 |
-| 9 | Two competing topics at once | **not built** | P0-3 |
-| 10 | Heavy spam collapses without losing volume | **not built** | P0-3 — the scaffold's laughter wave is the same window as case 3 |
-| 11 | Sarcasm → confidence must drop | **not built** | P0-3 |
-| 12 | No signal → abstain | `c12_no_signal_abstain` | — |
-| 13 | Prompt injection inside chat, treated as data | **not built** | optional; P0-3 |
-| 14 | Reference depending on an earlier window | **not built** | optional; P0-3 |
+**Eleven cases, all against real captures.** Frozen 2026-08-30, before any measurement run.
 
-4 of 12 built. All four run against `sample`, the hand-written scaffold fixture, so **none of
-them can produce a reported number** — they prove the evaluation runs end to end. Of the three
-cases the product is designed to win on (5, 11, 12), two are built and case 11 (sarcasm) needs a
-real capture.
+| Case | Fixture | Type | Trigger | Tests |
+|---|---|---|---|---|
+| `c01_word_puzzle_amethyst` | stableronaldo | audience_answer | frame | Answer distribution grounded in an on-screen prompt, zero speech |
+| `c02_word_puzzle_herald` | stableronaldo | audience_answer | frame | Distribution reflects the spread, not only the winner |
+| `c03_failure_laughter` | marlon_0715 | reaction | speech | Laughter attributed to the spoken line that caused it |
+| `c05_warning_no_cause` | marlon_0701 | warning | **unknown** | Warning found in noise, with no provable cause |
+| `c06_two_speakers_laughter` | yugi | reaction | speech | Trigger attribution across two diarized speakers |
+| `c07_frame_only_dracorex` | stableronaldo | audience_answer | frame | Chat provably uninterpretable without the frame |
+| `c08_pool_jump_reaction` | marlon_0701 | reaction | frame | Frame cause while speech discusses something else |
+| `c09_two_topics` | marlon_0715 | reaction ×2 | **unknown** | Two concurrent signals separated, not merged |
+| `c10_spam_collapse` | marlon_0715 | reaction | **unknown** | Reducer collapses near-identical repeats, counts preserved |
+| `c11_sarcasm_mockery` | marlon_0715 | reaction | **unknown** | Derision read as derision, not as praise |
+| `c12_no_signal_abstain` | yugi | *(abstain)* | — | No audience signal → `none`, not a manufactured card |
 
-The eight remaining cases are not written blind. Writing a gold label for sarcasm, diarization
-failure or competing topics against a fixture authored to contain exactly those phenomena would
-be grading the system against a script it was handed.
+All three cases the product is designed to win on — 5 (warning, no cause), 11 (sarcasm),
+12 (abstain) — are built against real captures.
+
+Across 12 gold signals: 4 frame triggers, 2 speech triggers, 5 `unknown`, 1 abstention. Four
+fixtures. Two cases have no speech at all in the window. Worst window overlap between any two
+cases is 30%; a twelfth case was cut for sitting 72% inside `c05`.
+
+### Gold-label provenance
+
+**Gold labels were drafted with model assistance from the captured fixtures and reviewed by the
+author. Draft status per case is tracked in `evals/REVIEW_ME.md`.** Every gold file carries a
+`"reviewed"` flag; anything still `false` at submission is declared in README §6 rather than
+hidden. No label claims human authorship a human has not given.
+
+Every `trigger_event_id` and `relevant_message_id` is resolved from the fixture itself rather
+than typed by hand, and `tests/test_frozen_cases.py` rebuilds a card from each gold signal and
+runs it through the real provenance gate — a gold label that could not itself pass the gate
+would silently score every correct card as a miss.
+
+### Archetypes deliberately absent
+
+Cases were built from what the captures contain, not from a wish list:
+
+- **Numeric rating** — zero bare-number replies in any of the four fixtures. These are IRL and
+  podcast streams, not gaming streams where "rate this out of ten" occurs.
+- **Binary choice** — the one real candidate lands 8 s before its fixture ends, leaving no room
+  for chat to answer inside a 60 s window.
+- **Prompt injection** — no chat message in any fixture attempts it.
+
+Writing a fixture to contain a phenomenon and then grading against it would be grading the
+system against a script it was handed.
+
+### stableronaldo_2026-08-30T0723 — no speech
+Captured audio measures -57.4 dB mean. Transcription returned zero segments. A +28 dB gain
+experiment brought the mean to -28.9 dB and still returned zero segments, confirming the window
+contains no speech rather than inaudible speech. The original audio is retained unmodified.
+This fixture is therefore used for cases that must succeed without speech: frame-grounded
+reactions, spam collapse, competing topics, and abstention.

@@ -1,0 +1,10 @@
+{
+ "case_id": "c02_word_puzzle_herald",
+ "fixture": "stableronaldo_2026-08-30T0723",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788074917878,
+  1788074977878
+ ],
+ "description": "A second round of the same overlay, prompt 'he____', answered 'herald'. Chat offers competing guesses. Tests that the answer distribution reflects the spread, not just the winner."
+}

@@ -1,0 +1,10 @@
+{
+ "case_id": "c06_two_speakers_laughter",
+ "fixture": "yugi_2026-08-30T0723",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788075083171,
+  1788075143171
+ ],
+ "description": "Two diarized speakers alternate inside one window and chat laughs. Tests that the trigger is attributed to the segment that actually caused the reaction rather than to whichever speaker holds the window."
+}

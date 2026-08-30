@@ -1,0 +1,49 @@
+{
+ "case_id": "c07_frame_only_dracorex",
+ "fixture": "stableronaldo_2026-08-30T0723",
+ "window_ms": [
+  1788074767878,
+  1788074827878
+ ],
+ "gold_signals": [
+  {
+   "type": "audience_answer",
+   "trigger_event_id": "frm_8cfb061b83",
+   "relevant_message_ids": [
+    "2798583a-47b9-4309-8f42-1aabe772daa0",
+    "59782a3c-5ca9-44f5-b2fa-4e49082fb75b",
+    "a0252382-8507-472a-ba47-f6a26354c1d7",
+    "68f2f938-4fe0-43bf-9de4-002c66179d24",
+    "376bef29-6b9b-4898-a394-c29d778a3cc5",
+    "c187e767-4d08-4cc8-846a-565e458204d5",
+    "1b3d503f-1495-4bd2-8950-fe0e16661de2",
+    "e5a89a9a-3bd1-4d1a-8ade-ed1aa8c9d30c",
+    "17158794-0439-4dcb-bba8-e07f5e328af9",
+    "d0ed58e3-bf58-4b35-be68-8975ed05247d",
+    "ae8a1a3e-6840-4c85-890e-a033e31013dd",
+    "249ae6f3-6af5-450b-b3a8-85b562ab68f6",
+    "d213bd2f-27b5-43ab-a84f-28edec592887",
+    "43218068-cee2-40a2-8597-4f8ee853f829",
+    "122be203-4a89-42b7-be0b-3b940a2bbdee",
+    "7ba49f08-cfc4-4de4-ab70-855494318967",
+    "7240251a-70f0-4762-a0c3-0109efcf42ac",
+    "1d2bbb3b-4bea-4312-a15d-fa1bcc807189",
+    "699b5f69-acf1-4fa8-b9b5-e897998dca11",
+    "fa53cf2c-1792-4f72-9d5a-e44eddac8592",
+    "86057934-7e61-4b2f-bad5-b2c8dbe5cf63",
+    "0198649e-ea1f-4c12-8371-568295dbd60b",
+    "d68cd967-5a9d-45a8-9685-70bf95ccb508"
+   ],
+   "distribution": {
+    "draconian": 0.35,
+    "dracula": 0.23,
+    "dragons": 0.16,
+    "draconic": 0.13,
+    "dramatic": 0.13
+   }
+  }
+ ],
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
+}

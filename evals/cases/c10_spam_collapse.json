@@ -1,0 +1,10 @@
+{
+ "case_id": "c10_spam_collapse",
+ "fixture": "marlon_2026-08-30T0715",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788074574681,
+  1788074634681
+ ],
+ "description": "A copypasta is posted repeatedly alongside a laughter wave. Tests that the deterministic reducer collapses near-identical repeats (trailing full stop included) into one burst with preserved counts, instead of spending a model call per message."
+}

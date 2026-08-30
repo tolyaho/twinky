@@ -1,23 +1,22 @@
 {
  "case_id": "c05_warning_no_cause",
- "fixture": "sample",
+ "fixture": "marlon_2026-08-30T0701",
  "window_ms": [
-  1756400018000,
-  1756400024000
+  1788073323294,
+  1788073383294
  ],
  "gold_signals": [
   {
    "type": "warning",
    "trigger_event_id": "unknown",
    "relevant_message_ids": [
-    "msg_0027",
-    "msg_0028",
-    "msg_0029",
-    "msg_0030",
-    "msg_0031",
-    "msg_0032"
+    "cd978c82-20a0-4af7-aaac-722226f9c759",
+    "5343017e-1756-4552-b66e-1e44425ce3b7",
+    "6749dd95-929e-4ff3-ab9d-884078d7e9ad"
    ]
   }
  ],
- "must_abstain": false
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
 }

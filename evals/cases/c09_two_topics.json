@@ -1,0 +1,10 @@
+{
+ "case_id": "c09_two_topics",
+ "fixture": "marlon_2026-08-30T0715",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788074514681,
+  1788074574681
+ ],
+ "description": "Two unrelated things run at once: chat reacts to a named guest ('VIOLET') while a copypasta about grabbing the camera is being spammed. Tests that two distinct signals in one window are separated rather than merged into one card."
+}

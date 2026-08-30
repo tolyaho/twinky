@@ -1,10 +1,10 @@
 {
  "case_id": "c03_failure_laughter",
- "fixture": "sample",
- "fixture_kind": "synthetic_scaffold",
+ "fixture": "marlon_2026-08-30T0715",
+ "fixture_kind": "capture",
  "window_ms": [
-  1756400010000,
-  1756400018000
+  1788074254219,
+  1788074314219
  ],
- "description": "A gameplay failure said aloud triggers a laughter wave. Tests the reaction card and, because the laughter is lexically varied (АХАХАХА / LUL / омг), tests that grouping is by cause rather than by string similarity."
+ "description": "An insult delivered aloud ('Your shoes are ugly.') is followed by a laughter wave. Tests the reaction card and a speech trigger, with the quote checkable against the transcript."
 }

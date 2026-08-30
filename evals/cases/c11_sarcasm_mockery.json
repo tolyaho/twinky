@@ -1,0 +1,10 @@
+{
+ "case_id": "c11_sarcasm_mockery",
+ "fixture": "marlon_2026-08-30T0715",
+ "fixture_kind": "capture",
+ "window_ms": [
+  1788074296000,
+  1788074356000
+ ],
+ "description": "Chat mocks the streamer for not doing the thing he promised: '0/87 on slams rn', 'good job marlon, that tree near the sidewalk was secured', 'You almost slammed him mar I saw that Kappa'. Read literally this is praise; it is derision. No single event in the window explains it, so the trigger must be unknown and confidence must not be high."
+}

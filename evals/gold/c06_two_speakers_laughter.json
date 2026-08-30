@@ -1,0 +1,31 @@
+{
+ "case_id": "c06_two_speakers_laughter",
+ "fixture": "yugi_2026-08-30T0723",
+ "window_ms": [
+  1788075083171,
+  1788075143171
+ ],
+ "gold_signals": [
+  {
+   "type": "reaction",
+   "trigger_event_id": "tr_ceef73e969",
+   "relevant_message_ids": [
+    "25bfc0fb-3bc8-4ce9-b12f-58744d5d1ba7",
+    "2a10bc16-ec45-4514-a1dd-002bacec1473",
+    "c79fab3f-28f7-472e-84fd-a5abb8f5342b",
+    "ff3c718a-c856-4b74-be4b-dc08272041e6",
+    "c40e6287-48e4-46e1-8f5b-a8080ef5c52a",
+    "9c1a2168-1cb5-4e1f-80f7-1e3dfa834bed",
+    "ba77874f-5fb8-4bc1-8779-ee9282422f8b",
+    "fe2c2f6c-1f33-4dcc-a8e0-6e90ab76a683",
+    "83f5e36a-9112-4abe-85f8-ee9a354f1bd5",
+    "f3fa6415-5cdd-40e2-b7dc-95d7707ae5e5",
+    "00014789-c93e-4e73-906b-fcb5060eb036",
+    "70907a43-1f2c-46b8-974f-e5ec0659836e"
+   ]
+  }
+ ],
+ "must_abstain": false,
+ "reviewed": false,
+ "label_provenance": "drafted with model assistance from the captured fixture; awaiting author review (evals/REVIEW_ME.md)"
+}
