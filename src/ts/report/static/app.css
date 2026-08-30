@@ -1111,3 +1111,11 @@ html, body.live-page { height: 100%; }
   border: 1px dashed var(--hairline-strong); border-radius: var(--r-md);
   font-size: 13px; line-height: 1.6; color: var(--body);
 }
+
+
+/* The model's one cosmetic contribution to the board. Set below the token, never instead of it:
+   the count and the messages are what the row stands on, and the line is a caption over them. */
+.gline-meaning {
+  grid-column: 1 / -1; margin: var(--xxs) 0 0;
+  font-size: 13px; line-height: 1.5; color: var(--body-strong);
+}

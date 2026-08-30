@@ -1637,3 +1637,53 @@ still **48 hits / 0 misses**, `evidence/` byte-identical. Cost: **$0.00**, ledge
 **~21 hours to the deadline.** Next: FEATURES_V2 §2, group labels — the first item so far that
 costs money, in cents.
 Blockers: the video needs the author.
+
+## Iteration 64 — 2026-08-30 — FEATURES_V2 §2, group labels
+
+Attempted: turn `violet × 27` from a token into a meaning. The first item in weeks that costs
+money, and it cost **$0.0043**.
+
+New `report/labels.py`, wired into `stream_events`. One batched call per window, `temperature=0`,
+content-addressed like every other call. Two rules carry the design and both are tested:
+
+**A label is never evidence.** The model's line lands in a separate `meaning` field; `label`,
+`count`, `event_ids` and the verbatim samples are exactly what the reducer produced. The gate and
+the scorer never read either field — asserted directly against `provenance.py` and `scorer.py`.
+A caption sits above the messages it describes, so a wrong one is visibly wrong.
+
+**A label may never break the page.** Replay raises `CacheMiss` on purpose; every failure path
+here returns `{}` and the row keeps its token. Cache miss, provider error, malformed JSON, and a
+label for a group that was never sent — that last one is a hallucinated key, and attaching it
+would put a caption over messages the model never saw. Verified end to end against a cold replay
+cache: rows render, `violet × 27` intact, no `meaning` key.
+
+**Two things measuring corrected, both after money had been spent.** My first version batched per
+**row**, which cost **45 calls on an 11-window fixture**; §2 specifies one call per window and
+that measures **10**. I deleted the 45 orphaned entries so the committed cache holds nothing that
+will never be hit — but the $0.0017 they cost is in the ledger anyway, because money spent is
+money spent. Then `MAX_GROUPS_PER_CALL` at 8 was truncating windows that hold 15-16 groups, so
+half fell back to tokens for nothing; raised to 16 and re-recorded.
+
+Recorded for the three fixtures the shot list films — 37 windows, **34 calls, $0.0026** — and
+verified to replay with `OPENAI_API_KEY`, `TS_LLM_API_KEY` and `DEEPSEEK_API_KEY` all unset:
+
+| fixture | windows | groups labelled |
+|---|---:|---|
+| marlon 0715 | 11 | 70 / 85 |
+| yugi 0723 | 13 | 50 / 54 |
+| stableronaldo 0723 | 13 | 37 / 93 |
+
+Real output, from cache, no key: `myers × 3` → *"Violet Myers is at the party, chat discusses her
+presence"*; `xand… × 5` → *"Audience calls out Xandro multiple times"*. stableronaldo's coverage
+is lowest because its word-game windows hold more than sixteen groups; those rows show tokens,
+which is the fallback working rather than a defect.
+
+Ledger total this iteration: **79 calls, 22,565 in / 5,123 out tokens, $0.0043**. Running total
+**$0.43** — unchanged at two decimal places, and the cost guard still passes.
+
+Result: `make test` 575 → **588 passed**. 13 new tests. `make eval` still **48 hits / 0 misses**,
+`evidence/` byte-identical. Shot 5 updated with the one line to say over the captions.
+
+**~20.5 hours to the deadline.** Next: FEATURES_V2 §1, embeddings as a measured third grouping
+arm — and the labels must be frozen before any arm runs.
+Blockers: the video needs the author.

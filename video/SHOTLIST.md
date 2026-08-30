@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 575 passed — this is also shot 14
+make test                             # 588 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -101,6 +101,12 @@ on?"* → **`violet × 27`**, with three verbatim messages under it: *"violet mu
 
 **Say:** *"He is mid-sentence asking what is going on. Twenty-seven people already answered, a
 minute ago, and he cannot see it."*
+
+Under each group is a **one-line meaning** — the only model call anywhere in the reporting layer,
+one batched call per window, recorded and replayed for nothing. Say once, over it: *"That line is
+cosmetic. The count, the messages and the ids under it are what the row stands on, and the gate
+never reads the caption."* If a window has no recorded label the row shows the token instead and
+nothing breaks — that is deliberate.
 
 **Note the honest label on camera if you have the second:** that row says `just before`, not
 `names it` — the link is adjacency, not proof. The board distinguishes the two and so should you.
@@ -211,7 +217,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 575 passed
+make test        # 588 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.

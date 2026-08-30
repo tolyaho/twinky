@@ -21,6 +21,8 @@ from ..ingest.replay import load_fixture, load_meta
 from ..provenance import UNKNOWN
 from .board import TICK_MS, board, rail, rolling_groups, stream_questions
 from .board import windows as window_tiles
+from .labels import attach as attach_labels
+from .labels import label_groups
 from .moderation import needs_a_look
 from .poll import attach_drafts
 
@@ -286,9 +288,23 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
                  if start <= ((w.get("window_ms") or [0])[0]) < end
                  for c in list(w.get("verified") or []) + list(w.get("rejected") or [])]
         so_far.extend(chat_in)
+        window_board = board(index, start, end)
+        # ONE call for the whole window, not one per row. Per-row cost 45 calls on a fixture
+        # where the window count is 11; the groups all come from the same minute of chat and the
+        # model reads them better together anyway.
+        #
+        # Cosmetic only. In replay with nothing recorded this is a miss, `label_groups` returns
+        # {} and every row keeps its token — a label may never be the reason a page fails.
+        every_group = [g for row in window_board["rows"] for g in row["groups"]]
+        every_group += window_board["unattributed"]
+        trigger = next((r["trigger"]["text"] for r in window_board["rows"]
+                        if (r.get("trigger") or {}).get("text")), None)
+        labels = label_groups(every_group, _label_cache(), trigger=trigger)
+        attach_labels(window_board["rows"], labels)
+        attach_labels([{"groups": window_board["unattributed"]}], labels)
         script.append((max(0, end - origin), {
             "kind": "board",
-            "board": board(index, start, end),
+            "board": window_board,
             "rail": rail(index, start, end, cards=cards, seen_authors=seen),
             # Cumulative, not per-window: "asked four times" is a fact about the audience, and
             # splitting it across three tiles turns one insistent question into three quiet ones.
@@ -355,6 +371,22 @@ def _trigger_ts(index, card: Dict[str, Any]) -> Optional[int]:
     trigger = card.get("trigger") or {}
     event = index.get(trigger.get("event_id")) if trigger.get("event_id") else None
     return event.ts_ms if event else None
+
+
+_LABEL_CACHE: Optional[Any] = None
+
+
+def _label_cache():
+    """One cache for the labelling calls, made once and reused.
+
+    Constructing a `ResponseCache` per group would re-read the mode and re-stat the directory for
+    every row on every window, which is a lot of syscalls for a cosmetic string.
+    """
+    global _LABEL_CACHE
+    if _LABEL_CACHE is None:
+        from ..cache import ResponseCache
+        _LABEL_CACHE = ResponseCache()
+    return _LABEL_CACHE
 
 
 def _state(card: Dict[str, Any]) -> str:

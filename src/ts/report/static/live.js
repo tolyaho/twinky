@@ -360,6 +360,13 @@ function groupLine(g, max) {
   bar.appendChild(fill);
   line.appendChild(bar);
   line.appendChild(el("span", "gline-n", String(g.count)));
+  /* The meaning, when one was recorded. The token stays visible beside it — the label is
+     cosmetic and never evidence, so a reader can always see the thing it is describing and judge
+     it. A group with no label simply has no line here. */
+  if (g.meaning) {
+    const meaning = el("p", "gline-meaning", g.meaning);
+    line.appendChild(meaning);
+  }
   const samples = el("p", "gline-samples");
   samples.textContent = g.samples.map((s) => `“${s}”`).join("  ");
   line.appendChild(samples);
