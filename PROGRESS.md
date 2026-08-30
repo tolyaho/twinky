@@ -210,3 +210,17 @@ shares were renormalised over the surviving options, so a trimmed poll printed 2
 directly above it said 25%; they now count every vote.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T06:38Z — iteration 16
+Attempted: nothing on the ladder is unblocked, so looked for the weakest thing that is. Found a
+correctness bug in the provenance gate (#26).
+Result: `make test` green, 200 -> 210. A `none` card — the explicit "no signal in this window"
+the agent is told to emit — claims nothing, so it cites nothing, so it failed on
+`E_NO_EVIDENCE`. Measured before the fix: a correct abstention scored `unsupported_rate = 1.0`,
+the headline metric, and rendered in the dashboard's rejected block. Perfect behaviour, worst
+possible number, shown to a judge as a failure — and it hit cases 5, 11 and 12 specifically, the
+three the product is designed to win on. `none` now takes an abstention path that fails only on
+self-contradiction; a passing one is labelled `abstained`; the drawer says there is no claim to
+check rather than "0 messages". A test asserts the path did not become a hole in the gate.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
