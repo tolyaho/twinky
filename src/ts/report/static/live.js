@@ -77,6 +77,14 @@ function addMessage(event) {
   }
 }
 
+/* CSS cannot reach this one. `scrollIntoView({ behavior: "smooth" })` passes the behaviour
+   explicitly and overrides the stylesheet's `scroll-behavior: auto`, so a reader who asked the
+   system for less motion still got a smooth scroll — on the citation highlight, which fires on
+   every card. Read the preference each time rather than caching it: it can change while the page
+   is open, and this is the one gesture the product rests on. */
+const stillPreferred = () =>
+  window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 /* The one gesture that is the whole argument: when a card lands, the messages it cites light up
    in the flood beside it. This cluster, that cause. */
 function highlightCited(card) {
@@ -99,7 +107,8 @@ function highlightIds(ids) {
   /* Stop following, bring the first cited message into view, hold, then resume. */
   state.pinned = false;
   showFollow(true);
-  rows[0].scrollIntoView({ block: "center", behavior: "smooth" });
+  rows[0].scrollIntoView({ block: "center",
+                          behavior: stillPreferred() ? "auto" : "smooth" });
 
   const holdToken = state.holdUntil = Date.now() + CITE_HOLD_MS;
   setTimeout(() => {

@@ -2543,3 +2543,42 @@ still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **20.5 hours to the deadline; the video gate is 12.5 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 84 — 2026-08-31 — reduced motion, where CSS could not reach
+
+Attempted: `prefers-reduced-motion`. The stylesheet has covered it since early on; JavaScript
+never had.
+
+**Two defects, and the second was worse than having no accessibility path at all.**
+
+**1. The citation scroll ignored the preference.** `live.js` never consulted it, and line 102
+passed `behavior: "smooth"` explicitly — which **overrides** the stylesheet's
+`scroll-behavior: auto`. So a reader who asked the system for less motion got a smooth scroll on
+every single citation: the gesture the whole product rests on, and the same one made keyboard-
+operable two iterations ago. Now `stillPreferred() ? "auto" : "smooth"`, read at use rather than
+cached at load, because the preference can change while the page is open.
+
+**2. Reduced motion rendered the hero stage as an empty box.** `renderStage` unhid the stage,
+wired its toggle, and then — under reduced motion — **skipped `stagePlay` entirely**. But
+`stagePlay` is what puts the messages, the frozen citation, the card and the caption on screen.
+The intent was right and the implementation threw the content away with the animation, so the
+Method page's only real-data demonstration was blank for exactly the readers who need it most.
+
+Fixed by teaching `stagePlay` to render the finished state directly: an `after(ms, run)` helper
+that calls `run()` immediately when motion is reduced and schedules it otherwise. Every one of the
+four beats — messages arriving, the citation freezing, the collapse, the card and its attribution
+— goes through that single helper, so a new beat cannot quietly become animation-only. A test
+asserts all four do.
+
+Reduced motion now means what it says: no timers, no transitions, and the same content.
+
+Checked the rest of the motion surface while there. The two `requestAnimationFrame` calls only add
+a class, and the CSS reduced-motion block already zeroes those transitions — they are fine as they
+are, so I left them.
+
+Result: `make test` 669 → **672 passed**. 3 new tests, four rows in DECISIONS.md. No CSS change,
+still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**20.4 hours to the deadline; the video gate is 12.4 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

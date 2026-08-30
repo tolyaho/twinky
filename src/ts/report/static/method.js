@@ -389,7 +389,13 @@ function stageStop() {
   stageTimers = [];
 }
 
-function stagePlay(hero) {
+/* `still` renders the finished state with no timers: every message present, the cited one
+   frozen, the card and its caption in place. Reduced motion means "do not animate", not "do not
+   show me the content" — and the previous version skipped the whole call, so a reader who asked
+   for less motion got an unhidden, entirely empty stage where the Method page's only real-data
+   demonstration should be. */
+function stagePlay(hero, still) {
+  const after = (ms, run) => (still ? run() : stageTimers.push(setTimeout(run, ms)));
   stageStop();
   const stream = document.getElementById("stage-stream");
   const holder = document.getElementById("stage-cards");
@@ -414,21 +420,21 @@ function stagePlay(hero) {
   let at = 0;
   rows.forEach((li, i) => {
     at += Math.max(80, STAGE_STEP_MS - i * 12);
-    stageTimers.push(setTimeout(() => li.classList.add("in"), at));
+    after(at, () => li.classList.add("in"));
   });
 
-  stageTimers.push(setTimeout(() => {
+  after(at + 200, () => {
     rows[freeze].classList.add("frozen");
     label.textContent = "meaningless on its own";
-  }, at + 200));
+  });
 
   const collapseAt = at + 200 + STAGE_FREEZE_MS;
-  stageTimers.push(setTimeout(() => {
+  after(collapseAt, () => {
     for (const li of rows) li.classList.add("out");
     label.textContent = "the cause was on screen";
-  }, collapseAt));
+  });
 
-  stageTimers.push(setTimeout(() => {
+  after(collapseAt + STAGE_COLLAPSE_MS, () => {
     const card = hero.card;
     const trigger = card.trigger || {};
     const box = el("div", "mini");
@@ -447,16 +453,17 @@ function stagePlay(hero) {
       + `Card produced by ${hero.system === "agent" ? "the agent" : "the single-prompt baseline"}, `
       + `replayed from the committed cache.`;
     caption.classList.add("in");
-  }, collapseAt + STAGE_COLLAPSE_MS));
+  });
 }
 
 function renderStage(hero) {
   if (!hero || !hero.card || !(hero.stream || []).length) return;
   document.getElementById("stage").hidden = false;
-  document.getElementById("stage-toggle").addEventListener("click", () => stagePlay(hero));
+  document.getElementById("stage-toggle").addEventListener("click", () => stagePlay(hero, still));
 
-  const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!still) stagePlay(hero);
+  const still = !!(window.matchMedia
+                   && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  stagePlay(hero, still);
 }
 
 const SEG_LEDE = {

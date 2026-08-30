@@ -140,3 +140,37 @@ def test_focus_is_restyled_and_never_removed():
     assert ":focus-visible" in css
     assert "outline: 2px solid var(--focus-ring)" in css
     assert "outline: none" not in css and "outline: 0" not in css
+
+
+# ------------------------------------------------------- reduced motion, in JS as well as CSS
+
+def test_the_citation_scroll_respects_reduced_motion(js_source):
+    """CSS cannot reach this. `scrollIntoView({behavior: "smooth"})` passes the behaviour
+    explicitly and overrides the stylesheet's `scroll-behavior: auto`, so a reader who asked for
+    less motion still got a smooth scroll on every citation — the gesture the product rests on."""
+    js = js_source("live.js")
+
+    assert "prefers-reduced-motion" in js, "live.js never consulted the preference"
+    assert 'stillPreferred() ? "auto" : "smooth"' in js
+    assert 'behavior: "smooth" }' not in js, "an unconditional smooth scroll is back"
+
+
+def test_reduced_motion_still_renders_the_stage(js_source):
+    """It means "do not animate", not "do not show me the content". `renderStage` used to skip
+    `stagePlay` entirely, so the Method page's only real-data demonstration rendered as an
+    unhidden, completely empty box."""
+    js = js_source("method.js")
+
+    assert "function stagePlay(hero, still)" in js
+    assert "stagePlay(hero, still)" in js
+    body = js.split("function stagePlay", 1)[1].split("\nfunction ", 1)[0]
+    assert "still ? run() : stageTimers.push" in body, "the still path must render immediately"
+    # every beat goes through the helper, or one of them stays animation-only
+    assert body.count("after(") == 4, "a stage beat is bypassing the reduced-motion path"
+
+
+def test_the_preference_is_read_when_used_not_cached_at_load(js_source):
+    """It can change while the page is open."""
+    js = js_source("live.js")
+
+    assert "const stillPreferred = () =>" in js, "a cached boolean goes stale"
