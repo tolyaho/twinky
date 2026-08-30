@@ -1252,3 +1252,100 @@ def test_the_questions_footer_states_the_totals():
 
     assert "still unanswered" in js
     assert "not shown" in js, "a truncated question list must say it was truncated"
+
+
+# ------------------------------------------------------------------------- live counts
+# Three cadences were being treated as one: what the model reasons over, how often the board
+# recounts, and how long the page sits blank. Only the first has to be 60 seconds.
+
+def test_the_analysis_window_is_still_sixty_seconds():
+    """The frozen cases carry explicit 60-second spans and the committed cache is keyed on prompts
+    containing those bounds. Shrinking the analysis window invalidates the eval, the gold labels
+    and keyless replay in one move — so the live counts had to be built beside it, not instead."""
+    index = serve_mod.load_fixture(FIXTURES / "yugi_2026-08-30T0723")
+    tiles = serve_mod.window_tiles(index)
+
+    assert {end - start for start, end in tiles} == {60_000}
+
+    cases = sorted((Path(__file__).resolve().parents[1] / "evals/cases").glob("*.json"))
+    spans = {tuple(json.loads(c.read_text(encoding="utf-8"))["window_ms"]) for c in cases}
+    assert len(cases) == 11
+    assert {b - a for a, b in spans} == {60_000}, "a frozen case no longer spans 60 seconds"
+
+
+def test_a_row_appears_long_before_the_window_closes():
+    """The board used to sit blank for a full minute, which reads as broken rather than pending."""
+    for fixture, first_row_ms in [("marlon_2026-08-30T0715", 2_000),
+                                  ("stableronaldo_2026-08-30T0723", 10_000)]:
+        script = serve_mod.stream_events(FIXTURES / fixture, Path("evidence/raw-results"))
+        first_live = next(o for o, e in script if e["kind"] == "tick" and e["groups"])
+        first_board = next(o for o, e in script if e["kind"] == "board")
+
+        assert first_live == first_row_ms
+        assert first_live < first_board
+
+
+def test_a_live_count_never_claims_a_cause():
+    """A live count drawn like a finished row would be asserting attribution it does not have.
+    The tick carries no trigger at all, so there is nothing for the UI to get wrong."""
+    script = serve_mod.stream_events(FIXTURES / "marlon_2026-08-30T0715",
+                                     Path("evidence/raw-results"))
+    ticks = [e for _, e in script if e["kind"] == "tick"]
+
+    assert ticks
+    for tick in ticks:
+        for group in tick["groups"]:
+            assert "trigger" not in group
+            assert set(group) == {"label", "rule", "count", "samples", "event_ids"}
+
+
+def test_a_tick_that_repeats_the_last_one_is_not_sent():
+    """Counts move constantly during a burst and not at all during a lull. Repainting for nothing
+    is bytes on the wire and a repaint that says the same thing."""
+    script = serve_mod.stream_events(FIXTURES / "stableronaldo_2026-08-30T0723",
+                                     Path("evidence/raw-results"))
+    ticks = [e for _, e in script if e["kind"] == "tick"]
+    signatures = [[(g["label"], g["count"]) for g in t["groups"]] for t in ticks]
+
+    assert all(a != b for a, b in zip(signatures, signatures[1:]))
+
+
+def test_the_live_payload_stays_lean():
+    """The full group dict carried 966 KB of repeated ids and samples per fixture — more than the
+    chat it was describing. The complete set is on the attributed row at window close."""
+    script = serve_mod.stream_events(FIXTURES / "stableronaldo_2026-08-30T0723",
+                                     Path("evidence/raw-results"))
+
+    for _, event in script:
+        if event["kind"] != "tick":
+            continue
+        for group in event["groups"]:
+            assert len(group["event_ids"]) <= 12
+            assert len(group["samples"]) <= 2
+
+
+def test_the_rolling_window_slides_rather_than_tiles():
+    """A wave straddling a tile boundary is split by the tiles and whole to the slider, which is
+    the point: 55 in the tile, 74 across the boundary."""
+    from ts.report.board import rolling_groups
+
+    index = serve_mod.load_fixture(FIXTURES / "stableronaldo_2026-08-30T0723")
+    origin = index.window(index.start_ms, index.end_ms + 1, types=["chat_message"])[0].ts_ms
+
+    live = rolling_groups(index, origin + 250_000)
+
+    assert live[0]["label"] == "drac…" and live[0]["count"] == 74
+
+
+def test_the_live_block_says_nothing_in_it_has_a_cause_yet():
+    html = LIVE_HTML.read_text(encoding="utf-8")
+
+    assert "no cause assigned yet" in html
+    assert 'id="nextclose-fill"' in html, "the wait must be legible, not mysterious"
+
+
+def test_switching_fixture_hides_the_live_block():
+    js = LIVE_JS.read_text(encoding="utf-8")
+    body = js.split("function reset()", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "liveBox.hidden = true;" in body

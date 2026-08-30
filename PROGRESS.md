@@ -1079,3 +1079,49 @@ Result: `make test` 490 → **498 passed**. 8 new tests, five rows in DECISIONS.
 `app.css` — still the sixteen from DESIGN.md. Cost unchanged at $0.42.
 Next: chatter stats surfaced properly (§4) and the masonry board (§6).
 Blockers: none.
+
+## Iteration 53 — 2026-08-31 — WINDOWS.md, the board counts live
+
+Attempted: WINDOWS.md — the board sat blank for a full minute before anything appeared, which
+reads as broken rather than pending.
+
+The premise checked out and I verified the load-bearing half myself: **all 11 frozen cases carry
+exactly 60000 ms `window_ms` spans.** So shrinking the analysis window would change the prompt
+bounds, kill every cached response, turn replay into all misses, and invalidate the cases and
+gold labels — the entire comparison, a day out. The analysis window stays at 60 s.
+
+What moved is the **grouping refresh**, which was never the same thing. Grouping calls no model,
+so it can run constantly: `rolling_groups()` recounts over a trailing 60 s every 2 s and the
+stream carries a `tick`. A group is drawn the moment it crosses the threshold and its count ticks
+up as chat arrives — measured on marlon: `reaction wave 7 → 15 → 16`, `slam 6 → 8`.
+
+Measured time to the first row on screen, against the first window close:
+
+| fixture | first live row | first board | before |
+|---|---:|---:|---:|
+| marlon 0715 | **2.0 s** | 60.0 s | 60.0 s |
+| stableronaldo | **10.0 s** | 56.5 s | 56.5 s |
+| yugi | **44.0 s** | 59.3 s | 59.3 s |
+
+Computed on the server, not ported to JavaScript: grouping is one rule set with tests pinned to
+measured numbers, a second implementation in the browser would drift, and there is no JS runtime
+here to test one with. Cost measured at **0.4 ms per recount, 0.19 s to build a whole fixture's
+script** — free, as predicted.
+
+Two things fixed by measuring. The first payload was **966 KB of ticks per fixture, more than the
+chat it was describing**; trimming to 12 ids and 2 samples and dropping ticks identical to their
+predecessor took stableronaldo from 359 ticks to 258 and 966 KB to 485 KB. And a tick carries no
+`trigger` field at all — rather than trusting the UI not to draw a cause on a live count, the
+payload has none to draw. The block is dashed, headed *"this minute so far"*, and says *"counting
+· no cause assigned yet"*, with a one-pixel hairline showing time to the next close.
+
+A side effect worth noting: the sliding window sees waves the tiles split. `drac…` is 55 in tile
+w3 and **74** across the boundary at 250 s.
+
+WINDOWS.md's own table comparing 30 s / 20 s / 10 s windows is a measurement I did not take, so
+it is recorded as post-deadline work rather than repeated as mine.
+
+Result: `make test` 498 → **506 passed**. 8 new tests, five rows in DECISIONS.md. No new hex —
+still the sixteen from DESIGN.md. Cost unchanged at $0.42.
+Next: chatter stats surfaced properly (§4) and the masonry board (§6).
+Blockers: none.

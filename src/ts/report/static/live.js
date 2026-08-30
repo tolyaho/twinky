@@ -324,6 +324,37 @@ function orphanBlock(orphans) {
   return box;
 }
 
+/* ------------------------------------------------------------------ live counts
+   Between window closes. The analysis window is still 60 seconds and the model still reasons
+   over 60 seconds — what changed is that the BOARD no longer waits for it. Grouping is
+   deterministic and calls nothing, so a group is drawn from the moment it crosses the threshold
+   and its count ticks up as chat arrives: `violet 4 … 11 … 27`. Nothing here is attributed to a
+   cause and the header says so; the cause arrives when the window closes. */
+function addTick(event) {
+  const groups = event.groups || [];
+  const box = document.getElementById("board-live");
+  const list = document.getElementById("live-groups");
+  box.hidden = !groups.length;
+  clear(list);
+
+  const max = Math.max(...groups.map((g) => g.count), 1);
+  for (const g of groups) {
+    const line = groupLine(g, max);
+    line.addEventListener("click", () => highlightIds(g.event_ids || []));
+    list.appendChild(line);
+  }
+
+  /* One thin hairline for time to the next close, so the wait is legible rather than mysterious. */
+  const fill = document.getElementById("nextclose-fill");
+  const close = event.next_close_ms;
+  if (close && close > event.at_ms) {
+    const span = close - Math.max(0, close - 60000);
+    fill.style.width = `${Math.min(100, Math.round((1 - (close - event.at_ms) / span) * 100))}%`;
+  } else {
+    fill.style.width = "100%";
+  }
+}
+
 /* ------------------------------------------------------------------ the rail */
 function renderRail(r) {
   const rail = document.getElementById("rail");
@@ -407,6 +438,7 @@ function apply(kind, event) {
   if (kind === "chat") addMessage(event);
   else if (kind === "card") addCard(event);
   else if (kind === "board") addBoard(event);
+  else if (kind === "tick") addTick(event);
 }
 
 function reset() {
@@ -436,6 +468,12 @@ function reset() {
   }
   const railN = document.getElementById("rail-n");
   if (railN) railN.textContent = "—";
+  const liveBox = document.getElementById("board-live");
+  if (liveBox) {
+    liveBox.hidden = true;
+    clear(document.getElementById("live-groups"));
+    document.getElementById("nextclose-fill").style.width = "0%";
+  }
   const questionsEl = document.getElementById("questions");
   if (questionsEl) {
     clear(questionsEl);

@@ -87,6 +87,18 @@
       </div>
     </header>
 
+    <!-- Live counts, recomputed over a trailing minute every two seconds. Grouping calls no
+         model, so this is free — and it is why the board no longer sits blank for a full minute
+         before anything appears, which read as broken rather than pending. -->
+    <section class="livebox" id="board-live" hidden>
+      <header class="livebox-h">
+        <span class="livebox-t">this minute so far</span>
+        <span class="livebox-sub">counting · no cause assigned yet</span>
+      </header>
+      <div id="live-groups"></div>
+      <div class="nextclose"><span class="nextclose-fill" id="nextclose-fill"></span></div>
+    </section>
+
     <div class="boardrows" id="boardrows">
       <p class="empty" id="board-empty">Waiting for the first window to close…</p>
     </div>

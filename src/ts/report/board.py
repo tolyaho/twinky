@@ -31,6 +31,17 @@ ANSWER_WINDOW_MS = 120_000     # how long after a question the streamer still co
 MAX_QUESTIONS = 12             # a list nobody scrolls is a list nobody reads
 MIN_ANSWER_TOKENS = 2          # one shared word is a coincidence, not an answer
 
+# The grouping refresh is NOT the analysis window. Three cadences were being treated as one: what
+# the model reasons over (60 s, and it stays there), how often the board recounts (this), and how
+# long the page sits blank before anything appears (this too). Grouping calls no model, so there
+# is nothing stopping it running constantly — measured at 0.4 ms per recount over a trailing
+# minute of stableronaldo, 0.14 s for the whole twelve-minute fixture.
+TICK_MS = 2_000
+TICK_SPAN_MS = 60_000          # the trailing span a live count is over
+MAX_LIVE_GROUPS = 5
+LIVE_IDS = 12                  # enough for the highlight to land; the full set is on the row
+LIVE_SAMPLES = 2
+
 # A question needs a content word. The bare "ends with ?" rule returns 54 hits on one marlon
 # window and they are almost all literally `???` — punctuation is volume, not a question.
 #
@@ -144,6 +155,25 @@ def stream_questions(index, chat: Sequence[Event], *,
         "questions": ranked[:limit],
         "hidden": max(0, len(ranked) - limit),
     }
+
+
+def rolling_groups(index, at_ms: int, *, span_ms: int = TICK_SPAN_MS,
+                   limit: int = MAX_LIVE_GROUPS) -> List[Dict[str, Any]]:
+    """The groups in the trailing `span_ms` ending at `at_ms`, as they stand right now.
+
+    The same rules the board uses, over a window that slides instead of tiling. Nothing here is
+    attributed to a cause and nothing here is a card — it is a live count, and it exists so a
+    group is visible from the moment it crosses the threshold rather than 60 seconds later. When
+    the tile closes, the model's attributed cause lands on a group the viewer has already been
+    watching grow, which is a better beat than a finished card appearing from nowhere.
+    """
+    chat = index.window(max(0, at_ms - span_ms) + 1, at_ms + 1, types=["chat_message"])
+    # Deliberately lean. A tick fires every two seconds for the length of the stream, and the
+    # full group dict carried 966 KB of repeated ids and samples per fixture — more than the chat
+    # it was describing. The attributed row at window close carries the complete set.
+    return [{"label": g.label, "rule": g.rule, "count": g.count,
+             "samples": g.samples[:LIVE_SAMPLES], "event_ids": g.event_ids[:LIVE_IDS]}
+            for g in group_chat(chat)[:limit]]
 
 
 def _overlaps(trigger_text: str, group: Dict[str, Any]) -> bool:

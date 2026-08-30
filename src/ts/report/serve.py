@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional
 
 from ..ingest.replay import load_fixture, load_meta
 from ..provenance import UNKNOWN
-from .board import board, rail, stream_questions
+from .board import TICK_MS, board, rail, rolling_groups, stream_questions
 from .board import windows as window_tiles
 from .poll import attach_drafts
 
@@ -281,6 +281,31 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
             "questions": stream_questions(index, so_far),
         }))
         seen.update(e.author for e in chat_in)
+
+    # Live counts between window closes. The board used to sit blank for a full minute before
+    # anything appeared, which reads as broken rather than pending — and the fix is free, because
+    # grouping calls no model. A row now exists from the moment its group crosses the threshold
+    # and its count ticks up as chat arrives.
+    closes = [max(0, end - origin) for start, end in window_tiles(index)
+              if index.window(start, end, types=["chat_message"])]
+    last_offset = chat[-1].ts_ms - origin
+    at = TICK_MS
+    previous: Optional[str] = None
+    while at <= last_offset:
+        groups = rolling_groups(index, origin + at)
+        # A tick that says exactly what the last one said is bytes on the wire and a repaint for
+        # nothing. Counts move constantly during a burst and not at all during a lull, so this
+        # costs nothing when it matters and saves everything when it does not.
+        signature = json.dumps([(g["label"], g["count"]) for g in groups])
+        if signature != previous:
+            previous = signature
+            script.append((at, {
+                "kind": "tick",
+                "at_ms": at,
+                "groups": groups,
+                "next_close_ms": next((c for c in closes if c >= at), None),
+            }))
+        at += TICK_MS
 
     script.sort(key=lambda s: s[0])
     return script
