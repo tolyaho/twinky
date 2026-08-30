@@ -586,3 +586,85 @@ html { scroll-behavior: smooth; }
 .step-t { font-weight: 300; font-size: 24px; line-height: 1.2; color: var(--ink); }
 .step-d { color: var(--body); font-size: 15px; line-height: 1.47; letter-spacing: .15px; }
 @media (max-width: 900px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ================================================================== the product page
+   Two columns: the flood on the left, what it meant on the right. The gap between them is the
+   whole argument, so nothing boxes them in — one hairline separates, and the chat sits on the
+   soft canvas so the signals column reads as the foreground. */
+.live-page { display: flex; flex-direction: column; min-height: 100vh; }
+.live-page main.two-col {
+  flex: 1;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 0;
+  max-width: var(--measure); width: 100%; margin: 0 auto;
+  padding: 0 var(--xl);
+  min-height: 0;
+}
+.col { display: flex; flex-direction: column; min-height: 0; padding: var(--lg) 0; }
+.col-chat { background: var(--canvas-soft); border-right: 1px solid var(--hairline); padding-right: var(--lg); }
+.col-signals { padding-left: var(--lg); }
+.col-h {
+  display: flex; align-items: baseline; gap: var(--xs);
+  margin: 0 0 var(--base);
+  font-size: 12px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
+  text-transform: uppercase; color: var(--muted);
+}
+.col-n { font-variant-numeric: tabular-nums; color: var(--muted-soft); }
+
+.feed {
+  flex: 1; min-height: 0; overflow-y: auto;
+  margin: 0; padding: 0 var(--xs) 0 0; list-style: none;
+}
+.msg {
+  display: grid; grid-template-columns: 11ch 1fr; gap: var(--sm);
+  padding: 3px 0 3px var(--xs);
+  border-left: 2px solid transparent;
+  transition: border-color .25s ease, background .25s ease;
+}
+.msg-who { font-family: var(--mono); font-size: 13px; color: var(--muted-soft); letter-spacing: 0; }
+.msg-text { font-size: 15px; line-height: 1.47; letter-spacing: .15px; color: var(--body); }
+/* the citation gesture: this cluster, that cause */
+.msg.cited { border-left-color: var(--ink); background: var(--surface-card); }
+.msg.cited .msg-text { color: var(--ink); }
+
+.signals { display: grid; gap: var(--base); align-content: start; overflow-y: auto; min-height: 0; }
+.signals .card { opacity: 0; transform: translateY(12px); transition: opacity .24s ease, transform .24s ease; }
+.signals .card.in { opacity: 1; transform: none; }
+.card-cites { margin: var(--sm) 0 0; color: var(--muted); font-size: 14px; letter-spacing: 0; }
+
+.picker-row { max-width: var(--measure); margin: 0 auto; padding: var(--base) var(--xl) 0; }
+.picker { margin: 0; max-width: 420px; }
+.picker-go { min-width: 44px; padding: 0 var(--base); }
+.bar-left .picker { margin-left: var(--base); }
+
+/* the one place numbers get to be large */
+.ticker {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--lg);
+  max-width: var(--measure); width: 100%; margin: 0 auto;
+  padding: var(--base) var(--xl) var(--lg);
+  border-top: 1px solid var(--hairline);
+}
+.counters { display: flex; gap: var(--xxl); margin: 0; }
+.counters div { margin: 0; }
+.counters dt {
+  font-size: 12px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
+  text-transform: uppercase; color: var(--muted);
+}
+.counters dd {
+  margin: var(--xxs) 0 0;
+  font-weight: 300; font-size: 48px; line-height: 1.08; letter-spacing: -.96px; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.controls { display: flex; align-items: center; gap: var(--xs); }
+.speeds { margin: 0; }
+.speeds .seg { padding: var(--xs) var(--sm); font-size: 14px; }
+
+@media (max-width: 900px) {
+  .live-page main.two-col { grid-template-columns: minmax(0, 1fr); padding: 0 var(--md); }
+  .col-chat { border-right: 0; border-bottom: 1px solid var(--hairline); padding-right: 0; }
+  .col-signals { padding-left: 0; }
+  .feed { max-height: 40vh; }
+  .counters { gap: var(--lg); }
+  .counters dd { font-size: 32px; letter-spacing: -.32px; }
+  .ticker { flex-direction: column; align-items: flex-start; }
+}

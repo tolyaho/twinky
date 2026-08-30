@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twitch Agent — method and results</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
+<header class="bar">
+ <div class="bar-inner">
+  <div class="bar-left">
+    <a class="mark" href="/" aria-label="Twitch Agent — home"><svg class="mark-glyph" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1"/><circle cx="21" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="8" r="3.5" fill="currentColor"/></svg><span class="mark-name">Twitch&nbsp;Agent</span></a>
+    <span class="pill" id="mode-badge">—</span>
+  </div>
+  <nav class="bar-nav" aria-label="Sections">
+    <a href="/">Live</a>
+    <a href="#signals">Signals</a>
+    <a href="#how">How it works</a>
+    <a href="#measured">Results</a>
+    <a href="#changelog">Method</a>
+  </nav>
+  <div class="bar-right">
+    <button class="btn-outline" id="debug-toggle" aria-expanded="false">Debug</button>
+  </div>
+ </div>
+</header>
+
+<section class="debug" id="debug" hidden>
+  <dl id="debug-body"></dl>
+  <p class="note">
+    Latency and cost are not shown because this is a replay: every model response comes from the
+    committed cache, so timing it would measure disk, not the model. Per-run cost is recorded in
+    <code>COST_LEDGER.md</code>.
+  </p>
+</section>
+
+<main>
+  <section class="hero">
+   <div class="hero-grid">
+    <div class="hero-claim">
+    <h1 class="display hero-title">A chat message is not text.<br>It is a response to something.</h1>
+    <p class="lede hero-lede">
+      <code>10</code> means nothing. <code>10</code> thirty seconds after <em>“how would you rate
+      this?”</em> is a rating. Chat is only interpretable against the stimulus that caused it —
+      and the stimulus is in the audio and on the screen, not in the chat.
+    </p>
+      <form class="picker" id="picker" autocomplete="off">
+        <label class="sr-only" for="picker-input">Channel</label>
+        <input class="picker-input" id="picker-input" type="text"
+               placeholder="try: yugi, marlon, stableronaldo…" list="picker-list">
+        <datalist id="picker-list"></datalist>
+        <button class="btn-primary" type="submit">Show</button>
+      </form>
+      <div class="chips" id="picker-chips"></div>
+      <p class="picker-note" id="picker-note">
+        Recorded windows, not a live stream. Live capture uses the same pipeline and is documented
+        in the reproduction guide.
+      </p>
+    </div>
+    <div class="hero-proof">
+    <!-- The stage replays REAL messages from this run and collapses them into the cards the
+         system actually produced. There is no synthetic loop and no invented text: if the run
+         has no verified card, the stage does not render at all. -->
+    <section class="stage" id="stage" hidden>
+      <div class="stage-head">
+        <span class="stage-label" id="stage-label">chat, as it arrives</span>
+        <button class="btn-outline" id="stage-toggle" aria-pressed="false">Replay</button>
+      </div>
+      <div class="stage-body">
+        <ul class="stream" id="stage-stream"></ul>
+        <div class="stage-cards" id="stage-cards"></div>
+        <p class="stage-trigger" id="stage-trigger"></p>
+      </div>
+    </section>
+    </div>
+   </div>
+
+    <dl class="stat-row" id="hero-stats"></dl>
+    <p class="note" id="hero-note"></p>
+  </section>
+
+  <section id="signals">
+    <span class="eyebrow">01 — what the run produced</span>
+    <h2 class="display sub">Every card, and what happened to it</h2>
+    <p class="lede" id="run-line">…</p>
+
+    <div class="segmented" role="tablist" aria-label="Card outcome">
+      <button role="tab" class="seg is-active" data-seg="grounded" aria-selected="true">
+        Grounded <span class="seg-n" id="n-grounded">0</span>
+      </button>
+      <button role="tab" class="seg" data-seg="abstained" aria-selected="false">
+        Abstained <span class="seg-n" id="n-abstained">0</span>
+      </button>
+      <button role="tab" class="seg" data-seg="rejected" aria-selected="false">
+        Rejected <span class="seg-n" id="n-rejected">0</span>
+      </button>
+    </div>
+    <p class="seg-lede" id="seg-lede"></p>
+
+    <div id="rail"></div>
+    <p class="empty" id="rail-empty" hidden></p>
+    <button class="btn-outline show-all" id="show-all" hidden>Show all</button>
+  </section>
+
+  <section id="how">
+    <span class="eyebrow">02 — how it works</span>
+    <h2 class="display sub">Four steps, no magic</h2>
+    <p class="lede">
+      Every number on this page comes out of the same four steps, replayed from a committed cache
+      with no API keys.
+    </p>
+    <ol class="steps">
+      <li><span class="step-n">01</span><span class="step-t">Capture</span>
+        <span class="step-d">Chat, audio and frames off a live broadcast. No keys, no model.</span></li>
+      <li><span class="step-n">02</span><span class="step-t">Ground</span>
+        <span class="step-d">Speech and screen become events beside the chat, on one timeline.</span></li>
+      <li><span class="step-n">03</span><span class="step-t">Verify</span>
+        <span class="step-d">A deterministic gate checks every citation. Unprovable cards are rejected.</span></li>
+      <li><span class="step-n">04</span><span class="step-t">Report</span>
+        <span class="step-d">What survived, what did not, and the evidence for both.</span></li>
+    </ol>
+  </section>
+
+  <section id="measured" hidden>
+    <span class="eyebrow">03 — is it actually better</span>
+    <h2 class="display sub">Measured improvement</h2>
+    <p class="lede">
+      Eleven frozen cases across four real broadcasts, scored on every card each system emits —
+      verified and rejected alike. Reproduced by <code>make eval</code> from the committed
+      response cache with no API keys.
+    </p>
+    <table class="scores"><thead><tr>
+      <th>system</th><th>cards</th><th>trigger accuracy</th>
+      <th>unmatched</th><th>unsupported</th><th>recall</th>
+    </tr></thead><tbody id="scores-body"></tbody></table>
+    <p class="note">
+      The agent wins grounding and loses restraint: it doubles the baseline’s recall and is the
+      only system that names a correct cause, and its unsupported-card rate is the worst of the
+      three. Both halves are reported and neither prompt was edited after the numbers were seen.
+      The chat-only ablation’s trigger accuracy rests on a single matched card, which is why
+      <em>unmatched</em> is printed beside it.
+    </p>
+  </section>
+
+  <section id="changelog">
+    <span class="eyebrow">04 — how it got here</span>
+    <h2 class="display sub">What changed, and what it cost</h2>
+    <p class="lede">
+      Every repair with its measured before and after — including a first run that was discarded
+      rather than published — is in <code>docs/IMPROVEMENT_CHANGELOG.md</code>.
+    </p>
+    <ol class="changelog" id="changelog-list">
+      <li>
+        <span class="chip">largest contributor</span>
+        The baseline had been handed the agent’s tool-calling prompt, so it replied with a tool
+        call, the parser turned that into an empty list, and it scored <strong>zero cards across
+        eleven cases</strong>. Fixing it is what made a comparison exist at all.
+      </li>
+      <li>
+        <span class="chip">removed experiment</span>
+        Amplifying the sleep-stream audio by 28&nbsp;dB produced <strong>zero additional
+        transcript segments</strong>. Reverted — it turned a suspected pipeline bug into a
+        verified property of the fixture: nobody is speaking.
+      </li>
+      <li>
+        <span class="chip">main failure mode</span>
+        On the word-puzzle case the agent returned <em>“no clear speech or on-screen content
+        detected”</em> without ever calling <code>get_frame_captions</code> — declaring the screen
+        empty without looking at it. Not fixed here: changing a prompt after seeing the score
+        invalidates the comparison.
+      </li>
+    </ol>
+  </section>
+</main>
+
+<footer>
+  <span id="footer-line"></span>
+</footer>
+
+<script src="/static/method.js"></script>
+</body>
+</html>

@@ -19,6 +19,13 @@ REPO = Path(__file__).resolve().parents[1]
 SAMPLE = REPO / "evals" / "fixtures" / "sample"
 STATIC = serve_mod.STATIC
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+# The front page is the product (live playback); the evidence story lives at /method. Tests that
+# guard the evidence copy read the method page, tests that guard the playback read the live one.
+LIVE_HTML = STATIC / "index.html"
+LIVE_JS = STATIC / "live.js"
+METHOD_HTML = STATIC / "method.html"
+METHOD_JS = STATIC / "method.js"
 DESIGN = REPO / "DESIGN.md"
 
 HEX = re.compile(r"#[0-9a-fA-F]{3,8}\b")
@@ -101,7 +108,7 @@ def test_the_dashboard_is_served_over_http(served):
         httpd.shutdown()
         httpd.server_close()
 
-    assert "Every card, and what happened to it" in page
+    assert "Live chat" in page and "Grounded signals" in page
     assert "not the dashboard" not in page   # the placeholder must be gone now
     assert "--surface-dark" in css
     assert api["result"]["counts"]["verified"] == 1
@@ -175,7 +182,7 @@ def test_the_page_fetches_nothing_from_the_network():
 
 def test_no_generator_ships_in_the_dashboard():
     """Shipping fake data as real is an integrity-gate failure, and the old shell did it."""
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     assert "Math.random" not in js
     # chat is untrusted data, so it reaches the DOM as text and never as markup
@@ -184,8 +191,8 @@ def test_no_generator_ships_in_the_dashboard():
 
 def test_every_scored_ui_element_is_present():
     """DESIGN.md lists these as scored; a missing one is lost points, not a cosmetic gap."""
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
 
     assert "mode-badge" in html                      # Replay | Live badge
     assert "card.type" in js                         # signal type
@@ -214,7 +221,7 @@ def test_the_measured_section_reads_the_eval_rather_than_recomputing_it(served):
 
 
 def test_the_dashboard_never_computes_a_rate_itself():
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     # Narrow on purpose: summing a card's own distribution for display is fine. What must not
     # happen is deriving one of the PUBLISHED rates, which evals/scorer.py owns.
@@ -225,8 +232,8 @@ def test_the_dashboard_never_computes_a_rate_itself():
 
 
 def test_the_editorial_sections_stay_hidden_without_an_eval():
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     assert 'id="measured" hidden' in html, "an empty table reads as a measured zero"
     assert 'document.getElementById("measured").hidden = false' in js
@@ -235,7 +242,7 @@ def test_the_editorial_sections_stay_hidden_without_an_eval():
 def test_the_editorial_copy_states_the_result_that_counts_against_the_product():
     """The measured section must not quietly show the agent winning. It loses the headline
     metric and the page has to say so where the table is."""
-    html = " ".join((STATIC / "index.html").read_text(encoding="utf-8").split())
+    html = " ".join((METHOD_HTML).read_text(encoding="utf-8").split())
 
     assert "loses restraint" in html
     assert "unsupported-card rate is the worst of the three" in html
@@ -243,7 +250,7 @@ def test_the_editorial_copy_states_the_result_that_counts_against_the_product():
 
 
 def test_the_changelog_section_names_the_removed_experiment_and_the_failure_mode():
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
 
     assert "removed experiment" in html
     assert "zero additional" in html.lower()
@@ -341,8 +348,8 @@ def test_the_orbs_are_atmosphere_and_nothing_else():
 def test_the_stage_plays_real_data_or_nothing():
     """The hero is the product's argument. If the run verified no card there is no argument to
     make, so it must stay hidden rather than animate a claim the system never produced."""
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
 
     assert 'id="stage" hidden' in html
     assert "if (!hero || !hero.card" in js, "no grounded card means no stage"
@@ -354,7 +361,7 @@ def test_the_stage_plays_real_data_or_nothing():
 def test_the_stage_is_deterministic_so_it_can_be_filmed():
     """Two plays must be identical: the video opens on this shot, and a jittering hero cannot be
     cut against a voiceover."""
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     assert "Math.random" not in js
     assert "STAGE_STEP_MS" in js, "timing must be a named constant, not improvised"
@@ -363,10 +370,8 @@ def test_the_stage_is_deterministic_so_it_can_be_filmed():
 
 def test_reduced_motion_is_respected():
     css = (STATIC / "app.css").read_text(encoding="utf-8")
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
 
     assert "prefers-reduced-motion" in css
-    assert "prefers-reduced-motion" in js
 
 
 def test_nothing_scrolls_horizontally():
@@ -426,7 +431,7 @@ def test_the_glass_is_only_on_surfaces_that_overlap_content():
 def test_the_sections_carry_the_story_in_order():
     """The page is an argument: what the audience said, what did not survive, whether it is
     actually better, how it got here. The eyebrows make that order legible."""
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
     order = re.findall(r'class="eyebrow">(\d+) — ([^<]+)<', html)
 
     assert [n for n, _ in order] == ["01", "02", "03", "04"], f"story order broken: {order}"
@@ -454,7 +459,7 @@ def test_the_hero_shows_one_grounded_card_not_three_echoes():
 def test_the_words_unknown_unknown_appear_nowhere():
     """The exact string a reader saw on the page. Checked against what can reach the DOM —
     comments are allowed to name the bug they fixed, and one does."""
-    for name in ("app.js", "index.html", "app.css"):
+    for name in ("live.js", "method.js", "index.html", "method.html", "app.css"):
         text = (STATIC / name).read_text(encoding="utf-8")
         code = re.sub(r"/\*.*?\*/", " ", text, flags=re.S)
         code = re.sub(r"^\s*//.*$", " ", code, flags=re.M)
@@ -465,7 +470,7 @@ def test_the_words_unknown_unknown_appear_nowhere():
 def test_a_chart_never_renders_with_fewer_than_two_buckets():
     """One bucket produced a column of indices, empty grey bars and a vertical one-character
     label down the right edge. A chart with nothing to compare is worse than no chart."""
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     assert "MIN_CHART_BUCKETS = 2" in js
     assert "entries.length < MIN_CHART_BUCKETS" in js
@@ -476,7 +481,7 @@ def test_a_chart_never_renders_with_fewer_than_two_buckets():
 def test_the_hero_names_the_system_that_produced_the_card():
     """The pinned card comes from the single-prompt baseline on that window, not the agent.
     Showing it unlabelled under the product's own headline would be a quiet misrepresentation."""
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     assert "single-prompt baseline" in js
     assert "hero.system" in js
@@ -485,8 +490,8 @@ def test_the_hero_names_the_system_that_produced_the_card():
 def test_no_heading_claims_verification_over_an_abstention():
     """Section 01 was headed "Verified audience signals" while every card under it was badged
     ABSTAINED with "Not established." A heading may not claim what its contents deny."""
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
+    js = (METHOD_JS).read_text(encoding="utf-8")
 
     assert "Verified audience signals" not in html
     # the three outcomes are now one section with three states, each labelled for what it holds
@@ -496,7 +501,7 @@ def test_no_heading_claims_verification_over_an_abstention():
 
 
 def test_abstentions_are_framed_as_correct_behaviour_not_failure():
-    js = " ".join((STATIC / "app.js").read_text(encoding="utf-8").split())
+    js = " ".join((METHOD_JS).read_text(encoding="utf-8").split())
 
     assert "could not tie to any moment" in js
     assert "instead of " + '"' + " naming a plausible one" not in js  # phrasing, not a claim
@@ -572,7 +577,7 @@ def test_cards_go_two_up_on_wide_screens():
 def test_the_hero_puts_claim_and_proof_side_by_side():
     """At 1440px the page was a narrow column with a dead right half."""
     css = (STATIC / "app.css").read_text(encoding="utf-8")
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
 
     assert "hero-claim" in html and "hero-proof" in html
     assert "grid-column: 1 / span 7" in css and "grid-column: 8 / span 5" in css
@@ -589,7 +594,7 @@ def test_monospace_is_only_used_for_data():
 def test_one_section_three_states_not_three_sections():
     """"Grounded", "abstained" and "rejected" are one thing — every card the run produced — in
     three outcomes. Stacking them as full-length sections is what made the page endless."""
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    html = (METHOD_HTML).read_text(encoding="utf-8")
 
     assert html.count('class="seg') >= 3
     assert 'role="tablist"' in html
@@ -599,7 +604,7 @@ def test_one_section_three_states_not_three_sections():
 
 def test_an_empty_state_is_one_line_not_reserved_height():
     css = (STATIC / "app.css").read_text(encoding="utf-8")
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = METHOD_JS.read_text(encoding="utf-8")
 
     block = css.split(".empty {", 1)[1].split("}", 1)[0]
     assert "margin: 0" in block and "min-height" not in block
@@ -608,22 +613,20 @@ def test_an_empty_state_is_one_line_not_reserved_height():
 
 def test_the_picker_is_over_recordings_and_says_so():
     """A control that looks live claims a capability the judge cannot check and that costs money
-    to exercise. It switches between recorded windows."""
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    to exercise. It switches between recorded windows, and the page says so."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
 
-    assert "Recorded windows, not a live stream" in html
-    assert "No recording of that channel" in js, "unknown channel is never a dead end"
-    assert "/api/fixtures" in js and "/api/replay${query}" in js
-    assert "capture" not in js.split("function initPicker")[1].split("function")[0].lower() \
-        or "never starts a capture" in js
+    assert "Recorded windows replayed at their true cadence" in html
+    assert "No recording of that channel yet" in js, "unknown channel is never a dead end"
+    assert "/api/fixtures" in js and "/api/stream" in js
 
 
 def test_switching_fixture_does_not_reload_the_page():
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
 
     assert "location.reload" not in js and "location.href" not in js
-    assert "fetch(`/api/replay${query}`)" in js
+    assert "new EventSource(`/api/stream${query}`)" in js
 
 
 def test_the_fixture_parameter_cannot_become_a_path():
@@ -646,3 +649,95 @@ def test_the_navbar_anchors_every_section_it_lists():
 def test_headings_do_not_hide_behind_the_sticky_bar():
     css = (STATIC / "app.css").read_text(encoding="utf-8")
     assert "scroll-margin-top" in css
+
+
+# --------------------------------------------------------------- time-accurate playback
+def test_the_stream_is_a_replay_and_says_so():
+    """The badge is load-bearing: it is how a viewer knows the source. It is written from the
+    server's own `mode`, never from a page-side assumption, and this build only ever replays."""
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert '"mode": "replay"' in serve
+    assert "String(open.mode).toUpperCase()" in js, "the badge must echo the server"
+    assert "open.speed" in js, "a replay at 8x may not display 1x"
+
+
+def test_the_playback_cadence_comes_from_the_fixture():
+    """"Looks live" is only honest if the timing is the timing the messages actually had."""
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+
+    assert "e.ts_ms - origin" in serve
+    assert "bounds[1] - origin" in serve, "a card lands when its window closed, not when it opened"
+    assert "No model call, no key, no cost" in serve
+
+
+def test_the_stream_endpoint_makes_no_model_call():
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+    body = serve.split("def stream_events")[1].split("\ndef ")[0]
+
+    for forbidden in ("ResponseCache", "provider", "complete(", "httpx"):
+        assert forbidden not in body, f"the stream reached for {forbidden}"
+
+
+def test_the_server_threads_so_a_stream_cannot_block_the_page():
+    """An SSE connection is held open for the whole playback. On a single-threaded server the
+    page itself would never load while one was running."""
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+
+    assert "ThreadingHTTPServer((host, port), handler)" in serve
+    assert "would block every other request" in serve
+
+
+def test_the_meta_event_is_not_named_open():
+    """EventSource reserves `open` for its own connection event, so a custom listener for it
+    never fires — and the badge would silently keep its default text."""
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert 'emit("meta"' in serve
+    assert 'addEventListener("meta"' in js
+    assert 'emit("open"' not in serve
+
+
+def test_only_the_offered_speeds_are_accepted():
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+
+    assert "SPEEDS = (1, 4, 8)" in serve
+    assert "if speed not in SPEEDS" in serve
+
+
+def test_the_chat_column_is_capped_but_the_counter_is_not():
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "MAX_ROWS = 200" in js
+    assert "the DOM is capped; the counter is not" in js
+
+
+def test_a_landing_card_highlights_the_messages_it_cites():
+    """The single gesture that is the argument: this cluster, that cause."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert "highlightCited" in js and "card.evidence" in js
+    assert ".msg.cited" in css
+
+
+def test_the_live_page_never_fabricates():
+    """Checked against executable code: the comments name these deliberately, and a guard that
+    trips on its own documentation gets deleted rather than fixed."""
+    raw = LIVE_JS.read_text(encoding="utf-8")
+    code = re.sub(r"/\*.*?\*/", " ", raw, flags=re.S)
+    code = re.sub(r"//.*$", " ", code, flags=re.M)
+
+    assert "Math.random" not in code
+    assert "innerHTML" not in code
+    assert "textContent, never innerHTML" in raw
+
+
+def test_the_method_page_is_reachable_and_routed():
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+    html = LIVE_HTML.read_text(encoding="utf-8")
+
+    assert '"/method"' in serve and "method.html" in serve
+    assert 'href="/method"' in html

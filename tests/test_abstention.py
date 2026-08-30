@@ -98,7 +98,7 @@ def test_abstaining_wrongly_is_still_caught_by_the_other_metrics(index):
 
 # --------------------------------------------------------------------------- the demo
 def test_the_dashboard_does_not_show_an_abstention_as_a_missing_evidence_defect():
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (STATIC / "method.js").read_text(encoding="utf-8")
 
     assert "Nothing to verify" in js
     assert "it is supposed to do when it cannot prove anything" in js

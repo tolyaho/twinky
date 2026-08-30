@@ -122,7 +122,7 @@ def test_the_module_has_no_client_no_token_and_no_request():
 
 
 def test_the_approve_button_sends_nothing():
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+    js = (STATIC / "method.js").read_text(encoding="utf-8")
     approval = js[js.index("function approval"):js.index("function renderCard")]
 
     assert "fetch(" not in approval

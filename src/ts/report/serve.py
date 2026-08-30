@@ -11,7 +11,8 @@ them as real output, which is an integrity-gate failure, not a cosmetic one.
 from __future__ import annotations
 
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import time
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -20,8 +21,9 @@ from ..provenance import UNKNOWN
 from .poll import attach_drafts
 
 STATIC = Path(__file__).parent / "static"
-ROUTES = ["/", "/api/replay", "/api/replay?fixture=<id>&system=<agent|baseline>",
-          "/api/fixtures", "/static/<file>"]
+ROUTES = ["/", "/method", "/api/replay", "/api/fixtures",
+          "/api/stream?fixture=<id>&system=<agent|baseline>&speed=<1|4|8>",
+          "/static/<file>"]
 
 PLACEHOLDER = """<!doctype html>
 <meta charset="utf-8"><title>Twitch Agent — replay output</title>
@@ -208,6 +210,57 @@ def available(fixtures_root: Path | str, out_dir: Path | str) -> List[Dict[str, 
     return found
 
 
+# Playback speeds the UI offers. The multiplier is echoed back in the opening event so the page
+# can state it: a replay that silently ran at 8x while showing "1x" would be lying about the
+# cadence, which is the one thing this view claims to reproduce faithfully.
+SPEEDS = (1, 4, 8)
+MAX_STREAM_SECONDS = 15 * 60
+
+
+def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent"):
+    """The recorded run as a time-ordered script: chat at its true offsets, cards at the moment
+    the window that produced them closed.
+
+    Reading only. No model call, no key, no cost — the cadence comes from the timestamps already
+    in the fixture, so "looks live" and "is a replay" are both true at once and the badge says
+    which. A window's cards are emitted at its END because that is when the agent could first
+    have produced them; emitting them at the start would show the answer before the evidence.
+    """
+    index = load_fixture(fixture)
+    chat = index.window(index.start_ms, index.end_ms + 1, types=["chat_message"])
+    if not chat:
+        return
+    origin = chat[0].ts_ms
+
+    script = [(e.ts_ms - origin, {"kind": "chat", "id": e.event_id, "author": e.author,
+                                 "text": e.text}) for e in chat]
+
+    meta = load_meta(fixture)
+    fixture_id = meta.get("fixture_id") or Path(fixture).name
+    path = result_path(Path(out_dir), fixture_id, system)
+    if path.exists():
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            doc = {}
+        for window in doc.get("windows") or []:
+            bounds = window.get("window_ms") or [origin, origin]
+            at = max(0, bounds[1] - origin)
+            for card in window.get("verified") or []:
+                script.append((at, {"kind": "card", "state": _state(card), "card": card}))
+            for card in window.get("rejected") or []:
+                script.append((at, {"kind": "card", "state": "rejected", "card": card}))
+
+    script.sort(key=lambda s: s[0])
+    return script
+
+
+def _state(card: Dict[str, Any]) -> str:
+    if not (card.get("gate") or {}).get("ok"):
+        return "rejected"
+    return "grounded" if _grounded(card) else "abstained"
+
+
 def evaluation(out_dir: Path | str) -> Optional[Dict[str, Any]]:
     """The measured comparison, read from what `make eval` wrote.
 
@@ -249,9 +302,86 @@ class ReplayHandler(BaseHTTPRequestHandler):
         self._send(code, json.dumps(obj, ensure_ascii=False, indent=1),
                    "application/json; charset=utf-8")
 
+    def _resolve(self, params: Dict[str, str]) -> Path:
+        """A fixture named in a query string is untrusted input: strip it to a bare filename and
+        require it to sit beside the served one, or fall back."""
+        name = Path(params.get("fixture", "") or self.fixture.name).name
+        target = self.fixture.parent / name
+        return target if (target / "meta.json").is_file() else self.fixture
+
+    def _stream(self, params: Dict[str, str]) -> None:
+        """Server-Sent Events: the recorded run replayed at its true cadence.
+
+        Deliberately a replay and labelled as one. The `mode` and `speed` in the opening event
+        are what the badge reads from, so the page cannot show "1x REPLAY" while the server runs
+        at another rate — the cadence is the only thing this view claims, so it has to be true.
+        """
+        target = self._resolve(params)
+        system = params.get("system", "agent")
+        if system not in ("agent", "baseline"):
+            system = "agent"
+        try:
+            speed = int(params.get("speed", "1"))
+        except ValueError:
+            speed = 1
+        if speed not in SPEEDS:
+            speed = 1
+
+        script = stream_events(target, self.out_dir, system) or []
+
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Connection", "close")
+        self.end_headers()
+
+        def emit(event: str, data: Any) -> bool:
+            try:
+                self.wfile.write(
+                    f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+                    .encode("utf-8"))
+                self.wfile.flush()
+                return True
+            except (BrokenPipeError, ConnectionResetError, ValueError):
+                return False   # the browser navigated away or switched channel
+
+        meta = load_meta(target)
+        # NOT named "open": EventSource reserves that for its own connection event, so a
+        # custom listener would never fire and the badge could not read the mode.
+        if not emit("meta", {
+            "mode": "replay", "speed": speed, "system": system,
+            "fixture_id": meta.get("fixture_id") or target.name,
+            "channel": meta.get("channel"),
+            "captured_utc": meta.get("captured_utc"),
+            "total_chat": sum(1 for _, e in script if e["kind"] == "chat"),
+            "total_cards": sum(1 for _, e in script if e["kind"] == "card"),
+            "duration_ms": script[-1][0] if script else 0,
+        }):
+            return
+
+        started = time.monotonic()
+        for offset_ms, event in script:
+            due = started + (offset_ms / 1000.0) / speed
+            while True:
+                delay = due - time.monotonic()
+                if delay <= 0:
+                    break
+                time.sleep(min(delay, 0.25))
+                if time.monotonic() - started > MAX_STREAM_SECONDS:
+                    break
+            if time.monotonic() - started > MAX_STREAM_SECONDS:
+                break
+            if not emit(event["kind"], event):
+                return
+        emit("done", {"ok": True})
+
     def do_GET(self) -> None:  # noqa: N802 - http.server's naming
         route, _, query = self.path.partition("?")
         params = dict(p.split("=", 1) for p in query.split("&") if "=" in p)
+
+        if route == "/api/stream":
+            self._stream(params)
+            return
 
         if route == "/api/fixtures":
             self._json(200, {"fixtures": available(self.fixture.parent, self.out_dir),
@@ -261,10 +391,7 @@ class ReplayHandler(BaseHTTPRequestHandler):
         if route == "/api/replay":
             # The picker may name another fixture, but only one that sits beside the served one:
             # a filename from a query string must never become a path.
-            name = Path(params.get("fixture", "") or self.fixture.name).name
-            target = self.fixture.parent / name
-            if not (target / "meta.json").is_file():
-                target = self.fixture
+            target = self._resolve(params)
             system = params.get("system", "agent")
             if system not in ("agent", "baseline"):
                 system = "agent"
@@ -274,9 +401,10 @@ class ReplayHandler(BaseHTTPRequestHandler):
                 self._json(404, {"error": str(exc), "fixture": target.name, "system": system})
             return
 
-        if route in ("/", "/index.html"):
-            index = STATIC / "index.html"
-            body = index.read_text(encoding="utf-8") if index.is_file() else PLACEHOLDER
+        if route in ("/", "/index.html", "/method"):
+            name = "method.html" if route == "/method" else "index.html"
+            page = STATIC / name
+            body = page.read_text(encoding="utf-8") if page.is_file() else PLACEHOLDER
             self._send(200, body, "text/html; charset=utf-8")
             return
 
@@ -296,10 +424,13 @@ class ReplayHandler(BaseHTTPRequestHandler):
 
 
 def make_server(fixture: Path | str, out_dir: Path | str, port: int,
-                host: str = "127.0.0.1", quiet: bool = False) -> HTTPServer:
+                host: str = "127.0.0.1", quiet: bool = False) -> ThreadingHTTPServer:
     handler = type("BoundReplayHandler", (ReplayHandler,),
                    {"fixture": Path(fixture), "out_dir": Path(out_dir), "quiet": quiet})
-    return HTTPServer((host, port), handler)
+    # ThreadingHTTPServer, not HTTPServer: an SSE connection is held open for the length of the
+    # playback, and on a single-threaded server that would block every other request — the page
+    # itself would never load while a stream was running.
+    return ThreadingHTTPServer((host, port), handler)
 
 
 def serve(fixture: Path | str, out_dir: Path | str, port: int = 8000,
