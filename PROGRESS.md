@@ -672,3 +672,24 @@ Third time the colour guard tripped on its own documentation — a comment namin
 forbids. Made it read declarations only, the way the `unknown unknown` and `Math.random` guards
 already do. A check that fires on prose gets deleted rather than fixed.
 Blockers: none. Cost unchanged at $0.41 — this pass spent nothing.
+
+## 2026-08-30T22:35Z — iteration 40
+Attempted: chat layout, boxes and lining, from a third screenshot.
+Result: `make test` green, 406 -> 409.
+One real bug: the waiting message was rendering at the BOTTOM of the signals column. It was a
+sibling of `.signals`, which is `flex: 1`, so the flex container took all the space and pushed the
+message to the floor — furthest from where a reader is looking while waiting. Moved inside the
+column, and `reset()` now recreates it there rather than relying on markup it had just cleared.
+Visual: the chat column read as a grey BOX with hard corners, which re-introduced the container
+the two-column layout exists to remove. The tint is now a bleed layer (`inset: 0 0 0 -100vw`,
+`z-index: -1`) so it has no visible edge — a field with one hairline beside it, which is what the
+brief asked for. The strip above the columns stacked chips and disclosure onto two lines and left
+a gap; it is one 40px row now, with the note truncating rather than wrapping and hiding below
+1100px. The macOS overlay scrollbar was a dark slab sitting on the text — both panes now use a
+6px thumb on a transparent track in `hairline-strong`, darkening on hover. Chat rows: author ids
+right-aligned against the text column so every message starts on one hard left edge, mono dropped
+to 12px, row padding up to 5px for a readable rhythm at speed.
+Two guards needed anchoring after the CSS moved: both split on a selector string that a newly
+added shared rule also matched. Same class as the comment-matching guards — a check that binds to
+text rather than structure drifts silently.
+Blockers: none. Cost unchanged at $0.41 — this pass spent nothing.

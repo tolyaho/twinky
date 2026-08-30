@@ -756,7 +756,8 @@ def test_the_product_page_is_bounded_to_the_viewport():
     assert "height: 100vh" in shell
     assert "overflow: hidden" in shell, "the page itself must never scroll"
 
-    for selector in (".feed {", ".signals {"):
+    # anchored to the rule itself, not the shared scrollbar rule that also names both
+    for selector in ("\n.feed {", "\n.signals {"):
         block = css.split(selector, 1)[1].split("}", 1)[0]
         assert "overflow-y: auto" in block and "min-height: 0" in block, selector
 
@@ -782,3 +783,33 @@ def test_an_empty_signals_column_says_when_to_expect_something():
     assert "The first closes at" in js
     assert "waiting-bar" in js
     assert "This run produced no cards" in js, "a run with nothing must say so, not wait forever"
+
+
+def test_the_waiting_state_sits_inside_the_signals_column():
+    """As a sibling of a flex:1 container it was pushed to the bottom of the panel, far from
+    where the reader is looking while waiting for the first card."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    inner = html.split('<div class="signals" id="signals">', 1)[1].split("</div>", 1)[0]
+    assert 'id="signals-empty"' in inner, "the empty state must be a child, not a sibling"
+    assert 'document.getElementById("signals").appendChild(empty)' in js
+
+
+def test_the_chat_column_is_a_field_not_a_box():
+    """One hairline between the columns and nothing around them. A bounded grey rectangle reads
+    as a widget and re-introduces the container the two-column layout replaced."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    block = css.split(".col-chat {", 1)[1].split("}", 1)[0]
+
+    assert "background:" not in block, "the tint belongs on the bleed layer, not the column"
+    assert "border-right: 1px solid var(--hairline)" in block
+    assert ".col-chat::before" in css and "inset: 0 0 0 -100vw" in css
+
+
+def test_the_scrollbars_are_quiet():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert "scrollbar-width: thin" in css
+    assert "::-webkit-scrollbar" in css
+    assert "background: transparent" in css.split("::-webkit-scrollbar-track", 1)[1][:120]

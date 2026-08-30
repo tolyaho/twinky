@@ -87,7 +87,8 @@ function addCard(event) {
      behind. They are all present, with their violation codes, on the method page. */
   if (event.state === "rejected") return;
 
-  document.getElementById("signals-empty").hidden = true;
+  const waiting = document.getElementById("signals-empty");
+  if (waiting) waiting.remove();
   const box = el("article", `card is-${event.state}`);
 
   const head = el("div", "card-head");
@@ -144,11 +145,11 @@ function reset() {
     const node = document.getElementById(id);
     while (node.firstChild) node.removeChild(node.firstChild);
   }
-  const empty = document.getElementById("signals-empty");
-  empty.hidden = false;
-  empty.className = "waiting";
-  while (empty.firstChild) empty.removeChild(empty.firstChild);
-  empty.appendChild(document.createTextNode("Connecting to the recording…"));
+  /* The waiting state lives INSIDE the signals column. As a sibling of a flex:1 container it
+     was pushed to the bottom of the panel, far from where the reader is looking. */
+  const empty = el("p", "waiting", "Connecting to the recording…");
+  empty.id = "signals-empty";
+  document.getElementById("signals").appendChild(empty);
   state.waitBar = null;
   state.firstCardMs = null;
 }

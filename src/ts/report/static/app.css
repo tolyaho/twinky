@@ -607,11 +607,17 @@ html, body.live-page { height: 100%; }
 /* One compact strip: chips and the disclosure share a line instead of stacking into a void. */
 .picker-row {
   flex: none;
-  display: flex; align-items: baseline; gap: var(--base); flex-wrap: wrap;
+  display: flex; align-items: center; gap: var(--base);
   max-width: var(--measure); width: 100%; margin: 0 auto;
-  padding: var(--sm) var(--xl);
+  padding: var(--xs) var(--xl);
+  min-height: 40px;
 }
-.picker-row .picker-note { margin: 0; font-size: 13px; max-width: 62ch; }
+.picker-row .picker-note {
+  margin: 0; font-size: 13px; line-height: 1.4; color: var(--muted-soft);
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (max-width: 1100px) { .picker-row .picker-note { display: none; } }
 
 .live-page main.two-col {
   flex: 1 1 auto;
@@ -627,9 +633,19 @@ html, body.live-page { height: 100%; }
   padding: var(--base) 0 var(--lg);
 }
 .col-chat {
-  background: var(--canvas-soft);
+  /* A tint, not a box. The brief is one hairline between the columns and nothing around them;
+     a bounded grey rectangle reads as a widget and re-introduces the container it replaced.
+     The tint bleeds past the column edges so it has no visible corner. */
+  position: relative;
   border-right: 1px solid var(--hairline);
-  padding-right: var(--lg);
+  padding-right: var(--xl);
+}
+.col-chat::before {
+  content: "";
+  position: absolute; inset: 0 0 0 -100vw;
+  background: var(--canvas-soft);
+  z-index: -1;
+  pointer-events: none;
 }
 .col-signals { padding-left: var(--lg); }
 .col-h {
@@ -641,6 +657,21 @@ html, body.live-page { height: 100%; }
 }
 .col-n { font-variant-numeric: tabular-nums; color: var(--muted-soft); }
 
+/* Quiet, thin, inside the gutter — the default macOS overlay bar reads as a dark slab dropped
+   on the text and is the first thing the eye goes to. */
+.feed, .signals {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-strong) transparent;
+}
+.feed::-webkit-scrollbar, .signals::-webkit-scrollbar { width: 6px; }
+.feed::-webkit-scrollbar-track, .signals::-webkit-scrollbar-track { background: transparent; }
+.feed::-webkit-scrollbar-thumb, .signals::-webkit-scrollbar-thumb {
+  background: var(--hairline-strong); border-radius: var(--r-pill);
+}
+.feed:hover::-webkit-scrollbar-thumb, .signals:hover::-webkit-scrollbar-thumb {
+  background: var(--muted-soft);
+}
+
 .feed {
   flex: 1 1 auto; min-height: 0; overflow-y: auto;
   margin: 0; padding: 0 var(--xs) 0 0; list-style: none;
@@ -651,29 +682,45 @@ html, body.live-page { height: 100%; }
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--ink) 24px);
 }
 .msg {
-  display: grid; grid-template-columns: 11ch 1fr; gap: var(--sm);
-  padding: 3px 0 3px var(--xs);
+  display: grid; grid-template-columns: 10ch minmax(0, 1fr); gap: var(--base);
+  align-items: baseline;
+  padding: 5px 0 5px var(--xs);
   border-left: 2px solid transparent;
-  transition: border-color .25s ease, background .25s ease;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
 }
-.msg-who { font-family: var(--mono); font-size: 13px; color: var(--muted-soft); letter-spacing: 0; }
-.msg-text { font-size: 15px; line-height: 1.47; letter-spacing: .15px; color: var(--body); }
+.msg-who {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0;
+  color: var(--muted-soft);
+  text-align: right;                     /* the ids end where the messages begin: one hard edge */
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.msg-text {
+  font-size: 15px; line-height: 1.5; letter-spacing: .15px; color: var(--body);
+  overflow-wrap: anywhere;
+}
 /* the citation gesture: this cluster, that cause */
 .msg.cited { border-left-color: var(--ink); background: var(--surface-card); }
 .msg.cited .msg-text { color: var(--ink); }
 
 .signals {
   flex: 1 1 auto; min-height: 0; overflow-y: auto;
-  display: grid; gap: var(--base); align-content: start;
+  display: flex; flex-direction: column; gap: var(--base);
   padding-right: var(--xs);
 }
+.signals > * { flex: none; }
 .signals .card { opacity: 0; transform: translateY(12px); transition: opacity .24s ease, transform .24s ease; }
 .signals .card.in { opacity: 1; transform: none; }
 .card-cites { margin: var(--sm) 0 0; color: var(--muted); font-size: 14px; letter-spacing: 0; }
 
 /* Waiting is not nothing: say when the first window closes so an empty column reads as pending
    rather than broken. A judge who watches a blank panel for a minute concludes it is broken. */
-.waiting { display: grid; gap: var(--xs); color: var(--muted); }
+/* At the top of the column, where the reader is looking — not pushed to the bottom by a
+   flex:1 sibling, which is where it used to land. */
+.waiting {
+  display: grid; gap: var(--sm);
+  margin: 0; padding: var(--base) 0 0;
+  color: var(--muted); font-size: 15px; max-width: 44ch;
+}
 .waiting-bar { height: 2px; background: var(--hairline); border-radius: var(--r-pill); overflow: hidden; }
 .waiting-bar span { display: block; height: 100%; width: 0; background: var(--ink); transition: width .4s linear; }
 
