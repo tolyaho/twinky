@@ -2149,3 +2149,50 @@ ledger $0.43.
 and cut the video, `make review` and confirm the labels you agree with, make the repository
 public, rotate `.env` and the Telegram credentials. Submit a complete draft early.
 Blockers: the video needs the author.
+
+## Iteration 75 — 2026-08-30 — `.env.example` was a trap, sitting next to a blocker
+
+Attempted: check the file the author will copy after rotating credentials — one of the four
+remaining blockers. It was not merely incomplete. **Copying it breaks the submission.**
+
+It declared `TS_TEXT_MODEL=deepseek-v4-flash`, while every recorded response in the committed
+cache came from `gpt-4.1-nano`. The model name is part of the cache key, so sourcing that file
+turns every entry into a miss. Verified rather than reasoned:
+
+```
+TS_TEXT_MODEL=deepseek-v4-flash make eval  ->  "no cached response … model='deepseek-v4-flash'"
+unset                                      ->  cache: {'hits': 4, 'misses': 0}
+```
+
+That is the same class of defect as the one fixed weeks ago — *"keyless reproduction broken:
+DEFAULT_TEXT_MODEL was a model never recorded"* — and the example file still carried the poison.
+Rotating credentials tonight and refilling `.env` from it would have reproduced the failure at
+the worst possible moment.
+
+Four more variables the code reads were undocumented, one of them load-bearing:
+**`TS_LLM_BASE_URL`**. The provider defaults to DeepSeek's endpoint, so an OpenAI key sent there
+returns `401 invalid_api_key` — which is precisely what happened during a record phase this
+session and cost an iteration to diagnose. It is now documented with that reason attached.
+`TS_ESCALATION_MODEL` was removed: nothing reads it, and a documented variable no code consults
+reads as a feature that exists.
+
+The rewritten file **sets no model name at all**, with the reason stated in the file, because the
+code already defaults to the recorded models when the variables are unset. Confirmed safe: sourcing
+it and running the eval gives 4 hits / 0 misses.
+
+Six tests, including one that fails if either model variable is ever set live again, and one that
+asserts the recorded defaults are still what the code falls back to — because the file's advice
+("leave them unset") is only correct while that holds.
+
+Two of my own mistakes on the way, both caught before they mattered: a regex using `\s*` after
+`=`, which matches newlines and made every empty key appear to hold the next line as its value;
+and a docstring containing `\s` that was not raw, which raised a `SyntaxWarning` during
+collection. Fixed both rather than muting them.
+
+Result: `make test` 645 → **651 passed**. RISKS #46 opened and closed in the same iteration.
+Cost: **$0.00**, ledger $0.43.
+
+**~15 hours to the deadline.** Four blockers, all author-only, all open: the video, the gold
+labels (`make review`), the private repository, and the live credentials — and rotating those is
+now safe to recover from.
+Blockers: the video needs the author.
