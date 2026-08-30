@@ -137,3 +137,18 @@ running with the environment stripped. File reordered by severity with a critica
 Next: B is still blocked on #2. Remaining unblocked work is #11 (drop six unused deps) and the
 editorial page sections that wait on measured numbers.
 Blockers: #2 gates B, C2, #12, #20 and the video. #16, #17 need the author: rotate, then exclude.
+
+## 2026-08-30T04:19Z — iteration 11
+Attempted: RISKS #11 — remove the declared dependencies nothing imports. Every ladder item is
+done or blocked on #2, so this was the topmost unblocked work.
+Result: `make test` green, 152 -> 154. Dropped `deepgram-sdk`, `fastapi`, `uvicorn`,
+`python-dotenv`, `orjson`, `pydantic`, `pytest-asyncio`. Proved rather than asserted: a clean
+venv from the reduced file plus `-e .` runs the whole suite green — the packages were still
+installed here, so a local pass would have proved nothing. The replay path is now one runtime
+package, `httpx`. New test fails the build if a declared package is never imported.
+Found on the way (#23): `make setup` cannot run on this machine at all — `python3 -m venv` dies
+in `ensurepip` on both Homebrew 3.11 and 3.14. Upstream of anything the project controls, but it
+means #10's caveat cannot be closed locally. `docs/REPRODUCTION.md` §2 now documents the `uv`
+fallback that was verified to work.
+Next: nothing on the ladder is unblocked. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream. #16, #17 need the author to rotate credentials.
