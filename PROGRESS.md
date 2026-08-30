@@ -552,3 +552,27 @@ Caught while verifying: a stale server was holding port 8000, so my first check 
 `make demo FIXTURE=yugi` was actually reading the previous stableronaldo instance. Re-ran clean.
 Next: the box has an hour or so left. The video is not started and is the hard deliverable.
 Blockers: none. Cost unchanged at $0.39 of $5.00 — this pass spent nothing.
+
+## 2026-08-30T18:20Z — iteration 35
+Attempted: frontend polish pass — spacing, navbar, glassmorphism, story, using the ui-ux-pro-max
+skill for guidance rather than taste.
+Result: `make test` green, 366 -> 371. Ran the skill's `--design-system` query first and
+DISCARDED its output: it returned an "Enterprise Gateway" pattern with a #1E40AF/#D97706 blue and
+amber palette and Fira Code, which contradicts the locked ElevenLabs system on three enforced
+rules at once — saturated accent, display weight, warm neutrals. The skill's own contract says to
+verify fit before applying, so its palette and typography were not used. Its accessibility
+guidance and the glassmorphism spec were kept, and both were on target.
+Real gap it found: **zero focus styles in the entire stylesheet**, which the guidance rates HIGH
+severity. Added `:focus-visible` with a 2px ink ring and offset, `cursor: pointer` on every
+operable control, and a test that fails if an outline is ever removed without replacement.
+Glass done properly rather than sprinkled: `--glass-bg/-border/-blur` added to DESIGN.md FIRST
+with the reasoning, translucent white so it carries no hue and the palette is unchanged, blur
+16px inside the 10-20px band the spec gives, `-webkit-` prefix for Safari, and a test that
+restricts it to the two surfaces that overlap scrolling content — the sticky bar and the stage
+header. Fixed a real bug while there: the bar was measured rather than full-bleed, so its glass
+stopped short of the viewport edge and left a visible seam on wide screens.
+Spacing was the main complaint and the main fix: page padding 48 -> 96, hero bottom 48 -> 96,
+card padding 24 -> 32, rail gap 20 -> 24, drawer 16 -> 24, lede margin 32 -> 48.
+Story: four numbered eyebrows now carry the argument — what the audience said, what did not
+survive, whether it is actually better, how it got here — with a test pinning the order.
+Blockers: none. Cost unchanged at $0.39 of $5.00.
