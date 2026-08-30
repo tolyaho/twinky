@@ -30,10 +30,20 @@ that code existed, not when it was committed here.
 - A static dashboard shell driven entirely by generated placeholder data
 - Exploratory notebooks (LangGraph tutorial, embedding probes)
 
-That code is preserved unmodified under `legacy/` for reference. **It is not imported by the
-submission**, and no file in `src/`, `evals/` or `tests/` reads from it. The prior work
-contributes ideas — the five card types map onto the old seven-category taxonomy, and the
-deterministic reducer is the January 2026 cost finding turned into a component — but not code.
+That code is preserved under `legacy/` for reference. **It is not imported by the submission**,
+and no file in `src/`, `evals/` or `tests/` reads from it.
+
+One exception, and it is deliberate: `legacy/frontend/` was **removed from the tree on
+2026-08-30** (RISKS #13). It was a static dashboard shell driven entirely by generated
+placeholder data — `chat-simulator.js`, `messageGenerator`, `Math.random` across six files
+including its `index.html`. Shipping fabricated data inside a submission whose whole argument is
+"never present generated data as real" was the wrong trade for 180 KB of reference material. It
+remains in this repository's git history, and it is still disclosed above as prior work; it is
+simply not part of what is submitted.
+
+The prior work contributes ideas — the five card types map onto the old seven-category taxonomy,
+and the deterministic reducer is the January 2026 cost finding turned into a component — but not
+code.
 
 ## Added during the competition
 

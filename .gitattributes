@@ -1,0 +1,15 @@
+# Defence in depth for packaging. `make archive` runs `git archive HEAD`, so anything marked
+# export-ignore here is absent from the zip even if it is tracked.
+#
+# `.env` and `.capture_salt` are untracked and gitignored, so they cannot reach the archive by
+# construction — listed anyway because RISKS #17 turned on "`.gitignore` does not protect a
+# directory that is zipped rather than committed", and a rule that is only true by accident is
+# one refactor away from being false.
+.env            export-ignore
+.env.*          export-ignore
+.capture_salt   export-ignore
+.farmlogs/      export-ignore
+STOP_FARM       export-ignore
+
+# Working scaffolding, not product.
+scripts/farm.sh export-ignore

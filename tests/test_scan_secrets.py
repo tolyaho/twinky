@@ -157,3 +157,47 @@ def test_the_project_tree_has_no_committed_secret():
             leaks.append(f"{path.relative_to(root)}:{lineno} [{rule}]")
 
     assert not leaks, f"committed secrets: {leaks}"
+
+
+# --------------------------------------------------------------- packaging (RISKS #13, #17)
+def test_no_credential_file_is_tracked_by_git():
+    """`.gitignore` does not protect a zip — but `make archive` builds from `git archive HEAD`,
+    so an untracked file cannot enter the archive by construction. This asserts the premise that
+    argument rests on, rather than trusting it."""
+    import subprocess
+    from pathlib import Path
+
+    root = Path(scan_secrets.__file__).resolve().parents[1]
+    tracked = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True,
+                             text=True, check=True).stdout.split()
+
+    for name in (".env", ".capture_salt"):
+        assert name not in tracked, f"{name} is tracked and would ship"
+    assert not [p for p in tracked if p.endswith((".wav", ".opus"))], "raw media is tracked"
+
+
+def test_the_fabricating_frontend_is_not_in_the_submission():
+    """`legacy/frontend/` was a dashboard shell driven entirely by generated placeholder data.
+    A judge opening fabricated data inside a submission that argues "never present generated
+    data as real" is the one integrity risk this project cannot absorb. Removed 2026-08-30."""
+    import subprocess
+    from pathlib import Path
+
+    root = Path(scan_secrets.__file__).resolve().parents[1]
+    tracked = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True,
+                             text=True, check=True).stdout.split()
+
+    assert not [p for p in tracked if p.startswith("legacy/frontend/")]
+    assert not (root / "legacy" / "frontend").exists()
+    # the rest of legacy/ is still preserved and disclosed
+    assert [p for p in tracked if p.startswith("legacy/")], "all of legacy/ vanished"
+
+
+def test_the_packaging_exclusions_are_declared():
+    from pathlib import Path
+
+    root = Path(scan_secrets.__file__).resolve().parents[1]
+    attrs = (root / ".gitattributes").read_text(encoding="utf-8")
+
+    for name in (".env", ".capture_salt"):
+        assert f"{name}" in attrs and "export-ignore" in attrs
