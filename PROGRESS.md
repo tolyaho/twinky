@@ -1735,3 +1735,46 @@ $0.43.
 deterministic — and only then decide whether arm C is worth the cents, because the comparison is
 already meaningful with two arms and embeddings are first on the cut list.
 Blockers: the video needs the author.
+
+## Iteration 66 — 2026-08-30 — arms A and B, measured against the frozen labels
+
+Attempted: score the two shipped grouping arms on pair-level precision and recall. Free,
+deterministic, no keys.
+
+| arm | precision | recall | F1 |
+|---|---:|---:|---:|
+| A · exact canonical | **1.000** | 0.057 | 0.107 |
+| B · token + prefix (shipped) | 0.926 | **0.257** | **0.403** |
+
+**Arm B carries 4.5× the recall for a 7-point precision cost, and F1 nearly quadruples.** That is
+the iteration-49 argument — exact matching splits one audience signal into dozens of rows of one —
+restated as a number, against labels frozen in a commit that contained no arm code.
+
+**Both predictions written into the frozen README before the arms ran held:**
+
+| window | A recall | B recall | B precision |
+|---|---:|---:|---:|
+| `stableronaldo` w2 — the word game | 0.032 | **0.230** | **1.000** |
+| `yugi` w9 — varied | 0.204 | **0.418** | 0.745 |
+
+The prefix rule wins the word-guessing window outright and gives up precision on the varied one,
+exactly the trade it was predicted to make. Arm A's precision is 1.000 because identical text
+really is the same thing — and its recall is 0.057 for the same reason.
+
+The metric is pair precision **and** recall, never compression: an arm that merges everything
+scores recall 1.000 and is useless, and a test asserts precision catches that. Another asserts
+that a message an arm never grouped pairs with nothing — treating two absent group ids as
+agreement would score silence as a correct answer.
+
+**Every figure inherits `reviewed: false`.** The labels are model-drafted. They are good enough to
+separate two arms by a factor of four; they are not good enough to call a 2-point difference, and
+the README says so beside the table.
+
+Result: `make test` 594 → **603 passed**. 9 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~19.5 hours to the deadline.** Next: arm C, embeddings — the harness now exists, the labels are
+frozen, and the marginal cost is a fraction of a cent. The team measured embedding clustering
+twice and got ~100 poor clusters; running it here turns that from a remembered result into a
+measured one, or overturns it.
+Blockers: the video needs the author.

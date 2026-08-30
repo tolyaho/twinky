@@ -48,3 +48,35 @@ the failure mode being tested for.
 
 They are the two shapes the arms disagree on. Prefix rules should win the first and may over-merge
 the second; a token or embedding method should do the opposite.
+
+
+---
+
+## Measured — arms A and B
+
+`python -m evals.grouping.score_arms`, free, deterministic, no keys.
+
+| arm | precision | recall | F1 |
+|---|---:|---:|---:|
+| **A · exact canonical** | **1.000** | 0.057 | 0.107 |
+| **B · token + prefix** (shipped) | 0.926 | **0.257** | **0.403** |
+
+Arm B carries **4.5× the recall for a 7-point precision cost**, and F1 nearly quadruples. That is
+the iteration-49 argument — exact matching splits one audience signal into dozens of rows of one —
+restated as a number against labels that were fixed before either arm ran.
+
+Both predictions written above, before the arms were run, held:
+
+| window | A recall | B recall | B precision |
+|---|---:|---:|---:|
+| `stableronaldo` w2 — the word game | 0.032 | **0.230** | **1.000** |
+| `yugi` w9 — varied | 0.204 | **0.418** | 0.745 |
+
+The prefix rule wins the word-guessing window outright and gives up precision on the varied one,
+which is exactly the trade it was predicted to make. Arm A cannot produce a false pair at all —
+identical text really is the same thing — and that is why its precision is 1.000 and why its
+recall is close to nothing.
+
+**Every figure here inherits `reviewed: false`.** The labels are model-drafted. They are good
+enough to separate two arms by a factor of four; they are not good enough to call a 2-point
+difference.
