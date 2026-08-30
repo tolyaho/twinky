@@ -237,3 +237,17 @@ still pass the gate afterwards, and added a test that keeps that true, so a futu
 cannot silently invalidate the frozen set.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T07:33Z — iteration 18
+Attempted: continued the gate audit — probing for claims that pass without real support.
+Result: `make test` green, 213 -> 217. Three holes found by probing. Two fixed (#29): the gate
+accepted any event id as evidence, so a card could cite the transcript segment that caused the
+signal as the audience's response to it, or offer a frame caption as a message, and be verified
+with no violations. Now `E_EVIDENCE_NOT_A_MESSAGE` and `E_CIRCULAR_EVIDENCE`. All four frozen
+gold cards still pass, asserted by the guard added last iteration. The third (#28) is left open
+on purpose: a one-word quote is trivially verbatim, so `"или"` satisfies the quote check without
+proving causation. A minimum quote length would close it, but the frozen metric definition says
+"does not appear verbatim", and tightening the rule after publishing the definition would make
+the numbers incomparable to the metric they claim to be. Documented in README §11 instead.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
