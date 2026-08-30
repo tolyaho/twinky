@@ -173,3 +173,78 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .draft-q { margin: 0 0 var(--xs); font-weight: 500; }
 .draft-options { margin: 0; padding-left: var(--md); color: var(--muted-soft); }
 .draft-warning { color: var(--muted-soft); font-size: 14px; letter-spacing: 0; margin: var(--xs) 0 0; }
+
+/* ---------------------------------------------------------------- editorial sections
+   Added for the sections that needed measured numbers: hero, measured improvement, changelog.
+   Same tokens as everything above — 96px section rhythm, hairlines rather than shadows, pill
+   geometry on the chips, display weight 300 and never heavier. No new colour is introduced. */
+main > section { margin-top: var(--section); }
+
+.hero { margin-top: var(--xl); padding-bottom: var(--xl); border-bottom: 1px solid var(--hairline-dark); }
+.hero-title { font-size: 48px; max-width: 20ch; }
+.hero-lede { max-width: 62ch; }
+.hero-lede code { color: var(--canvas); }
+
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--xl);
+  margin: var(--xl) 0 0;
+  padding: 0;
+}
+.stat-row div { margin: 0; }
+.stat-row dt {
+  font-size: 12px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stat-row dd {
+  margin: var(--xxs) 0 0;
+  font-weight: 300;              /* display voice: never heavier */
+  font-size: 32px;
+  letter-spacing: -.32px;
+  line-height: 1.13;
+}
+
+.scores {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--lg);
+  font-variant-numeric: tabular-nums;
+}
+.scores th, .scores td {
+  text-align: right;
+  padding: var(--sm) var(--base);
+  border-bottom: 1px solid var(--hairline-dark);
+}
+.scores th:first-child, .scores td:first-child { text-align: left; }
+.scores th {
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scores tr.is-agent td { color: var(--canvas); }
+.scores tr.is-diagnostic td { color: var(--muted-soft); }
+
+.changelog { margin: var(--lg) 0 0; padding-left: 0; list-style: none; counter-reset: step; }
+.changelog li {
+  padding: var(--md) 0;
+  border-top: 1px solid var(--hairline-dark);
+  max-width: 76ch;
+  color: var(--muted-soft);
+}
+.changelog li strong { color: var(--canvas); font-weight: 400; }
+.chip {
+  display: inline-block;
+  margin-right: var(--sm);
+  padding: 2px var(--sm);
+  border: 1px solid var(--hairline-dark);
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}

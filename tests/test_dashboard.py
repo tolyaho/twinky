@@ -79,8 +79,11 @@ def test_an_unknown_trigger_is_not_looked_up(served):
 def test_payload_carries_meta_result_and_events(served):
     got = serve_mod.payload(served / "fixture", served / "out")
 
-    assert set(got) == {"meta", "result", "events"}
+    assert set(got) == {"meta", "result", "events", "evaluation"}
     assert got["events"]["tr_0001"]["type"] == "transcript_segment"
+    # No eval has been run in this fixture, so the editorial section has nothing to show and
+    # says so with None rather than an empty table that would read as a measured zero.
+    assert got["evaluation"] is None
 
 
 # --------------------------------------------------------------------------- served end to end
@@ -162,3 +165,56 @@ def test_every_scored_ui_element_is_present():
     assert '"rejected"' in js and '"abstained"' in js and '"verified"' in js
     assert "trace ${card.trace_id" in js or "trace " in js
     assert 'id="debug"' in html                      # debug panel for judges
+
+
+# --------------------------------------------------------------- editorial sections (P4)
+def test_the_measured_section_reads_the_eval_rather_than_recomputing_it(served):
+    """`evals/scorer.py` owns every published metric. A rate computed a second time in the
+    browser would eventually disagree with the one printed in evidence/report.md."""
+    (served / "out" / "summary.json").write_text(json.dumps({
+        "systems": {"agent": {"cases": 11, "cards": 23, "trigger_accuracy": 0.5,
+                              "unmatched_rate": 0.913, "unsupported_rate": 0.739,
+                              "signal_recall": 0.182}},
+        "fixtures": {}, "reportable": True}), encoding="utf-8")
+
+    got = serve_mod.payload(served / "fixture", served / "out")
+
+    assert got["evaluation"]["systems"]["agent"]["unsupported_rate"] == 0.739
+
+
+def test_the_dashboard_never_computes_a_rate_itself():
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    # Narrow on purpose: summing a card's own distribution for display is fine. What must not
+    # happen is deriving one of the PUBLISHED rates, which evals/scorer.py owns.
+    for forbidden in ["unsupported_rate =", "trigger_accuracy =", "signal_recall =",
+                      "unmatched_rate =", "/ agg.", "/ result.counts"]:
+        assert forbidden not in js, f"the browser is deriving a published metric: {forbidden}"
+    assert "evals/scorer.py owns every published metric" in js
+
+
+def test_the_editorial_sections_stay_hidden_without_an_eval():
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert 'id="measured" hidden' in html, "an empty table reads as a measured zero"
+    assert 'document.getElementById("measured").hidden = false' in js
+
+
+def test_the_editorial_copy_states_the_result_that_counts_against_the_product():
+    """The measured section must not quietly show the agent winning. It loses the headline
+    metric and the page has to say so where the table is."""
+    html = " ".join((STATIC / "index.html").read_text(encoding="utf-8").split())
+
+    assert "loses restraint" in html
+    assert "unsupported-card rate is the worst of the three" in html
+    assert "single matched card" in html
+
+
+def test_the_changelog_section_names_the_removed_experiment_and_the_failure_mode():
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+
+    assert "removed experiment" in html
+    assert "zero additional" in html.lower()
+    assert "get_frame_captions" in html
+    assert "largest contributor" in html

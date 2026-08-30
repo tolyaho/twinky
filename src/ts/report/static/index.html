@@ -29,7 +29,18 @@
 </section>
 
 <main>
-  <h1 class="display" id="headline">Verified audience signals</h1>
+  <section class="hero">
+    <h1 class="display hero-title">A chat message is not text.<br>It is a response to something.</h1>
+    <p class="lede hero-lede">
+      <code>10</code> means nothing. <code>10</code> thirty seconds after <em>“how would you rate
+      this?”</em> is a rating. Chat is only interpretable against the stimulus that caused it —
+      and the stimulus is in the audio and on the screen, not in the chat.
+    </p>
+    <dl class="stat-row" id="hero-stats"></dl>
+    <p class="note" id="hero-note"></p>
+  </section>
+
+  <h2 class="display sub" id="headline">Verified audience signals</h2>
   <p class="lede" id="lede">
     Each card links a cluster of chat to the exact stream moment that caused it. Open one to see
     the evidence it is standing on.
@@ -44,6 +55,55 @@
       They are shown because a system that hides its rejects cannot be audited.
     </p>
     <div id="rejected-rail"></div>
+  </section>
+
+  <section id="measured" hidden>
+    <h2 class="display sub">Measured improvement</h2>
+    <p class="lede">
+      Eleven frozen cases across four real broadcasts, scored on every card each system emits —
+      verified and rejected alike. Reproduced by <code>make eval</code> from the committed
+      response cache with no API keys.
+    </p>
+    <table class="scores"><thead><tr>
+      <th>system</th><th>cards</th><th>trigger accuracy</th>
+      <th>unmatched</th><th>unsupported</th><th>recall</th>
+    </tr></thead><tbody id="scores-body"></tbody></table>
+    <p class="note">
+      The agent wins grounding and loses restraint: it doubles the baseline’s recall and is the
+      only system that names a correct cause, and its unsupported-card rate is the worst of the
+      three. Both halves are reported and neither prompt was edited after the numbers were seen.
+      The chat-only ablation’s trigger accuracy rests on a single matched card, which is why
+      <em>unmatched</em> is printed beside it.
+    </p>
+  </section>
+
+  <section id="changelog">
+    <h2 class="display sub">What changed, and what it cost</h2>
+    <p class="lede">
+      Every repair with its measured before and after — including a first run that was discarded
+      rather than published — is in <code>docs/IMPROVEMENT_CHANGELOG.md</code>.
+    </p>
+    <ol class="changelog" id="changelog-list">
+      <li>
+        <span class="chip">largest contributor</span>
+        The baseline had been handed the agent’s tool-calling prompt, so it replied with a tool
+        call, the parser turned that into an empty list, and it scored <strong>zero cards across
+        eleven cases</strong>. Fixing it is what made a comparison exist at all.
+      </li>
+      <li>
+        <span class="chip">removed experiment</span>
+        Amplifying the sleep-stream audio by 28&nbsp;dB produced <strong>zero additional
+        transcript segments</strong>. Reverted — it turned a suspected pipeline bug into a
+        verified property of the fixture: nobody is speaking.
+      </li>
+      <li>
+        <span class="chip">main failure mode</span>
+        On the word-puzzle case the agent returned <em>“no clear speech or on-screen content
+        detected”</em> without ever calling <code>get_frame_captions</code> — declaring the screen
+        empty without looking at it. Not fixed here: changing a prompt after seeing the score
+        invalidates the comparison.
+      </li>
+    </ol>
   </section>
 </main>
 

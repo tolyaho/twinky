@@ -214,8 +214,79 @@ function renderDebug(data) {
   }
 }
 
+
+/* ------------------------------------------------------------------ editorial sections
+   The hero counters and the scores table are read from what `make eval` wrote, never computed
+   here: evals/scorer.py owns every published metric, and a rate recomputed in the browser would
+   eventually disagree with the one in evidence/report.md. When the eval has not been run the
+   section stays hidden rather than rendering zeros that read like a measured result. */
+const rate = (v) => (typeof v === "number" ? v.toFixed(3) : "—");
+
+function stat(dl, label, value) {
+  const wrap = el("div");
+  wrap.appendChild(el("dt", null, label));
+  wrap.appendChild(el("dd", null, value));
+  dl.appendChild(wrap);
+}
+
+function renderHero(result, evaluation) {
+  const dl = document.getElementById("hero-stats");
+  const counts = result.counts || {};
+  stat(dl, "windows analysed", String(counts.windows != null ? counts.windows : "—"));
+  stat(dl, "cards verified", String(counts.verified != null ? counts.verified : "—"));
+  stat(dl, "rejected by the gate", String(counts.rejected != null ? counts.rejected : "—"));
+
+  const cache = result.cache || {};
+  if (cache.misses === 0) stat(dl, "api calls this run", "0");
+
+  const note = document.getElementById("hero-note");
+  if (evaluation && evaluation.systems) {
+    const cases = (evaluation.systems.agent || {}).cases;
+    note.textContent =
+      `Everything below is served from a recorded run and reproduces from the committed cache ` +
+      `with no API keys. The comparison further down covers ${cases} frozen cases.`;
+  } else {
+    note.textContent =
+      "Everything below is served from a recorded run. Run `make eval` to populate the measured " +
+      "comparison — it is hidden rather than shown empty.";
+  }
+}
+
+/* Rows are ordered agent, baseline, then the diagnostic, so the comparison reads in the order it
+   is argued. The ablation is dimmed because it is not the headline baseline. */
+const SYSTEM_ORDER = ["agent", "baseline", "ablation_chat_only"];
+const SYSTEM_LABEL = {
+  agent: "agent",
+  baseline: "baseline — one prompt, same events",
+  ablation_chat_only: "ablation — chat only, diagnostic",
+};
+
+function renderScores(evaluation) {
+  if (!evaluation || !evaluation.systems) return;
+  const body = document.getElementById("scores-body");
+  let rows = 0;
+  for (const name of SYSTEM_ORDER) {
+    const agg = evaluation.systems[name];
+    if (!agg) continue;
+    const tr = el("tr", name === "agent" ? "is-agent"
+                      : (name === "ablation_chat_only" ? "is-diagnostic" : null));
+    const cells = [
+      SYSTEM_LABEL[name] || name,
+      String(agg.cards),
+      rate(agg.trigger_accuracy),
+      rate(agg.unmatched_rate),
+      rate(agg.unsupported_rate),
+      rate(agg.signal_recall),
+    ];
+    for (const value of cells) tr.appendChild(el("td", null, value));
+    body.appendChild(tr);
+    rows += 1;
+  }
+  if (rows) document.getElementById("measured").hidden = false;
+}
+
 function render(data) {
-  const { meta, result, events } = data;
+  const { meta, result, events, evaluation } = data;
   const startMs = result.span_ms ? result.span_ms[0] : (meta.start_ms || 0);
 
   document.getElementById("mode-badge").textContent = result.mode;
@@ -225,6 +296,8 @@ function render(data) {
     `Served from ${result.fixture} — nothing on this page is generated. Reproduce with ` +
     `make replay FIXTURE=${result.fixture}`;
   renderDebug(data);
+  renderHero(result, evaluation);
+  renderScores(evaluation);
 
   const verified = [], rejected = [];
   for (const window of result.windows || []) {
