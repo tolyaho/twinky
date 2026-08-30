@@ -325,7 +325,8 @@ function renderQuestions(q) {
   document.getElementById("q-n").textContent = String(state.questionCount);
 
   if (!list.length) {
-    box.appendChild(el("p", "empty", "No question has been asked yet."));
+    box.appendChild(el("p", "empty",
+      "No question yet. Questions are grouped across the whole stream, not per window."));
   }
   for (const item of list) {
     const row = el("article", `qrow ${item.answered ? "is-answered" : "is-open"}`);
@@ -549,12 +550,14 @@ function reset() {
   const rowsEl = document.getElementById("boardrows");
   if (rowsEl) {
     clear(rowsEl);
-    rowsEl.appendChild(el("p", "empty", "Waiting for the first window to close…"));
+    rowsEl.appendChild(el("p", "empty",
+      "Counting starts with the first message. A row appears here with its cause when this 60-second window closes."));
   }
   const railEl = document.getElementById("rail");
   if (railEl) {
     clear(railEl);
-    railEl.appendChild(el("p", "empty", "No window has closed yet."));
+    railEl.appendChild(el("p", "empty",
+      "Rate, chatters and the gate ledger land when the first 60-second window closes."));
   }
   const railN = document.getElementById("rail-n");
   if (railN) railN.textContent = "—";
@@ -567,7 +570,8 @@ function reset() {
   const questionsEl = document.getElementById("questions");
   if (questionsEl) {
     clear(questionsEl);
-    questionsEl.appendChild(el("p", "empty", "No question has been asked yet."));
+    questionsEl.appendChild(el("p", "empty",
+      "No question yet. Questions are grouped across the whole stream, not per window."));
   }
   const qn = document.getElementById("q-n");
   if (qn) qn.textContent = "0";

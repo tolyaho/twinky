@@ -115,14 +115,14 @@
     </section>
 
     <div class="boardrows" id="boardrows">
-      <p class="empty" id="board-empty">Waiting for the first window to close…</p>
+      <p class="empty" id="board-empty">Counting starts with the first message. A row appears here with its cause when this 60-second window closes.</p>
     </div>
     <p class="board-foot" id="board-foot" hidden></p>
 
     <!-- "Signals", not "Grounded signals": this holds both grounded and abstained cards, and a
          heading may not claim what its contents deny. The split is spelled out in the footer. -->
     <div class="signals" id="signals" hidden>
-      <p class="empty" id="signals-empty">Waiting for the first window to close…</p>
+      <p class="empty" id="signals-empty">Cards land when the first 60-second window closes. Only what survives the provenance gate appears here; the rest is counted in the rail.</p>
     </div>
     <p class="board-foot" id="sig-split" hidden>0 grounded · 0 abstained</p>
 
@@ -130,7 +130,7 @@
          one thing a chat-only system cannot do — it has the question and no way to know whether
          it was ever picked up. -->
     <div class="questions" id="questions" hidden>
-      <p class="empty">No question has been asked yet.</p>
+      <p class="empty">No question yet. Questions are grouped across the whole stream, not per window.</p>
     </div>
     <p class="board-foot" id="q-foot" hidden></p>
   </section>
@@ -141,7 +141,7 @@
       <span class="panel-n" id="rail-n">&mdash;</span>
     </header>
     <div class="rail" id="rail">
-      <p class="empty">No window has closed yet.</p>
+      <p class="empty">Rate, chatters and the gate ledger land when the first 60-second window closes.</p>
     </div>
   </aside>
 </main>

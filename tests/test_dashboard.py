@@ -1590,3 +1590,26 @@ def test_the_proportional_bar_is_darker_than_its_track():
 
     assert "var(--hairline-soft)" in track
     assert "var(--muted)" in fill and "muted-soft" not in fill
+
+
+def test_empty_states_say_what_will_happen_not_merely_that_nothing_has():
+    """The board's empty state read "Waiting for the first window to close…" — copy written
+    before live counts existed. Measured, counts appear at 2.0s and rows at 60.0s, so it told the
+    reader to wait a minute for something already happening, on the first thing a judge reads."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+
+    assert "Waiting for the first window to close" not in html
+    board = html.split('id="board-empty"', 1)[1].split("</p>", 1)[0]
+    assert "Counting starts" in board and "60-second window closes" in board
+
+
+def test_the_reset_path_writes_the_same_copy_as_the_markup():
+    """A reset that renders different words than a page load is two products in one page."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    for phrase in ("Counting starts with the first message",
+                   "Rate, chatters and the gate ledger land",
+                   "No question yet. Questions are grouped"):
+        assert phrase in html, f"markup lost: {phrase}"
+        assert phrase in js, f"the reset path lost: {phrase}"

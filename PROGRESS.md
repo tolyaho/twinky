@@ -2501,3 +2501,45 @@ all, so still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **20.6 hours to the deadline; the video gate is 12.6 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 83 — 2026-08-31 — the empty states were describing an older product
+
+Attempted: empty and loading states — what a judge reads in the first seconds, before any data
+arrives.
+
+**The board's empty state was wrong, not merely dull.** It read *"Waiting for the first window to
+close…"* — copy written before the live counts of iteration 53 existed. Measured on marlon:
+
+| | |
+|---|---:|
+| live counts appear | **2.0 s** |
+| attributed rows appear | 60.0 s |
+
+So the first thing a judge read told them to wait a minute for something that starts in two
+seconds, and made the product look slower than it is.
+
+All four now describe the two-stage behaviour honestly:
+
+- **board** — *"Counting starts with the first message. A row appears here with its cause when
+  this 60-second window closes."*
+- **signals** — *"Cards land when the first 60-second window closes. Only what survives the
+  provenance gate appears here; the rest is counted in the rail."*
+- **questions** — *"No question yet. Questions are grouped across the whole stream, not per
+  window."*
+- **rail** — *"Rate, chatters and the gate ledger land when the first 60-second window closes."*
+
+The signals wording was **accurate** before, unlike the board's — but it was the last passive one
+on the page, and accurate-and-uninformative is still a wasted first impression. I rewrote it
+rather than exempting it from the guard, which was the tempting shortcut when the test failed on
+it.
+
+**A drift class I only avoided by hand, now asserted.** The same copy exists twice — in the markup
+and in `reset()`, which repaints on every fixture switch. A reset that renders different words
+than a page load is two products in one page. A test now requires both copies to match.
+
+Result: `make test` 667 → **669 passed**. 2 new tests, three rows in DECISIONS.md. No CSS change,
+still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**20.5 hours to the deadline; the video gate is 12.5 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
