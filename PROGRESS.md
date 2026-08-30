@@ -152,3 +152,17 @@ means #10's caveat cannot be closed locally. `docs/REPRODUCTION.md` §2 now docu
 fallback that was verified to work.
 Next: nothing on the ladder is unblocked. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream. #16, #17 need the author to rotate credentials.
+
+## 2026-08-30T04:47Z — iteration 12
+Attempted: C2, the half of it that does not need fixtures. The command list is blocked on #2,
+but the property C2 exists to prove — no command needs a key or a network — is checkable today.
+Result: `make test` green, 154 -> 161. `tests/test_offline_guarantee.py` executes C2's chain
+(`replay`, `baseline`, `eval`) with every credential deleted from the environment and
+`socket.socket`, `create_connection` and `getaddrinfo` rigged to raise. The chain completes on
+cache hits alone; an unrecorded system exits 3 instead of reaching for a provider; a miss reports
+a miss and never a missing key. Two out-of-process tests run the CLI with the environment
+stripped to PATH and HOME and assert `httpx` never enters the module table. The fake provider is
+installed only around the record step, so replay runs against the real provider class — otherwise
+the fake, not the socket trap, would be catching the call and the test would prove nothing.
+Next: still nothing unblocked on the ladder. #2 gates the rest.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
