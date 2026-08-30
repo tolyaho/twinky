@@ -886,14 +886,21 @@ html, body.live-page { height: 100%; }
 }
 /* A proportional bar so 27 and 4 differ at a glance without becoming a chart. */
 .gline-bar { height: 4px; border-radius: var(--r-pill); background: var(--hairline-soft); }
-.gline-fill { display: block; height: 100%; border-radius: var(--r-pill); background: var(--muted-soft); }
+/* `--muted-soft` on a `--hairline-soft` track is barely a difference, and this bar exists for
+   exactly one job: telling 27 from 4 without reading. One step darker, still no colour. */
+.gline-fill { display: block; height: 100%; border-radius: var(--r-pill); background: var(--muted); }
 .gline-n {
   font-family: var(--mono); font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums;
 }
+/* The samples ARE the evidence — the row's claim is "do not trust the count, here are the
+   messages". They were on one nowrap line with an ellipsis, which measured out at 30 of 276
+   group lines truncated (11%), the longest at 334 characters. Two clamped lines recover almost
+   all of it and still bound the row: the median line is 34 characters and never wraps at all. */
 .gline-samples {
   grid-column: 1 / -1; margin: 0 0 var(--xxs);
   font-size: 12px; line-height: 1.5; color: var(--muted);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
+  overflow: hidden;
 }
 
 /* Never hide the size of what was discarded: a board showing four rows out of 237 messages

@@ -2411,3 +2411,46 @@ unchanged, no new colour. Cost: **$0.00**, ledger $0.43.
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
 `make preflight` reports all of it.
+
+## Iteration 81 — 2026-08-31 — the board row, which is the thing the product rests on
+
+Attempted: the board row — trigger, meaning, count bar, samples. It should be the best-looking
+element on the page and it had one genuine defect.
+
+**The samples were being cut off, and the samples are the evidence.** `.gline-samples` was
+`white-space: nowrap` with an ellipsis, on a single line. The row's entire claim is *do not trust
+the count, here are the messages* — and it was truncating them mid-message.
+
+Measured before changing anything, across every window of every fixture:
+
+| | |
+|---|---:|
+| group sample-lines rendered | 276 |
+| median length | 34 characters |
+| longer than one line (~90 chars) | **30 (11%)** |
+| longest | **334 characters** |
+
+So 89% were fine and 11% silently lost their evidence — including `“yugi u look so awesome
+today” “Yugi is chronically addicted to using his phone rather than…”` at 262 characters.
+
+Now clamped to **two lines**, not free-wrapping: the median line still never wraps, the 11%
+recover almost all of their text, and the 334-character outlier — a bot's Amazon Prime message —
+still clips, which is correct. Unbounded wrapping would let one group swallow the board.
+
+**Second fix in the same element: the proportional count bar.** Its fill was `--muted-soft` on a
+`--hairline-soft` track — barely a difference, for a bar whose only job is telling 27 from 4
+without reading. One step darker to `--muted`. No new colour; the stylesheet is still on the same
+16 hexes.
+
+Two guards added, because both are the kind of thing a later edit quietly undoes: the samples must
+not be `nowrap`, and the fill must not be `muted-soft`.
+
+Verified on the served stylesheet and against a live `/api/stream` board event rather than by
+reading the source.
+
+Result: `make test` 661 → **663 passed**. 2 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**20.7 hours to the deadline; the video gate is 12.7 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

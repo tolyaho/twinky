@@ -1568,3 +1568,25 @@ def test_the_responsive_exemption_is_documented_not_assumed():
 
     assert "Responsive step-downs may use intermediate sizes" in design
     assert "they are not drift" in design
+
+
+def test_the_cited_samples_are_readable_not_ellipsised_to_one_line():
+    """The samples ARE the row's evidence — its claim is "do not trust the count, here are the
+    messages". They sat on one `nowrap` line with an ellipsis, which measured out at 30 of 276
+    group sample-lines truncated across the fixtures, the longest 334 characters."""
+    css = _css()
+    block = css.split(".gline-samples {", 1)[1].split("}", 1)[0]
+
+    assert "white-space: nowrap" not in block, "the evidence is being cut off mid-message"
+    assert "line-clamp: 2" in block, "unbounded wrapping lets one row swallow the board"
+
+
+def test_the_proportional_bar_is_darker_than_its_track():
+    """It exists for one job: telling 27 from 4 without reading. `--muted-soft` on a
+    `--hairline-soft` track is barely a difference."""
+    css = _css()
+    track = css.split(".gline-bar {", 1)[1].split("}", 1)[0]
+    fill = css.split(".gline-fill {", 1)[1].split("}", 1)[0]
+
+    assert "var(--hairline-soft)" in track
+    assert "var(--muted)" in fill and "muted-soft" not in fill
