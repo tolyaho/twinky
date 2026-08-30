@@ -8,16 +8,18 @@ actually run; where a result is not yet measured it says `[TBD]` rather than a p
 Four fixtures have been captured from live broadcasts and enriched, and `cache/llm/` holds their
 transcription and caption responses. Steps 1–6 work now with no keys.
 
-Step 7 (`make eval`) is **mid-repair**: the first measured run found the baseline being handed
-the agent's tool-calling prompt, so it emitted zero cards across all eleven cases. The prompts
-were repaired and the affected text cache entries are stale, so the eval must be re-recorded
-before its numbers mean anything. Results are `[TBD]` until then, and `report.md` now prints a
-**BROKEN — NOT A RESULT** banner for any system that emits nothing at all.
+The eval is recorded. `make eval` reproduces the committed results table from `cache/` with
+**48 hits and 0 misses**, verified with every credential unset — no `.env`, no keys, no network.
+
+An earlier run was discarded rather than reported: the baseline had been handed the agent's
+tool-calling prompt and emitted zero cards across all eleven cases. `report.md` now prints a
+**BROKEN — NOT A RESULT** banner, and `make eval` exits `5`, if any system emits nothing at all.
 
 In `replay` mode a cache miss raises instead of silently calling an API: the command prints the
 missing key and **exits `3`** rather than reaching for a provider, so a run either reproduces the
-recorded result exactly or fails loudly. Because the prompts changed, replaying the eval before
-it is re-recorded will exit `3` — that is the mechanism working, not a regression.
+recorded result exactly or fails loudly. Editing a prompt, a model name or the temperature
+changes the cache key and will produce exit `3` until the run is re-recorded — that is the
+mechanism working, not a regression.
 
 ## 1. Requirements
 
@@ -53,7 +55,7 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-30: **306 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-30: **309 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 

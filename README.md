@@ -160,9 +160,12 @@ API keys**, from the committed content-addressed response cache.
 
 ## 10. Agent and tool disclosure
 
-- **In the product:** one agent, `audience_signal_agent`, `deepseek-v4-flash`, `temperature=0`,
-  `max_steps=4`, four bounded read-only tools. Vision captions come from
-  `deepseek-v4-flash-vision-exp`; speech from Deepgram Nova-3. Both are record-mode only.
+- **In the product:** one agent, `audience_signal_agent`, `gpt-4.1-nano`, `temperature=0`,
+  `max_tokens=900`, `max_steps=4`, four bounded read-only tools. The baseline and the chat-only
+  ablation use the same model and the same card contract. Vision captions come from
+  `gpt-4.1-mini`; speech from Deepgram Nova-3 (`nova-3-general`). Both are record-mode only.
+  These are the models the committed cache was recorded with, and they are the defaults in code,
+  so a clone with no environment reproduces every number.
 - **In building it:** disclosure table `[TBD]` — see `trajectories/README.md`.
 
 ## 11. Known limitations, main failure mode, hot take

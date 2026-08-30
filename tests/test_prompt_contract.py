@@ -152,3 +152,57 @@ def test_the_report_says_nothing_when_every_system_answered(tmp_path):
                                    "cases": ["c1"]}})
 
     assert "BROKEN" not in (tmp_path / "report.md").read_text(encoding="utf-8")
+
+
+# --------------------------------------------------------------- citable ids
+def test_every_rendered_line_labels_the_id_it_must_be_cited_by():
+    """The second silent failure of the first measured run: the format led with a bare
+    bracketed timestamp, so every system cited that number as the id and was rejected on
+    E_UNKNOWN_MSG. Nothing could match gold or clear the gate."""
+    ix = EventIndex([
+        Event(event_id="msg_a", type="chat_message", ts_ms=1500,
+              payload={"text": "amethyst", "author": "u_1"}),
+        Event(event_id="tr_a", type="transcript_segment", ts_ms=1100,
+              payload={"text": "i died", "speaker": "spk_0"}),
+        Event(event_id="frm_a", type="frame_caption", ts_ms=1000, payload={"text": "a screen"}),
+    ])
+
+    rendered = single_prompt.render_events(ix, 0, 2000)
+
+    for line in rendered.splitlines():
+        assert "id=" in line, line
+        # the timestamp must never be the first token, where it reads as the identifier
+        assert not line.startswith("["), line
+    assert "id=msg_a" in rendered and "id=tr_a" in rendered and "id=frm_a" in rendered
+
+
+def test_the_baseline_is_told_which_token_is_the_id():
+    assert "id=" in single_prompt.SYSTEM
+    assert "never an id" in single_prompt.SYSTEM
+
+
+# --------------------------------------------------------------- keyless reproduction
+def test_the_default_model_is_the_one_the_cache_was_recorded_with():
+    """Reproducibility is a pre-scoring gate, and the model name is part of the cache key.
+
+    While the default was a model no run had ever been recorded with, `make eval` reproduced
+    only for someone whose environment set TS_TEXT_MODEL — which is the author and nobody else.
+    A judge's fresh clone missed every entry and exited 3. The env var stays as the re-record
+    override; the default has to be what is actually in `cache/`.
+    """
+    import glob
+    import json as _json
+    from pathlib import Path
+
+    recorded = set()
+    root = Path(__file__).resolve().parents[1]
+    for p in glob.glob(str(root / "cache" / "llm" / "*" / "*")):
+        req = _json.loads(Path(p).read_text(encoding="utf-8")).get("request") or {}
+        if req.get("messages"):
+            recorded.add(req.get("model"))
+
+    if not recorded:
+        pytest.skip("no text responses recorded yet")
+    assert agent.DEFAULT_TEXT_MODEL in recorded, (
+        f"default {agent.DEFAULT_TEXT_MODEL!r} was never recorded; cache holds {recorded}")
+    assert single_prompt.DEFAULT_TEXT_MODEL == agent.DEFAULT_TEXT_MODEL
