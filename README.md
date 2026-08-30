@@ -114,9 +114,18 @@ Both systems receive identical windows and are scored on **every card they emit*
 rejected alike. Scoring only the cards that survived the gate would force the unsupported rate to
 zero for both systems by construction.
 
-Case matrix and per-case status: `evals/DATA.md`. Currently 4 of 12 cases are built, and all four
-run against a synthetic scaffold fixture, so `make eval` prints a **NOT A REPORTED RESULT**
-banner. The remaining eight need real captures.
+Case matrix and per-case status: `evals/DATA.md`. **Eleven cases are frozen, all against real
+captures from four broadcasts**, including all three the product is designed to win on: warning
+with no provable cause, sarcasm, and abstention. Across 12 gold signals: 4 frame triggers,
+2 speech triggers, 5 `unknown`, 1 abstention.
+
+**Gold labels were drafted with model assistance from the captured fixtures and reviewed by the
+author. Draft status per case is tracked in `evals/REVIEW_ME.md`.** Every gold file carries a
+`"reviewed"` flag. At the time of writing every case is still `reviewed: false` — the labels
+have not yet been confirmed by a human, and this sentence stays here until they are. The labels
+are not hand-typed: every id is resolved from the fixture, and `tests/test_frozen_cases.py`
+pushes each gold signal through the real provenance gate, because a gold label that cannot pass
+the gate scores every correct card as a silent miss.
 
 ## 7. Results and evidence
 
@@ -185,6 +194,18 @@ This project began in September 2025 and was developed by three people until Mar
 committed before **28 Aug 2026 15:00 UTC** is pre-existing and is listed in
 `docs/PRE_EXISTING.md`. Competition work is everything after that timestamp, and every entry in
 `docs/IMPROVEMENT_CHANGELOG.md` is measured on the frozen eval set in `evals/`.
+
+### Git history disclosure
+
+> This repository was created on 30 Aug 2026 from a tree that was never under version control.
+> Its history is reconstructed: each commit holds the final state of the files it touches, and
+> commit dates are assigned, not observed. The order is real; the dates are not. `PROGRESS.md`
+> timestamps are real.
+
+Concretely: a file first committed on 29 Aug already contains fixes made on 30 Aug, because no
+intermediate snapshot of it exists to commit. Commit timestamps were taken from the session log
+in `PROGRESS.md` so that the history and the written record agree and can be checked against
+each other.
 
 ## Quick start (no API keys needed)
 

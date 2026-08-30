@@ -8,6 +8,17 @@ The project started **18 Sept 2025** as a three-person side project and was acti
 until **March 2026**, then dormant. The competition window opened **28 Aug 2026 15:00 UTC**.
 Everything below the second heading was written after that timestamp.
 
+## Git history disclosure
+
+> This repository was created on 30 Aug 2026 from a tree that was never under version control.
+> Its history is reconstructed: each commit holds the final state of the files it touches, and
+> commit dates are assigned, not observed. The order is real; the dates are not. `PROGRESS.md`
+> timestamps are real.
+
+Read the boundary above from this file and from `PROGRESS.md`, not from `git log`. The first
+commit imports `legacy/` and is dated before the competition window opened, which reflects when
+that code existed, not when it was committed here.
+
 ## Existed before the competition
 
 - Anonymous Twitch IRC chat ingestion and persistence

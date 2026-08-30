@@ -294,3 +294,17 @@ model, which cannot distinguish that from a tool returning nothing; the results 
 what was not executed.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T11:40Z — iteration 22
+Attempted: P1 — freeze the eval set against the four real captures; the synthetic-fixture cases
+could never produce a reported number.
+Result: `make test` green, 233 -> 293. 11 cases built from what the captures actually contain,
+including all three the product wins on (5 warning/unknown, 11 sarcasm, 12 abstain). Every id is
+resolved from the fixture, never typed; `tests/test_frozen_cases.py` rebuilds a card from each
+gold signal and runs the real provenance gate over it — gold that cannot pass the gate scores
+every correct card as a silent miss. Cut a 12th case (AURA flood) for sitting 72% inside c05's
+window; worst remaining overlap 30%. Labels are model-drafted and unreviewed: `reviewed: false`
+everywhere, `evals/REVIEW_ME.md` written for a ten-minute human pass.
+Next: P2 — `make baseline CASES=all` first and freeze it before the agent runs.
+Blockers: labels need the author (#3 in the author list). Numeric-rating and binary-choice
+archetypes do not exist in these captures and were not invented.
