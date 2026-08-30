@@ -10,7 +10,7 @@
   ],
   "chat_only": true
  },
- "duration_ms": 1,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -25,7 +25,7 @@
    "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -41,7 +41,7 @@
      "detail": "id=937426f0-57f7-4a3a-9340-79b991208a1c not in fixture"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -57,7 +57,7 @@
      "detail": "id=a61be580-d897-446f-b835-75dd555eca36 not in fixture"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -73,7 +73,7 @@
      "detail": "id=67686500-9c49-4384-9f19-89c6b8b69322 not in fixture"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -83,7 +83,7 @@
     "cards_dropped_by_cap": 0,
     "parse_error": null
    },
-   "at_ms": 1
+   "at_ms": 0
   }
  ]
 }

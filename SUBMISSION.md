@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 651 passed, ~1 s
+make test                        # 655 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 
@@ -142,8 +142,13 @@ compresses perfectly and is useless. The labels are model-drafted and say so.
 
 ## Known gaps
 
+`make preflight` checks every item below that can be checked, in one command, and exits non-zero
+while a hard blocker stands. It reports and never repairs.
+
 1. **No video.** The only required deliverable that does not exist.
-2. **Gold labels unconfirmed** (`evals/REVIEW_ME.md`).
+2. **The repository must be pushed before it is made public.** `origin/main` is behind local;
+   publishing it as it stands would show an older project and would look finished.
+3. **Gold labels unconfirmed** — `make review`, then `evals/REVIEW_ME.md`.
 3. **Summary hierarchy not built.** A named gap in `README.md` §5 and `docs/ARCHITECTURE.md`,
    not a silent omission.
 4. **No per-component ablation.** There was time for one honest end-to-end comparison, not five,

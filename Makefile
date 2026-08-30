@@ -7,7 +7,7 @@ PIP := .venv/bin/pip
 FIXTURE ?= evals/fixtures/stableronaldo_2026-08-30T0723
 CASES ?= all
 
-.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval graph debrief demo review scan archive clean
+.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval graph debrief demo review preflight scan archive clean
 
 PYTHON ?= python3
 
@@ -79,6 +79,10 @@ debrief:
 
 demo:
 	$(PY) -m ts.cli serve --fixture $(FIXTURE) --port 8000
+
+# One command before submitting: is this ready to hand in? Reports and never fixes.
+preflight:
+	@$(PY) scripts/preflight.py
 
 # Gold-label review. `--list` shows the state; confirming is deliberately one case at a time.
 review:

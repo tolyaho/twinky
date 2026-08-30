@@ -2196,3 +2196,51 @@ Cost: **$0.00**, ledger $0.43.
 labels (`make review`), the private repository, and the live credentials — and rotating those is
 now safe to recover from.
 Blockers: the video needs the author.
+
+## Iteration 76 — 2026-08-30 — the remote is 31 commits behind, and the risk register said "make it public"
+
+Attempted: continue asking *what will the author actually do next, and does it work?* — the
+question that caught the `.env.example` trap. Next action: make the repository public.
+
+**`origin/main` is at commit 104. Local is at 135.** The remote is missing the grouping arm, the
+three-zone dashboard, the questions panel, live counts, Tier 0 live chat, the agent graph, the
+moderation panel, group labels, both the grounded-arm and the embeddings measurements, the rename
+to Twinky, and every document correction of the last two days.
+
+`RISKS.md` #37 said the remaining action was *"make it public"*. Doing exactly that would have
+published a project called **Twitch Agent**, with a two-column dashboard and none of the measured
+experiments — **and it would have looked finished**, which is worse than a private repository,
+because nobody thinks to check a repository that opens fine. Opened as **RISKS #47, P0**, and #37
+now reads "two steps not one".
+
+I am forbidden from pushing, so the fix is author action. What I could build is the thing that
+makes it impossible to miss: **`make preflight`**, one command that answers "is this ready to
+hand in".
+
+```
+  [FAIL] video recorded             no video file — a missing deliverable scores nothing
+  [FAIL] pushed to origin           local is 31 commit(s) ahead of origin/main — PUSH BEFORE PUBLISHING
+  [FAIL] repository public          repository is private
+  [PASS] no secret ships            no secret can reach the archive
+  [PASS] tests green                651 passed
+  [PASS] eval reproduces keyless    48 hits, 0 misses, no keys
+  [TODO] gold labels reviewed       0/11 confirmed — not a blocker, only a cost
+```
+
+Three properties, each a decision:
+
+- **It reports and never repairs.** No push, no commit, no confirmation — asserted by test. A
+  checklist that fixes things is one you stop reading.
+- **A check that cannot run says `????`, not `PASS`.** Offline, the remote and visibility checks
+  admit they do not know. An offline check that silently passes is worse than one that admits it,
+  especially the one guarding *is the public repository actually this work*.
+- **Hard blockers are separated from stated costs.** Unconfirmed gold labels are a cost the README
+  already discloses, not a reason to stop. A checklist that cannot tell those apart gets ignored
+  at three in the morning, which is when it will be read.
+
+Result: `make test` 651 → **655 passed**. 4 new tests, four rows in DECISIONS.md, RISKS #47
+opened at P0 and #37 corrected. Cost: **$0.00**, ledger $0.43.
+
+**~14.5 hours to the deadline. Run `make preflight` before submitting.** The order is: push,
+make public, film and cut the video, `make review`, rotate the credentials.
+Blockers: the video needs the author, and so does the push.

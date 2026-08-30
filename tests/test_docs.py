@@ -390,3 +390,40 @@ def test_the_four_author_blockers_are_all_tracked_and_open():
         row = next((l for l in rows if phrase in l), None)
         assert row is not None, f"no risk row for: {phrase}"
         assert "OPEN" in row.upper(), f"{phrase} is no longer open — update the documents too"
+
+
+def test_preflight_treats_an_unpushed_remote_as_a_blocker():
+    """A public repository showing old work looks finished, which is worse than a private one:
+    nobody thinks to check. Found when origin/main was 31 commits behind local while the risk
+    register said the only remaining repository action was "make it public"."""
+    source = (REPO / "scripts/preflight.py").read_text(encoding="utf-8")
+
+    assert "PUSH BEFORE PUBLISHING" in source
+    assert "origin/main..HEAD" in source
+    risks = (REPO / "RISKS.md").read_text(encoding="utf-8")
+    assert "pushed and then made public" in risks
+
+
+def test_preflight_separates_blockers_from_stated_costs():
+    """Unconfirmed gold labels are a cost the README already states, not a reason to stop. A
+    checklist that cannot tell those apart gets ignored at 3am."""
+    source = (REPO / "scripts/preflight.py").read_text(encoding="utf-8")
+
+    assert "hard" in source and "TODO" in source
+    assert "is not a blocker, only a cost" in source
+
+
+def test_preflight_never_repairs_anything():
+    """It reports. A checklist that fixes things is a checklist you stop reading."""
+    source = (REPO / "scripts/preflight.py").read_text(encoding="utf-8")
+
+    for mutating in ("git push", "git commit", "write_text", "unlink", "--confirm"):
+        assert mutating not in source, f"preflight would perform {mutating!r}"
+
+
+def test_a_network_check_that_cannot_run_says_so():
+    """An offline check that silently passes is worse than one that admits it does not know."""
+    source = (REPO / "scripts/preflight.py").read_text(encoding="utf-8")
+
+    assert "cannot reach origin" in source
+    assert "gh unavailable" in source

@@ -11,7 +11,7 @@
   "max_steps": 4,
   "inline_context": false
  },
- "duration_ms": 1,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -48,7 +48,7 @@
    "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -60,7 +60,7 @@
      "detail": "2cf3f99a-c70b-4026-bbd0-ce4089f61105 is cited as evidence for the signal it supposedly caused"
     }
    ],
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -70,7 +70,7 @@
     "steps": 2,
     "cards_dropped_by_cap": 0
    },
-   "at_ms": 1
+   "at_ms": 0
   }
  ]
 }
