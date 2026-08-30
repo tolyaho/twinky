@@ -463,3 +463,21 @@ class as the Makefile `grep` scan and the pre-rewrite secret scan, both of which
 assurance in this project already. Every document now also has to keep all three rows.
 Next: nothing. The ladder is complete and the remaining work is author-only.
 Blockers: none. Cost unchanged at $0.39 of $5.00.
+
+## 2026-08-30T16:05Z — iteration 31
+Attempted: block A (gate items) of the frontend/farm ladder, with the fixture farm started first
+per block D.
+Result: `make test` green, 351 -> 354. Farm running in the background, capture-only, verified it
+references no enrich path and no API key before starting it. `legacy/frontend/` REMOVED from the
+tree rather than merely excluded from packaging: it is a dashboard shell driven entirely by
+generated data — `chat-simulator.js`, `messageGenerator`, `Math.random` across six files
+including its `index.html` — and an export-ignore would have hidden it from the zip while leaving
+it in a public repository, which is the half-fix. 27 files gone, the other 32 legacy files kept
+and still disclosed. `.env` packaging closed off three ways and asserted by test: untracked,
+`git archive HEAD` cannot include an untracked file by construction, and `.gitattributes` marks
+it export-ignore anyway. `make scan` clean; archive verified by opening it.
+Caught while verifying: the archive still contained `legacy/frontend/` because `git archive`
+reads HEAD and the deletion was only staged. The check found it, which is the point of opening
+the archive rather than trusting the target.
+Next: block B — the shared-spec re-measure. It is paid and changes all three systems identically.
+Blockers: none. Cost unchanged at $0.39 of $5.00.
