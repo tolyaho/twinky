@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Twitch Agent — signal rail</title>
+<title>Twitch Agent — grounded audience signals</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <!-- No CDN, no build step, no webfont fetch. A judge with no network still sees the real thing. -->
 <link rel="stylesheet" href="/static/app.css">
 </head>
@@ -14,7 +15,7 @@
 <header class="bar">
  <div class="bar-inner">
   <div class="bar-left">
-    <span class="mark">Twitch Agent</span>
+    <a class="mark" href="/" aria-label="Twitch Agent — home"><svg class="mark-glyph" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1"/><circle cx="21" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="8" r="3.5" fill="currentColor"/></svg><span class="mark-name">Twitch&nbsp;Agent</span></a>
     <span class="pill" id="mode-badge">—</span>
   </div>
   <div class="bar-right">
@@ -35,12 +36,16 @@
 
 <main>
   <section class="hero">
+   <div class="hero-grid">
+    <div class="hero-claim">
     <h1 class="display hero-title">A chat message is not text.<br>It is a response to something.</h1>
     <p class="lede hero-lede">
       <code>10</code> means nothing. <code>10</code> thirty seconds after <em>“how would you rate
       this?”</em> is a rating. Chat is only interpretable against the stimulus that caused it —
       and the stimulus is in the audio and on the screen, not in the chat.
     </p>
+    </div>
+    <div class="hero-proof">
     <!-- The stage replays REAL messages from this run and collapses them into the cards the
          system actually produced. There is no synthetic loop and no invented text: if the run
          has no verified card, the stage does not render at all. -->
@@ -55,6 +60,8 @@
         <p class="stage-trigger" id="stage-trigger"></p>
       </div>
     </section>
+    </div>
+   </div>
 
     <dl class="stat-row" id="hero-stats"></dl>
     <p class="note" id="hero-note"></p>

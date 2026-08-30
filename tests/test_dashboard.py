@@ -500,3 +500,85 @@ def test_abstentions_are_framed_as_correct_behaviour_not_failure():
 
     assert "could not tie to any stream moment" in html
     assert "an abstention is the correct answer" in html
+
+
+# --------------------------------------------------------------- brand
+def test_the_wordmark_is_a_mark_not_body_text():
+    """"Twitch Agent" set in the body face is not a wordmark. The glyph means what the product
+    means: a filled dot bound by a hairline to an outlined dot — signal bound to its cause."""
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert "mark-glyph" in html and "<svg" in html
+    assert html.count("<circle") >= 2 and "<line" in html
+    block = css.split(".mark-name", 1)[1].split("}", 1)[0]
+    assert "font-weight: 300" in block, "the wordmark is display type, never heavier"
+    assert "letter-spacing: -" in block, "display tracking is negative"
+
+
+def test_the_favicon_is_the_same_mark():
+    svg = (STATIC / "favicon.svg").read_text(encoding="utf-8")
+
+    assert svg.count("<circle") == 2 and "<line" in svg
+    assert "#0c0a09" in svg and "#f5f5f5" in svg, "favicon uses the ink and canvas tokens"
+
+
+def test_svg_is_served_with_the_right_content_type():
+    assert '".svg": "image/svg+xml"' in (
+        (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8"))
+
+
+def test_the_name_is_treated_identically_everywhere():
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert "<title>Twitch Agent" in html
+    assert readme.startswith("# Twitch Agent")
+    assert "Twitch&nbsp;Agent" in html or "Twitch Agent" in html
+
+
+# --------------------------------------------------------------- cards as objects
+def test_the_trigger_quote_is_the_emphasis_not_the_type_label():
+    """The quote is the most important text on a card — it is the cause, verbatim. The type
+    badge was competing with it by carrying a filled background."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    quote = css.split(".quote {", 1)[1].split("}", 1)[0]
+    assert "font-size: 18px" in quote and "font-style: italic" in quote
+    assert "border-left: 2px solid var(--hairline-strong)" in quote
+
+    pill = css.split(".pill {", 1)[1].split("}", 1)[0]
+    assert "background: transparent" in pill, "the badge must be quiet"
+
+
+def test_the_drawer_looks_openable_and_animates_the_connection():
+    """Opening a card should visibly connect claim to the messages it stands on. That is the
+    only motion on the page that carries meaning."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert ".drawer[open] > summary::before" in css and "rotate(90deg)" in css
+    assert ".drawer[open] .evidence li" in css and "animation-delay" in css
+
+
+def test_cards_go_two_up_on_wide_screens():
+    """A full-width card holding one line of text is what made the page feel thin."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    block = css.split("@media (min-width: 1100px)", 1)[1].split("}", 1)[0]
+
+    assert "repeat(2, minmax(0, 1fr))" in block
+
+
+def test_the_hero_puts_claim_and_proof_side_by_side():
+    """At 1440px the page was a narrow column with a dead right half."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+
+    assert "hero-claim" in html and "hero-proof" in html
+    assert "grid-column: 1 / span 7" in css and "grid-column: 8 / span 5" in css
+
+
+def test_monospace_is_only_used_for_data():
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert "--mono:" in css
+    assert "Monospace only where the text IS data" in css

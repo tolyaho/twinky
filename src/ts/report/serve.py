@@ -239,8 +239,8 @@ class ReplayHandler(BaseHTTPRequestHandler):
         if route.startswith("/static/"):
             path = _static_file(route[len("/static/"):])
             if path is not None:
-                ctype = {".css": "text/css", ".js": "text/javascript"}.get(
-                    path.suffix, "application/octet-stream")
+                ctype = {".css": "text/css", ".js": "text/javascript",
+                         ".svg": "image/svg+xml"}.get(path.suffix, "application/octet-stream")
                 self._send(200, path.read_text(encoding="utf-8"), f"{ctype}; charset=utf-8")
                 return
 

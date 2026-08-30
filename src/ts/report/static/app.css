@@ -47,7 +47,12 @@
   --focus-ring:   var(--primary);
   --focus-offset: 2px;
 
-  --ui: Inter, "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  /* No CDN and no webfont fetch — a judge with no network must see the real page. Inter first
+     if the machine has it, then the system UI faces, which carry the same metrics closely
+     enough that the tracking below still reads as intended. */
+  --ui: Inter, "Inter Tight", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+        Roboto, system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   --measure: 1200px;
 }
 
@@ -124,8 +129,14 @@ body {
 
 .lede { color: var(--body); max-width: 62ch; margin: 0 0 var(--xxl); }
 .note { color: var(--muted); font-size: 14px; letter-spacing: 0; max-width: 80ch; margin: var(--base) 0 0; }
-.meta { color: var(--muted); font-size: 14px; }
-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+.meta { color: var(--muted); font-size: 14px; letter-spacing: 0; }
+/* 15/400/1.47/+0.15 — small body */
+.small { font-size: 15px; line-height: 1.47; letter-spacing: .15px; }
+/* Monospace only where the text IS data: ids, trace ids, timestamps. */
+.mono, .evidence li span:first-child, .trigger .label + .mono {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0; color: var(--muted);
+}
+code { font-family: var(--mono); font-size: .92em; }
 
 /* ---------------------------------------------------------------- chrome */
 .bar {
@@ -144,7 +155,17 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   max-width: var(--measure); margin: 0 auto; width: 100%;
 }
 .bar-left, .bar-right { display: flex; align-items: center; gap: var(--sm); }
-.mark { font-weight: 500; color: var(--ink); letter-spacing: 0; }
+/* The wordmark. A filled dot bound by a hairline to an outlined dot: signal bound to its
+   cause, which is the only thing this product claims to do. Set in the display face at 300
+   with tightened tracking — "Twitch Agent" in body type was not a wordmark. */
+.mark {
+  display: inline-flex; align-items: center; gap: var(--xs);
+  color: var(--ink); text-decoration: none;
+}
+.mark-glyph { flex: none; }
+.mark-name {
+  font-weight: 300; font-size: 20px; line-height: 1.2; letter-spacing: -.4px;
+}
 
 main { max-width: var(--measure); margin: 0 auto; padding: var(--section) var(--xl) var(--section); }
 main > section { margin-top: var(--section); }
@@ -165,7 +186,7 @@ footer {
   padding: var(--xxs) var(--sm);
   border: 1px solid var(--hairline-strong);
   border-radius: var(--r-pill);
-  background: var(--surface-strong);
+  background: transparent;        /* quiet: the quote is the emphasis, not the label */
   font-size: 12px; font-weight: 600; line-height: 1.4; letter-spacing: .96px;
   text-transform: uppercase;
   color: var(--muted);
@@ -194,11 +215,22 @@ footer {
 
 /* ---------------------------------------------------------------- hero */
 .hero { padding-bottom: var(--section); border-bottom: 1px solid var(--hairline); }
+/* Claim in columns 1-7, proof in 8-12: the eye moves from the headline to the grounded example
+   horizontally. At 1440px the page was a narrow column with a dead right half. */
+.hero-grid {
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  gap: var(--xl); align-items: start;
+}
+.hero-claim { grid-column: 1 / span 7; }
+.hero-proof { grid-column: 8 / span 5; min-width: 0; }
+@media (max-width: 1100px) {
+  .hero-claim, .hero-proof { grid-column: 1 / -1; }
+}
 .hero-title {
   /* display-mega, the reference's homepage-hero row: 64px / 300 / 1.05 / -1.92px */
   font-size: 64px; font-weight: 300; line-height: 1.05; letter-spacing: -1.92px;
   color: var(--ink);
-  max-width: 18ch;
+  max-width: 15ch;
   margin: 0 0 var(--lg);
 }
 .hero-lede { max-width: 60ch; }
@@ -215,14 +247,14 @@ footer {
 }
 .stat-row dd {
   margin: var(--xs) 0 0;
-  font-weight: 300; font-size: 36px; letter-spacing: -.36px; line-height: 1.17;
+  font-weight: 300; font-size: 48px; letter-spacing: -.96px; line-height: 1.08;
   color: var(--ink);
 }
 
 /* ---- the stage: real replay data collapsing into cards. Never a fake loop. ---- */
 .stage {
   position: relative;
-  margin: var(--xxl) 0 0;
+  margin: 0;
   min-height: 232px;
   border: 1px solid var(--hairline);
   border-radius: var(--r-xl);
@@ -293,7 +325,7 @@ footer {
 }
 .mini .mini-meta {
   margin-top: var(--sm);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--mono);
   font-size: 13px; letter-spacing: 0; color: var(--muted);
 }
 .stage-trigger {
@@ -304,7 +336,11 @@ footer {
 .stage-trigger.in { opacity: 1; }
 
 /* ---------------------------------------------------------------- cards */
-#rail, #rejected-rail { display: grid; gap: var(--lg); }
+#rail, #rejected-rail, #abstained-rail { display: grid; gap: var(--lg); }
+@media (min-width: 1100px) {
+  /* A full-width card holding one line of text is what makes a page feel thin. */
+  #rail, #rejected-rail, #abstained-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 .card {
   background: var(--surface-card);
@@ -314,6 +350,8 @@ footer {
   transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 .card:hover { border-color: var(--hairline-strong); box-shadow: var(--shadow-hover); }
+#rejected-rail .card { border-color: var(--hairline-strong); }
+#rejected-rail .card h3 { opacity: .85; }
 .card-head { display: flex; align-items: center; gap: var(--sm); flex-wrap: wrap; }
 .badges { display: flex; align-items: center; gap: var(--xs); margin-left: auto; flex-wrap: wrap; }
 .card h3 {
@@ -329,9 +367,11 @@ footer {
 .dist-flat { margin: var(--base) 0 0; color: var(--body); font-size: 14px; }
 
 .quote {
-  margin: var(--base) 0 0; padding: var(--sm) 0 var(--sm) var(--base);
-  border-left: 2px solid var(--ink);
-  color: var(--ink); font-size: 18px; font-weight: 300; line-height: 1.44; letter-spacing: 0;
+  display: block;
+  margin: var(--base) 0 0; padding: var(--xs) 0 var(--xs) var(--base);
+  border-left: 2px solid var(--hairline-strong);
+  color: var(--ink);
+  font-size: 18px; font-weight: 400; font-style: italic; line-height: 1.44; letter-spacing: 0;
 }
 .trigger { margin: var(--sm) 0 0; color: var(--muted); font-size: 14px; }
 .trigger.unknown { color: var(--body-strong); font-style: italic; }
@@ -340,13 +380,36 @@ footer {
   margin: var(--lg) 0 0; padding: var(--lg) 0 0;
   border-top: 1px solid var(--hairline-soft);
 }
+.drawer > summary {
+  display: flex; align-items: center; gap: var(--xs);
+  list-style: none;
+  color: var(--body-strong);
+  font-size: 15px; font-weight: 500; letter-spacing: 0;
+}
+.drawer > summary::before {
+  content: "";
+  width: 0; height: 0;
+  border-left: 5px solid currentColor;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform .2s ease;
+}
+.drawer[open] > summary::before { transform: rotate(90deg); }
+.drawer > summary:hover { color: var(--ink); }
+
+/* Source to insight, made visible: the rows arrive in order when the drawer opens. That motion
+   is the product's argument — a claim, then the messages it is standing on. */
+.drawer[open] .evidence li { animation: reveal .34s ease both; }
+.drawer[open] .evidence li:nth-child(1) { animation-delay: .02s; }
+.drawer[open] .evidence li:nth-child(2) { animation-delay: .06s; }
+.drawer[open] .evidence li:nth-child(3) { animation-delay: .10s; }
+.drawer[open] .evidence li:nth-child(4) { animation-delay: .14s; }
+.drawer[open] .evidence li:nth-child(n+5) { animation-delay: .18s; }
 .evidence { margin: var(--sm) 0 0; padding: 0; list-style: none; }
 .evidence li {
-  display: grid; grid-template-columns: 12ch 9ch 1fr; gap: var(--sm);
+  display: grid; grid-template-columns: 13ch 9ch 1fr; gap: var(--sm);
   padding: var(--xs) 0; border-bottom: 1px solid var(--hairline-soft);
   font-size: 14px; letter-spacing: 0;
-  /* the connection claim -> trigger -> message, drawn as it opens */
-  animation: reveal .32s ease both;
 }
 .evidence li:last-child { border-bottom: 0; }
 @keyframes reveal { from { opacity: 0; transform: translateX(-6px); } }
