@@ -1687,3 +1687,51 @@ Result: `make test` 575 → **588 passed**. 13 new tests. `make eval` still **48
 **~20.5 hours to the deadline.** Next: FEATURES_V2 §1, embeddings as a measured third grouping
 arm — and the labels must be frozen before any arm runs.
 Blockers: the video needs the author.
+
+## Iteration 65 — 2026-08-30 — the pair labels, frozen before any arm exists
+
+Attempted: the precondition for FEATURES_V2 §1. The brief is explicit — *"labels frozen BEFORE
+running any arm"* — so this iteration is the labelling and the freeze, and deliberately nothing
+else. No arm code was written, and none exists in the tree.
+
+**That is checkable rather than claimed.** The freeze commit `2ea2c68` contains
+`evals/grouping/pair_labels.json`, its `sha256`, a README and a test file. No embedding code, no
+scorer, no arm. `git show --stat` on it is the evidence.
+
+I labelled **164 messages across two windows** by reading them and nothing else:
+
+| window | messages | multi-message intents | unsure | singletons |
+|---|---:|---:|---:|---:|
+| `stableronaldo` w2 | 79 | 4 — `guess_ame` 42, `guess_dr` 25, `emote` 3, `banter` 2 | 3 | 4 |
+| `yugi` w9 | 85 | 11 — `shock` 12, `laugh` 11, `reply` 8, `astao` 6, `codeswitch` 5… | 3 | 22 |
+
+Two windows of deliberately different shape: a word-guessing minute that changes puzzle halfway
+(`ame…` then `dr…`), and a varied minute of topics, reactions and directed replies. One window
+would let an arm look good by being right about a single shape.
+
+**Three decisions that decide whether the numbers will mean anything:**
+
+- **Singletons get unique `x<n>` ids, never a shared `other`.** A single catch-all would make
+  every unrelated singleton a positive pair with every other, inflating recall for any arm that
+  over-merges — which is exactly the failure this comparison exists to detect.
+- **Ambiguous messages are `unsure` and excluded from scoring in both directions.** Three per
+  window. "definitely", sitting inside a run of `dr…` guesses, is not a call I can make honestly,
+  and forcing it would score an arm on my uncertainty rather than its behaviour.
+- **The two puzzles are two intents, not one.** People guessing `amethyst` and people guessing a
+  `dr…` word are not doing the same thing, even though both are "guessing".
+
+**Declared model-drafted and unreviewed**, `"reviewed": false`, exactly like `evals/gold`. I read
+the messages and assigned the intents; no person has confirmed them, and any number computed
+against them inherits that caveat and must carry it.
+
+Six tests: the checksum matches, the provenance is declared, every message is labelled and still
+aligned to the fixture, no two singletons share an id, `unsure` stays under 10%, and both window
+shapes are present.
+
+Result: `make test` 588 → **594 passed**. Five rows in DECISIONS.md. Cost: **$0.00**, ledger
+$0.43.
+
+**~20 hours to the deadline.** Next: score arms A and B against these labels — free and
+deterministic — and only then decide whether arm C is worth the cents, because the comparison is
+already meaningful with two arms and embeddings are first on the cut list.
+Blockers: the video needs the author.
