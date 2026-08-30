@@ -308,3 +308,26 @@ everywhere, `evals/REVIEW_ME.md` written for a ten-minute human pass.
 Next: P2 — `make baseline CASES=all` first and freeze it before the agent runs.
 Blockers: labels need the author (#3 in the author list). Numeric-rating and binary-choice
 archetypes do not exist in these captures and were not invented.
+
+## 2026-08-30T12:05Z — iteration 23
+Attempted: P2a — diagnose the broken first measurement before changing anything.
+Result: two root causes, both single-cause, neither a quality result.
+(1) The baseline never emitted a card because it is handed the AGENT's system prompt
+(`single_prompt.py:25` imports `SYSTEM` from `workflow.agent`), which specifies a tool-calling
+protocol. Verified in the cache: every baseline reply is a well-formed
+`{"action":"call_tools",...}` — the model answered correctly, and `.get("cards", [])` then
+returned `[]` with no exception raised. A silent zero, the same class as iterations 8 and 13.
+Of the 44 calls, 33 are single-turn (11 baseline + 11 ablation + 11 agent step 1) and 11 are the
+agent's second step; the counts confirm the baseline did call the model.
+(2) 19 of the agent's 20 cards fail on ONE code, `E_CIRCULAR_EVIDENCE`. Every trigger id it
+emitted is a chat-message UUID that is also in its own evidence list: it names a chat message as
+the cause of the chat it caused. The prompt documents `trigger.event_id` without ever stating
+that a trigger must be a speech or screen event and must not appear in evidence — a gap between
+the prompt and the gate that scores it, not a modelling failure.
+Next: P2b — re-record and re-measure. Changing the prompts invalidates all 44 text cache entries.
+Blockers: none. Fix and regression tests land this iteration; the paid re-run is next.
+Fix landed same iteration: shared `CARD_CONTRACT` used verbatim by both prompts, baseline given
+its own tool-free system prompt, trigger constraint stated, no-`cards` reply recorded as a parse
+failure, `make eval` banners and exits 5 on a zero-card system. 13 regression tests;
+`make test` 293 -> 306. All 44 text cache entries are now stale by design — the prompts changed,
+so P2b must re-record. Nothing in `cache/` was deleted.

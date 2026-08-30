@@ -10,11 +10,20 @@ caused it, and shows the evidence.
 
 ## Status — read this first
 
-The system runs end to end offline, but **no fixture has been recorded yet**, so the response
-cache is empty and every number below is `[TBD]`. `make replay`, `make baseline` and `make eval`
-currently exit `3` with a cache-miss error. That is the designed behaviour, not a bug: in replay
-mode a miss raises rather than silently calling an API, so a run either reproduces the recorded
-result exactly or fails loudly. See `RISKS.md` for what is open.
+Four fixtures have been captured from live broadcasts and enriched, and eleven evaluation cases
+are frozen against them. **The comparison is not yet measured, so every number below is `[TBD]`.**
+
+The first measured run was discarded rather than reported. The baseline had been handed the
+agent's tool-calling system prompt; having no tools it replied `{"action": "call_tools", ...}`,
+which the parser turned into an empty card list, so the baseline scored zero across all eleven
+cases and there was nothing to compare the agent against. The prompts are repaired and share one
+card contract verbatim; the eval is being re-recorded. `make eval` now prints a
+**BROKEN — NOT A RESULT** banner and exits `5` if any system emits no cards at all, because the
+failure it hides looks exactly like a result.
+
+Until the re-record lands, `make eval` exits `3` on a cache miss — replay refuses to silently
+call an API, so a run either reproduces the recorded result exactly or fails loudly. See
+`RISKS.md` for what is open.
 
 Nothing in this repository states a number that was not measured.
 

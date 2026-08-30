@@ -5,10 +5,19 @@ actually run; where a result is not yet measured it says `[TBD]` rather than a p
 
 ## 0. What state this repository is in
 
-No fixture has been recorded, so `cache/llm/` is empty. Steps 4–7 therefore **exit `3` today**
-with a cache-miss error. That is the designed behaviour: in `replay` mode a cache miss raises
-instead of silently calling an API, so a run either reproduces the recorded result exactly or
-fails loudly. Steps 1–3 work now.
+Four fixtures have been captured from live broadcasts and enriched, and `cache/llm/` holds their
+transcription and caption responses. Steps 1–6 work now with no keys.
+
+Step 7 (`make eval`) is **mid-repair**: the first measured run found the baseline being handed
+the agent's tool-calling prompt, so it emitted zero cards across all eleven cases. The prompts
+were repaired and the affected text cache entries are stale, so the eval must be re-recorded
+before its numbers mean anything. Results are `[TBD]` until then, and `report.md` now prints a
+**BROKEN — NOT A RESULT** banner for any system that emits nothing at all.
+
+In `replay` mode a cache miss raises instead of silently calling an API: the command prints the
+missing key and **exits `3`** rather than reaching for a provider, so a run either reproduces the
+recorded result exactly or fails loudly. Because the prompts changed, replaying the eval before
+it is re-recorded will exit `3` — that is the mechanism working, not a regression.
 
 ## 1. Requirements
 
@@ -44,7 +53,7 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-30: **293 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-30: **306 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 
