@@ -180,3 +180,19 @@ surfaced; `stamp_frames` is extracted and tested directly; one test drives captu
 streamlink, ffmpeg or the channel, not this module.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T05:41Z — iteration 14
+Attempted: `docs/ARCHITECTURE.md` — it feeds Agent Solution & Engineering, the largest single
+criterion, and was the last unblocked deliverable I had not read.
+Result: `make test` green, 169 -> 186. Checking the diagram against the tree found an overclaim
+in two documents at once (#24): the 1m/5m/30m/2h summary hierarchy is listed under "implemented
+nodes" in the architecture doc and sits unmarked in the README component table, and no module
+implements it — zero matches in `src/`. The README row is mine, written in iteration 7 by
+carrying a design table over from `01-PRODUCT.md` without checking it against the code. Both now
+mark it as a named gap. The diagram was rewritten with a file against every node and now includes
+capture, enrich, the cache and the eval harness, which it previously omitted — exactly the parts
+carrying Reproducibility and Measured Improvement. Tests assert every ticked node exists, that
+the gap declaration stays in step with the tree, and that the four tool names in the docs are the
+four the agent allows.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
