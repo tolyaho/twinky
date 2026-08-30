@@ -1,0 +1,26 @@
+{
+ "case_id": "c03_failure_laughter",
+ "fixture": "sample",
+ "window_ms": [
+  1756400010000,
+  1756400018000
+ ],
+ "gold_signals": [
+  {
+   "type": "reaction",
+   "trigger_event_id": "tr_0002",
+   "relevant_message_ids": [
+    "msg_0018",
+    "msg_0019",
+    "msg_0020",
+    "msg_0021",
+    "msg_0022",
+    "msg_0023",
+    "msg_0024",
+    "msg_0025",
+    "msg_0026"
+   ]
+  }
+ ],
+ "must_abstain": false
+}

@@ -1,0 +1,10 @@
+{
+ "case_id": "c03_failure_laughter",
+ "fixture": "sample",
+ "fixture_kind": "synthetic_scaffold",
+ "window_ms": [
+  1756400010000,
+  1756400018000
+ ],
+ "description": "A gameplay failure said aloud triggers a laughter wave. Tests the reaction card and, because the laughter is lexically varied (АХАХАХА / LUL / омг), tests that grouping is by cause rather than by string similarity."
+}

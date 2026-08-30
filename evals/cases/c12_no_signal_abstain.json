@@ -1,0 +1,10 @@
+{
+ "case_id": "c12_no_signal_abstain",
+ "fixture": "sample",
+ "fixture_kind": "synthetic_scaffold",
+ "window_ms": [
+  1756400013500,
+  1756400019500
+ ],
+ "description": "Chat is silent for the whole window; the only event is a frame caption showing an alert overlay. There is stream context but no audience, so there is no audience signal. The system must abstain rather than manufacture one out of context alone."
+}

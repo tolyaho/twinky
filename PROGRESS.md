@@ -48,3 +48,13 @@ force unsupported-rate to 0 for both and make the headline metric vacuous. Adds
 empty cache exits 3 with no paid call (verified by hand).
 Next: A4 — build the remaining 10 eval cases against the sample fixture; cases 5, 11, 12 first.
 Blockers: none. RISKS #10 still open (`python -m ts.cli` needs `PYTHONPATH=src`), P0 for gate C2.
+
+## 2026-08-30T00:41Z — iteration 4
+Attempted: A4 — build the 12 eval cases against whatever fixtures exist.
+Result: `make test` green, 94 -> 98. Built the cases the scaffold fixture honestly supports:
+`c03_failure_laughter` and `c12_no_signal_abstain`, taking the frozen set 2 -> 4. Annotated all
+four with `fixture_kind`; `make eval` now banners non-capture fixtures NOT A REPORTED RESULT and
+prints each fixture's provenance. Case inventory with per-case blockers in `evals/DATA.md`.
+Next: A5 — `report/debrief.py`, roll verified cards into the post-stream document.
+Blockers: 8 of 12 cases need real captures (RISKS #12, downstream of #2). Case 11 (sarcasm) is
+one of the three the product wins on and cannot be written without a real fixture.

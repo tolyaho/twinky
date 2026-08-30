@@ -1,0 +1,10 @@
+{
+ "case_id": "c12_no_signal_abstain",
+ "fixture": "sample",
+ "window_ms": [
+  1756400013500,
+  1756400019500
+ ],
+ "gold_signals": [],
+ "must_abstain": true
+}
