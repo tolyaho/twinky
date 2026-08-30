@@ -84,7 +84,26 @@ def payload(fixture: Path | str, out_dir: Path | str, system: str = "agent") -> 
     for window in result.get("windows") or []:
         attach_drafts(window.get("verified") or [])
 
-    return {"meta": meta, "result": result, "events": cited_events(result, fixture)}
+    return {"meta": meta, "result": result, "events": cited_events(result, fixture),
+            "evaluation": evaluation(out_dir)}
+
+
+def evaluation(out_dir: Path | str) -> Optional[Dict[str, Any]]:
+    """The measured comparison, read from what `make eval` wrote.
+
+    Read, never recomputed: `evals/scorer.py` owns every published metric, and a rate computed a
+    second time here would eventually disagree with the one in `evidence/report.md`. Returns None
+    when the eval has not been run, so the editorial sections stay hidden rather than rendering
+    an empty table that reads like a measured zero.
+    """
+    path = Path(out_dir)
+    summary = path / "summary.json" if path.name != "raw-results" else path.parent / "summary.json"
+    if not summary.exists():
+        return None
+    try:
+        return json.loads(summary.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
 
 
 def _static_file(name: str) -> Optional[Path]:

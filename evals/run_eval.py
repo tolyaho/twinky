@@ -155,6 +155,15 @@ def write_outputs(scores: List[CaseScore], out: Path,
               "model-response cache, with no API keys and zero cost.", ""]
     (out / "report.md").write_text("\n".join(lines), encoding="utf-8")
 
+    # Machine-readable twin of the table above, for the dashboard. The dashboard must not
+    # recompute a rate: `evals/scorer.py` owns every published metric, and a second
+    # implementation would eventually disagree with the one in print.
+    summary = {"systems": {s: aggregate([x for x in scores if x.system == s]) for s in systems},
+               "fixtures": {n: {"kind": f["kind"], "channel": f["channel"],
+                                "cases": len(f["cases"])} for n, f in sorted(fixtures.items())},
+               "reportable": not unreportable}
+    (out / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+
 
 def write_predictions(predictions: List[Dict[str, Any]], out: Path) -> None:
     """Frozen protocol, item 4: persist raw predictions, gate decisions and the trace id for
