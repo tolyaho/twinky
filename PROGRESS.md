@@ -166,3 +166,17 @@ installed only around the record step, so replay runs against the real provider 
 the fake, not the socket trap, would be catching the call and the test would prove nothing.
 Next: still nothing unblocked on the ladder. #2 gates the rest.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T05:14Z — iteration 13
+Attempted: RISKS #21 — de-risk the recorder, the one time-critical step, without a live stream.
+Result: `make test` green, 161 -> 169. Everything below the network boundary is now covered, and
+covering it found two real defects. A re-run of `capture_media` re-stamped already-timestamped
+frames from zero against a new `start_ms`, corrupting every frame timestamp — and capture is the
+step that gets retried after it fails. And a capture that produced nothing returned success and
+wrote a `meta.json` declaring a good fixture, so the emptiness would have surfaced at enrichment
+time with the broadcast over. Both now raise. ffmpeg's return code is checked and its stderr
+surfaced; `stamp_frames` is extracted and tested directly; one test drives capture -> enrich ->
+`load_fixture` across the real seam. #21 narrowed: a first-contact failure should now mean
+streamlink, ffmpeg or the channel, not this module.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
