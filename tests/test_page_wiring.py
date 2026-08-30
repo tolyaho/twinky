@@ -135,7 +135,9 @@ def test_each_target_says_what_activating_it_will_do():
 
 
 def test_focus_is_restyled_and_never_removed():
-    css = (STATIC / "app.css").read_text(encoding="utf-8")
+    # Seventh time: the comment recording that `#rejected-rail` was removed contains the
+    # selector it says is gone. Assert against rules, explain in prose.
+    css = re.sub(r"/\*.*?\*/", " ", (STATIC / "app.css").read_text(encoding="utf-8"), flags=re.S)
 
     assert ":focus-visible" in css
     assert "outline: 2px solid var(--focus-ring)" in css
@@ -174,3 +176,45 @@ def test_the_preference_is_read_when_used_not_cached_at_load(js_source):
     js = js_source("live.js")
 
     assert "const stillPreferred = () =>" in js, "a cached boolean goes stale"
+
+
+# Shared chrome: the same component, deliberately present on both pages. `#rail` was NOT this —
+# it named the Method page's card rail and the product page's statistics rail, two different
+# things, and an id beats `.panel-rail .rail` on specificity, so the product rail was silently
+# laid out as a two-column grid inside a ~259px column.
+SHARED_CHROME = {"debug", "debug-body", "debug-toggle", "mode-badge", "picker", "picker-chips",
+                 "picker-input", "picker-list", "picker-note", "signals"}
+
+
+def test_an_id_shared_between_pages_is_the_same_component():
+    """Anything new sharing a name across pages is a `#rail` waiting to happen: one stylesheet,
+    two meanings, and the id wins on specificity wherever they disagree."""
+    shared = _ids("index.html") & _ids("method.html")
+
+    unexpected = sorted(shared - SHARED_CHROME)
+    assert not unexpected, (
+        f"{unexpected} now names something on both pages — confirm it is the same component and "
+        f"add it to SHARED_CHROME, or rename one of them")
+
+
+def test_no_stylesheet_rule_targets_an_id_that_exists_nowhere():
+    """`#rejected-rail` and `#abstained-rail` were styled and never rendered."""
+    import re
+
+    # Seventh time: the comment recording that `#rejected-rail` was removed contains
+    # the selector it says is gone. Assert against rules, explain in prose.
+    css = re.sub(r"/\*.*?\*/", " ",
+                 (STATIC / "app.css").read_text(encoding="utf-8"), flags=re.S)
+    live = _ids("index.html") | _ids("method.html") | _ids("philosophy.html")
+    # ids created at runtime by the scripts
+    live |= set(re.findall(r'\.id = "([^"]+)"',
+                           (STATIC / "live.js").read_text(encoding="utf-8")))
+
+    # `#a7e5d3` is a colour, not a selector. Ids cannot be pure hex of those lengths.
+    def is_colour(token):
+        return len(token) in (3, 4, 6, 8) and all(c in "0123456789abcdefABCDEF" for c in token)
+
+    styled = {s for s in re.findall(r"#([a-zA-Z][\w-]*)", css) if not is_colour(s)}
+    orphans = sorted(styled - live)
+
+    assert not orphans, f"styled but never rendered: {orphans}"

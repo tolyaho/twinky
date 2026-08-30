@@ -338,10 +338,14 @@ footer {
 .stage-trigger.in { opacity: 1; }
 
 /* ---------------------------------------------------------------- cards */
-#rail, #rejected-rail, #abstained-rail { display: grid; gap: var(--lg); }
+/* METHOD PAGE ONLY. `#rejected-rail` and `#abstained-rail` were removed — they existed in no
+   page. `#rail` used to match the product page's statistics rail too, and an id beats
+   `.panel-rail .rail` on specificity, so that rail was silently laid out as a two-column grid
+   inside a ~259px column. The product one is now `#window-rail`. */
+#rail { display: grid; gap: var(--lg); }
 @media (min-width: 1100px) {
   /* A full-width card holding one line of text is what makes a page feel thin. */
-  #rail, #rejected-rail, #abstained-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .card {
@@ -352,8 +356,6 @@ footer {
   transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 .card:hover { border-color: var(--hairline-strong); box-shadow: var(--shadow-hover); }
-#rejected-rail .card { border-color: var(--hairline-strong); }
-#rejected-rail .card h3 { opacity: .85; }
 .card-head { display: flex; align-items: center; gap: var(--sm); flex-wrap: wrap; }
 .badges { display: flex; align-items: center; gap: var(--xs); margin-left: auto; flex-wrap: wrap; }
 .card h3 {

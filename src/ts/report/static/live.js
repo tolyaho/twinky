@@ -457,7 +457,7 @@ function addTick(event) {
 
 /* ------------------------------------------------------------------ the rail */
 function renderRail(r) {
-  const rail = document.getElementById("rail");
+  const rail = document.getElementById("window-rail");
   clear(rail);
   if (!r || r.messages === undefined) return;
   document.getElementById("rail-n").textContent = `${r.messages}`;
@@ -562,7 +562,7 @@ function reset() {
     rowsEl.appendChild(el("p", "empty",
       "Counting starts with the first message. A row appears here with its cause when this 60-second window closes."));
   }
-  const railEl = document.getElementById("rail");
+  const railEl = document.getElementById("window-rail");
   if (railEl) {
     clear(railEl);
     railEl.appendChild(el("p", "empty",

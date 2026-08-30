@@ -2582,3 +2582,44 @@ still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **20.4 hours to the deadline; the video gate is 12.4 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 85 — 2026-08-31 — two components wearing one id
+
+Attempted: responsive behaviour. Auditing the breakpoints found something that had nothing to do
+with breakpoints and was worse.
+
+**`#rail` named two different things.** On the Method page it is the card rail, which genuinely
+wants `grid-template-columns: repeat(2, minmax(0, 1fr))` at ≥1100px — a full-width card holding
+one line of text is what makes a page feel thin. On the product page it was the **statistics
+rail**, which wants a stacked column.
+
+An id selector is specificity (1,0,0) and `.panel-rail .rail` is (0,2,0), so **the id won**. The
+rail's six blocks — volume, who is talking, composition, questions, stream context, the gate
+ledger — were being laid out in **two columns inside a ~259px space**, about 110px each, with a
+two-column `.rstats` grid nested inside that. Whenever the rail was visible, which is every
+viewport above 1280px.
+
+Found by reading the breakpoint table, not by looking at the page. That is the sort of thing a
+screenshot shows instantly and I cannot take one — so the audit had to be structural.
+
+The product rail is now `#window-rail`, the Method page keeps `#rail`, and `#rejected-rail` and
+`#abstained-rail` — styled for weeks, present in no page — are deleted. Renamed rather than
+out-specified: two components under one name is the defect, and a heavier selector would have
+hidden it.
+
+Three guards: an id shared between pages must be listed as deliberate shared chrome, no
+stylesheet rule may target an id no page renders, and the three-zone test now names the new id.
+
+**My own tests were wrong twice before the code was.** The first version of the shared-id guard
+banned all sharing — but `debug`, `picker` and `mode-badge` are legitimately the same component on
+both pages, so it now enumerates them. The orphan guard matched `#a7e5d3` as an id, because hex
+colours also start with `#`. And the **seventh** occurrence of the comment-greps-itself failure:
+my note recording that `#rejected-rail` was removed contains the selector it says is gone. Fixed
+by stripping CSS comments before asserting, as the house rule already says.
+
+Result: `make test` 672 → **674 passed**. 2 new tests, three rows in DECISIONS.md, RISKS #50.
+No colour change; still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**20.3 hours to the deadline; the video gate is 12.3 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

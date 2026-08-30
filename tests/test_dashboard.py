@@ -1154,7 +1154,7 @@ def test_the_board_endpoint_refuses_a_window_that_does_not_exist(live_server):
 def test_the_page_has_three_zones():
     html = LIVE_HTML.read_text(encoding="utf-8")
 
-    for marker in ('id="feed"', 'id="boardrows"', 'id="rail"'):
+    for marker in ('id="feed"', 'id="boardrows"', 'id="window-rail"'):
         assert marker in html, f"{marker} is missing from the dashboard"
     assert 'class="panel panel-rail"' in html
 
