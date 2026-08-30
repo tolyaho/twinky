@@ -39,7 +39,7 @@ class FakeDeepSeek:
 
 
 @pytest.fixture
-def workspace(tmp_path, monkeypatch):
+def workspace(tmp_path, monkeypatch, stub_cases):
     """Cache, trajectories and evidence all land in tmp. The frozen cases and the sample fixture
     are read from the repo and never written to."""
     monkeypatch.chdir(tmp_path)

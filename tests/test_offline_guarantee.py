@@ -90,7 +90,8 @@ def _record(monkeypatch):
         base.DeepSeekProvider = real
 
 
-def test_the_whole_chain_replays_with_no_keys_and_no_socket(offline, monkeypatch, no_network):
+def test_the_whole_chain_replays_with_no_keys_and_no_socket(offline, monkeypatch, no_network,
+                                                           stub_cases):
     """`make baseline && make replay && make eval`, which is C2's command list, run with every
     credential removed and the socket constructor booby-trapped."""
     _record(monkeypatch)
