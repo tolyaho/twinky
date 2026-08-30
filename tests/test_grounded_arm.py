@@ -152,3 +152,30 @@ def test_the_grounded_opening_names_the_list_as_the_only_source_of_triggers():
     assert "id=frm_" in opening
     assert "must come from the list above" in opening
     assert '"unknown"' in opening, "abstention must stay available"
+
+
+# --------------------------------------------------------------- the recorded negative result
+
+def test_the_grounded_arm_reproduces_from_the_committed_cache():
+    """The experiment lost, and a lost experiment is only worth reporting if someone else can
+    re-run it. Recorded once, replayed by anyone with no key and no cost."""
+    import subprocess
+    import sys
+
+    env = {"PATH": "/usr/bin:/bin", "TS_LLM_MODE": "replay", "HOME": "/tmp"}
+    done = subprocess.run(
+        [sys.executable, "-m", "evals.run_eval", "--ablation", "--grounded",
+         "--cases", "c07_frame_only_dracorex", "--out", "/tmp/ts_grounded_check"],
+        cwd=str(ROOT), capture_output=True, text=True, env=env, timeout=120)
+
+    assert done.returncode == 0, done.stderr[-800:]
+    assert "'misses': 0" in done.stdout, "a replay miss means the arm is not fully recorded"
+
+
+def test_the_published_agent_is_not_the_grounded_one():
+    """The whole reason this is a second arm. If `agent` ever picked up inlining, its published
+    numbers would silently stop matching the committed cache."""
+    source = (ROOT / "evals/run_eval.py").read_text(encoding="utf-8")
+    published = source.split('runs.append(("agent",', 1)[1].split("\n", 1)[0]
+
+    assert "inline_context" not in published

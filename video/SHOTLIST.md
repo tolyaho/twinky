@@ -160,7 +160,7 @@ cat evidence/report.md
 correct cause. It also has the worst unsupported-card rate of the three. I am reporting both."*
 
 **Do not put latency on screen.** It is deliberately not measured: a replay run reads cached
-responses, so timing it measures disk, not the model. Cost is real and small — **$0.42 total**,
+responses, so timing it measures disk, not the model. Cost is real and small — **$0.43 total**,
 itemised in `COST_LEDGER.md`.
 
 ### Shot 12 — reproducibility, the pre-scoring gate

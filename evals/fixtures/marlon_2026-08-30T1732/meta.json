@@ -1,0 +1,15 @@
+{
+ "fixture_id": "marlon_2026-08-30T1732",
+ "channel": "marlon",
+ "captured_utc": "2026-08-30T1732",
+ "duration_s": 480,
+ "chat_messages": 1634,
+ "pseudonymised": true,
+ "enriched": false,
+ "provenance": "Captured from a public Twitch broadcast. Chatter logins pseudonymised at capture time with a local salt that is not distributed. Raw audio is not committed; only the derived transcript is.",
+ "quality": "480p",
+ "start_ms": 1788111178436,
+ "frames": 16,
+ "audio": "raw/audio.wav",
+ "frame_interval_s": 30
+}

@@ -1,0 +1,67 @@
+{
+ "systems": {
+  "ablation_chat_only": {
+   "cases": 11,
+   "cards": 25,
+   "trigger_accuracy": 1.0,
+   "unmatched_rate": 0.96,
+   "unsupported_rate": 0.28,
+   "signal_recall": 0.09090909090909091,
+   "abstention_correct": 0,
+   "abstention_cases": 1
+  },
+  "agent": {
+   "cases": 11,
+   "cards": 23,
+   "trigger_accuracy": 0.5,
+   "unmatched_rate": 0.9130434782608695,
+   "unsupported_rate": 0.7391304347826086,
+   "signal_recall": 0.18181818181818182,
+   "abstention_correct": 0,
+   "abstention_cases": 1
+  },
+  "agent_grounded": {
+   "cases": 11,
+   "cards": 17,
+   "trigger_accuracy": 0.0,
+   "unmatched_rate": 0.8823529411764706,
+   "unsupported_rate": 0.8823529411764706,
+   "signal_recall": 0.18181818181818182,
+   "abstention_correct": 0,
+   "abstention_cases": 1
+  },
+  "baseline": {
+   "cases": 11,
+   "cards": 21,
+   "trigger_accuracy": 0.0,
+   "unmatched_rate": 0.9523809523809523,
+   "unsupported_rate": 0.6190476190476191,
+   "signal_recall": 0.09090909090909091,
+   "abstention_correct": 0,
+   "abstention_cases": 1
+  }
+ },
+ "fixtures": {
+  "marlon_2026-08-30T0701": {
+   "kind": "capture",
+   "channel": "marlon",
+   "cases": 2
+  },
+  "marlon_2026-08-30T0715": {
+   "kind": "capture",
+   "channel": "marlon",
+   "cases": 4
+  },
+  "stableronaldo_2026-08-30T0723": {
+   "kind": "capture",
+   "channel": "stableronaldo",
+   "cases": 3
+  },
+  "yugi_2026-08-30T0723": {
+   "kind": "capture",
+   "channel": "yugi",
+   "cases": 2
+  }
+ },
+ "reportable": true
+}

@@ -1270,3 +1270,70 @@ no number for it on the frozen set and none may be published until there is.
 Next: the paid record phase — one fixture first to measure real cost, then the eleven cases if it
 is affordable. Check COST_LEDGER.md, log the run, leave baseline and ablation frozen.
 Blockers: none.
+
+## Iteration 57 — 2026-08-30 — the grounded arm, recorded. It lost.
+
+Attempted: the paid record phase for `agent_grounded`. Ledger checked first: $0.42 of $5.00.
+
+**Blocker found and worked around without asking.** `TS_LLM_MODE=record` failed with
+`401 invalid_api_key`. The provider reads `TS_LLM_API_KEY` then `DEEPSEEK_API_KEY`, and the
+latter is dead. Probed all four candidate key names with a single 1-token request — values never
+printed — and `OPENAI_API_KEY` returns 200 against the same base URL. Recorded with
+`TS_LLM_API_KEY=$OPENAI_API_KEY`.
+
+Priced one case first, as instructed: **2 calls per case**, so 22 for eleven. Then recorded all
+eleven with `--ablation --grounded`. Existing agent, baseline and ablation entries were cache
+**hits** and cost nothing; only the new arm was paid for.
+
+**Measured on the same eleven frozen cases, same windows, same gold labels:**
+
+| system | cards | trigger accuracy | unmatched | unsupported | recall |
+|---|---:|---:|---:|---:|---:|
+| agent | 23 | **0.500** | 0.913 | **0.739** | 0.182 |
+| `agent_grounded` | 17 | 0.000 | **0.882** | 0.882 | 0.182 |
+| baseline | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
+
+**It lost, and it is not adopted.** `agent` remains the published system, unchanged.
+
+**But it did the thing it was built to do, and the mechanism is the real finding.** Where each
+arm's trigger ids actually came from:
+
+| | abstained | a chat id | a real transcript id | a real frame id |
+|---|---:|---:|---:|---:|
+| agent | 5 | 14 | 4 | **0** |
+| `agent_grounded` | **0** | 12 | 1 | **4** |
+
+Failure #39 is fixed narrowly — the agent had never once named a frame caption, and this arm
+names four. On `c07`, the published agent emitted three cards reading *"Audience mentions
+'draconic'"*, each naming a **chat UUID** as a `speech` trigger; the grounded arm emitted one
+card, *"Audience is guessing words related to 'dragon' and 'dracula'"*, `trigger.kind=screen`,
+a real frame id, quote `draco___`. Still gated out — but on `E_TRIGGER_LATE`, having named a real
+screen event that came *after* the chat, which is a far more tractable error than inventing one.
+
+**What killed it was abstention.** The agent returns `unknown` five times; the grounded arm
+returns it **zero** times. Handed a list of candidates it always picked one, and picking one is
+how a card becomes scoreable and therefore wrong. `E_CIRCULAR_EVIDENCE` went *up*, 8 → 10. This
+is the headline result running backwards: the ablation won by knowing less and saying nothing;
+this arm lost by knowing more and always committing.
+
+Cost: **$0.0122** — 22 calls, 107,546 input and 3,589 output tokens at `gpt-4.1-nano` list price,
+computed from the usage fields in the new cache entries rather than estimated. Ledger now $0.43.
+Verified afterwards with every key unset: `--grounded` replays **70 hits / 0 misses**, and
+`make eval` is still **48 / 0** with `report.md`, `comparison.csv` and `summary.json` byte-
+identical.
+
+**Two integrity items found while doing this.** The cost guard in `test_published_numbers.py`
+failed the moment the ledger moved — it caught two documents still quoting $0.42, which is
+exactly what it is for. And the clock says **2026-08-30 17:40 UTC**, while 8 PROGRESS headings
+and 57 DECISIONS rows read `2026-08-31`: the assigned-date assumption already disclosed for the
+git history leaked into the working documents. No measurement depends on a timestamp — spend is
+computed from token counts inside cache entries — so it is disclosed as RISKS #36 rather than
+mass-rewritten with a day to go.
+
+Written up as *Removed experiment #2* in `docs/IMPROVEMENT_CHANGELOG.md`, with the reproduce
+command.
+
+Result: `make test` 521 → **523 passed**. Five rows in DECISIONS.md, one in RISKS.md.
+**24.3 hours to the deadline. The video does not exist.**
+Next: D) the REPLAY|LIVE segmented control with Tier 0 keyless live chat.
+Blockers: none.

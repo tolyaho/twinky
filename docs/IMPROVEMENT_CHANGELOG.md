@@ -137,3 +137,70 @@ task where the honest answer is often "I cannot show you the cause." The agent i
 here that named a correct cause at all, and it paid for that by being wrong more often. That
 trade is the product, and the next build should be measured on whether it can move recall without
 buying it with unsupported claims.
+
+---
+
+## Removed experiment #2 — inlining the stream context did not work
+
+**Diagnosis first, from the recorded cache rather than from intuition.** `CARD_CONTRACT` demands
+that `trigger.event_id` be a SPEECH or SCREEN id and states that every cited id must be one the
+model "actually saw in the input". It was shown none. All **57** of the agent's own recorded
+opening turns contain zero event ids — the whole turn is *"Analyse the window start_ms=… end_ms=…
+/ Call tools to see what happened, then answer."* Across the **70** cached conversations that
+reached a tool result, chat appeared in **70 (100%)** and frame captions in **2 (3%)**. In 97% of
+conversations the only ids the model had ever been shown were chat ids, so naming a chat message
+was the only move available to it. That is logged failure #39, and it made
+`E_CIRCULAR_EVIDENCE` a missing input rather than a disobedient model.
+
+**The fix.** A second arm, `agent_grounded`, puts the window's transcript segments and frame
+captions into the opening turn as `id=… ts=… | text`, capped at 12 and 6, names that list as the
+only source of trigger ids, and keeps `unknown` explicitly available. Nothing else changes: same
+schema, same tools, same gate, same scorer, `temperature=0`. It is a **separate arm**, not a
+re-recorded agent, because the prompt is the cache key and the committed cache is how a judge
+reproduces every published number with no API key.
+
+**Measured on the same eleven frozen cases, same windows, same gold labels:**
+
+| system | cards | trigger accuracy | unmatched | unsupported | recall |
+|---|---:|---:|---:|---:|---:|
+| agent | 23 | **0.500** | 0.913 | **0.739** | 0.182 |
+| `agent_grounded` | 17 | 0.000 | **0.882** | 0.882 | 0.182 |
+| baseline | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
+
+**It lost.** Same recall, worse unsupported rate, worse trigger accuracy. The change is not
+adopted; `agent` remains the published system and its numbers are unchanged.
+
+**But it did the thing it was built to do, and the mechanism is the finding.** Where each arm's
+trigger id actually came from:
+
+| | abstained | a chat id | a real transcript id | a real frame id |
+|---|---:|---:|---:|---:|
+| agent | 5 | 14 | 4 | **0** |
+| `agent_grounded` | **0** | 12 | 1 | **4** |
+
+Failure #39 is fixed in the narrow sense: the agent had never once named a frame caption, and
+this arm names four. On the frame-only case `c07`, the published agent emitted three cards
+reading *"Audience mentions 'draconic'"*, each naming a chat UUID as a `speech` trigger; the
+grounded arm emitted one card titled *"Audience is guessing words related to 'dragon' and
+'dracula'"* with `trigger.kind=screen`, a real frame id, and the quote `draco___`. It still
+failed the gate — but on `E_TRIGGER_LATE`, having named a real screen event that came *after* the
+chat it explained, which is a different and much more tractable error than inventing a cause.
+
+**What killed it was abstention.** The agent returns `unknown` five times; the grounded arm
+returns it **zero** times. Handed a list of candidates, it always picked one, and picking one is
+how a card becomes scoreable and therefore wrong. `E_CIRCULAR_EVIDENCE` went *up*, 8 to 10.
+
+This is the same trade the headline result already exposed, running in the opposite direction:
+the ablation won by knowing less and saying nothing, and this arm lost by knowing more and always
+committing. Supplying candidates without also teaching the model when *none of them* is the cause
+just moves the failure from "invents a cause" to "picks the nearest one". That is the next
+experiment, and it is not one to design after seeing this score.
+
+Reproduce it with no keys and no cost:
+
+```
+TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+```
+
+70 cache hits, 0 misses, $0.00. Recording it cost **$0.0122** (22 calls, 107,546 input and 3,589
+output tokens at `gpt-4.1-nano` list price), logged in `COST_LEDGER.md`.

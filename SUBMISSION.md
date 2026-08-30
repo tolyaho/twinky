@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 521 passed, ~1 s
+make test                        # 523 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 
@@ -121,4 +121,4 @@ published, is in `docs/IMPROVEMENT_CHANGELOG.md`.
    default and the documented route. Exercised once end to end against a live broadcast:
    113 messages, 3 cards, 104.8 s, ~$0.006.
 
-Cost of every model call ever made in this project: **$0.42**, itemised in `COST_LEDGER.md`.
+Cost of every model call ever made in this project: **$0.43**, itemised in `COST_LEDGER.md`.
