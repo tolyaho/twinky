@@ -15,7 +15,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 371 passed — this is also shot 12
+make test                             # 375 passed — this is also shot 12
 ```
 
 Nothing below needs an API key or a network connection. Every command reads the committed cache.
@@ -165,7 +165,7 @@ itemised in `COST_LEDGER.md`.
 
 ### Shot 12 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 371 passed
+make test        # 375 passed
 ```
 **Proves:** with `make eval` above, a judge reproduces every number in the submission from the
 committed cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
