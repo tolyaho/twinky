@@ -576,3 +576,30 @@ card padding 24 -> 32, rail gap 20 -> 24, drawer 16 -> 24, lede margin 32 -> 48.
 Story: four numbered eyebrows now carry the argument — what the audience said, what did not
 survive, whether it is actually better, how it got here — with a test pinning the order.
 Blockers: none. Cost unchanged at $0.39 of $5.00.
+
+## 2026-08-30T19:45Z — iteration 36
+Attempted: the UI pass, worked in the numbered order after the author actually looked at the page.
+Result: `make test` green, 371 -> 386. Eight items, each committed separately.
+(1) The hero showed the wrong data and disproved its own headline: three cards reading "Chat
+mention of X" under "caused by unknown unknown". It is now pinned server-side to the window where
+the argument is provable and shows ONE grounded card. Searched every recorded run for cards that
+are gate-clean, non-abstaining, naming a real event with a verbatim quote — 14 exist. The best is
+on the sleep-stream word game: chat types li-words and lands on "libral" while the frame shows
+"librarian" correctly guessed, with ZERO transcript segments in the window. The stream is built
+backwards from the cited message so it arrives at the freeze; taking the first N left the payoff
+off the end. The card came from the single-prompt BASELINE, not the agent, so the stage says so —
+presenting it unlabelled under the product's headline would have been the quiet misrepresentation.
+(2) Three rendering bugs fixed: the literal "unknown unknown" is now one sentence, the `CAUSE`
+label had no margin ("CAUSENot established."), and a distribution with one bucket drew a column
+of indices with a vertical one-character label — charts now need two distinct non-zero buckets or
+the fact is printed as text.
+(3) Section 01 was headed "Verified audience signals" over cards badged ABSTAINED. Renamed to
+"Signals with a cause" and abstentions given their own block framed as correct behaviour.
+(4) Wordmark: a filled dot bound by a hairline to an outlined dot — signal bound to its cause —
+in the nav and as the favicon; SVG content type added to the server.
+(5-6) Inter stack with the full scale applied, mono only for ids and timestamps, hero split into
+claim (cols 1-7) and proof (8-12) so the dead right half is gone, cards 2-up above 1100px, stat
+numbers at 48/300.
+(8) Cards as objects: the quote is now the emphasis at 18px italic with a hairline rule, the type
+badge is quiet with no fill, the drawer caret rotates and the evidence rows stagger in.
+Blockers: none. Cost unchanged at $0.39 of $5.00 — this pass spent nothing.
