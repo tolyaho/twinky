@@ -1115,8 +1115,11 @@ def test_the_middle_column_shows_one_kind_of_claim_at_a_time():
     js = LIVE_JS.read_text(encoding="utf-8")
 
     assert 'id="tab-board"' in html and 'id="tab-signals"' in html
-    assert 'document.getElementById("signals").hidden = board;' in js
-    assert 'document.getElementById("boardrows").hidden = !board;' in js
+    # One VIEWS entry per pane, and showMiddle hides every pane that is not the active one.
+    assert 'const VIEWS = {' in js
+    for view in ("board:", "signals:", "questions:"):
+        assert view in js, f"{view} is not a middle-column view"
+    assert 'document.getElementById(v.pane).hidden = !on;' in js
 
 
 def test_the_row_states_the_strength_of_its_link():
@@ -1150,3 +1153,102 @@ def test_the_rail_is_the_first_zone_to_go_when_the_window_narrows():
     narrow = css.split("@media (max-width: 1280px)", 1)[1].split("}\n\n", 1)[0]
 
     assert ".panel-rail { display: none; }" in narrow
+
+
+
+# --------------------------------------------------------------------- questions to you
+# Answered or not is decided by reading the transcript AFTER the question. That is the one thing
+# a chat-only system cannot do, which is why this panel is the cheapest proof of the thesis.
+
+def test_an_answer_needs_two_shared_words_not_one():
+    """Measured on marlon: a single-token rule answered "whos fucking dad" with "the fucking
+    water is this shit". Nine of its ten answers were that kind of coincidence."""
+    from ts.report.board import answered_by
+    from ts.events import Event, EventIndex
+
+    index = EventIndex([
+        Event("s1", "transcript_segment", 5_000, {"text": "the fucking water is this shit"}),
+        Event("s2", "transcript_segment", 9_000,
+              {"text": "how do you feel that Reddify switching you for XQC?"}),
+    ])
+
+    coincidence = {"ts_ms": 1_000, "variants": ["whos fucking dad"]}
+    real = {"ts_ms": 1_000, "variants": ["how do u feel abt Redify switching u for xqc"]}
+
+    assert answered_by(index, coincidence) is None
+    assert answered_by(index, real)["event_id"] == "s2"
+
+
+def test_an_answer_must_come_after_the_question():
+    """A streamer cannot answer a question that has not been asked. Without this the panel would
+    match on any nearby speech and the word "after" in its own description would be a lie."""
+    from ts.report.board import answered_by
+    from ts.events import Event, EventIndex
+
+    index = EventIndex([Event("s1", "transcript_segment", 1_000,
+                              {"text": "violet myers at the party"})])
+
+    assert answered_by(index, {"ts_ms": 5_000, "variants": ["why violet myers party"]}) is None
+
+
+def test_a_silent_stream_can_answer_nothing():
+    """stableronaldo has zero transcript segments for twelve minutes, so every question on it is
+    unanswered — and that is a true statement about the stream, not a gap."""
+    index = serve_mod.load_fixture(FIXTURES / "stableronaldo_2026-08-30T0723")
+    chat = index.window(index.start_ms, index.end_ms + 1, types=["chat_message"])
+
+    result = serve_mod.stream_questions(index, chat)
+
+    assert result["total"] == result["unanswered"] == 16
+
+
+def test_the_measured_answered_questions_reproduce():
+    """Both yugi answers are the streamer picking the question up out loud. Pinned so a change to
+    the rule has to move this number deliberately."""
+    index = serve_mod.load_fixture(FIXTURES / "yugi_2026-08-30T0723")
+    chat = index.window(index.start_ms, index.end_ms + 1, types=["chat_message"])
+
+    result = serve_mod.stream_questions(index, chat, limit=200)
+    answered = [q for q in result["questions"] if q["answered"]]
+
+    assert (result["total"], result["asked"], len(answered)) == (38, 45, 2)
+    top = answered[0]
+    assert top["count"] == 6
+    assert "switching" in top["answered"]["matched"]
+
+
+def test_unanswered_questions_come_first():
+    """The value of the panel is the thing the streamer meant to get to and lost."""
+    index = serve_mod.load_fixture(FIXTURES / "yugi_2026-08-30T0723")
+    chat = index.window(index.start_ms, index.end_ms + 1, types=["chat_message"])
+
+    ranked = serve_mod.stream_questions(index, chat, limit=200)["questions"]
+    states = [bool(q["answered"]) for q in ranked]
+
+    assert states == sorted(states), "an answered question sorted above an unanswered one"
+
+
+def test_questions_are_cumulative_across_the_stream():
+    """"Asked four times" is a fact about the audience. Split across three tiles it becomes three
+    quiet questions instead of one insistent one."""
+    script = serve_mod.stream_events(FIXTURES / "marlon_2026-08-30T0715",
+                                     Path("evidence/raw-results"))
+    totals = [e["questions"]["total"] for _, e in script if e["kind"] == "board"]
+
+    assert totals == sorted(totals), "the question list must only grow"
+    assert totals[-1] > totals[0]
+
+
+def test_the_panel_shows_the_line_the_streamer_said():
+    """A verdict with no evidence under it is exactly what this project refuses everywhere else."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert '"you said"' in js
+    assert "item.answered.text" in js
+
+
+def test_the_questions_footer_states_the_totals():
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "still unanswered" in js
+    assert "not shown" in js, "a truncated question list must say it was truncated"

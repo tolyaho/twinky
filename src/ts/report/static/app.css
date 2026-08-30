@@ -916,3 +916,50 @@ html, body.live-page { height: 100%; }
 }
 .spark { display: flex; align-items: flex-end; gap: 2px; height: 34px; }
 .spark-bar { flex: 1 1 0; min-width: 2px; border-radius: 1px 1px 0 0; background: var(--muted-soft); }
+
+
+/* ------------------------------------------------------------- questions to you
+   Unanswered first, because the value of the panel is the thing the streamer meant to get to and
+   lost. Answered and unanswered are told apart by the weight of a hairline and a filled or empty
+   dot — no state colour, since the palette has none. */
+.questions {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  display: flex; flex-direction: column; gap: var(--xs);
+  padding: var(--sm) var(--base);
+  scrollbar-width: thin; scrollbar-color: var(--hairline-strong) transparent;
+}
+.qrow {
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  padding: var(--xs) var(--sm) var(--sm);
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.qrow:hover { border-color: var(--hairline-strong); box-shadow: var(--shadow-hover); }
+.qrow.is-open { border-left: 2px solid var(--ink); }
+.qrow-h { display: flex; align-items: center; gap: var(--xs); }
+.qdot {
+  width: 6px; height: 6px; border-radius: var(--r-pill);
+  border: 1px solid var(--ink); background: var(--ink);
+}
+.qrow.is-answered .qdot { background: transparent; border-color: var(--muted-soft); }
+.qstate {
+  font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
+  color: var(--muted);
+}
+.qrow.is-open .qstate { color: var(--ink); }
+.qn {
+  margin-left: auto;
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.qtext {
+  margin: var(--xxs) 0 0;
+  font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--body-strong);
+}
+/* The line the streamer actually said, so the reader judges the link rather than trusting it. */
+.qans {
+  margin: var(--xs) 0 0; padding-left: var(--sm);
+  border-left: 1px solid var(--hairline-strong);
+  font-size: 13px; line-height: 1.5; color: var(--muted);
+}
+.qans .label { display: block; }

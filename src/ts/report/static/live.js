@@ -40,6 +40,8 @@ const state = {
   rows: new Map(),              /* event id -> <li>, for the citation highlight */
   boardRows: 0,
   boardSeen: false,
+  questionCount: 0,
+  view: "board",
 };
 
 /* ------------------------------------------------------------------ chat column */
@@ -129,7 +131,7 @@ function addCard(event) {
      header read "0" above five visible cards. */
   const shown = (state.counts.grounded || 0) + (state.counts.abstained || 0);
   document.getElementById("sig-n").textContent = String(shown);
-  if (document.getElementById("boardrows").hidden) {
+  if (state.view === "signals") {
     document.getElementById("board-n").textContent = String(shown);
   }
   document.getElementById("sig-split").textContent =
@@ -227,11 +229,52 @@ function addBoard(event) {
     + (f.rows_hidden ? ` · ${f.rows_hidden} more rows hidden` : "");
   state.boardRows = rows.length + orphans.length;
   state.boardSeen = true;
-  if (!document.getElementById("boardrows").hidden) {
+  if (state.view === "board") {
     document.getElementById("board-n").textContent = String(state.boardRows);
   }
 
   renderRail(event.rail || {});
+  renderQuestions(event.questions || {});
+}
+
+/* ------------------------------------------------------------------ questions to you
+   The cheapest proof of the whole thesis: whether a question was answered is decided by reading
+   the transcript AFTER it was asked. A chat-only system has the question and no way to know. */
+function renderQuestions(q) {
+  const list = q.questions || [];
+  const box = document.getElementById("questions");
+  clear(box);
+  state.questionCount = q.total || 0;
+  document.getElementById("q-n").textContent = String(state.questionCount);
+
+  if (!list.length) {
+    box.appendChild(el("p", "empty", "No question has been asked yet."));
+  }
+  for (const item of list) {
+    const row = el("article", `qrow ${item.answered ? "is-answered" : "is-open"}`);
+    const head = el("div", "qrow-h");
+    head.appendChild(el("span", "qdot"));
+    head.appendChild(el("span", "qstate", item.answered ? "answered" : "unanswered"));
+    head.appendChild(el("span", "qn", `${item.count} asked`));
+    row.appendChild(head);
+    row.appendChild(el("p", "qtext", `“${item.text}”`));
+    if (item.answered) {
+      /* The line the streamer actually said, so the reader judges the link rather than
+         trusting it. Two shared content words is the test, and it is stated on the method page. */
+      const ans = el("p", "qans");
+      ans.appendChild(el("span", "label", "you said"));
+      ans.appendChild(document.createTextNode(`“${item.answered.text}”`));
+      row.appendChild(ans);
+    }
+    row.addEventListener("click", () => highlightIds(item.event_ids || []));
+    box.appendChild(row);
+  }
+
+  const foot = document.getElementById("q-foot");
+  foot.textContent = `${q.total || 0} questions · ${q.asked || 0} asked · `
+    + `${q.unanswered || 0} still unanswered`
+    + (q.hidden ? ` · ${q.hidden} not shown` : "");
+  if (!document.getElementById("questions").hidden) foot.hidden = false;
 }
 
 function boardRow(row, origin) {
@@ -376,6 +419,7 @@ function reset() {
   state.holdUntil = 0;
   state.boardRows = 0;
   state.boardSeen = false;
+  state.questionCount = 0;
 
   /* The board and the rail describe ONE window. Leaving the previous fixture's rows up while a
      new stream fills the feed is the stale-identity bug that made an empty page read as loading,
@@ -392,8 +436,19 @@ function reset() {
   }
   const railN = document.getElementById("rail-n");
   if (railN) railN.textContent = "—";
-  const foot = document.getElementById("board-foot");
-  if (foot) { foot.hidden = true; foot.textContent = ""; }
+  const questionsEl = document.getElementById("questions");
+  if (questionsEl) {
+    clear(questionsEl);
+    questionsEl.appendChild(el("p", "empty", "No question has been asked yet."));
+  }
+  const qn = document.getElementById("q-n");
+  if (qn) qn.textContent = "0";
+  for (const id of ["board-foot", "sig-split", "q-foot"]) {
+    const foot = document.getElementById(id);
+    if (foot) foot.hidden = true;
+  }
+  const boardFoot = document.getElementById("board-foot");
+  if (boardFoot) boardFoot.textContent = "";
   showFollow(false);
 
   /* Identity is cleared here, not only on success. A failed start() used to leave the previous
@@ -543,26 +598,30 @@ for (const button of document.querySelectorAll(".speeds .seg")) {
 
 /* The middle column shows one kind of thing at a time. A deterministic row and a gated card
    drawn in the same column would read as the same kind of claim, and they are not. */
+const VIEWS = {
+  board:     { pane: "boardrows", foot: "board-foot", tab: "tab-board",     title: "The board" },
+  signals:   { pane: "signals",   foot: "sig-split",  tab: "tab-signals",   title: "Signals" },
+  questions: { pane: "questions", foot: "q-foot",     tab: "tab-questions", title: "Questions to you" },
+};
+
 function showMiddle(view) {
-  const board = view === "board";
-  document.getElementById("boardrows").hidden = !board;
-  document.getElementById("board-foot").hidden = !board || !state.boardSeen;
-  document.getElementById("signals").hidden = board;
-  document.getElementById("sig-split").hidden = board;
-  document.getElementById("board-h").textContent = board ? "The board" : "Signals";
-  for (const id of ["tab-board", "tab-signals"]) {
-    const b = document.getElementById(id);
-    const on = (id === "tab-board") === board;
-    b.classList.toggle("is-active", on);
-    b.setAttribute("aria-pressed", String(on));
+  state.view = view;
+  for (const [name, v] of Object.entries(VIEWS)) {
+    const on = name === view;
+    document.getElementById(v.pane).hidden = !on;
+    document.getElementById(v.foot).hidden = !on || !state.boardSeen;
+    const tab = document.getElementById(v.tab);
+    tab.classList.toggle("is-active", on);
+    tab.setAttribute("aria-pressed", String(on));
   }
-  document.getElementById("board-n").textContent = board
-    ? String(state.boardRows || 0)
-    : String((state.counts.grounded || 0) + (state.counts.abstained || 0));
+  document.getElementById("board-h").textContent = VIEWS[view].title;
+  document.getElementById("board-n").textContent = String(
+    view === "board" ? (state.boardRows || 0)
+      : view === "questions" ? (state.questionCount || 0)
+        : (state.counts.grounded || 0) + (state.counts.abstained || 0));
 }
-for (const id of ["tab-board", "tab-signals"]) {
-  document.getElementById(id).addEventListener(
-    "click", () => showMiddle(id === "tab-board" ? "board" : "signals"));
+for (const [name, v] of Object.entries(VIEWS)) {
+  document.getElementById(v.tab).addEventListener("click", () => showMiddle(name));
 }
 
 const debug = document.getElementById("debug-toggle");

@@ -27,6 +27,9 @@ from ..workflow.reduce import STOPWORDS, canonical, group_chat, grouped_summary
 RATE_BUCKET_MS = 10_000        # the sparkline's resolution, and the unit "peak burst" is in
 MAX_ROWS = 6                   # a board nobody scrolls is a board somebody reads
 TOP_SHARE = 0.10               # "concentration" is the share of messages from the top 10%
+ANSWER_WINDOW_MS = 120_000     # how long after a question the streamer still counts as answering
+MAX_QUESTIONS = 12             # a list nobody scrolls is a list nobody reads
+MIN_ANSWER_TOKENS = 2          # one shared word is a coincidence, not an answer
 
 # A question needs a content word. The bare "ends with ?" rule returns 54 hits on one marlon
 # window and they are almost all literally `???` — punctuation is volume, not a question.
@@ -82,6 +85,65 @@ def questions(events: Iterable[Event]) -> List[Dict[str, Any]]:
                         "variants": [e.text], "ts_ms": e.ts_ms})
     out.sort(key=lambda q: (-q["count"], q["ts_ms"], q["text"]))
     return out
+
+
+def answered_by(index, question: Dict[str, Any], *,
+                within_ms: int = ANSWER_WINDOW_MS) -> Optional[Dict[str, Any]]:
+    """Did the streamer say something answering this, and when?
+
+    Looked for in the transcript **after** the question was asked — which is exactly why a
+    chat-only system cannot produce this panel at all. It has the question and no way to know
+    whether it was ever picked up.
+
+    The test is lexical: a speech segment within the next two minutes sharing **two** content
+    words with the question. Two, not one, because one common word is not evidence — measured on
+    marlon, a single-token rule answered *"whos fucking dad"* with *"the fucking water is this
+    shit"* and *"WHYS SHE HERE"* with a line containing "here". Nine of ten answers on that
+    fixture were that kind of coincidence.
+
+    It costs real matches: *"ETA?"* answered by *"ETA 10:36."* shares one token and is now marked
+    unanswered. That is the right direction to be wrong in. Telling a streamer they answered
+    something they did not takes it off the list they came here for; leaving an answered question
+    on the list only adds noise to it.
+
+    This is the same kind of evidence a `matched` board row stands on, and the same kind of claim
+    — a link, not a certainty — so the panel shows the line the streamer actually said, with its
+    timestamp, and the reader judges it.
+    """
+    asked = question["ts_ms"]
+    wanted = {t for v in (question.get("variants") or [question.get("text", "")])
+              for t in _content_tokens(v)}
+    if not wanted:
+        return None
+    for seg in index.window(asked + 1, asked + within_ms, types=["transcript_segment"]):
+        hit = wanted & set(_content_tokens(seg.text))
+        if len(hit) >= MIN_ANSWER_TOKENS:
+            return {"event_id": seg.event_id, "ts_ms": seg.ts_ms, "text": seg.text,
+                    "matched": sorted(hit)}
+    return None
+
+
+def stream_questions(index, chat: Sequence[Event], *,
+                     limit: int = MAX_QUESTIONS) -> Dict[str, Any]:
+    """Every question asked so far, grouped across the whole stream and marked answered or not.
+
+    Stream-level rather than per-window on purpose: "asked four times" is a fact about the
+    audience, and splitting it across three 60-second tiles turns one insistent question into
+    three quiet ones. This is the list a streamer opens after the stream.
+    """
+    ranked = questions(chat)
+    for q in ranked:
+        q["answered"] = answered_by(index, q)
+    # Unanswered first, then by how many asked: the whole value of the panel is the thing the
+    # streamer meant to get to and lost.
+    ranked.sort(key=lambda q: (bool(q["answered"]), -q["count"], q["ts_ms"]))
+    return {
+        "total": len(ranked),
+        "asked": sum(q["count"] for q in ranked),
+        "unanswered": sum(1 for q in ranked if not q["answered"]),
+        "questions": ranked[:limit],
+        "hidden": max(0, len(ranked) - limit),
+    }
 
 
 def _overlaps(trigger_text: str, group: Dict[str, Any]) -> bool:

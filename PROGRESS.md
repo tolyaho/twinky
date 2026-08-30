@@ -1031,3 +1031,51 @@ Not done: masonry (§6), the questions panel as a section rather than a rail blo
 `REPLAY | LIVE` segmented control. Cost unchanged at $0.42.
 Next: the FEATURES_V2 ship-today set — questions panel, chatter stats surfaced properly, masonry.
 Blockers: none.
+
+## Iteration 52 — 2026-08-31 — the questions panel
+
+Attempted: FEATURES_V2 §3 — the one feature on the page a chat-only system provably cannot build.
+
+Added `answered_by()` and `stream_questions()` to `report/board.py`, a `Questions` tab beside
+`Board` and `Signals`, and a cumulative question payload on every board event. Whether a question
+was answered is decided by reading the **transcript after it was asked** — which is the whole
+point: a chat-only system has the question and no way to know whether it was ever picked up.
+
+The first rule matched on a single shared content word and it was mostly wrong. Measured on
+marlon: 10 answers, of which nine were coincidence — *"whos fucking dad"* answered by *"the
+fucking water is this shit"*, *"WHYS SHE HERE"* by a line containing "here", *"Who is Marlon
+Yall"* by a line containing "coke". Two shared words is now the threshold.
+
+That costs a real match: *"ETA?"* → *"ETA 10:36."* shares one token and is now marked unanswered.
+Accepted deliberately. Telling a streamer they answered something they did not takes it off the
+list they came here for; leaving an answered question on the list only adds noise to it.
+
+Measured after the fix, on the committed fixtures:
+
+| fixture | questions | asked | answered |
+|---|---:|---:|---:|
+| yugi | 38 | 45 | **2** |
+| marlon 0715 | 72 | 105 | **0** |
+| stableronaldo | 16 | 16 | **0** — zero transcript segments, so nothing could be answered |
+
+Both yugi answers are the streamer picking the question up out loud, and the first is the whole
+argument in one row: **"Yugi how do u feel abt Redify switching u for…" asked 6 times → *"how do
+you feel that Reddify switching you for XQC?"*** matched on `feel`, `switching`, `xqc`. marlon's
+head of the unanswered list is `violet murders?` asked **14** times and never picked up.
+
+The panel shows the line the streamer actually said, with its timestamp, rather than only a
+verdict — the link is lexical, the same family as a `matched` board row, and a verdict with no
+evidence under it is what this project refuses everywhere else. Unanswered sorts first. Clicking
+a row highlights every message that asked it.
+
+Verified against a running server: an 8× SSE read of yugi carried the cumulative question payload
+on each board event, with `why violet myers at the party` → *"my god. I remember that Violet Myers
+party."* via `myers`, `party`, `violet`.
+
+One existing guard was rewritten rather than loosened: the two-way middle-column toggle became a
+three-entry `VIEWS` table, so the test now asserts every pane is hidden unless active.
+
+Result: `make test` 490 → **498 passed**. 8 new tests, five rows in DECISIONS.md. No new hex in
+`app.css` — still the sixteen from DESIGN.md. Cost unchanged at $0.42.
+Next: chatter stats surfaced properly (§4) and the masonry board (§6).
+Blockers: none.

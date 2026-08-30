@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional
 
 from ..ingest.replay import load_fixture, load_meta
 from ..provenance import UNKNOWN
-from .board import board, rail
+from .board import board, rail, stream_questions
 from .board import windows as window_tiles
 from .poll import attach_drafts
 
@@ -263,6 +263,7 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
     # Computed here rather than in the browser: the client never holds the fixture, and these
     # numbers have to be identical to what `/api/board` serves for the same window.
     seen: set = set()
+    so_far: List[Any] = []
     for start, end in window_tiles(index):
         chat_in = index.window(start, end, types=["chat_message"])
         if not chat_in:
@@ -270,10 +271,14 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
         cards = [c for w in recorded
                  if start <= ((w.get("window_ms") or [0])[0]) < end
                  for c in list(w.get("verified") or []) + list(w.get("rejected") or [])]
+        so_far.extend(chat_in)
         script.append((max(0, end - origin), {
             "kind": "board",
             "board": board(index, start, end),
             "rail": rail(index, start, end, cards=cards, seen_authors=seen),
+            # Cumulative, not per-window: "asked four times" is a fact about the audience, and
+            # splitting it across three tiles turns one insistent question into three quiet ones.
+            "questions": stream_questions(index, so_far),
         }))
         seen.update(e.author for e in chat_in)
 

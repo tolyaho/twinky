@@ -83,6 +83,7 @@
       <div class="segmented middle-tabs" role="group" aria-label="Middle column">
         <button class="seg is-active" id="tab-board" data-view="board" aria-pressed="true">Board</button>
         <button class="seg" id="tab-signals" data-view="signals" aria-pressed="false">Signals <span id="sig-n">0</span></button>
+        <button class="seg" id="tab-questions" data-view="questions" aria-pressed="false">Questions <span id="q-n">0</span></button>
       </div>
     </header>
 
@@ -97,6 +98,14 @@
       <p class="empty" id="signals-empty">Waiting for the first window to close…</p>
     </div>
     <p class="board-foot" id="sig-split" hidden>0 grounded · 0 abstained</p>
+
+    <!-- Answered or not is decided by reading the transcript AFTER the question, which is the
+         one thing a chat-only system cannot do — it has the question and no way to know whether
+         it was ever picked up. -->
+    <div class="questions" id="questions" hidden>
+      <p class="empty">No question has been asked yet.</p>
+    </div>
+    <p class="board-foot" id="q-foot" hidden></p>
   </section>
 
   <aside class="panel panel-rail" aria-labelledby="rail-h">
