@@ -1,8 +1,8 @@
-# Submission — Twitch Agent
+# Submission — Twinky, grounded audience signals from Twitch
 
 micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one place.
 
-> Twitch Agent turns an unreadable live chat into a small number of verified audience signals: it
+> Twinky turns an unreadable live chat into a small number of verified audience signals: it
 > links each cluster of answers, reactions, questions and warnings to the exact stream moment that
 > caused it, and shows the evidence.
 
@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 559 passed, ~1 s
+make test                        # 561 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 

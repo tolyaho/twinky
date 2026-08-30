@@ -32,7 +32,7 @@ ROUTES = ["/", "/method", "/api/replay", "/api/fixtures",
           "/static/<file>"]
 
 PLACEHOLDER = """<!doctype html>
-<meta charset="utf-8"><title>Twitch Agent — replay output</title>
+<meta charset="utf-8"><title>Twinky — replay output</title>
 <body style="font-family:system-ui;font-weight:300;max-width:44rem;margin:4rem auto;color:#292524">
 <h1 style="font-weight:300">Replay output</h1>
 <p><strong>This is not the dashboard.</strong> The interface has not been built yet. This page

@@ -1,10 +1,10 @@
-# Twitch Agent
+# Twinky — grounded audience signals from Twitch
 
 > A chat message is not text. It is a response to something. `10` is meaningless; `10` thirty
 > seconds after *"how would you rate this game?"* is a rating. Chat is only interpretable against
 > the stimulus that caused it — and the stimulus is in the audio and on the screen, not in the chat.
 
-Twitch Agent turns an unreadable live chat into a small number of verified audience signals: it
+Twinky turns an unreadable live chat into a small number of verified audience signals: it
 links each cluster of answers, reactions, questions and warnings to the exact stream moment that
 caused it, and shows the evidence.
 

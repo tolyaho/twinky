@@ -1530,3 +1530,56 @@ rotate `.env` and the Telegram credentials; submit a complete draft early.
 Next unattended: FEATURES_V2 §5, the read-only NEEDS A LOOK moderation panel — deterministic,
 free, and the prompt-injection row is a security story as much as a moderation one.
 Blockers: the video needs the author.
+
+## Iteration 62 — 2026-08-30 — the rename, Twitch Agent → Twinky
+
+*(Entries above this line use the former name. They are append-only records and are left as
+written; rewriting them retroactively is the history-tidying this project refuses everywhere
+else.)*
+
+Attempted: RENAME.md, pulled to the front of the queue because **the video is filmed from the UI**
+and renaming afterwards means reshooting.
+
+**The safety check first, because one wrong move here destroys the submission.** The product name
+appears in **no prompt string** — verified against the agent's `SYSTEM`, `CARD_CONTRACT`, `INTRO`
+and `TOOLS_DOC`, the baseline prompt and the vision module before a single file was touched. So
+the rename could not change a cache key. The recorded artifacts were checked too: no occurrence in
+`evidence/`, `evals/fixtures/`, `trajectories/` or `cache/`.
+
+Renamed: the three page shells (`<title>`, wordmark, `aria-label`), the placeholder in `serve.py`,
+the package docstring, `README.md`, `SUBMISSION.md`, `CLAUDE.md`. **A tagline goes wherever the
+bare name would stand alone** — the README H1 is now *"Twinky — grounded audience signals from
+Twitch"* and the mark's `aria-label` carries the same, because "Twinky" alone tells a judge
+nothing while the old name carried "Twitch" for free.
+
+Deliberately not renamed: `PROGRESS.md`, `DECISIONS.md` and `RISKS.md` (append-only; one dated row
+added to each instead), every recorded artifact, and the `ts` package, module paths and CLI. The
+distribution name `twitch-agent` in `pyproject.toml` also stays — renaming it regenerates egg-info
+and risks `pip install -e .` a day out, for nothing a judge can see.
+
+One note in `app.css` keeps the old name on purpose. It records *why* the mark exists — a finding
+about the old two-word name set in body type — so renaming inside it would falsify the history.
+The point was generalised and the original name kept as an explicit parenthetical, and a test
+asserts that file is the **only** shipped surface where the old name survives.
+
+**`video/HOOK.md` had already logged this exact problem** — *"the repo, the README, the UI and the
+submission all say Twitch Agent… a judge who reads one name and hears another assumes they are
+looking at two different projects"* — and called it "not a T-23h change". It was, because the
+prompts were clean. That note is now closed in place with the resolution and the reason.
+
+**The proof the rename touched nothing that matters:** `make eval` **48 hits / 0 misses**, and
+`evidence/report.md`, `comparison.csv` and `summary.json` byte-identical. All three pages serve
+200 with the new titles and the wordmark reads `Twinky`. The header cannot wrap — `.mark`,
+`.mark-name` and `.bar-left` carry no fixed sizing, and the name is six characters shorter than
+what it replaced.
+
+Result: `make test` 559 → **561 passed**. Three brand tests rewritten and two added, four rows in
+DECISIONS.md, one in RISKS.md. Cost: **$0.00**, ledger $0.43.
+
+Measured while scoping the next item (FEATURES_V2 §5): across **3895 fixture messages there are
+14 link/invite messages and ZERO prompt-injection-shaped ones.** So the moderation panel gets link
+and coordinated-repeat rows from real data, and the injection rule must be shown as a rule with no
+current hits rather than illustrated with an invented example.
+
+**~21.5 hours to the deadline.** Next: FEATURES_V2 §5, the read-only NEEDS A LOOK panel.
+Blockers: the video needs the author.

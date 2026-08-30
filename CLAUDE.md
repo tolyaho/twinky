@@ -15,7 +15,7 @@ tree. Nothing in `src/`, `tests/` or `evals/` reads from it, so a clone is compl
 
 ## Product invariant — do not drift
 
-> Twitch Agent turns an unreadable live chat into a small number of verified audience signals:
+> Twinky turns an unreadable live chat into a small number of verified audience signals:
 > it links each cluster of answers, reactions, questions and warnings to the exact stream moment
 > that caused it, and shows the evidence.
 

@@ -157,7 +157,9 @@ code { font-family: var(--mono); font-size: .92em; }
 .bar-left, .bar-right { display: flex; align-items: center; gap: var(--sm); }
 /* The wordmark. A filled dot bound by a hairline to an outlined dot: signal bound to its
    cause, which is the only thing this product claims to do. Set in the display face at 300
-   with tightened tracking — "Twitch Agent" in body type was not a wordmark. */
+   with tightened tracking — the product name set in body type was not a
+   wordmark. (Written when the product was called Twitch Agent; the point survives
+   the rename.) */
 .mark {
   display: inline-flex; align-items: center; gap: var(--xs);
   color: var(--ink); text-decoration: none;

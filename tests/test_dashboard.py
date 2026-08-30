@@ -513,7 +513,7 @@ def test_abstentions_are_framed_as_correct_behaviour_not_failure():
 
 # --------------------------------------------------------------- brand
 def test_the_wordmark_is_a_mark_not_body_text():
-    """"Twitch Agent" set in the body face is not a wordmark. The glyph means what the product
+    """The product name set in the body face is not a wordmark. The glyph means what the product
     means: a filled dot bound by a hairline to an outlined dot — signal bound to its cause."""
     html = (STATIC / "index.html").read_text(encoding="utf-8")
     css = (STATIC / "app.css").read_text(encoding="utf-8")
@@ -538,12 +538,47 @@ def test_svg_is_served_with_the_right_content_type():
 
 
 def test_the_name_is_treated_identically_everywhere():
-    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    """One name across the repo, the UI and the submission. `video/HOOK.md` had already logged
+    the mismatch — the hook said Twinky while everything else said Twitch Agent — and a judge who
+    reads one name and hears another is counting two projects."""
+    pages = [(STATIC / p).read_text(encoding="utf-8")
+             for p in ("index.html", "method.html", "philosophy.html")]
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    submission = (REPO_ROOT / "SUBMISSION.md").read_text(encoding="utf-8")
 
-    assert "<title>Twitch Agent" in html
-    assert readme.startswith("# Twitch Agent")
-    assert "Twitch&nbsp;Agent" in html or "Twitch Agent" in html
+    for html in pages:
+        assert "<title>Twinky —" in html
+        assert '<span class="mark-name">Twinky</span>' in html
+    assert readme.startswith("# Twinky")
+    assert "Twinky turns an unreadable live chat" in readme
+    assert "Twinky" in submission
+
+
+def test_the_bare_name_never_stands_alone_without_saying_what_it_is():
+    """"Twinky" on its own tells a judge nothing, and the old name carried "Twitch" for free."""
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+
+    assert readme.splitlines()[0] == "# Twinky — grounded audience signals from Twitch"
+    assert 'aria-label="Twinky — grounded audience signals from Twitch"' in html
+
+
+def test_the_old_name_survives_only_where_it_is_history():
+    """Renaming inside a note that explains a past decision would falsify the note. Everywhere
+    else the old name is gone from shipped surfaces."""
+    import subprocess
+
+    shipped = subprocess.run(
+        ["grep", "-rl", "Twitch Agent", "src", "README.md", "SUBMISSION.md"],
+        cwd=REPO_ROOT, capture_output=True, text=True).stdout.split()
+    # Bytecode and packaging metadata are build output, not shipped source, and both keep a
+    # stale copy of the docstring until something regenerates them.
+    live = [f for f in shipped
+            if "egg-info" not in f and "__pycache__" not in f and not f.endswith(".pyc")]
+
+    assert live == ["src/ts/report/static/app.css"], f"the old name is still on {live}"
+    note = (STATIC / "app.css").read_text(encoding="utf-8")
+    assert "Written when the product was called Twitch Agent" in note
 
 
 # --------------------------------------------------------------- cards as objects

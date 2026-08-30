@@ -72,11 +72,17 @@ face at **weight 300 only**, one pastel orb drifting behind, no saturated colour
 that matches the site exactly is worth more than a rendered one, and it takes ten minutes in
 HTML you already have.
 
-**One naming check before you cut it.** The card in your brief says *"introducing… Twinky"*, but
-the repo, the README, the UI and the submission all say **Twitch Agent**. Pick one and make
-everything agree — a judge who reads "Twitch Agent" everywhere and hears "Twinky" in the video
-assumes they are looking at two different projects. If you want Twinky as the product name, it
-has to change in the README and the interface too, and that is not a T-23h change.
+**The naming check is closed — resolved 2026-08-30 in favour of Twinky.** This note used to warn
+that the card said *"introducing… Twinky"* while the repo, README, UI and submission all said
+*Twitch Agent*, and that a judge who reads one name and hears another counts two projects. The
+rename has been done: all three pages, the README, the submission and the invariant now read
+**Twinky**, with a tagline wherever the bare name would otherwise stand alone. Say "Twinky" in
+the video.
+
+It was safe to do this late because the product name appears in **no prompt string** — verified
+against the agent's `SYSTEM`, `CARD_CONTRACT`, `INTRO`, `TOOLS_DOC`, the baseline prompt and the
+vision module before a single file was touched. So it could not move a cache key, and `make eval`
+still reports 48 hits / 0 misses with `evidence/` byte-identical.
 
 ---
 
