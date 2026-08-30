@@ -5,20 +5,20 @@ them — so rows are reordered by severity, never renumbered.
 
 ## The critical path, and what it costs
 
-Everything unscored traces back to one thing: **no fixture has been recorded** (#2). Downstream
-of it sit the eight missing eval cases (#12, blocks Measured Improvement, 15 pts), all three
-required trajectories (#20), the whole B phase, and the C2 fresh-clone run. The video (#6) also
-needs footage that only a real fixture produces.
+Reviewed against the tree 2026-08-30 14:30, by executing claims rather than re-reading them.
+**#2 is closed** — four fixtures captured, eleven cases frozen, one measured comparison, all
+reproducible from cache with no keys. Everything that was downstream of it (#12, #20, #21, and
+the whole B phase) is closed with it.
 
-The recorder itself has never been run against a live stream (#21). That is the sharp edge: if
-capture fails on first contact there is no fallback, and it fails at the moment there is least
-time to fix it.
+What is left is not engineering. In order: the **video** (#6) does not exist and is a hard
+deliverable; the **gold labels** (#36) are model-drafted and unconfirmed; the **repository is
+private** (#37), which fails "judges have access"; and `.env` (#17) and the Telegram history
+(#1) hold live credentials that need rotating regardless of the hackathon.
+
+The measured result is mixed and is reported that way: the agent doubles the baseline's recall
+and loses the headline unsupported-card rate. That is #38, a finding rather than a defect.
 
 Decision gate is Sunday 20:00 MSK; submission is Monday 21:00 MSK (18:00 UTC).
-
-Before any of that, rotate the credentials in #17 and #1. They are live, and were already exposed
-once. (#16 claimed a third copy in `legacy/`; it was a scanner false positive — see the fixed
-table and #35.)
 
 ---
 
@@ -28,20 +28,21 @@ table and #35.)
 |---|---|---|---|
 | 17 | `.env` holds eight live credentials | **OPEN** | Twitch, Deepgram, Anthropic, OpenAI, DeepSeek and DB credentials. Now genuinely ignored: the tree became a git repository 2026-08-30 and `.env` is covered by `.gitignore`, verified with `git check-ignore`. The ignore rule does not protect a **zip**, so still exclude it explicitly at packaging time. `make scan` reports it as a shipping blocker. |
 | 1 | Credentials pasted in the team Telegram group (Twitch secret, MySQL creds, Anthropic key) | **OPEN** | Rotate regardless of the hackathon. Never commit the export. Still live — see #16, #17. |
-| 2 | No fixtures recorded; P0-3 needs streams live | **OPEN — the critical path** | 3 × ~10 min. Self-stream one as a guaranteed fallback. Everything below marked "downstream of #2" unblocks the moment this lands. |
-| 21 | The fixture recorder has never been run against a live stream | **OPEN — narrowed 2026-08-30** | The network boundary is still unexercised: no Twitch egress here. Everything below it now is — frame stamping, retry safety, the ffmpeg failure path, the empty-capture guard, and the capture → enrich → `load_fixture` seam, 8 tests. Two real defects were fixed in the process: a re-run stamped already-timestamped frames from zero against a new start time, and a capture that produced nothing returned success and wrote a `meta.json` declaring a good fixture. Still run it once on a 60-second segment and check `make inspect` before committing to three full captures. |
+| 37 | The GitHub repository is private, so judges cannot access it | **OPEN — author action** | `github.com/tolyaho/twinky`. `make scan` is clean and `legacy/README.original.md` was a false positive (#16), so there is nothing to scrub first. Flip it public before submitting, and check `legacy/frontend/` (#13) is acceptable to publish. |
+| 36 | Gold labels are model-drafted and no human has confirmed them | **OPEN — author action** | All eleven gold files carry `"reviewed": false`. `evals/REVIEW_ME.md` is a ten-minute pass written for exactly this. README §6 states the position plainly rather than claiming a review that did not happen. Three cases need judgement specifically: c03's trigger, c12's abstain call, c05's warning inside an unrelated flood. |
+| 6 | Video not started; ≤5:00 and a hard deliverable | **OPEN — the only missing deliverable** | Footage now exists: `make demo` runs from cache on two fixtures. Storyboard in `../notes/06-VIDEO.md`. A judge who cannot watch the demo cannot score End-to-End Quality at all. |
+| 21 | The fixture recorder had never been run against a live stream | **CLOSED 2026-08-30** | Run four times against live broadcasts: 2 + 10 + 12 + 12 minutes, 3863 chat messages, 72 frames, 47.6 minutes of audio, all four enriched and committed. The two defects fixed beforehand were real — a re-run re-stamped already-timestamped frames from zero, and an empty capture returned success while writing a `meta.json` declaring a good fixture — and neither recurred. |
 | 22 | `.env` is never read — `python-dotenv` is declared but `load_dotenv` is called nowhere | **OPEN — new 2026-08-30** | Verified: zero call sites in `src/`, `evals/`, `tests/`, `scripts/`, `Makefile`. A correctly filled `.env` will still fail the record phase with "DEEPGRAM_API_KEY is unset". Export the variables in the shell instead. Note `.env` also sets `TS_LLM_MODE`, so auto-loading it would let a local file silently flip a judge's replay run into live mode — the fix is to export keys, not to add `load_dotenv()` blindly. `docs/REPRODUCTION.md` §10 was corrected. |
 
 ## Open — required deliverables and scoring
 
 | # | Risk | Status | What to do |
 |---|---|---|---|
-| 12 | 4 of 12 eval cases exist, all on the synthetic scaffold fixture | **OPEN — blocks Measured Improvement (15 pts)** | Downstream of #2. Hand-writing fixtures to contain the phenomena being graded would be grading against a script. `make eval` banners any non-`capture` fixture as NOT A REPORTED RESULT. Per-case status in `evals/DATA.md`. |
-| 20 | No product-agent trajectory exists for any of the three systems | **OPEN — required deliverable** | Downstream of #2. Needs `audience_signal_agent`, `baseline_single_prompt`, `baseline_chat_only`. Status table in `trajectories/README.md`. |
-| 6 | Video not started; ≤5:00 and a hard deliverable | **OPEN** | Monday 14:00–16:00 MSK reserved; storyboard in `../notes/06-VIDEO.md`. Needs footage from #2. If the schedule slips, cut the video before the frontend — a judge who cannot watch the demo cannot score End-to-End Quality at all. |
+| 38 | The agent loses the headline metric to both other systems | **OPEN — reported, not fixed** | Measured: unsupported-card rate 0.739 against the baseline's 0.600 and the chat-only ablation's 0.280. The agent also doubles the baseline's recall (0.182 vs 0.091) and is the only system to name a correct cause. Root cause diagnosed: 14 of 23 cards set `trigger.event_id` to a chat UUID, so 8 fail `E_CIRCULAR_EVIDENCE`. Not tuned after the fact — see `docs/IMPROVEMENT_CHANGELOG.md`. Fix in the next build and re-measure; changing it now would invalidate the comparison. |
+| 39 | The agent abstains without checking the screen | **OPEN — the main failure mode** | On `c01_word_puzzle_amethyst` it called `group_repeated` and `get_transcript_window`, found no speech, and returned `none` reading "no clear speech or on-screen content detected" — never calling `get_frame_captions`, on the one case where the screen is the only possible cause. Visible step by step in the trajectory. Deliberately not fixed: forcing a frame check after seeing the score is tuning. |
 | 8 | Only the latest *complete* submission is evaluated | **OPEN** | Submit a complete draft early Monday, then revise. |
 | 7 | Submission ownership under the Participation Agreement | **OPEN** | Read the actual agreement before uploading. |
-| 13 | `legacy/frontend/` (180 KB) ships in the archive unless excluded | **OPEN — C-phase** | It fabricates names, emotes and cluster values. A judge who opens it sees generated data inside the submission. Exclude or delete before packaging. |
+| 13 | `legacy/frontend/` (180 KB) ships in the archive and the public repo unless excluded | **OPEN — decide before going public (#37)** | It fabricates names, emotes and cluster values. A judge who opens it sees generated data inside the submission. Exclude or delete before packaging. |
 
 ## Open — accuracy and hygiene
 
@@ -50,8 +51,8 @@ table and #35.)
 | 14 | Twitch VOD retention figures (7 / 14 / 60 days by tier) come from planning notes, not a source | **OPEN — UNVERIFIED** | Carries the product's second thesis, so source it before it enters the README or the video. Currently stated qualitatively, with no numbers. |
 | 15 | Jan/Mar 2026 per-message cost and tail-latency figures are team recollection | **OPEN — UNVERIFIED** | The README states the failure qualitatively and quotes no figure. A number for the video has to be re-measured, not recalled. Supersedes the old #9. |
 | 11 | `requirements.txt` declared six packages nothing imports | **Fixed 2026-08-30** | Removed `deepgram-sdk`, `fastapi`, `uvicorn`, `python-dotenv`, `orjson`, `pydantic`, and `pytest-asyncio` (zero async tests). Proved rather than asserted: a clean venv built from the reduced file plus `-e .` runs the full suite green. The replay path is now one runtime package, `httpx`. A test fails the build if a declared package is never imported. |
-| 35 | `make scan` reports a placeholder docs block as the project's highest-severity secret | **OPEN — new 2026-08-30** | `scripts/scan_secrets.py` treats `KEY=value` as a credential unless the value is empty or `<angle-bracketed>`. It does not recognise the `your_*` convention, so `legacy/README.original.md` — six lines of `DB_PASSWORD=your_password` — outranked the eight real credentials in `.env`. Cost: #16 sat as the top P0 for a full day. Add the placeholder form and re-run; the fix belongs with a test per form, like the #18 rewrite. |
-| 5 | Vision model choice | **Partly resolved 2026-08-30** | `deepseek-v4-flash-vision-exp` is now chosen in `providers/vision.py`, and V4-Flash is documented as text-only. It has never actually been called, so schema compliance is unverified until B1. Captions are cached, so replay is unaffected either way. |
+| 35 | `make scan` reported a placeholder docs block as the project's highest-severity secret | **Fixed 2026-08-30** | The scanner now recognises the placeholder forms (`your_*`, `changeme`, `replace-me`, `localhost`, `<...>`, `xxx`) and its own decoy-bearing test file is allowlisted. `make scan` reports zero project-file findings for the first time; only `.env` remains, correctly classified as local-only. Two holes found while fixing: `your\w*` greedily matched `yourself_is_not_a_placeholder...`, so a real secret beginning "your" would have been skipped (now bounded), and the comment-stripping ran before the placeholder check, so a line *starting* with `#` became empty and the comment explaining this very rule was reported as a leaked credential. 11 tests, one per form plus both holes. |
+| 5 | Vision model choice unverified | **Closed 2026-08-30** | `gpt-4.1-mini` has now produced 76 frame captions across four fixtures, all cached and committed. The default in code is the model the cache was recorded with, so a clone reproduces without configuration. The prompt was tightened after inspection to forbid describing the chat overlay — a caption that transcribes chat could otherwise become the claimed cause of the very messages it contains. |
 
 ## Mitigated or fixed
 
@@ -69,7 +70,9 @@ table and #35.)
 
 | # | Risk | Status | What to do |
 |---|---|---|---|
-| 23 | `make setup` cannot run on the development machine — `python3 -m venv` fails at `ensurepip` | **OPEN — blocks closing #10, not the project** | Verified 2026-08-30 on Homebrew Python 3.11 and 3.14: both fail with `ensurepip ... returned non-zero exit status 1`. The failure is upstream of anything this project controls, but it means the literal `make setup` line has never executed here, so #10's caveat cannot be closed locally. What *was* proved: a clean venv created with `uv`, installed from the reduced `requirements.txt` plus `pip install -e .`, runs all 154 tests green. `docs/REPRODUCTION.md` §2 documents the fallback. Confirm the stdlib path on a second machine at C2. |
+| 23 | `make setup` fails on this machine — `python3 -m venv` dies at `ensurepip` | **OPEN — machine-local, does not block a judge** | Reproduced 2026-08-30 on Homebrew 3.11 and 3.14; upstream of anything this project controls. `docs/REPRODUCTION.md` §2 documents the verified `uv venv` fallback. Running the gate as an actual fresh clone found the defects that *did* block a judge and they are fixed (see #40): the whole chain — setup deps, test, eval, inspect, baseline, replay, debrief — now runs from `/tmp` with every credential unset and zero API calls. |
+| 40 | `make setup` failed from a clean clone on macOS system Python | **Fixed 2026-08-30** | `streamlink==8.0.0` requires Python 3.10+ while macOS ships 3.9 as `python3`, so pip died with a resolver dump at the first documented command — over a package no graded command imports. Capture-only dependencies moved to `requirements-record.txt`; `make setup` installs the graded path only and checks the interpreter first, failing in a second with an actionable message. Found by executing the gate rather than reading it. |
+| 41 | Malformed model output crashed a run rather than being recorded | **Fixed 2026-08-30** | Two instances on real output: `{"cards": ["text"]}` hit `str.get` in `cap_cards` and killed a record mid-run *after* earlier windows had been paid for, and `"distribution": "single mention"` crashed the debrief on `.values()`. Model output is untrusted in shape, not only in content. Both guarded, with tests. |
 | 24 | Two documents claimed a summary hierarchy that no module implements | **Fixed 2026-08-30** | `docs/ARCHITECTURE.md` listed it under "implemented nodes" and the README component table listed it unmarked among components that exist. Zero matches in `src/`. Both now mark it as a named, unbuilt gap; a test asserts the declaration stays in step with the tree. The README row was written on 2026-08-30 by carrying a design table over from `../notes/01-PRODUCT.md` without checking it against the code. |
 | 25 | Twitch poll limits in `report/poll.py` (5 options, 60/25 chars) are recalled, not sourced | **OPEN — UNVERIFIED, low** | Nothing posts, so a wrong cap costs nothing today, and every trim is reported in the draft's `warnings` rather than applied silently. Check them against Twitch's API documentation before any real posting integration. |
 | 26 | The provenance gate rejected every correct abstention | **Fixed 2026-08-30** | A `none` card claims nothing, so it cites nothing, so it failed on `E_NO_EVIDENCE`. Measured before the fix: a correct abstention scored `unsupported_rate = 1.0` — the headline metric — and landed in the dashboard's rejected block, so the demo would have shown the product's best moment as a failure. It also depressed cases 5, 11 and 12, the three the product is designed to win on. `none` now takes an abstention path that fails only on self-contradiction (citing messages or naming a cause), and a passing one is labelled `abstained`. 10 tests, including one that keeps the path from becoming a hole in the gate. |
