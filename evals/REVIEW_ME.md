@@ -7,9 +7,23 @@ You are the only person who can turn this into ground truth. Budget ten minutes.
 below: read the three sentences, decide **agree / disagree**, and if you disagree say what the
 right answer is. You should not need to open a single JSON file.
 
-To confirm a case, set `"reviewed": true` in `evals/gold/<case_id>.json`. Whatever is still
-`false` at submission gets said out loud in README §6 — that is the deal, and it is better than
-claiming a review that did not happen.
+To confirm a case, do not hand-edit JSON — a stray comma at three in the morning is a broken
+eval. Use:
+
+```bash
+make review                                                    # what is confirmed, what is not
+python scripts/confirm_gold.py --confirm c05_warning_no_cause --by "your name"
+python scripts/confirm_gold.py --disagree c11_sarcasm_mockery --by "your name" \
+                               --note "the cause is the clip at 4:12"
+```
+
+It sets the flag, records who and refuses an anonymous confirmation, and touches no other field.
+**There is deliberately no `--all`** — eleven labels behind one keystroke is how a review becomes
+a rubber stamp. Disagreeing is recorded too, because a label a reviewer rejected is information,
+and leaving it `false` would look identical to a label nobody read.
+
+Whatever is still `false` at submission gets said out loud in README §6 — that is the deal, and
+it is better than claiming a review that did not happen.
 
 **What "correct" means here.** The label is not "what is chat feeling". It is: *which stream
 event caused this cluster, and is there enough evidence in the window to prove it?* When nothing

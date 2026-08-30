@@ -7,7 +7,7 @@ PIP := .venv/bin/pip
 FIXTURE ?= evals/fixtures/stableronaldo_2026-08-30T0723
 CASES ?= all
 
-.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval graph debrief demo scan archive clean
+.PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval graph debrief demo review scan archive clean
 
 PYTHON ?= python3
 
@@ -79,6 +79,10 @@ debrief:
 
 demo:
 	$(PY) -m ts.cli serve --fixture $(FIXTURE) --port 8000
+
+# Gold-label review. `--list` shows the state; confirming is deliberately one case at a time.
+review:
+	$(PY) scripts/confirm_gold.py --list
 
 scan:
 	@echo "Scanning for secrets before archiving..."

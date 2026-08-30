@@ -55,7 +55,7 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-30: **635 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-30: **642 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 
@@ -214,4 +214,15 @@ make graph        # writes src/ts/report/static/agent-graph.svg; a test fails if
 ## 13. Data
 
 `evals/DATA.md` — fixture provenance, permission, pseudonymisation, and the per-case status of
-the eleven frozen cases. Gold-label review status per case: `evals/REVIEW_ME.md`.
+the eleven frozen cases.
+
+Gold-label review status, per case, at any moment:
+
+```bash
+make review
+```
+
+All eleven currently read `reviewed: false` — model-drafted, not human-confirmed, and every
+number scored against them inherits that. `evals/REVIEW_ME.md` is the ten-minute review, and
+`scripts/confirm_gold.py` records the outcome one case at a time. There is no way to confirm them
+all at once, on purpose.

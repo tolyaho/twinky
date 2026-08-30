@@ -2063,3 +2063,47 @@ $0.43.
 
 **~16.5 hours to the deadline. The demo is verified working end to end and is safe to film.**
 Blockers: the video needs the author.
+
+## Iteration 73 — 2026-08-30 — making the ten-minute gold review actually take ten minutes
+
+Attempted: the largest remaining honesty gap is one I must not close — all eleven gold labels
+read `reviewed: false`, and confirming them is the author's judgement, not mine. What I could do
+is make that review fast and hard to get wrong.
+
+**`evals/REVIEW_ME.md` promised a review needing no JSON, then asked for exactly that**: hand-edit
+`"reviewed": true` across eleven files. That is the step that goes wrong at three in the morning —
+a stray comma, the wrong case, or a quiet edit to a field that is not the flag.
+
+`scripts/confirm_gold.py` and `make review` now do it:
+
+```
+make review                      # 0 of 11 confirmed by a person. 11 still model-drafted.
+confirm_gold.py --confirm c05_warning_no_cause --by "your name"
+confirm_gold.py --disagree c11_sarcasm_mockery --by "…" --note "the cause is the clip at 4:12"
+```
+
+Four properties, each of them a decision rather than a convenience:
+
+- **No `--all`.** Eleven labels behind one keystroke is how a review becomes a rubber stamp. The
+  flag exists to separate a review that happened from one that was asserted, and a tool that makes
+  asserting easy destroys the distinction it records.
+- **`--by` is required.** Whoever confirms is part of what makes it a confirmation.
+- **Disagreement is recorded as `"disagreed"` with a note**, not left as `false`. A label a
+  reviewer rejected is information; left false it looks identical to a label nobody read.
+- **It touches no field but the review fields**, asserted by test against a copy.
+
+Every test runs on a throwaway copy — the committed labels were never written by this work, and
+`git status evals/gold` confirmed zero changes after each run.
+
+One test asserts **the committed labels are still all eleven unconfirmed**. If that ever fails,
+either a person genuinely reviewed them, in which case the documents saying otherwise must change,
+or something confirmed them automatically, which is worse.
+
+Result: `make test` 635 → **642 passed**. 7 new tests, five rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~16 hours to the deadline.** The submission is complete, verified from a clean archive, and
+every document is current. The remaining author-only work is now: film and cut the video, run
+`make review` and confirm what you agree with, make the repo public, rotate `.env` and the
+Telegram credentials, and submit a draft early.
+Blockers: the video needs the author.
