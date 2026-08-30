@@ -87,7 +87,7 @@ def test_an_unknown_trigger_is_not_looked_up(served):
 def test_payload_carries_meta_result_and_events(served):
     got = serve_mod.payload(served / "fixture", served / "out")
 
-    assert set(got) == {"meta", "result", "events", "evaluation", "hero"}
+    assert set(got) == {"meta", "result", "events", "evaluation", "hero", "moderation"}
     assert got["events"]["tr_0001"]["type"] == "transcript_segment"
     # No eval has been run in this fixture, so the editorial section has nothing to show and
     # says so with None rather than an empty table that would read as a measured zero.
@@ -437,7 +437,12 @@ def test_the_sections_carry_the_story_in_order():
     html = (METHOD_HTML).read_text(encoding="utf-8")
     order = re.findall(r'class="eyebrow">(\d+) — ([^<]+)<', html)
 
-    assert [n for n, _ in order] == ["01", "02", "03", "04"], f"story order broken: {order}"
+    # The property, not a fixed count: consecutive from 01 with no gaps and no repeats. A hard
+    # list failed the moment a fifth section was added, which is a guard that punishes the page
+    # for growing rather than for breaking.
+    numbers = [int(n) for n, _ in order]
+    assert numbers == list(range(1, len(numbers) + 1)), f"story order broken: {order}"
+    assert len(numbers) >= 4, "the argument lost a step"
 
 
 # --------------------------------------------------------------- the hero, pinned and grounded

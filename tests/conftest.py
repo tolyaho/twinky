@@ -58,3 +58,47 @@ def _traces_stay_out_of_the_deliverable(tmp_path_factory):
         os.environ.pop("TS_TRACE_DIR", None)
     else:
         os.environ["TS_TRACE_DIR"] = previous
+
+
+# ---------------------------------------------------------------- source, without the prose
+# House rule, learned six times: a guard that greps raw source fires on the comment explaining
+# why the forbidden thing is absent. `/* textContent, never innerHTML */` is not a use of
+# innerHTML. Assert against code; explain in prose.
+
+def strip_js_comments(source: str) -> str:
+    """`/* … */` and `// …` removed, string literals left alone."""
+    import re
+
+    out, i, n = [], 0, len(source)
+    while i < n:
+        two = source[i:i + 2]
+        if two == "/*":
+            i = source.find("*/", i + 2)
+            i = n if i == -1 else i + 2
+        elif two == "//":
+            end = source.find("\n", i)
+            i = n if end == -1 else end
+        elif source[i] in "\"'`":
+            quote = source[i]
+            j = i + 1
+            while j < n and source[j] != quote:
+                j += 2 if source[j] == "\\" else 1
+            out.append(source[i:j + 1])
+            i = j + 1
+        else:
+            out.append(source[i])
+            i += 1
+    return "".join(out)
+
+
+@pytest.fixture
+def js_source():
+    """Read a static JS file with its comments stripped."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1] / "src/ts/report/static"
+
+    def read(name: str) -> str:
+        return strip_js_comments((root / name).read_text(encoding="utf-8"))
+
+    return read

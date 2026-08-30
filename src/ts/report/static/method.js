@@ -211,6 +211,60 @@ function renderCard(card, events, startMs) {
   return node;
 }
 
+/* NEEDS A LOOK. Suggestions with their evidence, and zero counts drawn as loudly as hits — a
+   rule reporting nothing is a result, not an empty space. */
+function renderModeration(data) {
+  const host = clear(document.getElementById("moderation"));
+  if (!data) return;
+
+  for (const rule of data.rules || []) {
+    const block = document.createElement("section");
+    block.className = "mod-rule";
+    const head = document.createElement("header");
+    head.className = "mod-h";
+    const title = document.createElement("h3");
+    title.className = "mod-t";
+    title.textContent = rule.label;
+    head.appendChild(title);
+    const n = document.createElement("span");
+    n.className = rule.hits ? "mod-n" : "mod-n is-clean";
+    n.textContent = rule.hits ? `${rule.hits}` : "none found";
+    head.appendChild(n);
+    block.appendChild(head);
+
+    for (const row of rule.rows) {
+      const item = document.createElement("article");
+      item.className = "mod-row";
+      const t = document.createElement("p");
+      t.className = "mod-row-t";
+      t.textContent = row.title;
+      item.appendChild(t);
+      const meta = document.createElement("p");
+      meta.className = "mod-row-meta";
+      meta.textContent = `${row.count} message${row.count === 1 ? "" : "s"} · `
+        + `${row.authors} account${row.authors === 1 ? "" : "s"}`;
+      item.appendChild(meta);
+      for (const sample of row.samples) {
+        const s = document.createElement("p");
+        s.className = "mod-sample";
+        s.textContent = `“${sample}”`;   /* textContent, never innerHTML: this is hostile input */
+        item.appendChild(s);
+      }
+      const why = document.createElement("p");
+      why.className = "mod-why";
+      why.textContent = row.why;
+      item.appendChild(why);
+      block.appendChild(item);
+    }
+    host.appendChild(block);
+  }
+
+  const note = document.createElement("p");
+  note.className = "mod-note";
+  note.textContent = data.note;
+  host.appendChild(note);
+}
+
 function renderDebug(data) {
   const { meta, result } = data;
   const dl = clear(document.getElementById("debug-body"));
@@ -496,6 +550,7 @@ function renderRun(data) {
     + `make replay FIXTURE=${result.fixture}`;
 
   renderDebug(data);
+  renderModeration(data.moderation);
   renderHero(result, data.evaluation);
   renderStage(hero);
   selectSeg(activeSeg);

@@ -21,6 +21,7 @@ from ..ingest.replay import load_fixture, load_meta
 from ..provenance import UNKNOWN
 from .board import TICK_MS, board, rail, rolling_groups, stream_questions
 from .board import windows as window_tiles
+from .moderation import needs_a_look
 from .poll import attach_drafts
 
 STATIC = Path(__file__).parent / "static"
@@ -95,7 +96,11 @@ def payload(fixture: Path | str, out_dir: Path | str, system: str = "agent") -> 
 
     return {"meta": meta, "result": result, "events": cited_events(result, fixture),
             "evaluation": evaluation(out_dir),
-            "hero": hero(Path(fixture).parent, out_dir)}
+            "hero": hero(Path(fixture).parent, out_dir),
+            # Read-only, deterministic, no model. On the Method page rather than the dashboard:
+            # the rule that earns its place is prompt injection, and that is a security story
+            # before it is a moderation one.
+            "moderation": needs_a_look(load_fixture(fixture))}
 
 
 # STILL LIVE, despite `index.html` having no hero markup: `method.js` reads `payload.hero` and

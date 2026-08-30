@@ -1583,3 +1583,57 @@ current hits rather than illustrated with an invented example.
 
 **~21.5 hours to the deadline.** Next: FEATURES_V2 §5, the read-only NEEDS A LOOK panel.
 Blockers: the video needs the author.
+
+## Iteration 63 — 2026-08-30 — FEATURES_V2 §5, NEEDS A LOOK
+
+Attempted: the read-only moderation view. Three deterministic rules, no model, no cost, and no
+button that does anything.
+
+**Measuring the rules before shipping them caught a serious false-positive problem.** The
+coordinated-repeats rule, written exactly as §5 specifies — same canonical message, many distinct
+accounts, short span — flagged **`ranger` from 15 accounts, `AURA` from 20, `JUMP` from 9, `LOL`
+from 11**. That is not coordination, it is Twitch. Worse, `ranger` is *the audience signal the
+board exists to surface*: the panel was calling the product's own best output suspicious. A
+false positive here is unrecoverable, so the rule now requires ≥4 words and ≥20 characters —
+pasted spam is a sentence, a one-word wave is a reaction and already has a home on the board.
+
+A second defect: every link row rendered as *"Link or invite to an unnamed host"*, because the
+pattern's scheme alternative matched `https://` without the host. Fixed, and a test asserts no row
+can be titled that again.
+
+**Measured across the fixtures after both fixes:**
+
+| rule | hits | example |
+|---|---:|---|
+| links and invites | **11 rows** | `discord.gg` — *"Join The NEW Stable Discord Community!"*, verbatim, the message §5 cited |
+| coordinated repeats | **0** | — |
+| prompt injection | **0** across 3895 messages | — |
+
+**Both zeros ship as zeros.** A rule that found nothing is reported as a rule that found nothing,
+because otherwise a reader cannot tell *"we checked and it is clean"* from *"we never checked"* —
+and inventing an example to fill the panel is the one thing this feature must not do. The
+injection rule is separately tested to prove it can still fire, since a true zero is only worth
+reporting if the rule works.
+
+Placed on the **Method page**, not the dashboard: the rule that earns its place is prompt
+injection, and that is a security story before it is a moderation one. The dashboard is also what
+the video is filmed from. The panel renders with `textContent` only — it draws the exact text that
+tried to attack the system, so it is the one place where writing HTML would turn the report into
+the vulnerability, and a test enforces it.
+
+Three existing guards were rewritten rather than loosened: the payload key set (a new key is a
+real change), the section-order guard (it asserted a fixed list of four and failed the moment a
+fifth section existed — it now asserts consecutive numbering, which is the property), and the
+malformed nesting I introduced while moving the section below the results, caught by parsing the
+page rather than by eye. The results table stays above the moderation panel; a headline does not
+go below a safety feature.
+
+**Sixth occurrence of the comment-greps-itself failure**, so it is fixed once and shared:
+`strip_js_comments` now lives in `conftest.py` with a `js_source` fixture.
+
+Result: `make test` 561 → **575 passed**. 14 new tests, six rows in DECISIONS.md. `make eval`
+still **48 hits / 0 misses**, `evidence/` byte-identical. Cost: **$0.00**, ledger $0.43.
+
+**~21 hours to the deadline.** Next: FEATURES_V2 §2, group labels — the first item so far that
+costs money, in cents.
+Blockers: the video needs the author.
