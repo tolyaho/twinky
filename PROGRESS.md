@@ -365,3 +365,27 @@ real runs on disk, ARCHITECTURE said "4 of 12 cases", README said fixtures are t
 §6 asserted labels were "reviewed by the author" while every gold file says `reviewed: false`.
 Next: P4 dashboard editorial sections, or P5 gate. P5 is worth more.
 Blockers: none. Cost unchanged at $0.36 of $5.00 — this iteration spent nothing.
+
+## 2026-08-30T14:10Z — iteration 26
+Attempted: P5 — the qualification gate, run as an actual fresh clone rather than read.
+Result: `make test` green, 319 -> 334. Four gate defects found by executing it, all P0 for
+Reproducibility, which is scored before anything else.
+(1) `make setup` failed from a clean clone: `streamlink==8.0.0` needs Python 3.10+ while macOS
+ships 3.9 as `python3`, so pip died with a resolver error before `make test` could run — on a
+package no graded command imports. Split into `requirements-record.txt`; `make setup` now
+installs the graded path only and checks the interpreter, failing in a second with an actionable
+message instead of a wall of pip output.
+(2) `make replay` and `make baseline` over a whole fixture exited 3: the cache held the 11 frozen
+case windows, not the 60 s tiles those commands generate. Recorded both for yugi and
+stableronaldo ($0.03); the documented commands now run from cache.
+(3) Recording crashed mid-run: a model answering `{"cards": ["text"]}` hit `str.get` in
+`cap_cards`. The baseline already handled that; the agent did not, so paid calls for every
+earlier window were lost. Now filtered, with tests.
+(4) `make debrief` crashed on `"distribution": "single mention"` — a string where a mapping was
+assumed. Model output is untrusted in shape, not just content.
+`make scan` is clean for the first time: RISKS #35 fixed, so placeholders like
+`DB_PASSWORD=your_password` no longer outrank the real credentials in `.env`. `SUBMISSION.md`
+written. Verified end to end from /tmp: setup, test, eval, inspect, baseline, replay, debrief,
+all with every credential unset and 0 API calls.
+Next: P5 remainder — RISKS.md review pass and build/open the archive. Then P6 video assets.
+Blockers: none. Cost $0.39 of $5.00.
