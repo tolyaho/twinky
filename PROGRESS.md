@@ -1167,3 +1167,57 @@ Next: FIX_GROUNDING_AND_UI.md §1–2 — putting the window's transcript segmen
 into the model's turn with their ids — which the plan rates above D and E now that A–C have
 landed.
 Blockers: none.
+
+## Iteration 55 — 2026-08-31 — FIX_GROUNDING_AND_UI §1, the diagnosis
+
+Attempted: §1, which is explicitly read-only — answer one capability question from `agent.py`
+and a cached request body, write the answer down, stop. No code changed.
+
+**The question:** when the model is asked to name a trigger, does the prompt put the window's
+non-chat candidates — transcript segments and frame captions, with their event ids — in front of
+it, or does it only state the rule and leave the model to fetch them?
+
+**The answer is NO.** The agent's entire opening user turn is two sentences, verbatim from
+`cache/llm/04/041a143d…json`:
+
+```
+Analyse the window start_ms=1788075308171 end_ms=1788075309123.
+Call tools to see what happened, then answer.
+```
+
+Zero event ids. Across all **57** recorded openings the agent wrote for itself, **not one
+contains an event id of any kind.** (79 two-message agent-prompt openings exist in the cache;
+the other 11 carry rendered events and are leftovers from the discarded first run, where the
+baseline was handed the agent's tool-calling prompt — a bug already logged and fixed.)
+
+Meanwhile `CARD_CONTRACT` requires exactly what the prompt withholds: *"`trigger.event_id` … is
+a SPEECH id or a SCREEN id. It is NEVER a chat id"* and *"Every id you cite must be one you
+actually saw in the input."*
+
+So the model must fetch the candidates itself. Measured over the 70 cached agent conversations
+that carry TOOL RESULTS — counting only the controller's result turns, not the tool names in the
+system prompt:
+
+| tool | conversations where its results appear |
+|---|---:|
+| `group_repeated` (chat) | **70 / 70 — 100%** |
+| `get_transcript_window` | 10 / 70 — 14% |
+| `get_frame_captions` | **2 / 70 — 3%** |
+| `get_chat_window` | 2 / 70 — 3% |
+
+The agent sees chat in every single conversation and the screen in three percent of them, and is
+then required to name a screen or speech id it "actually saw". In 97% of conversations the only
+ids it has ever been shown are chat ids, so citing chat is the only move available to it.
+
+**That makes `E_CIRCULAR_EVIDENCE` a missing input, not a disobedient model** — the quantitative
+form of logged failure #39, and it settles the open question §1 was asked to settle. It also
+means the refusal in iteration 32 was right for the reason given then and is untouched by this:
+the contract does state the rule, the controller still does not enforce it, and nothing about
+scoring has moved.
+
+Cost this iteration: $0.00. Ledger unchanged at $0.42 (169 cache entries, 289 files).
+Next: §2 — supply the candidates in the turn. Note for that iteration: §2 prescribes re-recording
+the agent, which changes every cache key and therefore the published agent numbers. That is
+legitimate per §2 and must be written up as its own iteration with before/after, baseline and
+ablation left frozen, and reverted if the delta is not an improvement.
+Blockers: none. `make test` untouched at 511 passed.
