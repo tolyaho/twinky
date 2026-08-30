@@ -1828,3 +1828,59 @@ Result: `make test` 603 → **610 passed**. 7 new tests, four rows in DECISIONS.
 author:** film and cut, confirm `evals/REVIEW_ME.md`, make the repo public, rotate `.env` and the
 Telegram credentials, submit a draft early.
 Blockers: the video needs the author.
+
+## Iteration 68 — 2026-08-30 — the clean-clone verification, and a security check that cried wolf
+
+Attempted: with every build item done and the video needing the author, the highest-value
+unattended work is the pre-scoring gate — does the submission actually run from a clean clone?
+A great deal has moved since that was last checked: the rename, four new modules, 60-odd new
+tests and 36 new cache entries.
+
+**It does.** `make archive` → 683 files, no secrets → extracted to `/tmp` → `make setup` on a
+fresh venv → then every documented command under `env -i` with no keys, no `.env` and a stripped
+PATH:
+
+| command | result |
+|---|---|
+| `make test` | **610 passed** |
+| `make replay` | 29 hits / 0 misses |
+| `make baseline` | 13 hits / 0 misses |
+| `make eval` | **48 hits / 0 misses**, and `evidence/report.md` **byte-identical** to the committed one |
+| `evals.grouping.score_arms` | A 0.107 / B 0.403 — the published figures |
+| `/`, `/method`, `/philosophy`, `/api/fixtures`, `/static/agent-graph.svg` | all 200 |
+
+The archive serves `<title>Twinky — grounded audience signals</title>`, the moderation panel with
+its three rules (3 hits, 0, 0), and **group labels replaying from the committed cache with no
+key** — `maui → "Audience repeatedly mentions Maui"`.
+
+**One real defect found: `make scan` could never pass on the author's machine.** It failed on the
+local `.env`, which is expected to exist and is git-ignored, and which `make archive` provably
+cannot include because the zip is built from `git archive HEAD`. A security check that always
+fails is one you learn to ignore, and this one is the last thing standing between a stray key and
+a public repo.
+
+Fixed by making the exit code say which case it is: a local-only file confirmed git-ignored is
+**reported by name and allowed**; anything else still fails. Verified in all four directions —
+
+| case | exit |
+|---|---|
+| `.env` present and git-ignored | **0**, and named in the output |
+| `.env` present and NOT ignored | **1** |
+| a key in a tracked source file | **1** |
+| a local-only file outside any git checkout — i.e. inside the extracted archive | **1** |
+
+Silence was not an option either: an allowed file is printed, because saying nothing is
+indistinguishable from not having looked.
+
+Two of my own verification steps were wrong before the results were: I read `$?` after a pipe
+through `tail` twice, and once ran `make` from a directory I had just deleted. Both produced exit
+codes that had nothing to do with the scanner. Re-checked properly before drawing any conclusion.
+
+Result: `make test` 610 → **615 passed**. 5 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~18.5 hours to the deadline. The build is complete and the archive is verified.** Everything
+outstanding is author-only: film and cut the video, confirm `evals/REVIEW_ME.md`, make the repo
+public, rotate `.env` and the Telegram credentials, and submit a draft early rather than at the
+wire.
+Blockers: the video needs the author.

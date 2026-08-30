@@ -213,3 +213,77 @@ def test_the_packaging_exclusions_are_declared():
 
     for name in (".env", ".capture_salt"):
         assert f"{name}" in attrs and "export-ignore" in attrs
+
+
+# ------------------------------------------------- a check that always fails is a check nobody reads
+
+REPO = Path(__file__).resolve().parents[1]
+
+
+def _scan(root):
+    import subprocess
+    import sys
+
+    return subprocess.run([sys.executable, str(REPO / "scripts/scan_secrets.py"),
+                           "--root", str(root)], capture_output=True, text=True)
+
+
+def _git_repo(tmp_path, ignored: bool):
+    import subprocess
+
+    subprocess.run(["git", "init", "-q", "."], cwd=tmp_path, check=True)
+    (tmp_path / ".env").write_text(
+        "OPENAI_API_KEY=sk-proj-abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH\n", encoding="utf-8")
+    if ignored:
+        (tmp_path / ".gitignore").write_text(".env\n", encoding="utf-8")
+    return tmp_path
+
+
+def test_a_git_ignored_env_file_does_not_fail_the_scan(tmp_path):
+    """`make archive` builds from `git archive HEAD`, so an ignored file cannot enter the zip by
+    construction. Failing for it taught the author that `make scan` always fails, which is how a
+    security check stops being read."""
+    done = _scan(_git_repo(tmp_path, ignored=True))
+
+    assert done.returncode == 0
+    assert "clean" in done.stdout
+
+
+def test_it_is_reported_even_when_it_is_allowed(tmp_path):
+    """Silence would be indistinguishable from not having looked."""
+    done = _scan(_git_repo(tmp_path, ignored=True))
+
+    assert ".env" in done.stdout
+    assert "cannot reach the archive" in done.stdout
+
+
+def test_an_env_file_that_is_NOT_ignored_still_fails(tmp_path):
+    """The property actually worth protecting. If `.env` ever became trackable, this must stop
+    the archive."""
+    done = _scan(_git_repo(tmp_path, ignored=False))
+
+    assert done.returncode == 1
+    assert "must not ship" in done.stderr
+
+
+def test_a_secret_in_a_project_file_always_fails(tmp_path):
+    """Nothing about the git-ignore rule may soften this: a key in tracked source is a leak."""
+    _git_repo(tmp_path, ignored=True)
+    (tmp_path / "leaked.py").write_text(
+        'key = "sk-proj-abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH"\n', encoding="utf-8")
+
+    done = _scan(tmp_path)
+
+    assert done.returncode == 1
+    assert "SECRET IN A PROJECT FILE" in done.stderr
+
+
+def test_outside_a_git_checkout_nothing_is_excused(tmp_path):
+    """The extracted archive has no git. There, a local-only file being present is a real
+    failure, and `is_git_ignored` returning False is what produces that."""
+    (tmp_path / ".env").write_text(
+        "OPENAI_API_KEY=sk-proj-abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH\n", encoding="utf-8")
+
+    done = _scan(tmp_path)
+
+    assert done.returncode == 1

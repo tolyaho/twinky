@@ -116,6 +116,25 @@ def scan_file(path: Path) -> List[Tuple[int, str]]:
     return hits
 
 
+def is_git_ignored(path: Path, root: Path) -> bool:
+    """Is this file excluded from the repository by `.gitignore`?
+
+    `make archive` builds from `git archive HEAD`, so a tracked-and-ignored file cannot enter the
+    zip by construction. A local `.env` is therefore expected and correct, and failing the whole
+    scan for it teaches the author that `make scan` always fails — which is how a security check
+    stops being read. In the extracted archive there is no git at all, and then any local-only
+    file present IS a real failure, which is exactly what the `False` return produces.
+    """
+    import subprocess
+
+    try:
+        done = subprocess.run(["git", "check-ignore", "-q", str(path)],
+                              cwd=root, capture_output=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return done.returncode == 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", type=Path, default=REPO)
@@ -124,14 +143,21 @@ def main(argv=None) -> int:
 
     blockers: List[str] = []
     leaks: List[str] = []
+    excluded: List[str] = []
 
     for path in candidate_files(root):
         if path.name in ALLOWLIST:
             continue
         rel = path.relative_to(root)
-        for lineno, rule in scan_file(path):
-            line = f"{rel}:{lineno}  [{rule}]"
-            (blockers if path.name in LOCAL_ONLY else leaks).append(line)
+        hits = [f"{rel}:{lineno}  [{rule}]" for lineno, rule in scan_file(path)]
+        if not hits:
+            continue
+        if path.name not in LOCAL_ONLY:
+            leaks.extend(hits)
+        elif is_git_ignored(path, root):
+            excluded.append(str(rel))          # expected, and provably cannot reach the archive
+        else:
+            blockers.extend(hits)
 
     if leaks:
         print("SECRET IN A PROJECT FILE — do not archive, rotate the credential:", file=sys.stderr)
@@ -147,6 +173,11 @@ def main(argv=None) -> int:
 
     if leaks or blockers:
         return 1
+    if excluded:
+        # Reported, never silent: the author should see that the scanner found them and knows
+        # why they are allowed. Silence here would be indistinguishable from not looking.
+        print(f"local-only and git-ignored, so they cannot reach the archive: "
+              f"{', '.join(sorted(set(excluded)))}")
     print("clean")
     return 0
 
