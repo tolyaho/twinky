@@ -405,3 +405,22 @@ Verified by opening it: 524 files, 1.9 MB, no `.env`, no salt, no raw media, sca
 from the extracted zip `make test` 334 passed and `make eval` reproduced at 37 hits / 0 misses.
 Next: P6 — video shot list and a clean `make demo` walkthrough. P4 dashboard editorial after.
 Blockers: none. Cost unchanged at $0.39 of $5.00 — this iteration spent nothing.
+
+## 2026-08-30T15:00Z — iteration 28
+Attempted: P6 — video support assets and a clean `make demo` walkthrough.
+Result: `make test` green, 334. `video/SHOTLIST.md` written: 17 shots in capture order, exact
+commands, what each proves, and the lines to say out loud — including the ones that count
+against us. Verified `make demo` end to end: 13 windows, 5 verified, 19 rejected, 37 events,
+0 server errors, every command in the list executed before being written down.
+Three findings while filming-by-proxy. (1) The storyboard's "approve -> draft poll" beat cannot
+be filmed: no card in any recorded run carries a `distribution`, so `build_draft` correctly
+returns None. The last link of the invariant is code-complete and unexercised — RISKS #42, and
+the shot list says cut it rather than stage it. (2) `make eval` did not reproduce the committed
+`report.md`: it omitted `--ablation`, so running it on camera would have silently rewritten the
+three-row table the README quotes with a two-row one. Now included; replay is free. (3) That
+change surfaced a real shift: iteration 27's `cap_cards` repair means a reply like
+`{"cards": ["text", {...}]}` keeps the valid card instead of discarding everything, so the
+baseline went 20 -> 21 cards and unsupported 0.600 -> 0.619. Propagated to every table and
+declared as Repair 5 in the changelog rather than quietly re-run — it narrows the gap against us.
+Next: P4 dashboard editorial sections, the last unstarted ladder item.
+Blockers: none. Cost unchanged at $0.39 of $5.00.

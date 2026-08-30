@@ -55,8 +55,8 @@ A chat-only run exists as a diagnostic ablation (`--chat-only`), never as the he
 Comparing a multimodal agent against a chat-only prompt would measure the value of giving the
 system more data, not the value of the agentic workflow.
 
-Baseline results, 11 cases: **20 cards, trigger accuracy 0.000, unmatched 0.950, unsupported
-0.600, recall 0.091.** It attributes to speech readily — fourteen of twenty cards name a
+Baseline results, 11 cases: **21 cards, trigger accuracy 0.000, unmatched 0.952, unsupported
+0.619, recall 0.091.** It attributes to speech readily — fifteen of twenty-one cards name a
 transcript segment — but nine are rejected on `E_TRIGGER_LATE`: seeing the window flat, it picks
 a plausible line without checking that the cause precedes the effect.
 
@@ -143,7 +143,7 @@ Eleven cases, four broadcasts, one run, no tuning after the fact.
 | system | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|
 | **agent** | 23 | **0.500** | 0.913 | 0.739 | **0.182** |
-| baseline — single prompt, same events | 20 | 0.000 | 0.950 | **0.600** | 0.091 |
+| baseline — single prompt, same events | 21 | 0.000 | 0.952 | **0.619** | 0.091 |
 | ablation — chat only, diagnostic | 25 | 1.000¹ | 0.960 | **0.280** | 0.091 |
 
 ¹ One matched card out of twenty-five. Meaningless alone, which is why `unmatched` sits beside
@@ -211,7 +211,7 @@ possible cause. The trajectory shows this step by step. The fix is obvious and w
 not applied: changing the prompt after seeing the score is tuning, and it would invalidate this
 comparison.
 
-The baseline fails differently — nine of twenty cards rejected on `E_TRIGGER_LATE`, naming a
+The baseline fails differently — nine of twenty-one cards rejected on `E_TRIGGER_LATE`, naming a
 spoken line that occurs *after* the messages it supposedly caused.
 
 **Hot take.** The evaluation produced a result that argues against the product, and it is the

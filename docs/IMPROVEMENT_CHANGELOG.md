@@ -25,7 +25,7 @@ hackathon improvement.
 | system | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|
 | agent | 23 | **0.500** | 0.913 | 0.739 | **0.182** |
-| baseline (single prompt, same events) | 20 | 0.000 | 0.950 | **0.600** | 0.091 |
+| baseline (single prompt, same events) | 21 | 0.000 | 0.952 | **0.619** | 0.091 |
 | ablation (chat only, diagnostic) | 25 | 1.000¹ | 0.960 | **0.280** | 0.091 |
 
 ¹ One matched card out of twenty-five. Reported only because `unmatched` is printed beside it;
@@ -44,10 +44,11 @@ produced numbers that were broken rather than bad, and the work was to make the 
 | Stage | What was tried and why | Evidence / result | Decision |
 |---|---|---|---|
 | First measured run | Ran all three systems over the 11 frozen cases | baseline **0 cards across 11 cases**; agent unsupported **0.95**, trigger **0.00** | **Discarded, not reported.** Zero cards is a parse failure, not a weak baseline |
-| Repair 1 — baseline prompt | The baseline imported the *agent's* system prompt, a tool-calling protocol. Having no tools it replied `{"action":"call_tools"}`, and `.get("cards", [])` turned that into a clean empty list | baseline **0 → 20 cards** | Kept. Card contract is now one string included verbatim by both systems, asserted by test |
+| Repair 1 — baseline prompt | The baseline imported the *agent's* system prompt, a tool-calling protocol. Having no tools it replied `{"action":"call_tools"}`, and `.get("cards", [])` turned that into a clean empty list | baseline **0 → 21 cards** | Kept. Card contract is now one string included verbatim by both systems, asserted by test |
 | Repair 2 — state the trigger rule | The gate rejected chat-as-cause and self-citation; the prompt never said so | agent `E_CIRCULAR_EVIDENCE` **19/20 (95%) → 8/23 (35%)**; unsupported **0.95 → 0.739** | Kept. Identical wording went to the baseline, so the fix is symmetric |
-| Repair 3 — label citable ids | Input lines led with a bare bracketed timestamp, so every system cited the timestamp as the event id and was rejected on `E_UNKNOWN_MSG` | baseline now names a transcript segment in **14/20** cards instead of citing a number that does not exist | Kept. Affects the baseline only — the agent reads ids from JSON tool results — so this repair *strengthens the comparison against us* |
+| Repair 3 — label citable ids | Input lines led with a bare bracketed timestamp, so every system cited the timestamp as the event id and was rejected on `E_UNKNOWN_MSG` | baseline now names a transcript segment in **15/21** cards instead of citing a number that does not exist | Kept. Affects the baseline only — the agent reads ids from JSON tool results — so this repair *strengthens the comparison against us* |
 | Repair 4 — default to the recorded model | The model name is part of the cache key, and the default was a model no run was ever recorded with | `make eval` from a clean environment: **0 hits / 44 misses → 48 hits / 0 misses** | Kept. This was the reproducibility gate silently failing for everyone but the author |
+| Repair 5 — a malformed reply no longer discards the valid cards beside it | `cap_cards` raised `AttributeError` on `{"cards": ["text", {...}]}`, so one bad entry threw away the whole reply — and crashed the agent's run outright, mid-record, after earlier windows had been paid for | baseline **20 → 21 cards**, unsupported **0.600 → 0.619** | Kept, and it moved a published number. Declared here rather than quietly re-run: it makes the baseline slightly *worse* on the headline metric and so narrows the gap against us, which is the only direction a post-hoc repair may move a result unchallenged |
 | Reducer, tools, gate | Present in the final system | **Not independently ablated** | No per-component claim is made. There was time for one honest end-to-end comparison, not five |
 
 **Largest single contributor:** Repair 1. Without it there was no baseline, therefore no
@@ -77,7 +78,7 @@ The fix is obvious and was deliberately not applied: forcing a frame check after
 is tuning, and it would invalidate the comparison. It is the first thing to change in the next
 build, and the correct measurement of it is a fresh run, not this one.
 
-The baseline fails differently: nine of its twenty cards are rejected on `E_TRIGGER_LATE`. Seeing
+The baseline fails differently: nine of its twenty-one cards are rejected on `E_TRIGGER_LATE`. Seeing
 the whole window flat, it picks a plausible-sounding line without checking that the cause precedes
 the effect. Neither system had trouble producing fluent cards. Both had trouble proving them.
 

@@ -48,7 +48,7 @@ Eleven frozen cases, four real broadcasts, one run, no tuning after the numbers 
 | system | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|
 | **agent** | 23 | **0.500** | 0.913 | 0.739 | **0.182** |
-| baseline — one prompt, same events | 20 | 0.000 | 0.950 | **0.600** | 0.091 |
+| baseline — one prompt, same events | 21 | 0.000 | 0.952 | **0.619** | 0.091 |
 | ablation — chat only, diagnostic | 25 | 1.000¹ | 0.960 | **0.280** | 0.091 |
 
 ¹ One matched card out of twenty-five — meaningless alone, which is why `unmatched` is beside it.
