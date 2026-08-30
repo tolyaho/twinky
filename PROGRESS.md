@@ -444,3 +444,22 @@ quietly reworded into a win.
 Next: the ladder is complete. Everything remaining is author-only: video, gold review, repo
 visibility, credential rotation, submission.
 Blockers: none. Cost unchanged at $0.39 of $5.00.
+
+## 2026-08-30T15:55Z — iteration 30
+Attempted: nothing on the ladder is unfinished — P1 through P6 are all done — so took the
+topmost remaining risk instead: the results table is hand-propagated across five documents and
+has already been rewritten twice, once when the measurement landed and once when a repair moved
+the baseline from 20 cards to 21.
+Result: `make test` green, 339 -> 351. `tests/test_published_numbers.py` parses every results
+table in README, SUBMISSION, the changelog, the shot list and `evidence/report.md`, and asserts
+each row against `evidence/summary.json` — the machine-readable twin written by the same
+`aggregate()` that prints the table. Also checks every `$X total` claim against the ledger's
+running total. Verified by mutating a published number and watching it fail with the exact
+document, row and field named, then restoring it.
+The vacuity guards paid for themselves immediately: they caught that my own regex was silently
+matching only two of the three systems, because the ablation row carries a `¹` footnote marker
+that broke the value cell. A consistency check that quietly stops checking is the same failure
+class as the Makefile `grep` scan and the pre-rewrite secret scan, both of which gave false
+assurance in this project already. Every document now also has to keep all three rows.
+Next: nothing. The ladder is complete and the remaining work is author-only.
+Blockers: none. Cost unchanged at $0.39 of $5.00.
