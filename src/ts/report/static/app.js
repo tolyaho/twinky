@@ -411,19 +411,32 @@ function render(data) {
   renderStage(hero);
   renderScores(evaluation);
 
-  const verified = [], rejected = [];
+  /* The gate's "verified" bucket holds both. A heading reading "Verified audience signals" over
+     a card badged ABSTAINED claims something the card denies, so they are separated here and
+     each gets a heading that matches what is under it. */
+  const verified = [], abstained = [], rejected = [];
   for (const window of result.windows || []) {
-    for (const card of window.verified || []) verified.push(card);
+    for (const card of window.verified || []) {
+      (statusOf(card) === "verified" ? verified : abstained).push(card);
+    }
     for (const card of window.rejected || []) rejected.push(card);
   }
 
   const rail = document.getElementById("rail");
   if (!verified.length) {
-    rail.appendChild(el("p", "empty",
-      "No card in this run had evidence that checked out. That is a result, not an error — it is " +
-      "what the system is supposed to say when it cannot prove anything."));
+    const note = document.getElementById("rail-empty");
+    note.hidden = false;
+    note.textContent =
+      "No card in this run named a cause its evidence could support. That is a result, not an " +
+      "error — it is what the system is supposed to say when it cannot prove anything.";
   } else {
     for (const card of verified) rail.appendChild(renderCard(card, events, startMs));
+  }
+
+  if (abstained.length) {
+    document.getElementById("abstained-block").hidden = false;
+    const bin = document.getElementById("abstained-rail");
+    for (const card of abstained) bin.appendChild(renderCard(card, events, startMs));
   }
 
   if (rejected.length) {

@@ -101,7 +101,8 @@ def test_the_dashboard_is_served_over_http(served):
         httpd.shutdown()
         httpd.server_close()
 
-    assert "Verified audience signals" in page
+    assert "Signals with a cause" in page   # renamed: the old heading claimed verification
+                                            # over cards that abstain (see the test below)
     assert "not the dashboard" not in page   # the placeholder must be gone now
     assert "--surface-dark" in css
     assert api["result"]["counts"]["verified"] == 1
@@ -480,3 +481,22 @@ def test_the_hero_names_the_system_that_produced_the_card():
 
     assert "single-prompt baseline" in js
     assert "hero.system" in js
+
+
+def test_no_heading_claims_verification_over_an_abstention():
+    """Section 01 was headed "Verified audience signals" while every card under it was badged
+    ABSTAINED with "Not established." A heading may not claim what its contents deny."""
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    js = (STATIC / "app.js").read_text(encoding="utf-8")
+
+    assert "Verified audience signals" not in html
+    assert 'id="abstained-block" hidden' in html
+    assert 'statusOf(card) === "verified" ? verified : abstained' in js
+    assert "Abstentions" in html
+
+
+def test_abstentions_are_framed_as_correct_behaviour_not_failure():
+    html = " ".join((STATIC / "index.html").read_text(encoding="utf-8").split())
+
+    assert "could not tie to any stream moment" in html
+    assert "an abstention is the correct answer" in html
