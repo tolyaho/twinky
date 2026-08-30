@@ -196,3 +196,17 @@ the gap declaration stays in step with the tree, and that the four tool names in
 four the agent allows.
 Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
 Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
+
+## 2026-08-30T06:09Z — iteration 15
+Attempted: the last unclosed link of the product invariant — evidence -> streamer action. The
+changelog is the other candidate and is genuinely blocked: every competition row needs
+`evidence/`.
+Result: `make test` green, 186 -> 200. `report/poll.py` turns a verified audience_answer card
+into a poll draft, attached server-side to the served payload; the dashboard grew an
+"Approve -> draft poll" button that reveals it. Nothing posts: the module holds no client, token
+or request and a test enforces that, and the button contains no fetch. Caps are visible, never
+silent — a trimmed option is named in the draft's warnings. Fixed one thing while rendering it:
+shares were renormalised over the surviving options, so a trimmed poll printed 28% where the card
+directly above it said 25%; they now count every vote.
+Next: nothing unblocked remains. #2 gates B, C2, #12, #20 and the video.
+Blockers: #2 needs a live stream; #16, #17 need credential rotation by the author.
