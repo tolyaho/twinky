@@ -503,3 +503,24 @@ made iteration in the changelog with the evidence; #38 narrowed from "contract d
 behaviour".
 Next: block C, the frontend, time-boxed 3 hours.
 Blockers: none. Cost unchanged at $0.39 of $5.00 — this block spent nothing.
+
+## 2026-08-30T16:50Z — iteration 33
+Attempted: block C, first item — pull the ElevenLabs reference, reconcile it with DESIGN.md, then
+the two cheapest wins it names: type and space.
+Result: `make test` green, 354 -> 359. `npx getdesign` could not run — no Node toolchain on this
+machine at all — so the template came from the published npm tarball directly
+(`getdesign@0.6.25`, `templates/elevenlabs.md`), which is the same artifact the CLI would install.
+Reconciliation is a verified no-op: all 19 colour tokens match in BOTH directions, and the display
+and Inter scales are identical row for row. DESIGN.md needed no correction and its provenance is
+now recorded at the top of the file.
+The gap was that the CSS did not use the scale it documents. The hero rendered at the 48px
+display-xl row instead of the 64px/300/1.05/-1.92px display-mega row — most of why the page read
+as a tool rather than an editorial surface. Fixed, with a mobile step down. Two uppercase labels I
+added last iteration had improvised .8px tracking and no weight, so they did not match the badges
+already on the page; both now use the caption-uppercase row, 12px/600/1.4/+0.96px. Stat row moved
+to the 12-column grid. Five tests pin the hero row, the uppercase scale, the +0.16px body
+tracking, display weight <= 300 and the colour rule, so the type cannot drift back.
+Block C item 5 was already done: deleting `legacy/frontend/` in block A took the Spline blob,
+glass-liquid and gradient bars with it — zero matches left in `report/static/`.
+Next: block C item 3, the hero driven by real replay data, then item 4, drawer motion.
+Blockers: none. Cost unchanged at $0.39 of $5.00 — this block spent nothing.
