@@ -1884,3 +1884,46 @@ outstanding is author-only: film and cut the video, confirm `evals/REVIEW_ME.md`
 public, rotate `.env` and the Telegram credentials, and submit a draft early rather than at the
 wire.
 Blockers: the video needs the author.
+
+## Iteration 69 — 2026-08-30 — README and SUBMISSION brought up to the product
+
+Attempted: the same audit that caught the shot list, applied to the two documents a judge reads
+first. They had rotted the same way and it mattered more.
+
+**What was wrong.** `SUBMISSION.md` described `/` as *"chat on the left, signals on the right"* —
+the two-column build that has not existed since iteration 51. Both documents claimed **33
+trajectories**; there are **118**. Between them they mentioned none of: the board, the rail, the
+questions panel, Tier 0 live chat, the agent graph, the moderation panel, group labels, the
+grouping evaluation, or **any of the three experiments that were built, measured and rolled
+back** — which is the strongest agent-engineering evidence in the repository and it was invisible
+in the document a judge opens first.
+
+Added to `SUBMISSION.md`:
+
+- **"Three things that were tried, measured, and rolled back"** — louder audio (zero additional
+  segments), inlining the stream context (frame citations 0 → 4, abstentions 5 → 0, unsupported
+  0.739 → 0.882), and embedding clustering (best F1 0.583 against 0.403, but the same threshold
+  scores 0.770 on one window and precision 0.164 on the other). Both later ones reproduce with no
+  keys, and the commands are printed.
+- **"Grouping, evaluated rather than asserted"** — the A/B table against labels frozen in a commit
+  containing no arm code, with the note that compression is deliberately not the metric.
+- Corrected routes, the real trajectory count, Tier 0 and `evals/grouping/` in the deliverables
+  table.
+
+`README.md` got the same treatment: three zones and the `Board | Signals | Questions` control,
+Tier 0 described as keyless and free **and as having no cause to give**, the rolled-back
+experiments in the status block, and the grouping labels added to the model-drafted caveat.
+
+**Four guards so it cannot rot silently again**: the trajectory count is checked against the real
+file count, the interface description must not say "chat on the left", the rolled-back experiments
+must be present with their numbers, and the grouping figures in `SUBMISSION.md` are checked
+against what `score_arms` prints today.
+
+Result: `make test` 615 → **619 passed**. 4 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~18 hours to the deadline. The build is complete, the archive is verified, and the documents
+now describe what exists.** Everything outstanding is author-only: film and cut the video, confirm
+`evals/REVIEW_ME.md`, make the repo public, rotate `.env` and the Telegram credentials, and submit
+a draft early.
+Blockers: the video needs the author.

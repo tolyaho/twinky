@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 615 passed, ~1 s
+make test                        # 619 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 
@@ -23,8 +23,8 @@ Three routes, all keyless:
 
 | route | what it is |
 |---|---|
-| `/` | the product — a recorded run replayed at its true cadence, chat on the left, signals on the right |
-| `/method` | the evidence — comparison table, every card in three states, changelog, failure modes |
+| `/` | the product — a recorded run replayed at its true cadence. Three zones: the raw chat flood, a board of grouped audience signals with their causes, and a rail of live statistics. `Replay \| Live` switches to a real channel's chat over anonymous IRC, keyless and free |
+| `/method` | the evidence — comparison table, every card in three states, a generated agent graph, the read-only NEEDS A LOOK panel, changelog, failure modes |
 | `/philosophy` | the argument, including the result that counts against the product |
 
 See the product end to end on the strongest fixture:
@@ -66,6 +66,39 @@ only system that ever names a correct cause; its unsupported-card rate is the wo
 Both halves are reported. The full account, including a first run that was discarded rather than
 published, is in `docs/IMPROVEMENT_CHANGELOG.md`.
 
+## Three things that were tried, measured, and rolled back
+
+The changelog carries three experiments that did not ship. Each was diagnosed from data, built,
+measured against the frozen cases or frozen labels, and then declined — which is the part of
+engineering that usually leaves no trace.
+
+| experiment | measured | why it did not ship |
+|---|---|---|
+| **Louder audio** — the sleep stream was thought too quiet to transcribe, so it was amplified 28 dB and re-run | **zero** additional transcript segments | It turned a suspected pipeline bug into a verified property of the fixture |
+| **Inlining the stream context** — the agent had never once named a frame caption, so the window's speech and screen events were put in its turn with their ids | Frame citations **0 → 4**, and abstentions **5 → 0**. Same recall, unsupported rate 0.739 → 0.882 | Handed candidates it stopped abstaining entirely, and picking one is how a card becomes scoreable and therefore wrong |
+| **Embedding clustering** — measured as a third grouping arm against labels frozen in a commit containing no arm code | Best pooled F1 **0.583** vs the shipped arm's 0.403 — but the same threshold scores **0.770** on one window and **precision 0.164** on the other | The threshold does not transfer, and it was chosen by looking at the labels. It won on a metric the product is not bought on |
+
+Both later experiments reproduce with no keys:
+
+```bash
+TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+TS_LLM_MODE=replay python -m evals.grouping.score_arms
+```
+
+## Grouping, evaluated rather than asserted
+
+Chat grouping is the difference between one row saying `violet × 27` and twenty-seven rows saying
+nothing. It is scored on **pair-level precision and recall** against intent labels for 164
+messages across two windows — frozen, with a checksum, in a commit containing no arm code.
+
+| arm | precision | recall | F1 |
+|---|---:|---:|---:|
+| exact canonical — what shipped first | **1.000** | 0.057 | 0.107 |
+| **token + prefix — what ships now** | 0.926 | **0.257** | **0.403** |
+
+Compression is deliberately **not** the metric: an arm that merges every message into one group
+compresses perfectly and is useless. The labels are model-drafted and say so.
+
 ## Where everything is
 
 | Deliverable | Path |
@@ -75,14 +108,16 @@ published, is in `docs/IMPROVEMENT_CHANGELOG.md`.
 | Improvement changelog: every repair with measured before/after | `docs/IMPROVEMENT_CHANGELOG.md` |
 | Architecture diagram, one file per node, gaps marked | `docs/ARCHITECTURE.md` |
 | Results table, per-case CSV, raw predictions with gate decisions | `evidence/` |
-| Agent trajectories — 33 real runs, 11 cases × 3 systems | `trajectories/product-agent/` |
+| Agent trajectories — **118 real runs**, written as each run happened | `trajectories/product-agent/` |
 | Coding-agent disclosure (how this was built) | `trajectories/coding-agents/README.md` |
 | Frozen cases, gold labels, fixture provenance | `evals/` and `evals/DATA.md` |
 | Every decision with its rationale | `DECISIONS.md` |
 | Open risks, ordered by severity | `RISKS.md` |
 | Cost ledger — every paid call | `COST_LEDGER.md` |
 | Pre-existing vs competition work | `docs/PRE_EXISTING.md` |
-| Live capture (demo path, needs keys, costs money) | `src/ts/live.py`, `/api/live` |
+| Live **Tier 0** — a real channel's chat, grouped, **no key and no cost** | `src/ts/live_chat.py`, `/api/live_chat` |
+| Live full pipeline (demo path, needs keys, costs money) | `src/ts/live.py`, `/api/live` |
+| Grouping arms A/B/C scored on frozen pair labels | `evals/grouping/` |
 | Video | *not recorded* |
 
 ## What is honest about this submission

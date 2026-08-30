@@ -20,8 +20,14 @@ of the three. Neither prompt was edited after the numbers were seen — see
 `docs/IMPROVEMENT_CHANGELOG.md` for the full account, including the run that was discarded and
 why.
 
+Three experiments were built, measured and **rolled back** — louder audio, inlining the stream
+context into the agent's turn, and embedding clustering as a third grouping arm. Each is in
+`docs/IMPROVEMENT_CHANGELOG.md` with the number that killed it, and the last two reproduce with
+no keys. Chat grouping itself is scored on pair-level precision and recall against labels frozen
+in a commit containing no arm code (`evals/grouping/`).
+
 Nothing in this repository states a number that was not measured. Gold labels are model-drafted
-and not yet author-confirmed (§6).
+and not yet author-confirmed (§6), and so are the grouping labels.
 
 ---
 
@@ -236,8 +242,9 @@ half of this product is memory.
 ## 12. Video and trajectories
 
 - Video: `[TBD]` — not yet recorded. This is the one deliverable below that does not exist.
-- Trajectories: `trajectories/` — **33 real runs**, 11 frozen cases × 3 systems, written
-  during the measured run and reproducible from the cache.
+- Trajectories: `trajectories/` — **118 real runs** across the agent, the single-prompt
+  baseline and the chat-only ablation, written as each run happened and reproducible from the
+  cache.
 
 ---
 
@@ -267,10 +274,17 @@ make setup
 make test
 ```
 
-`make demo` serves three routes, all without keys: `/` replays a recorded run at its true
-cadence, `/method` holds the evidence, `/philosophy` states the argument including the result
-that counts against the product. A live-capture demo path exists behind an explicit click; it
-needs keys, spends money, and is capped and time-limited — replay is the default and the
-documented route.
+`make demo` serves three routes, all without keys. `/` is the product: three zones — the raw
+chat flood, a board of grouped audience signals under the moment that caused them, and a rail of
+live statistics — with `Board | Signals | Questions` across the middle and counts that update
+every two seconds rather than once a minute. `/method` holds the evidence, a generated agent
+graph and the read-only NEEDS A LOOK panel. `/philosophy` states the argument, including the
+result that counts against the product.
+
+The `Replay | Live` control switches to a real channel's chat over anonymous IRC — **Tier 0: no
+key, no model call, no cost**, and no cause either, because that tier has no audio or screen and
+says so. The full live pipeline is a separate, explicitly paid button; it is capped,
+time-limited, and records into a temporary cache so the committed one is never touched. Replay
+remains the default and the documented route.
 
 Full guide, including what currently exits `3` and why: `docs/REPRODUCTION.md`.

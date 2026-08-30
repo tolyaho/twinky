@@ -211,3 +211,58 @@ def test_the_shot_list_calls_the_grounded_arm_a_failure():
     assert "tried, measured and not adopted" in shots
     assert "and it lost" in shots
     assert "I did not apply it" not in shots, "that sentence is no longer true"
+
+
+# ------------------------------------------------------ the first two documents a judge reads
+# They described a two-column page and 33 trajectories for about fifteen iterations after both
+# stopped being true. The shot list rotted the same way. These stop it happening silently.
+
+def test_the_trajectory_count_is_the_real_one():
+    import glob
+
+    actual = len(glob.glob(str(REPO / "trajectories/product-agent/*.json")))
+    for name in ("README.md", "SUBMISSION.md"):
+        text = (REPO / name).read_text(encoding="utf-8")
+        assert f"**{actual} real runs**" in text, f"{name} misstates the trajectory count"
+        assert "33 real runs" not in text
+
+
+def test_the_documents_describe_the_interface_that_exists():
+    """Three zones with a Board/Signals/Questions control, not two columns."""
+    submission = (REPO / "SUBMISSION.md").read_text(encoding="utf-8")
+    readme = (REPO / "README.md").read_text(encoding="utf-8")
+
+    for text in (submission, readme):
+        assert "chat on the left, signals on the right" not in text
+    assert "Three zones" in submission and "three zones" in readme
+    assert "Board | Signals | Questions" in readme
+    for feature in ("Tier 0", "agent graph", "NEEDS A LOOK"):
+        assert feature in submission, f"{feature} is not mentioned in the submission"
+
+
+def test_the_rolled_back_experiments_are_in_the_submission():
+    """Three things built, measured and declined. That is the part of engineering that usually
+    leaves no trace, and it was invisible in the document a judge reads first."""
+    submission = (REPO / "SUBMISSION.md").read_text(encoding="utf-8")
+    changelog = (REPO / "docs/IMPROVEMENT_CHANGELOG.md").read_text(encoding="utf-8")
+
+    assert changelog.count("## Removed experiment") >= 2
+    assert "tried, measured, and rolled back" in submission
+    for evidence in ("28 dB", "0 → 4", "0.583"):
+        assert evidence in submission, f"the {evidence} result is missing"
+
+
+def test_the_grouping_figures_in_the_submission_are_the_measured_ones():
+    """Quoted in `SUBMISSION.md`, so they have to be what the scorer prints today."""
+    import sys
+
+    sys.path.insert(0, str(REPO))
+    from evals.grouping.score_arms import run
+
+    overall = run()["overall"]
+    submission = (REPO / "SUBMISSION.md").read_text(encoding="utf-8")
+
+    for arm in ("A · exact canonical", "B · token + prefix"):
+        for key in ("precision", "recall", "f1"):
+            assert f"{overall[arm][key]:.3f}" in submission, \
+                f"{arm} {key} = {overall[arm][key]:.3f} is not in SUBMISSION.md"
