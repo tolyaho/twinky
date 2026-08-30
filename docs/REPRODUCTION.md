@@ -55,7 +55,7 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-30: **619 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-30: **623 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 
@@ -168,12 +168,50 @@ make scan
 Walks the whole tree — dotfiles and `legacy/` included — and exits non-zero on anything that
 looks like a credential. It prints `path:line` and the rule that fired, never the matched value.
 
-Two severities. **SECRET IN A PROJECT FILE** means a credential is committed and must be rotated.
-**LOCAL-ONLY FILE WITH CREDENTIALS** means `.env` or `.capture_salt` is present, which is normal
-on a working machine and fatal in an archive — exclude them explicitly. `.gitignore` does not
-protect a directory that is zipped rather than committed.
+Two severities. **SECRET IN A PROJECT FILE** means a credential is committed and must be rotated
+— always fatal. **LOCAL-ONLY FILE WITH CREDENTIALS** means `.env` or `.capture_salt` is present
+somewhere it could ship.
 
-## 12. Data
+A local-only file that git confirms is **ignored** is reported by name and allowed, because
+`make archive` builds from `git archive HEAD` and an ignored file cannot enter the zip by
+construction. Anything else fails, including a local-only file found outside a git checkout —
+which is exactly the case inside an extracted archive. The scan used to fail on every developer
+machine for a perfectly normal `.env`, and a check that always fails is a check nobody reads.
+
+## 12. Two results that are reproduced separately
+
+Both are in `docs/IMPROVEMENT_CHANGELOG.md` as experiments that were built, measured and **not
+adopted**. Neither needs a key, and neither touches the headline numbers.
+
+**The grounded arm** — the window's speech and screen events inlined in the agent's turn, as a
+fourth recorded system beside agent, baseline and ablation:
+
+```bash
+TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+```
+
+Expect **70 cache hits, 0 misses**. It writes to `evidence/grounded/`, never to `evidence/`, so
+the published table cannot move. Result: same recall, worse unsupported rate — it stopped
+abstaining entirely once it was handed candidates.
+
+**The grouping arms**, scored on pair-level precision and recall against intent labels frozen in
+a commit that contained no arm code:
+
+```bash
+TS_LLM_MODE=replay python -m evals.grouping.score_arms       # arms A and B
+TS_LLM_MODE=replay python -m pytest tests/test_arm_embeddings.py   # arm C, from cache
+```
+
+Expect `A · exact canonical` at precision 1.000 / recall 0.057 and `B · token + prefix` at
+0.926 / 0.257. The labels are model-drafted and unreviewed, and every figure inherits that.
+
+Regenerate the Method page's agent graph from the code it describes:
+
+```bash
+make graph        # writes src/ts/report/static/agent-graph.svg; a test fails if it drifts
+```
+
+## 13. Data
 
 `evals/DATA.md` — fixture provenance, permission, pseudonymisation, and the per-case status of
 the eleven frozen cases. Gold-label review status per case: `evals/REVIEW_ME.md`.

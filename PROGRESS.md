@@ -1927,3 +1927,48 @@ now describe what exists.** Everything outstanding is author-only: film and cut 
 `evals/REVIEW_ME.md`, make the repo public, rotate `.env` and the Telegram credentials, and submit
 a draft early.
 Blockers: the video needs the author.
+
+## Iteration 70 — 2026-08-30 — the architecture diagram and the reproduction guide
+
+Attempted: the last two scored documents I had not audited. Both were stale in the same way as
+the README, and one had a sharper problem.
+
+**`docs/ARCHITECTURE.md` named none of the six modules added since it was drawn** — `board.py`,
+`labels.py`, `moderation.py`, `live_chat.py`, `graph.py`, `live.py` — while claiming "one file per
+node". It showed a single box labelled "live rail".
+
+That box is now a **second pipeline**, drawn as one, because that is what it is: the reporting
+layer is wholly deterministic over the same event stream — grouping → board, rail, questions,
+NEEDS A LOOK, the generated agent graph — with exactly **one** model call in it, the cosmetic
+group label, marked as such in the diagram. That property is why Tier 0 live chat works with no
+key at all, and the picture now says so. Added the grouping evaluation to the cross-cutting
+concerns table, and the Aug 2026 embedding re-measurement to the row that records the Oct 2025 and
+Mar 2026 findings.
+
+**The sharper problem: `SUBMISSION.md` tells a judge to run two commands that the reproduction
+guide did not mention.** `--grounded` and `score_arms` are now documented in a new §12, with what
+to expect, and every command was run before it was written down:
+
+| command | verified |
+|---|---|
+| `run_eval --ablation --grounded` | **70 hits / 0 misses**, writes to `evidence/grounded/`, never `evidence/` |
+| `evals.grouping.score_arms` | A 1.000 / 0.057, B 0.926 / 0.257 — the documented figures |
+| `make graph` | regenerates the SVG; a test fails if it drifts |
+
+Also corrected §11: it still said a local `.env` is fatal, which stopped being true last
+iteration. A guide that contradicts its own tool teaches the reader to distrust the tool.
+
+Four new guards: the diagram must name every module in the reporting layer, the guide must
+document what the submission points at, its quoted grouping figures must match the scorer, and its
+description of the scanner must match the scanner.
+
+Two of my own assertions failed before the documents did — one on `report/serve` vs `serve.py`,
+one on a phrase split across a line break. **Fourth time a guard has failed on a newline rather
+than on content**, so that assertion now normalises whitespace first.
+
+Result: `make test` 619 → **623 passed**. 4 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**~17.5 hours to the deadline. Every deliverable except the video is complete, current and
+verified from a clean archive.**
+Blockers: the video needs the author.

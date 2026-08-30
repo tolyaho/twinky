@@ -30,9 +30,35 @@ rather than a build is worth nothing to a reviewer who opens `src/`.
                             │                                      unsupported cards)
           ┌─────────────────┼─────────────────┐
           │                 │                 │
-   live rail        post-stream debrief   trace writer
-   ✔ report/serve   ✔ report/debrief      ✔ workflow/trace.py → trajectories/
+   the dashboard    post-stream debrief   trace writer
+   ✔ report/serve.py ✔ report/debrief.py      ✔ workflow/trace.py → trajectories/
    + static/
+```
+
+The reporting layer is a second, wholly deterministic pipeline over the same events. It calls no
+model — with exactly one cosmetic exception, marked below — so everything it draws holds up in a
+live session with no key at all.
+
+```
+  normalized event stream
+          │
+   deterministic grouping        ✔ workflow/reduce.py   group_chat: reaction wave,
+          │                                             4-char prefix, content token
+          ├──▶ the board          ✔ report/board.py     rows: a trigger and the groups that
+          │                                             followed, `matched` or `preceding`
+          ├──▶ the rail           ✔ report/board.py     rate, chatters, concentration,
+          │                                             questions, the gate ledger by code
+          ├──▶ questions to you   ✔ report/board.py     answered by reading the transcript
+          │                                             AFTER the question was asked
+          ├──▶ NEEDS A LOOK       ✔ report/moderation.py  links, coordinated repeats, prompt
+          │                                               injection — read-only, no action
+          ├──▶ group labels       ✔ report/labels.py    the ONE model call here. Cosmetic,
+          │                                             never evidence; falls back to the token
+          └──▶ agent graph        ✔ report/graph.py     generated from the code it describes
+
+   the same grouping, live       ✔ live_chat.py         Tier 0: anonymous IRC, no key, no model,
+                                                        no cost — and no cause, and it says so
+   the full pipeline, live       ✔ live.py              paid, capped, time-limited, temp cache
 ```
 
 Cutting across all of it:
@@ -43,7 +69,8 @@ Cutting across all of it:
 | Clock abstraction — no wall-clock in a query path | `clock.py` | ✔ |
 | Provider adapters — text, vision, STT behind interfaces | `providers/` | ✔ |
 | Evaluation harness, gold labels, scorer | `evals/` | ✔ harness; 11 frozen cases on real captures |
-| Secret gate | `scripts/scan_secrets.py` | ✔ |
+| Secret gate | `scripts/scan_secrets.py` | ✔ passes on a git-ignored `.env`, fails on anything shippable |
+| Grouping evaluation — pair precision/recall on frozen labels | `evals/grouping/` | ✔ arms A, B and C measured; labels frozen in a commit with no arm code |
 
 ## Designed, deliberately not built
 
@@ -71,7 +98,9 @@ reproducible, and judges have no API keys.
 | Component | The observed failure it fixes |
 |---|---|
 | Speech + frame context | Short chat replies are meaningless as text (Sept 2025 – Jan 2026) |
-| Event-centric grouping | Embedding clustering gave unstable clusters (Oct 2025; again Mar 2026) |
+| Event-centric grouping | Embedding clustering gave unstable clusters (Oct 2025; again Mar 2026 — and re-measured here in Aug 2026, where one threshold scored F1 0.770 on one window and precision 0.164 on another) |
+| Group labels, cosmetic only | `violet × 27` is a token, not a meaning — and a caption that could break the page is not worth having |
+| Read-only moderation | Chat is untrusted data; an attempt to instruct the system is worth surfacing, and acting on it is not this build's decision |
 | Deterministic reducer | Per-message inference was too slow and too expensive at scale (Jan, Mar 2026) |
 | Provenance gate + abstention | Cards attaching to nothing, in the team's own testing 4 Jan 2026 |
 | Replay + response cache | Live streams are not reproducible and judges have no API keys |

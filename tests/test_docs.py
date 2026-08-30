@@ -266,3 +266,50 @@ def test_the_grouping_figures_in_the_submission_are_the_measured_ones():
         for key in ("precision", "recall", "f1"):
             assert f"{overall[arm][key]:.3f}" in submission, \
                 f"{arm} {key} = {overall[arm][key]:.3f} is not in SUBMISSION.md"
+
+
+def test_the_architecture_names_every_module_it_claims_to_cover():
+    """"One file per node" is the claim. Six modules landed after the diagram was drawn and none
+    of them appeared in it, which makes the diagram a picture of a system that used to exist."""
+    architecture = (REPO / "docs/ARCHITECTURE.md").read_text(encoding="utf-8")
+    modules = sorted(p.name for p in (REPO / "src/ts/report").glob("*.py")
+                     if p.name not in {"__init__.py", "poll.py", "debrief.py"})
+
+    missing = [m for m in modules if m not in architecture]
+    assert not missing, f"the diagram does not mention {missing}"
+    for module in ("live_chat.py", "live.py"):
+        assert module in architecture
+
+
+def test_the_reproduction_guide_documents_what_the_submission_points_at():
+    """SUBMISSION.md tells a judge to run these. The file whose entire job is reproduction has to
+    know about them."""
+    guide = (REPO / "docs/REPRODUCTION.md").read_text(encoding="utf-8")
+
+    for command in ("--grounded", "score_arms", "make graph"):
+        assert command in guide, f"{command} is promised elsewhere and undocumented here"
+
+
+def test_the_reproduction_guide_quotes_the_measured_grouping_figures():
+    import sys
+
+    sys.path.insert(0, str(REPO))
+    from evals.grouping.score_arms import run
+
+    overall = run()["overall"]
+    guide = (REPO / "docs/REPRODUCTION.md").read_text(encoding="utf-8")
+
+    for arm in ("A · exact canonical", "B · token + prefix"):
+        assert f"{overall[arm]['precision']:.3f} / {overall[arm]['recall']:.3f}" in guide \
+            or f"{overall[arm]['precision']:.3f}" in guide
+
+
+def test_the_guide_describes_the_scanner_as_it_now_behaves():
+    """It said a local `.env` was fatal. It is reported and allowed when git confirms it is
+    ignored, and the guide has to say which, or the next person reads a pass as a bug."""
+    # Prose wraps. Assert against the words, not against where the line happened to break —
+    # this is the fourth time a guard has failed on a newline rather than on the content.
+    guide = " ".join((REPO / "docs/REPRODUCTION.md").read_text(encoding="utf-8").split())
+
+    assert "cannot enter the zip by construction" in guide
+    assert "outside a git checkout" in guide
