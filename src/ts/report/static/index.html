@@ -141,11 +141,15 @@
   <div class="controls">
     <button class="btn-outline" id="pp" aria-pressed="false">Pause</button>
     <button class="btn-outline" id="restart">Restart</button>
-    <div class="segmented speeds" role="group" aria-label="Playback speed">
-      <button class="seg is-active" data-speed="1" aria-pressed="true">1&times;</button>
-      <button class="seg" data-speed="4" aria-pressed="false">4&times;</button>
+    <!-- 4x by default. The first card lands when its 60s window closes, so at 1x a judge
+         opening this page watches an empty column for a full minute and reads it as broken.
+         Changing speed restarts the stream, and the label says so rather than surprising you. -->
+    <div class="segmented speeds" role="group" aria-label="Playback speed (restarts the stream)">
+      <button class="seg" data-speed="1" aria-pressed="false">1&times;</button>
+      <button class="seg is-active" data-speed="4" aria-pressed="true">4&times;</button>
       <button class="seg" data-speed="8" aria-pressed="false">8&times;</button>
     </div>
+    <span class="controls-note">speed restarts playback</span>
   </div>
 </footer>
 

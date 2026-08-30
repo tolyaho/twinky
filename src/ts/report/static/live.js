@@ -33,13 +33,15 @@ const state = {
   holdUntil: 0,
   fixture: null,
   system: "agent",
-  speed: 1,
+  speed: 4,   /* see index.html: at 1x the first card is 60s away and the page reads as broken */
   paused: false,
   queue: [],                    /* events that arrived while paused */
   counts: { chat: 0, grounded: 0, abstained: 0, rejected: 0 },
   rows: new Map(),              /* event id -> <li>, for the citation highlight */
   boardRows: 0,
   boardSeen: false,
+  origin: null,
+  codes: {},                    /* gate violation census, for the finding line */
   questionCount: 0,
   view: "board",
 };
@@ -123,6 +125,9 @@ function addCard(event) {
   const card = event.card || {};
   const trigger = card.trigger || {};
   state.counts[event.state] = (state.counts[event.state] || 0) + 1;
+  for (const v of ((card.gate || {}).violations) || []) {
+    state.codes[v.code] = (state.codes[v.code] || 0) + 1;
+  }
   for (const name of ["grounded", "abstained", "rejected"]) {
     document.getElementById(`c-${name}`).textContent = String(state.counts[name] || 0);
   }
@@ -144,29 +149,11 @@ function addCard(event) {
   const waiting = document.getElementById("signals-empty");
   if (waiting) waiting.remove();
 
-  /* If this run names no causes at all, say it once, in place, with the way to see one. That is
-     the measured result — the agent grounds nothing on any recorded fixture — and hiding it
-     behind an empty panel would be less honest than printing it. */
-  if (event.state === "abstained" && !state.counts.grounded && !state.notedUngrounded) {
-    state.notedUngrounded = true;
-    const note = el("p", "panel-note");
-    note.appendChild(document.createTextNode(
-      "No card in this run names a cause its evidence supports. That is the measured result for "
-      + "this system, not a loading state — "));
-    const swap = el("button", "linkish", "see the baseline on this window");
-    swap.type = "button";
-    swap.addEventListener("click", () => {
-      start(state.fixture, state.system === "agent" ? "baseline" : "agent", state.speed);
-      renderChips(state.fixture);
-    });
-    note.appendChild(swap);
-    note.appendChild(document.createTextNode("."));
-    document.getElementById("signals").appendChild(note);
-  }
+  renderFinding();
   const box = el("article", `card is-${event.state}`);
 
   const head = el("div", "card-head");
-  head.appendChild(el("span", "pill", card.type || "signal"));
+  head.appendChild(el("span", "pill", (card.type || "signal").replace(/_/g, " ")));
   const badge = el("span", `pill ${event.state}`);
   badge.appendChild(el("span", "dot"));
   badge.appendChild(document.createTextNode(event.state));
@@ -179,7 +166,12 @@ function addCard(event) {
     box.appendChild(el("p", "quote", `“${trigger.quote}”`));
     const meta = el("p", "trigger");
     meta.appendChild(el("span", "label", "Cause"));
-    meta.appendChild(el("span", "mono", `${trigger.kind} · ${trigger.event_id}`));
+    /* `speech · 04:12`, not `speech · 7e828421-74fa-…`. A streamer reads a timestamp; the id is
+       what a judge wants, and it stays in the debug panel and the raw JSON. */
+    const ts = event.trigger_ts;
+    const at = ts && state.origin ? clock(ts - state.origin) : null;
+    meta.appendChild(el("span", "mono", at ? `${trigger.kind} · ${at}` : trigger.kind));
+    meta.title = trigger.event_id;
     box.appendChild(meta);
   } else {
     const meta = el("p", "trigger unknown");
@@ -189,16 +181,76 @@ function addCard(event) {
     box.appendChild(meta);
   }
 
-  const cited = el("p", "card-cites");
-  cited.appendChild(el("span", "label", "Evidence"));
-  cited.appendChild(document.createTextNode(
-    `${(card.evidence || []).length} message${(card.evidence || []).length === 1 ? "" : "s"}`));
+  /* The messages, not a count of them. `Evidence — 3 messages` asks to be trusted; the whole
+     product is that you do not have to. Two are shown and the rest sit behind a disclosure, so a
+     card with fifteen citations stays the size of a card. */
+  const messages = event.cited || [];
+  const total = (card.evidence || []).length;
+  const cited = el("div", "card-cites");
+  cited.appendChild(el("span", "label",
+    total === 1 ? "Evidence — 1 message" : `Evidence — ${total} messages`));
+  for (const m of messages.slice(0, 2)) cited.appendChild(citedLine(m));
+  if (messages.length > 2) {
+    const more = el("details", "cites-more");
+    more.appendChild(el("summary", null, `${messages.length - 2} more`));
+    for (const m of messages.slice(2)) more.appendChild(citedLine(m));
+    cited.appendChild(more);
+  }
+  if (total > messages.length) {
+    cited.appendChild(el("p", "cites-note", `${total - messages.length} further citations not shown`));
+  }
   box.appendChild(cited);
 
   const signals = document.getElementById("signals");
   signals.insertBefore(box, signals.firstChild);
   requestAnimationFrame(() => box.classList.add("in"));
   highlightCited(card);
+}
+
+/* If this run names no cause at all, say so at the top, as a finding, with the census that backs
+   it — and keep it updated as the run goes on. It is the measured result, not a loading state and
+   not an apology: a system that refuses to invent a cause is the product's actual claim. It
+   removes itself the moment a grounded card arrives. */
+function renderFinding() {
+  const panel = document.getElementById("signals");
+  let note = document.getElementById("signals-finding");
+  if (state.counts.grounded) {
+    if (note) note.remove();
+    return;
+  }
+  if (!note) {
+    note = el("p", "panel-note");
+    note.id = "signals-finding";
+    panel.insertBefore(note, panel.firstChild);
+  }
+  clear(note);
+
+  const worst = Object.entries(state.codes).sort((a, b) => b[1] - a[1])[0];
+  const rejected = state.counts.rejected || 0;
+  note.appendChild(document.createTextNode(
+    "No card in this run names a cause the gate could stand behind. "
+    + `${rejected} rejected`
+    + (worst ? `; ${worst[0]} accounts for ${worst[1]}` : "")
+    + `; ${state.counts.abstained || 0} abstained. That is the measured result for this system, `
+    + "not a loading state — "));
+  const swap = el("button", "linkish", "see the baseline on this window");
+  swap.type = "button";
+  swap.addEventListener("click", () => {
+    start(state.fixture, state.system === "agent" ? "baseline" : "agent", state.speed);
+    renderChips(state.fixture);
+  });
+  note.appendChild(swap);
+  note.appendChild(document.createTextNode("."));
+}
+
+/* One cited message. An id the fixture does not contain renders as unresolvable rather than
+   being dropped — a citation that cannot be checked is a finding, not a gap. */
+function citedLine(m) {
+  const row = el("p", m.text ? "cite" : "cite is-missing");
+  row.appendChild(el("span", "cite-who", (m.author || "").slice(0, 10)));
+  row.appendChild(document.createTextNode(
+    m.text ? `“${m.text}”` : "cited id is not in the fixture"));
+  return row;
 }
 
 /* ------------------------------------------------------------------ the board
@@ -214,7 +266,7 @@ function addBoard(event) {
   const rowsEl = document.getElementById("boardrows");
   clear(rowsEl);
 
-  const origin = (data.window_ms || [0])[0];
+  const origin = state.origin || (data.window_ms || [0])[0];
   const arriving = [];
   for (const row of rows) arriving.push(rowsEl.appendChild(boardRow(row, origin)));
   if (orphans.length) arriving.push(rowsEl.appendChild(orphanBlock(orphans)));
@@ -449,7 +501,7 @@ function reset() {
   state.queue = [];
   state.rows.clear();
   state.counts = { chat: 0, grounded: 0, abstained: 0, rejected: 0 };
-  state.notedUngrounded = false;
+  state.codes = {};
   state.pinned = true;
   state.holdUntil = 0;
   state.boardRows = 0;
@@ -546,6 +598,7 @@ function start(fixtureId, system, speed) {
     /* An empty right-hand column for the first minute reads as broken. Say what it is waiting
        for and how far along it is — the window has to close before a card can exist. */
     state.firstCardMs = open.first_card_ms;
+    state.origin = open.origin_ms || null;
     state.speed = open.speed || state.speed;
     const empty = document.getElementById("signals-empty");
     while (empty.firstChild) empty.removeChild(empty.firstChild);

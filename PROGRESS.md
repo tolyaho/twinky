@@ -1337,3 +1337,54 @@ Result: `make test` 521 → **523 passed**. Five rows in DECISIONS.md, one in RI
 **24.3 hours to the deadline. The video does not exist.**
 Next: D) the REPLAY|LIVE segmented control with Tier 0 keyless live chat.
 Blockers: none.
+
+## Iteration 58 — 2026-08-30 — FIX_GROUNDING_AND_UI §3–4, the UI stops claiming what it has not got
+
+Attempted: the tail of the current item — §3 and the §4 bugs that were still open. §4 a, b, c and
+i were fixed in earlier iterations; d, e, f, g and h were not.
+
+**d — cards showed an evidence count, not the evidence.** `Evidence — 3 messages` asks to be
+trusted, and the entire product is that you do not have to. `stream_events` now attaches the
+cited messages' author and text server-side (the server already has the index open; the browser
+never holds a fixture). Two render verbatim, the rest sit behind a disclosure so a card with
+fifteen citations stays the size of a card. **An id the fixture does not contain renders as
+*"cited id is not in the fixture"* rather than being dropped** — dropping it would quietly show
+one fewer citation than the card claims, and shown, it is the gate made visible.
+
+**e — the cause line printed a raw uuid.** Now `speech · 04:12`, computed against a stream origin
+the server sends in `meta` rather than one the browser guesses. The id moves to a tooltip and
+stays in the debug panel and the raw JSON, where a judge wants it. The timestamp is resolved as a
+sibling field, never written into the card: the card is the recorded artifact and what is drawn
+has to stay diffable against what was scored.
+
+**f — type pills read `audience_answer`.** Now `audience answer`.
+
+**g — 1x was the default** and the first card lands when its 60-second window closes, so a judge
+opening the page watched an empty column for a full minute. Now 4x, with the control labelled
+*"speed restarts playback"*, because it does.
+
+**h — `hero()` looked dead and is not.** §4 says delete it if nothing uses it. `method.js` reads
+`payload.hero` and plays it in `stagePlay()`, so it stays, with a comment recording that it was
+checked rather than assumed.
+
+**§3 — the finding now carries its census.** The no-grounding line was a bare claim; it now reads
+*"No card in this run names a cause the gate could stand behind. N rejected;
+E_CIRCULAR_EVIDENCE accounts for M; K abstained"*, updates as the run goes on, and removes itself
+the moment a grounded card arrives. The numbers were already in the rail — the claim and its
+evidence now sit together.
+
+One existing guard was rewritten rather than dropped: it asserted the `notedUngrounded` one-shot
+flag, which is gone. The property it protected — one note, not one per card — now holds through a
+single id-addressed node, and the test asserts that plus the census and the self-removal.
+
+Verified on a running server: `/`, `/method`, `/philosophy` all 200; a card event carries
+`trigger_ts` resolving to +0.0s, +59.2s and +1.3s on yugi with cited text attached;
+`make eval` still **48 hits / 0 misses**.
+
+Result: `make test` 523 → **530 passed**. 7 new tests, seven rows in DECISIONS.md. No new hex —
+still the sixteen from DESIGN.md. Cost this iteration: $0.00, ledger $0.43.
+
+**FIX_GROUNDING_AND_UI is complete: §1 diagnosed, §2 built and measured (it lost), §3–4 shipped.**
+**~23.5 hours to the deadline. The video does not exist.**
+Next: D) the REPLAY|LIVE segmented control with Tier 0 keyless live chat.
+Blockers: none.

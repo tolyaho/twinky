@@ -97,6 +97,10 @@ def payload(fixture: Path | str, out_dir: Path | str, system: str = "agent") -> 
             "hero": hero(Path(fixture).parent, out_dir)}
 
 
+# STILL LIVE, despite `index.html` having no hero markup: `method.js` reads `payload.hero` and
+# plays it in `stagePlay()`. Deleting it would take the Method page's only real-data stage with
+# it. Checked rather than assumed, because dead code that pins a fixture is a trap.
+#
 # The hero makes the product's argument, so it is pinned to the window where the argument is
 # provable rather than to whatever fixture happens to be loaded. On this capture nobody is
 # speaking — Deepgram returned zero utterances for the whole 12 minutes — chat is typing guesses
@@ -254,9 +258,13 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
             bounds = window.get("window_ms") or [origin, origin]
             at = max(0, bounds[1] - origin)
             for card in window.get("verified") or []:
-                script.append((at, {"kind": "card", "state": _state(card), "card": card}))
+                script.append((at, {"kind": "card", "state": _state(card), "card": card,
+                                    "cited": _cited_text(index, card),
+                                    "trigger_ts": _trigger_ts(index, card)}))
             for card in window.get("rejected") or []:
-                script.append((at, {"kind": "card", "state": "rejected", "card": card}))
+                script.append((at, {"kind": "card", "state": "rejected", "card": card,
+                                    "cited": _cited_text(index, card),
+                                    "trigger_ts": _trigger_ts(index, card)}))
 
     # The board and the rail, one per tile, emitted when the tile closes — the same instant the
     # cards for it arrive, because that is the earliest the window could be described at all.
@@ -309,6 +317,38 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
 
     script.sort(key=lambda s: s[0])
     return script
+
+
+CITED_IN_PAYLOAD = 6
+
+
+def _cited_text(index, card: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """The messages a card cites, with their text — not a count of them.
+
+    A card reading `Evidence — 3 messages` asks to be trusted. The whole product is that you do
+    not have to: the messages are right there. Attached here because the server already has the
+    index open and the browser has no business holding a fixture.
+
+    An id the fixture does not contain is returned as `text: null` rather than dropped, so the
+    card shows a citation that cannot be resolved instead of quietly showing one fewer — which is
+    the provenance gate made visible.
+    """
+    out: List[Dict[str, Any]] = []
+    for event_id in (card.get("evidence") or [])[:CITED_IN_PAYLOAD]:
+        event = index.get(event_id)
+        out.append({"id": event_id,
+                    "author": event.author if event else None,
+                    "text": event.text if event else None})
+    return out
+
+
+def _trigger_ts(index, card: Dict[str, Any]) -> Optional[int]:
+    """When the named cause happened. Resolved here as a sibling of the card rather than written
+    into it, because the card is the recorded artifact and what is drawn must stay diffable
+    against what was scored."""
+    trigger = card.get("trigger") or {}
+    event = index.get(trigger.get("event_id")) if trigger.get("event_id") else None
+    return event.ts_ms if event else None
 
 
 def _state(card: Dict[str, Any]) -> str:
@@ -420,6 +460,8 @@ class ReplayHandler(BaseHTTPRequestHandler):
             speed = 1
 
         script = stream_events(target, self.out_dir, system) or []
+        origin_chat = load_fixture(target).window(0, 2 ** 62, types=["chat_message"])
+        origin_ms = origin_chat[0].ts_ms if origin_chat else 0
 
         self.send_response(200)
         self.send_header("Content-Type", "text/event-stream; charset=utf-8")
@@ -448,6 +490,9 @@ class ReplayHandler(BaseHTTPRequestHandler):
             "total_chat": sum(1 for _, e in script if e["kind"] == "chat"),
             "total_cards": sum(1 for _, e in script if e["kind"] == "card"),
             "duration_ms": script[-1][0] if script else 0,
+            # So the page can print `speech · 04:12` instead of a raw uuid. Sent rather than
+            # inferred: the browser never sees the fixture and must not guess where zero is.
+            "origin_ms": origin_ms,
             # so an empty signals column can say when to expect something instead of sitting
             # blank for a minute, which reads as broken rather than pending
             "first_card_ms": next((o for o, e in script if e["kind"] == "card"), None),

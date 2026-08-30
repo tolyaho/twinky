@@ -867,7 +867,14 @@ def test_a_run_that_grounds_nothing_says_so_in_place():
 
     assert "That is the measured result for" in js
     assert "see the baseline on this window" in js
-    assert "notedUngrounded" in js, "it must say this once, not once per card"
+    # One note, not one per card: a single id-addressed node that is reused and updated.
+    assert 'note.id = "signals-finding"' in js
+    assert 'document.getElementById("signals-finding")' in js
+    assert "notedUngrounded" not in js, "the old one-shot flag is gone; the node is the dedup"
+    # And it carries the census that backs the claim, not just the claim.
+    assert "rejected}" in js or "${rejected}" in js
+    assert "accounts for" in js
+    assert "if (state.counts.grounded) {" in js, "it must remove itself when a cause is named"
 
 
 def test_card_states_are_distinguished_without_colour():
@@ -1403,3 +1410,73 @@ def test_motion_is_dropped_when_the_reader_asked_for_less():
     assert any("transition-duration: .001ms" in b for b in blocks)
     assert any(".brow" in b and "opacity: 1" in b for b in blocks), \
         "reduced motion must not mean an invisible board"
+
+
+# ------------------------------------------------------------- evidence, shown not counted
+# `Evidence — 3 messages` asks to be trusted. The whole product is that you do not have to.
+
+def test_the_stream_attaches_the_cited_messages_themselves():
+    script = serve_mod.stream_events(FIXTURES / "stableronaldo_2026-08-30T0723",
+                                     Path("evidence/raw-results"))
+    cards = [e for _, e in script if e["kind"] == "card"]
+
+    assert cards, "no cards in the recorded run"
+    withtext = [c for c in cards if any(m["text"] for m in c["cited"])]
+    assert withtext, "not one card carries the text of a message it cites"
+    sample = withtext[0]["cited"][0]
+    assert set(sample) == {"id", "author", "text"}
+
+
+def test_an_unresolvable_citation_is_shown_rather_than_dropped():
+    """A cited id the fixture does not contain is the provenance gate made visible. Dropping it
+    would quietly show one fewer citation than the card claims."""
+    index = serve_mod.load_fixture(FIXTURES / "stableronaldo_2026-08-30T0723")
+
+    cited = serve_mod._cited_text(index, {"evidence": ["msg_does_not_exist"]})
+
+    assert cited == [{"id": "msg_does_not_exist", "author": None, "text": None}]
+    js = LIVE_JS.read_text(encoding="utf-8")
+    assert "cited id is not in the fixture" in js
+
+
+def test_the_cause_line_shows_a_time_not_a_uuid():
+    """`speech · 04:12`, not `speech · 7e828421-74fa-…`. The id stays where a judge wants it."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "meta.title = trigger.event_id;" in js, "the id must remain reachable"
+    assert "`${trigger.kind} · ${at}`" in js
+
+
+def test_the_trigger_timestamp_is_resolved_without_touching_the_card():
+    """The card is the recorded artifact; what is drawn has to stay diffable against what was
+    scored, so the timestamp rides beside it."""
+    script = serve_mod.stream_events(FIXTURES / "yugi_2026-08-30T0723",
+                                     Path("evidence/raw-results"))
+    cards = [e for _, e in script if e["kind"] == "card"]
+
+    assert any(c["trigger_ts"] for c in cards)
+    assert all("ts_ms" not in (c["card"].get("trigger") or {}) for c in cards)
+
+
+def test_the_page_knows_where_zero_is():
+    """The browser never sees the fixture, so it must not guess the stream origin."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "state.origin = open.origin_ms" in js
+    assert '"origin_ms": origin_ms' in Path(serve_mod.__file__).read_text(encoding="utf-8")
+
+
+def test_card_type_pills_are_not_raw_enum_names():
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert 'replace(/_/g, " ")' in js
+
+
+def test_playback_defaults_to_four_times():
+    """At 1x the first card lands 60s in and a judge reads the empty column as broken."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert '<button class="seg is-active" data-speed="4"' in html
+    assert "speed: 4," in js
+    assert "speed restarts playback" in html, "changing speed restarts; say so"
