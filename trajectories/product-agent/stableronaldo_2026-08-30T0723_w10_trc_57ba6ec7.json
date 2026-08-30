@@ -10,7 +10,7 @@
   ],
   "chat_only": false
  },
- "duration_ms": 1418,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "2948d43e5b4b313dbf873b35be622f81a3b0584ed0fb956e6b0b481482e574ee",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 1417
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -37,7 +37,7 @@
      "detail": "f2c11ced-8f58-4204-801c-5797dc8705a6 is cited as evidence for the signal it supposedly caused"
     }
    ],
-   "at_ms": 1417
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -47,7 +47,7 @@
     "cards_dropped_by_cap": 0,
     "parse_error": null
    },
-   "at_ms": 1417
+   "at_ms": 0
   }
  ]
 }

@@ -2,7 +2,7 @@
  "system": "baseline",
  "fixture": "evals/fixtures/stableronaldo_2026-08-30T0723",
  "fixture_id": "stableronaldo_2026-08-30T0723",
- "mode": "record",
+ "mode": "replay",
  "window_size_ms": 60000,
  "span_ms": [
   1788074587878,
@@ -14,8 +14,8 @@
   "rejected": 8
  },
  "cache": {
-  "hits": 2,
-  "misses": 11
+  "hits": 13,
+  "misses": 0
  },
  "windows": [
   {

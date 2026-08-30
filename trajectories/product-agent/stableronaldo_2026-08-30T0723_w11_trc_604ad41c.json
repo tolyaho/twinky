@@ -10,7 +10,7 @@
   ],
   "chat_only": false
  },
- "duration_ms": 2605,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,31 +22,31 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "25ae4a248cfcb36ab53d8c9a20082d79480d592d794144a2cca6fe3d1cadc69f",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 2605
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "b8acfab4-ffab-46ea-8757-9bc6171415e9",
    "ok": true,
    "violations": [],
-   "at_ms": 2605
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "f41de116-f86d-4c84-8db5-c283daf2b49a",
    "ok": true,
    "violations": [],
-   "at_ms": 2605
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
    "signal_id": "82b5159c-0ac6-492f-a7c1-599e802f4cf0",
    "ok": true,
    "violations": [],
-   "at_ms": 2605
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -56,7 +56,7 @@
     "cards_dropped_by_cap": 0,
     "parse_error": null
    },
-   "at_ms": 2605
+   "at_ms": 0
   }
  ]
 }

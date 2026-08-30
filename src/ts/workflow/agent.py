@@ -101,6 +101,58 @@ Gather what you need, then answer. """ + CARD_CONTRACT
 
 ALLOWED_TOOLS = {"group_repeated", "get_transcript_window", "get_frame_captions", "get_chat_window"}
 
+# ---------------------------------------------------------------- inlined stream context
+# The contract demands a SPEECH or SCREEN id and swears the model may only cite ids it "actually
+# saw in the input" — and the opening turn shows it none. Measured over the recorded cache:
+# all 57 of the agent's own openings contain zero event ids, and across the 70 conversations that
+# reached a tool result, chat appeared in 70 (100%) while frame captions appeared in 2 (3%). In
+# 97% of conversations the only ids the model had ever been shown were chat ids, so naming a chat
+# message was the only move available to it. That is logged failure #39, and it is a missing
+# input rather than a disobedient model.
+#
+# So: put the window's non-chat candidates in the turn, with their ids. Nothing else changes —
+# same schema, same tools, same gate, same scorer, temperature=0. The tools stay because the
+# model may still want raw chat or a wider window; what changes is that abstaining is now a
+# choice rather than the only option.
+#
+# OFF BY DEFAULT, and that is load-bearing. This text goes into the prompt, the prompt is the
+# cache key, and the committed cache is how a judge reproduces every published number with no
+# API key. Turning it on for the recorded `agent` would miss every entry. It is a separate arm.
+MAX_INLINE_SEGMENTS = 12
+MAX_INLINE_CAPTIONS = 6
+INLINE_TEXT_CHARS = 240
+
+
+def _clip(text: str, limit: int = INLINE_TEXT_CHARS) -> str:
+    text = " ".join((text or "").split())
+    return text if len(text) <= limit else text[:limit - 1] + "…"
+
+
+def stream_context(index: EventIndex, start_ms: int, end_ms: int) -> str:
+    """The window's speech and screen candidates as `id · ts · text`, capped.
+
+    Returns "" when the window has neither, and the caller adds nothing — a heading over an empty
+    list would tell the model there was context to find when there was not. On `stableronaldo`
+    that is the truth for the whole capture: no speech at all, twelve minutes of it.
+    """
+    # Empty segments are real — Deepgram emits them — and an id over a blank line spends one of
+    # twelve slots telling the model nothing. Drop them here rather than showing noise.
+    speech = [e for e in index.window(start_ms, end_ms, types=["transcript_segment"])
+              if (e.text or "").strip()][:MAX_INLINE_SEGMENTS]
+    screen = [e for e in index.window(start_ms, end_ms, types=["frame_caption"])
+              if (e.text or "").strip()][:MAX_INLINE_CAPTIONS]
+    if not speech and not screen:
+        return ""
+
+    lines: List[str] = []
+    if speech:
+        lines.append("SPEECH in this window (transcript segments):")
+        lines += [f"  id={e.event_id} ts={e.ts_ms} | {_clip(e.text)}" for e in speech]
+    if screen:
+        lines.append("SCREEN in this window (frame captions):")
+        lines += [f"  id={e.event_id} ts={e.ts_ms} | {_clip(e.text)}" for e in screen]
+    return "\n".join(lines)
+
 
 # The default IS the recorded model, so a fresh clone with no .env reproduces from the cache.
 # The model name is part of the cache key: when this defaulted to a model the runs were never
@@ -113,10 +165,14 @@ DEFAULT_TEXT_MODEL = os.getenv("TS_TEXT_MODEL") or "gpt-4.1-nano"
 class AudienceSignalAgent:
     def __init__(self, index: EventIndex, cache: ResponseCache,
                  model: str = DEFAULT_TEXT_MODEL,
-                 provider: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None) -> None:
+                 provider: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None,
+                 *, inline_context: bool = False) -> None:
         self.index = index
         self.cache = cache
         self.model = model
+        # Default False: this changes the prompt, the prompt is the cache key, and the committed
+        # cache is the keyless-reproduction mechanism. The recorded `agent` must keep hitting it.
+        self.inline_context = inline_context
         self.tools = Tools(index)
         if provider is None:
             from ..providers.base import DeepSeekProvider
@@ -143,10 +199,19 @@ class AudienceSignalAgent:
     # ---------------------------------------------------------------- the loop
     def run(self, case_id: str, start_ms: int, end_ms: int, *, max_steps: int = 4) -> Dict[str, Any]:
         trace = Trace(agent="audience_signal_agent", case_id=case_id)
-        trace.meta = {"model": self.model, "window_ms": [start_ms, end_ms], "max_steps": max_steps}
+        trace.meta = {"model": self.model, "window_ms": [start_ms, end_ms], "max_steps": max_steps,
+                      "inline_context": self.inline_context}
 
         opening = (f"Analyse the window start_ms={start_ms} end_ms={end_ms}.\n"
                    f"Call tools to see what happened, then answer.")
+        if self.inline_context:
+            context = stream_context(self.index, start_ms, end_ms)
+            opening = (f"Analyse the window start_ms={start_ms} end_ms={end_ms}.\n\n"
+                       + (context + "\n\n" if context else "")
+                       + "These are the only speech and screen events in this window; a trigger "
+                         "id must come from the list above, or be \"unknown\" if none of them "
+                         "caused what chat did.\n"
+                         "Call tools if you need the chat itself or a wider window, then answer.")
         messages: List[Dict[str, str]] = [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": opening},

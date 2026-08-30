@@ -1221,3 +1221,52 @@ the agent, which changes every cache key and therefore the published agent numbe
 legitimate per §2 and must be written up as its own iteration with before/after, baseline and
 ablation left frozen, and reverted if the delta is not an improvement.
 Blockers: none. `make test` untouched at 511 passed.
+
+## Iteration 56 — 2026-08-31 — FIX_GROUNDING_AND_UI §2, the grounded arm, built and unrecorded
+
+Attempted: §2 — put the window's speech and screen events into the model's turn with their ids.
+
+Built as **a second arm, `agent_grounded`, not as a re-recorded `agent`.** §2 prescribes
+re-recording the agent; that changes every cache key, and the committed cache is how a judge
+reproduces every published number with no API key. A second arm measures the same question and
+leaves the published comparison standing whichever way it goes — an improvement with both arms on
+the record, or a removed experiment with a result.
+
+`stream_context()` renders the window's transcript segments and frame captions as
+`id=… ts=… | text`, capped at 12 and 6 and clipped to 240 characters, and the grounded opening
+names that list as the only source of trigger ids while keeping `unknown` explicitly available.
+Blank segments are dropped — Deepgram emits them, and an id over a blank line spends a slot
+saying nothing. `inline_context=False` everywhere by default; `run_eval.py` gains `--grounded`
+and the Makefile does not pass it.
+
+What the model would now see on stableronaldo w0 — the window where it emitted *"No clear speech
+or on-screen content detected"*:
+
+```
+SCREEN in this window (frame captions):
+  id=frm_e51ae0df39 ts=1788074587878 | … A word-guessing game is active on screen with the
+                                        prompt "r a _ _ _ _ _". …
+  id=frm_bfd997f846 ts=1788074617878 | … the word "ranger" correctly guessed by a user name…
+```
+
+**Nothing published moved, and that was verified rather than assumed.** `make replay` 29 hits /
+0 misses, `make baseline` 13/0, `make eval` **48 hits / 0 misses**, and `evidence/report.md`,
+`comparison.csv` and `summary.json` are byte-identical. The only diff in a raw result is
+`mode: record → replay` with the cards unchanged. A new test pins the default opening turn to a
+real committed cache entry, because that one string is what the reproduction claim rests on and
+nothing else in the suite would have caught an edit to it.
+
+**Found while verifying: `make replay` typed with no arguments was exiting 3 on committed state.**
+`FIXTURE` defaulted to `evals/fixtures/sample`, the scaffold, which has no recording — while
+README.md line 172 promises `make test`, `make baseline`, `make replay` and `make eval` all run
+with no keys. Pre-existing, confirmed by stashing this iteration's changes and reproducing it.
+The default is now a recorded fixture and both bare commands work from cache.
+
+Result: `make test` 511 → **521 passed**. 10 new tests in `tests/test_grounded_arm.py`, six rows
+in DECISIONS.md. Cost this iteration: **$0.00**, ledger unchanged at $0.42.
+
+**Not done and stated plainly: the arm is unmeasured.** No recording exists for it, so there is
+no number for it on the frozen set and none may be published until there is.
+Next: the paid record phase — one fixture first to measure real cost, then the eleven cases if it
+is affordable. Check COST_LEDGER.md, log the run, leave baseline and ablation frozen.
+Blockers: none.

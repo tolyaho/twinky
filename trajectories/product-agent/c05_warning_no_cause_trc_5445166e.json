@@ -8,7 +8,8 @@
    1788073323294,
    1788073383294
   ],
-  "max_steps": 4
+  "max_steps": 4,
+  "inline_context": false
  },
  "duration_ms": 1,
  "steps": [
@@ -38,7 +39,7 @@
    "result": {
     "n": 152
    },
-   "at_ms": 1
+   "at_ms": 0
   },
   {
    "kind": "model_call",

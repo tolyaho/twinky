@@ -10,7 +10,7 @@
   ],
   "chat_only": false
  },
- "duration_ms": 2318,
+ "duration_ms": 0,
  "steps": [
   {
    "kind": "instructions",
@@ -22,10 +22,10 @@
    "kind": "model_call",
    "model": "gpt-4.1-nano",
    "request_hash": "1753023aaae75698289f84be2d96fefb311d6dfb04a03c88f59c3210a9b131d8",
-   "cached": false,
+   "cached": true,
    "tokens": null,
    "cost_usd": null,
-   "at_ms": 2318
+   "at_ms": 0
   },
   {
    "kind": "provenance_gate",
@@ -73,7 +73,7 @@
      "detail": "id=c632fb3f-ad8a-4e16-b6ad-c64aa3da715c not in fixture"
     }
    ],
-   "at_ms": 2318
+   "at_ms": 0
   },
   {
    "kind": "result",
@@ -83,7 +83,7 @@
     "cards_dropped_by_cap": 0,
     "parse_error": null
    },
-   "at_ms": 2318
+   "at_ms": 0
   }
  ]
 }

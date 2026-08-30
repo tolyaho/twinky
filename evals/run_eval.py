@@ -63,7 +63,8 @@ def emitted(result: Dict[str, Any]) -> List[Dict[str, Any]]:
     return sorted(cards, key=lambda c: str(c.get("signal_id", "")))
 
 
-def run_case(case: Dict[str, Any], cache: ResponseCache, *, ablation: bool = False
+def run_case(case: Dict[str, Any], cache: ResponseCache, *, ablation: bool = False,
+             grounded: bool = False
              ) -> Tuple[EventIndex, List[Tuple[str, Dict[str, Any]]]]:
     """Run every system over one frozen case. Identical index, identical window."""
     index = load_fixture(FIXTURES_DIR / case["fixture"])
@@ -81,6 +82,14 @@ def run_case(case: Dict[str, Any], cache: ResponseCache, *, ablation: bool = Fal
                      single_prompt.run(index, cache, case_id, start_ms, end_ms,
                                        chat_only=True)))
     runs.append(("agent", AudienceSignalAgent(index, cache).run(case_id, start_ms, end_ms)))
+    if grounded:
+        # A second arm, not a replacement. Putting the window's speech and screen events in the
+        # opening turn changes the prompt, and the prompt is the cache key — recording it over
+        # `agent` would miss every committed entry and take keyless reproduction with it. Both
+        # arms therefore sit side by side, and whichever wins, nothing already published moves.
+        runs.append(("agent_grounded",
+                     AudienceSignalAgent(index, cache, inline_context=True)
+                     .run(case_id + "_grounded", start_ms, end_ms)))
     return index, runs
 
 
@@ -179,6 +188,10 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=Path("evidence"))
     ap.add_argument("--ablation", action="store_true",
                     help="also run the chat-only diagnostic ablation")
+    ap.add_argument("--grounded", action="store_true",
+                    help="also run the arm that inlines the window's speech and screen events "
+                         "(needs its own recording; off by default so `make eval` keeps "
+                         "reproducing from the committed cache with no keys)")
     args = ap.parse_args(argv)
 
     cases = load_cases(args.cases)
@@ -193,7 +206,8 @@ def main(argv=None) -> int:
     try:
         for case in cases:
             gold = load_gold(case["case_id"])
-            index, runs = run_case(case, cache, ablation=args.ablation)
+            index, runs = run_case(case, cache, ablation=args.ablation,
+                                   grounded=args.grounded)
             for system, result in runs:
                 cards = emitted(result)
                 # latency_ms and cost_usd stay None on purpose - see write_outputs

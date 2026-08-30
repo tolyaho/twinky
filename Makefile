@@ -1,6 +1,10 @@
 PY := .venv/bin/python
 PIP := .venv/bin/pip
-FIXTURE ?= evals/fixtures/sample
+# A RECORDED fixture, so `make replay` / `make baseline` / `make demo` typed with no arguments
+# work from the committed cache with no keys — which is what README.md promises. The scaffold
+# `sample` fixture has no recording, so the bare command used to exit 3 with "nothing is
+# recorded for this fixture yet", which reads as a broken submission rather than a wrong flag.
+FIXTURE ?= evals/fixtures/stableronaldo_2026-08-30T0723
 CASES ?= all
 
 .PHONY: setup setup-record test inspect capture enrich replay baseline ablation eval debrief demo scan archive clean

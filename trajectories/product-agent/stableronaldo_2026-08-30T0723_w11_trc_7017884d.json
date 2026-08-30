@@ -8,7 +8,8 @@
    1788075247878,
    1788075307878
   ],
-  "max_steps": 4
+  "max_steps": 4,
+  "inline_context": false
  },
  "duration_ms": 0,
  "steps": [
