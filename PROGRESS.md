@@ -3013,3 +3013,45 @@ ledger $0.43.
 **19.3 hours to the deadline; the video gate is 11.3 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 35+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 96 — 2026-08-31 — walking the shot list against the running product
+
+Attempted: the structural audits stopped finding things, so rather than hunting further I walked
+`video/SHOTLIST.md` shot by shot against the running server — directly de-risking the one
+deliverable that does not exist yet.
+
+**Six of seven UI shots reproduce exactly as written:**
+
+| shot | what the list promises | what the server returned |
+|---|---|---|
+| 4 · the board | `163 messages · 2 rows · 75 singletons`, `screen · names it`, `rang… × 20` | exactly that, caption contains `ranger` |
+| 5 · the argument | `237 · 4 · 123`, `violet × 27` under *"what the fuck is going on"* | exactly that, samples verbatim |
+| 6 · signals | a finding line with the census | *"19 rejected; E_CIRCULAR_EVIDENCE accounts for 14; 5 abstained"*, grounded 0 |
+| 7 · questions | asked 0:56 → answered 1:04 | verified last iteration |
+| 8 · the rail | `silent window` on stableronaldo | 0 speech, 2 frames, 32 chatters, 21% top-10%, peak 23/10s |
+| 9 · agent graph | `get_frame_captions: 2` | 200, 6160 bytes, the 2 present |
+
+**Shot 10 found a real gap.** `#jynxzi` — the channel the shot list names — is **offline now**, and
+Tier 0 returned **0 messages in 9 seconds**: a "connected" status followed by nothing. Anonymous
+IRC joins an offline channel perfectly happily, so an empty feed is indistinguishable from a
+broken page, which is exactly how it would read on camera. `caseoh_` returned 30 in the same
+window, so the tier is fine — the silence was the channel.
+
+Tier 0 now says so after 12 seconds: *"connected to #jynxzi, and it has sent nothing in 12
+seconds. The channel is probably offline — anonymous IRC joins either way."*
+
+**That fix nearly introduced a worse bug.** The new status carries no `mode`, and the client wrote
+the badge from `s.mode.toUpperCase()` unconditionally — an absent mode throws, and the exception
+would have killed the whole live session rather than the badge. The badge is now only touched by a
+status that reports a mode; the note always updates. Caught before it shipped, and guarded.
+
+Shot 10 in the list now tells the author to pick a channel that is broadcasting, with the day's
+measurement — jynxzi 0, caseoh_ 30 — rather than depending on one channel still being live.
+
+Result: `make test` 692 → **694 passed**. 2 new tests, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**19.2 hours to the deadline; the video gate is 11.2 hours away and no video exists.** The shot
+list is now verified shot by shot against the running product.
+Author-only and unchanged: film and cut the video; `git push` (origin/main 36+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

@@ -915,11 +915,16 @@ function watchLiveChat(channel) {
   source.addEventListener("status", (e) => {
     if (!current()) return;
     const s = JSON.parse(e.data);
-    /* Written from the SERVER's mode, never from what this tab thinks it clicked. */
-    clear(badge);
-    badge.appendChild(el("span", "dot"));
-    badge.appendChild(document.createTextNode(`${s.mode.toUpperCase()} · TIER ${s.tier} · $0.00`));
-    document.getElementById("captured-at").textContent = `#${s.channel} · live now`;
+    /* A later status — "this channel has said nothing" — carries no mode, and rewriting the
+       badge from an absent one threw and killed the handler. The badge is only touched by a
+       status that actually reports a mode; the note always updates. */
+    if (s.mode) {
+      /* Written from the SERVER's mode, never from what this tab thinks it clicked. */
+      clear(badge);
+      badge.appendChild(el("span", "dot"));
+      badge.appendChild(document.createTextNode(`${s.mode.toUpperCase()} · TIER ${s.tier} · $0.00`));
+      document.getElementById("captured-at").textContent = `#${s.channel} · live now`;
+    }
     note.textContent = s.message;
   });
 

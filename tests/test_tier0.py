@@ -168,3 +168,25 @@ def test_the_paid_escalation_says_it_is_paid_before_it_is_clicked():
     html = (ROOT / "src/ts/report/static/index.html").read_text(encoding="utf-8")
 
     assert "costs money" in html
+
+
+def test_a_silent_channel_says_so_rather_than_looking_broken():
+    """Anonymous IRC joins an offline channel happily and then delivers nothing, so "connected"
+    followed by an empty feed is indistinguishable from a fault — which is how it reads on
+    camera. Found while walking the shot list: `#jynxzi` returned 0 messages in 9 seconds."""
+    source = code("src/ts/live_chat.py")
+
+    assert "QUIET_AFTER_S" in source
+    assert '"quiet"' in source
+    text = (ROOT / "src/ts/live_chat.py").read_text(encoding="utf-8")
+    assert "probably offline" in text
+
+
+def test_a_status_without_a_mode_does_not_kill_the_handler(js_source):
+    """The quiet status carries no `mode`, and the badge was written from `s.mode.toUpperCase()`
+    unconditionally — an absent mode would throw and take the whole live session with it."""
+    js = js_source("live.js")
+    block = js.split("function watchLiveChat", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "if (s.mode) {" in block
+    assert block.index("if (s.mode) {") < block.index("s.mode.toUpperCase()")

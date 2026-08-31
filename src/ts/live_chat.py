@@ -32,6 +32,10 @@ TICK_SECONDS = 2.0             # the same cadence the replay board recounts at
 TRAILING_MS = 60_000           # the same trailing span, so live and replay mean the same thing
 MAX_LIVE_GROUPS = 6
 RECV_TIMEOUT_S = 30
+# How long a silent channel waits before the page says so. Anonymous IRC joins an offline channel
+# perfectly happily and then delivers nothing, so "connected" followed by an empty feed is
+# indistinguishable from a broken page — which is what it looks like on camera.
+QUIET_AFTER_S = 12
 
 
 def _pump(channel: str, out: "queue.Queue", stop: threading.Event) -> None:
@@ -123,6 +127,7 @@ def session(channel: str, *, max_seconds: int = TIER0_MAX_SECONDS,
     seen = set()
     started = now()
     next_tick = started + tick_seconds
+    quiet_said = False
     try:
         while now() - started < max_seconds:
             try:
@@ -148,6 +153,16 @@ def session(channel: str, *, max_seconds: int = TIER0_MAX_SECONDS,
                                         {"text": row["text"], "author": author}))
                     yield {"kind": "chat", "id": row["id"], "author": author,
                            "text": row["text"], "ts_ms": row["ts_ms"]}
+
+            # A channel that has said nothing since we joined is almost certainly offline. Say
+            # that, once, rather than leaving a connected-but-empty feed to be read as a fault.
+            if not events and not quiet_said and now() - started > QUIET_AFTER_S:
+                quiet_said = True
+                yield {"kind": "status", "state": "quiet", "channel": channel, "cost_usd": 0.0,
+                       "message": (f"Connected to #{channel}, and it has sent nothing in "
+                                   f"{QUIET_AFTER_S} seconds. The channel is probably offline — "
+                                   f"anonymous IRC joins either way. Try one that is "
+                                   f"broadcasting.")}
 
             if now() >= next_tick:
                 next_tick = now() + tick_seconds

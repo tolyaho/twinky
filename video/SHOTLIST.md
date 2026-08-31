@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 692 passed — this is also shot 14
+make test                             # 694 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -181,8 +181,13 @@ Measured on `#jynxzi`: **168 messages and 6 refreshes in 14 seconds**, 50 unique
 forming live. Authors are pseudonymised before they reach the screen, deliberately, because this
 is going in a video.
 
-> The badge text comes from the server's own `mode`, never from what the tab thinks. If the
-> channel is offline the page says so rather than sitting blank.
+> The badge text comes from the server's own `mode`, never from what the tab thinks.
+>
+> **Pick a channel that is actually broadcasting.** Tier 0 joins anonymous IRC either way, so an
+> offline channel connects and then says nothing. After 12 seconds the page states that outright
+> — *"connected to #x, and it has sent nothing in 12 seconds; the channel is probably offline"* —
+> which is a fine thing to have on screen but not the shot. Verified on the day: `jynxzi` was
+> offline and returned 0 messages in 9 seconds while `caseoh_` returned 30.
 
 ---
 
@@ -226,7 +231,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 692 passed
+make test        # 694 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
