@@ -3055,3 +3055,39 @@ ledger $0.43.
 list is now verified shot by shot against the running product.
 Author-only and unchanged: film and cut the video; `git push` (origin/main 36+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 97 — 2026-08-31 — running the shot list's commands instead of reading them
+
+Attempted: the UI shots were walked last iteration; this did the **terminal** shots — every
+command the author types on camera, run exactly as written.
+
+**All of them work.** Shot 2's chat dump returns 79 lines; shot 3's `grep` returns the caption;
+`c01_word_puzzle_amethyst_trc_13ffd83b.json` still exists under the name the list gives, which it
+would not if trace ids had stayed random.
+
+**Shot 3's payoff is confirmed, and I could only confirm it by printing the whole caption.** I had
+only ever seen it truncated at *"three people sleeping in a dimly lit room…"* and doubted it named
+the game. In full it reads *"On screen, a word-guessing game is active with the prompt 'GUESS THE
+WORD!' and the partial word `ame_______` visible"* — against chat typing *amethyst, American,
+amendment*. The thesis in one cut, exactly as claimed.
+
+**Shot 2 had a real problem, and only running it showed this.** The window holds 79 messages and
+**message 2 is `@wetnutsock12 yeah you're retarded`** — a slur aimed at a named viewer, second on
+screen in the submission's **first product shot**.
+
+70 of those 79 messages are one-word guesses, which is what the shot is for. The command now
+filters to them, and the shot list states plainly why, including that this is a **framing choice
+rather than sanitising**: the unfiltered feed is on screen throughout shot 4, raw and complete.
+Naming what a shot is about is honest; quietly cropping the ugly part while implying completeness
+would not be. The filtered command returns **69 lines and no slur**, and a test asserts both — the
+guess run survives, and nothing flagged gets through.
+
+Result: `make test` 694 → **695 passed**. 1 new test, three rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+Both halves of the shot list — the seven UI shots and the nineteen commands — have now been run
+against the built product rather than read.
+
+**19.1 hours to the deadline; the video gate is 11.1 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 37+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

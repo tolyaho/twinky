@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 694 passed — this is also shot 14
+make test                             # 695 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -43,14 +43,24 @@ footage.**
 ### Shot 2 — the raw material, unreadable
 ```bash
 python3 -c "
-import json
+import json, re
 for line in open('evals/fixtures/stableronaldo_2026-08-30T0723/chat.jsonl'):
     d = json.loads(line)
-    if 1788074707878 <= d['ts_ms'] < 1788074767878: print(d['text'])
+    if 1788074707878 <= d['ts_ms'] < 1788074767878 and re.fullmatch(r\"[A-Za-z']{3,20}\", d['text'].strip()):
+        print(d['text'])
 "
 ```
-**Capture:** the bare list scrolling past — *amethyst, American, amendment, amethysts…*
+**Capture:** the bare list scrolling past — *armament, American, Americans, amendment, americna,
+amemetrn, amitturure, amenities…*
 **Say:** *"Nothing in this list means anything."*
+
+> **Why this filters to single words, and say so if asked.** The window holds 79 messages, of
+> which **70 are one-word guesses** — that is the shot. It is not sanitising: the unfiltered feed
+> is on screen throughout shot 4, raw and complete. But message **2 of 79** is `@wetnutsock12
+> yeah you're retarded`, and the unfiltered command puts a slur aimed at a named viewer second on
+> screen in the first product shot of the submission. Found by running the command rather than
+> reading it. If you prefer the unfiltered version, start the capture a few lines in — do not put
+> that frame in the cut.
 
 ### Shot 3 — the screen that makes it mean something
 ```bash
@@ -231,7 +241,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 694 passed
+make test        # 695 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.

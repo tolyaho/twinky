@@ -466,3 +466,27 @@ def test_every_path_the_entry_documents_cite_exists_in_the_archive():
             missing.append(f"{name} -> {path}")
 
     assert not missing, f"cited but not shipped: {sorted(set(missing))}"
+
+
+def test_the_opening_shot_does_not_put_a_slur_on_camera():
+    """Shot 2's window holds 79 messages and message 2 is a slur aimed at a named viewer. The
+    unfiltered command put it second on screen in the submission's first product shot. Found by
+    running the command, not by reading it."""
+    import json
+    import re
+
+    shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
+    assert "re.fullmatch" in shots, "shot 2 is unfiltered again"
+    assert "70 are one-word guesses" in shots, "the reason must travel with the filter"
+
+    slur = re.compile(r"\bretard|\bn[i1]gg|\bfag|\btrann|\bkys\b", re.I)
+    shown = []
+    fixture = REPO / "evals/fixtures/stableronaldo_2026-08-30T0723/chat.jsonl"
+    for line in fixture.read_text(encoding="utf-8").splitlines():
+        d = json.loads(line)
+        if 1788074707878 <= d["ts_ms"] < 1788074767878 and \
+                re.fullmatch(r"[A-Za-z']{3,20}", d["text"].strip()):
+            shown.append(d["text"])
+
+    assert len(shown) > 50, "the shot must still show the guess run"
+    assert not [t for t in shown if slur.search(t)]
