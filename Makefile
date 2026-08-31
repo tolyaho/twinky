@@ -96,12 +96,12 @@ scan:
 # media. `git archive` cannot include an untracked file by accident, which is the property that
 # matters here: .gitignore does not protect a directory that is zipped rather than committed.
 archive:
-	git archive --format=zip -o /tmp/twitch-agent.zip HEAD
-	@rm -rf /tmp/twitch-agent-check && mkdir -p /tmp/twitch-agent-check
-	@unzip -qq /tmp/twitch-agent.zip -d /tmp/twitch-agent-check
-	@$(PY) scripts/scan_secrets.py --root /tmp/twitch-agent-check
-	@echo "OK  /tmp/twitch-agent.zip  ($$(find /tmp/twitch-agent-check -type f | wc -l | tr -d ' ') files)"
-	@echo "Now open it: cd /tmp/twitch-agent-check && make setup && make test && make eval"
+	git archive --format=zip -o /tmp/twinky.zip HEAD
+	@rm -rf /tmp/twinky-check && mkdir -p /tmp/twinky-check
+	@unzip -qq /tmp/twinky.zip -d /tmp/twinky-check
+	@$(PY) scripts/scan_secrets.py --root /tmp/twinky-check
+	@echo "OK  /tmp/twinky.zip  ($$(find /tmp/twinky-check -type f | wc -l | tr -d ' ') files)"
+	@echo "Now open it: cd /tmp/twinky-check && make setup && make test && make eval"
 
 clean:
 	rm -rf .venv __pycache__ .pytest_cache

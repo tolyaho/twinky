@@ -3579,3 +3579,48 @@ byte-identical, `scan_secrets` clean. Cost **$0.00**, ledger $0.4364.
 Author-only and unchanged: film and cut the video; `git push` (origin/main 61+ commits behind);
 make the repository public after pushing; `make review`; rotate `.env` and the Telegram
 credentials.
+
+## Iteration 108 — the archive check again, and two directories the guide never explained
+
+Verification-only. The tree gained `evidence/h1/`, `trajectories/h1-arm/` and a change to
+`evals/run_eval.py` — a graded-path file — since the last clean-clone run, so it was worth
+repeating.
+
+**The archive is sound.** 762 files; `evidence/h1/report.md`, `trajectories/h1-arm/README.md`,
+the patch and all 33 arm traces ship. Set up with the documented `uv` route: **705 passed, 4
+skipped**, the four skips being the archive-question tests that correctly decline to answer from
+inside an archive. `make eval` under `env -i` with no keys and no PATH beyond `/usr/bin:/bin`:
+**48 hits, 0 misses**.
+
+**And the published H1 command works from the archive**, which was the open question — it starts
+with `git apply` and an extracted zip is not a repository. Ran the whole round trip there: apply
+(exit 0, `tools.py` patched) → **46 hits, 0 misses** → banner present in the report → `git apply -R`
+→ `reduce_chat` restored. `git apply` does not require a work tree, so the instruction holds for
+a judge who takes the zip rather than the clone.
+
+**What was actually wrong was the documentation.** `docs/REPRODUCTION.md` §12 explains the
+grounded arm and the grouping arms in detail and says nothing about H1 — so a judge following the
+reproduction guide meets `evidence/h1/` and `trajectories/h1-arm/` with no account of what they
+are. The heading also read *"Two results that are reproduced separately"* and there are three.
+Both fixed, with the H1 entry carrying the one instruction that damages a deliverable if skipped:
+`TS_TRACE_DIR` is not optional, because trace ids are stable across runs and the command without
+it rewrites ten committed trajectories.
+
+**A rename leftover, in a target a judge may run.** `make archive` wrote `/tmp/twitch-agent.zip`
+and closed by telling the reader to `cd /tmp/twitch-agent-check` — nine occurrences of the
+pre-rename name. Now `twinky`. No document quoted the old path, so nothing else moved. Swept the
+rest of the rename while there: the only surviving occurrences outside append-only history are
+`pyproject.toml`'s distribution name, which `RENAME.md` rules out of scope and `DECISIONS.md`
+records as a deliberate choice, and `video/HOOK.md` explaining the rename itself. Clean.
+
+The scale-table guard fired for the second time in three iterations, on schedule, and the table
+was refreshed with it: 170 commits, 108 iterations, 433 decisions, 51 risks.
+
+Result: `make test` **709 passed**; archive **705 passed, 4 skipped**; keyless eval 48 hits / 0
+misses inside the archive; `evidence/report.md` and `trajectories/product-agent/` byte-identical.
+Cost **$0.00**, ledger $0.4364.
+
+**8.5 hours to the deadline. The 8-hour video gate is under half an hour away and no video
+exists.** Author-only and unchanged: film and cut the video; `git push` (origin/main 61+ commits
+behind); make the repository public after pushing; `make review`; rotate `.env` and the Telegram
+credentials.
