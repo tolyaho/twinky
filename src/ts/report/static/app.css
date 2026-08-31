@@ -292,7 +292,17 @@ footer {
   padding-left: var(--sm);
   margin-left: calc(var(--sm) * -1);
 }
-.stream li.out { opacity: 0; transform: translateY(-8px); }
+/* When the card arrives the stream recedes; it does not leave. Everything except the message the
+   card cites drops back, and that one stays at full strength, so the panel ends on the link
+   between a card and its evidence — which is the whole product — instead of on nothing.
+
+   It used to fade the list to zero. That read correctly while `.stage-cards` was absolutely
+   positioned over the same box, and stopped reading at all when the rebuild below made the cards
+   `position: static`: the invisible list kept its 363px of layout and pushed the card underneath
+   it. Measured on the running page, the Method hero was an empty white box for 53 of every 60
+   seconds, under a heading promising a demonstration. */
+.stream li.out { opacity: .26; transform: none; }
+.stream li.frozen.out { opacity: 1; }
 
 .stage-cards {
   position: absolute; inset: var(--lg);

@@ -73,20 +73,46 @@ def _set_speed(page, speed: int) -> bool:
     return False
 
 
+def _scroll_over(page, target: float, seconds: float) -> None:
+    """Pan to an absolute scroll position over `seconds`, stepped from Python.
+
+    Driven off elapsed time rather than a frame or step count. The first version counted
+    `requestAnimationFrame` ticks, which meant the pan took as long as headless Chromium chose to
+    schedule them — a 26 s glide finished in 19 — and stepping it from Python instead cost a
+    round trip per step and stretched the same pan to 83 s. Reading the clock makes the take last
+    what the shot list says it lasts, whatever the frame rate underneath.
+    """
+    page.evaluate(
+        """([target, seconds]) => new Promise(done => {
+             const from = scrollY, t0 = performance.now(), ms = seconds * 1000;
+             const tick = () => {
+               const k = Math.min(1, (performance.now() - t0) / ms);
+               scrollTo(0, from + (target - from) * k);
+               if (k < 1) setTimeout(tick, 30); else done();
+             };
+             tick();
+           })""", [target, seconds])
+
+
 def _glide(page, seconds: float, to: float = 1.0) -> None:
     """Slow, even scroll — a human-looking pan for the long pages. `to` is a fraction of the
     scrollable height."""
-    steps = max(1, int(seconds * 30))
-    page.evaluate(
-        """([steps, to]) => new Promise(done => {
-             const max = (document.body.scrollHeight - innerHeight) * to;
-             let i = 0;
-             const tick = () => {
-               scrollTo(0, max * (i / steps));
-               if (i++ < steps) requestAnimationFrame(tick); else done();
-             };
-             tick();
-           })""", [steps, to])
+    _scroll_over(page, page.evaluate("(to) => (document.body.scrollHeight - innerHeight) * to",
+                                     to), seconds)
+
+
+def _glide_to(page, selector: str, seconds: float, offset: int = 90) -> bool:
+    """Pan until `selector` sits just under the header. Returns False rather than raising, so a
+    renamed element costs the hold and not the shot."""
+    y = page.evaluate(
+        """([sel, off]) => { const el = document.querySelector(sel);
+             return el ? el.getBoundingClientRect().top + scrollY - off : null; }""",
+        [selector, offset])
+    if y is None:
+        print(f"    ! {selector} not found — panning the whole page instead")
+        return False
+    _scroll_over(page, max(0, y), seconds)
+    return True
 
 
 def _settle(page, ms: int) -> None:
@@ -148,11 +174,16 @@ def shot_agent_vs_baseline(page):
 
 
 def shot_method(page):
-    """The method page — the agent graph and the gate codes."""
+    """The method page — the agent graph and the gate codes.
+
+    The graph is what this shot is for, so it is panned to and held on rather than passed over
+    in a single sweep of a page that is many screens long."""
     page.goto(f"{BASE}/method", wait_until="load")
-    _settle(page, 2500)
-    _glide(page, 26, to=1.0)
-    _settle(page, 2500)
+    _settle(page, 5000)                # let the hero panel play its sequence out
+    _glide_to(page, "figure.graph", 7)
+    _settle(page, 9000)                # the hold: read the tool counts and the gate codes
+    _glide(page, 12, to=1.0)
+    _settle(page, 2000)
 
 
 def shot_replay_live(page):
