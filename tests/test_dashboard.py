@@ -1843,3 +1843,44 @@ def test_the_live_counting_box_belongs_to_the_board_and_only_the_board():
     # blank until the next tick.
     tick = js.split("function addTick", 1)[1].split("\n}", 1)[0]
     assert "state.liveGroups = groups.length" in tick and "clear(list)" in tick
+
+
+def test_every_event_kind_the_page_handles_is_actually_subscribed():
+    """`apply()` routed four kinds and `start()` subscribed two. The server names every SSE event
+    — `event: board`, `event: tick` — and EventSource silently drops a named event no listener
+    asked for: no error, no console warning, the data simply never arrives. The board, the rail,
+    the questions panel and the live counter therefore never rendered in a browser at all, for
+    the entire life of the project.
+
+    Nothing caught it because every check read `/api/stream` server-side, where the payloads were
+    always correct. This asserts the two ends against each other, which is the cheap half of what
+    a browser would have told us.
+    """
+    import re
+
+    js = strip_js_comments(LIVE_JS.read_text(encoding="utf-8"))
+
+    handled = set(re.findall(r'kind === "(\w+)"', js.split("function apply", 1)[1]
+                             .split("\n}", 1)[0]))
+    assert handled, "apply() no longer dispatches on kind"
+
+    replay = js.split("function start(", 1)[1].split("\nfunction ", 1)[0]
+    subscribed = set(re.findall(r'source\.addEventListener\("(\w+)"', replay))
+
+    missing = handled - subscribed
+    assert not missing, (f"apply() handles {sorted(missing)} and start() never subscribes to "
+                         f"them — the server sends those events and the browser drops them")
+
+
+def test_the_hidden_attribute_actually_hides_the_middle_panes():
+    """`.boardrows`, `.signals` and `.questions` each set an explicit `display`, and the UA rule
+    `[hidden] { display: none }` is a bare attribute selector that loses to a class. So
+    `element.hidden = true` set the attribute and changed nothing: all three panes rendered
+    stacked on top of each other in every view. Found in the first frame of the first screen
+    recording, after twenty-odd iterations of reading the markup.
+    """
+    css = LIVE_CSS = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    for pane in (".boardrows", ".signals", ".questions"):
+        assert re.search(rf"\{re.escape(pane)}\[hidden\]", css) or f"{pane}[hidden]" in css, \
+            f"{pane} sets a display and has no [hidden] override; `hidden` will not hide it"

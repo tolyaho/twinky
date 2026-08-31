@@ -698,6 +698,20 @@ function start(fixtureId, system, speed) {
   source.addEventListener("card", (e) => {
     if (current()) queueOrApply("card", JSON.parse(e.data));
   });
+  /* `apply()` has always handled four kinds and only two were ever subscribed. The server sends
+     every event NAMED — `event: board`, `event: tick` — and EventSource drops a named event no
+     listener asked for, silently and with no console error. So the board, the rail, the
+     questions panel and the live counter received their data and threw it away: the middle
+     column sat on "Counting starts with the first message" for the whole run.
+
+     Twenty-odd iterations of checking `/api/stream` payloads could not see this, because the
+     payloads were always correct. It took rendering the page in a real browser. */
+  source.addEventListener("board", (e) => {
+    if (current()) queueOrApply("board", JSON.parse(e.data));
+  });
+  source.addEventListener("tick", (e) => {
+    if (current()) queueOrApply("tick", JSON.parse(e.data));
+  });
   source.addEventListener("done", () => {
     source.close();
     if (!current()) return;             /* an abandoned stream must not end the live one */
