@@ -3762,3 +3762,51 @@ Result: `make test` 713 → **714 passed**. 1 new guard. `evidence/` and
 **7.6 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
 video; `git push` (origin/main 61+ commits behind); make the repository public after pushing;
 `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 112 — swept RISKS.md, and found the regression I put in the setup instructions
+
+**Inside the video gate: 7.2 hours left, no video file.** Verification-only.
+
+`RISKS.md` is the document a judge reads to decide whether the author knows what is wrong with
+the work, and it was the last state file not checked this session. 51 rows, 17 open. Verified
+each open row's concrete claim against the tree.
+
+**The worst thing found was mine, from last iteration.** `docs/REPRODUCTION.md` §2 read:
+
+> If `.venv/bin/python -m venv` fails with an `ensurepip` error…
+
+That asks the interpreter *inside* the environment to create that environment. It came from my own
+blanket substitution of `python -m` → `.venv/bin/python -m`, which was right for sixteen commands
+and wrong for this one, in the setup instructions of the first document a judge follows.
+
+**The over-broad rule is the finding, not the typo.** A guard written to catch one class of error
+introduced another. The rule is not "never a bare interpreter" — it is "never a bare interpreter
+for something that needs this project installed". `venv`, `pip` and `ensurepip` run *before* the
+environment exists, so they are exempt by definition, and the guard now says so with the reason
+attached. A second assertion forbids the inverse: no document may bootstrap with
+`.venv/bin/python -m venv`.
+
+Three stale rows corrected:
+
+- **#37 and #47** both said `origin/main` is **31 commits behind**. Re-measured: **70**. Five
+  times out of date, on the two P0 rows about the one action that would publish the wrong project.
+  #37 now says what it was when written and what it is now, rather than silently swapping it.
+- **#22** said *"`python-dotenv` is declared but `load_dotenv` is called nowhere"*. The first half
+  stopped being true when **#11** removed the six unused packages; it survives only as a comment
+  in `requirements.txt` explaining its own removal. The substance is unchanged and still verified:
+  nothing reads `.env`, deliberately, because auto-loading it would let a local file flip a
+  judge's replay run into live mode.
+- **#48** closed. The three incomplete captures are committed alongside nineteen more and
+  accounted for in `evals/DATA.md`, with a test holding that nothing but `meta.json` ships.
+
+Checked and found accurate, so left alone: **#23** (`make setup` still dies on Homebrew 3.14's
+`ensurepip`, re-confirmed in a clean archive last iteration), **#28** (the one-word trigger quote,
+cited correctly by `README.md` §11), **#36**, **#38**, **#39**, **#42**, **#43**.
+
+Result: `make test` **714 passed**. 1 guard added, 1 guard narrowed, 1 documentation regression
+repaired. `evidence/` and `trajectories/product-agent/` byte-identical. Cost **$0.00**, ledger
+$0.4364.
+
+**7.2 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
+video; `git push` (**origin/main is 70 commits behind**); make the repository public after
+pushing; `make review`; rotate `.env` and the Telegram credentials.

@@ -634,11 +634,28 @@ def test_no_documented_command_calls_an_interpreter_that_may_not_exist():
         if not path.is_file():
             continue
         for line in path.read_text(encoding="utf-8").splitlines():
-            if re.search(r"(?<![\w./-])python3? -m ", line):
+            hit = re.search(r"(?<![\w./-])python3? -m (\w+)", line)
+            # `venv`, `pip` and `ensurepip` are the exceptions and they are not arbitrary: they
+            # are stdlib modules that run BEFORE the environment exists, so they cannot use the
+            # interpreter inside it. The first version of this rule had no exemption, and the
+            # blanket substitution it justified turned `python3 -m venv` into
+            # `.venv/bin/python -m venv` in the setup instructions.
+            if hit and hit.group(1) not in {"venv", "pip", "ensurepip"}:
                 offenders.append(f"{name}: {line.strip()}")
 
     assert not offenders, ("these need `.venv/bin/python -m`, or they die with "
                            f"`command not found`:\n" + "\n".join(offenders))
+
+    # The opposite error, and self-inflicted: the blanket substitution that fixed the above
+    # rewrote `python3 -m venv` into `.venv/bin/python -m venv`, which asks the interpreter
+    # inside the environment to create that environment. A bootstrap command cannot use the
+    # thing it bootstraps.
+    for name in ("README.md", "SUBMISSION.md", "docs/REPRODUCTION.md", "video/SHOTLIST.md"):
+        path = REPO / name
+        if path.is_file():
+            text = path.read_text(encoding="utf-8")
+            for impossible in (".venv/bin/python -m venv", ".venv/bin/pip install -r"):
+                assert impossible not in text, f"{name} bootstraps with `{impossible}`"
 
 
 def test_the_shot_two_count_is_counted_from_the_fixture():

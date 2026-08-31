@@ -38,7 +38,7 @@ This creates `.venv`, installs the pinned dependencies from `requirements.txt`, 
 package itself in editable mode so `.venv/bin/python -m ts.cli` resolves. The replay path pulls exactly one
 runtime package, `httpx`.
 
-If `.venv/bin/python -m venv` fails with an `ensurepip` error — it does on Homebrew Python 3.11 and 3.14
+If `python3 -m venv` fails with an `ensurepip` error — it does on Homebrew Python 3.11 and 3.14
 as installed on the development machine — create the environment another way and install the same
 two lines into it:
 
