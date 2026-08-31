@@ -741,3 +741,18 @@ one for abstained. Weight and line, never hue — the same rule the badges follo
 Fourth guard to match its own comment. Stripping comments before checking is now the house
 pattern for every text-based assertion in this suite.
 Blockers: none. Cost unchanged at $0.41.
+
+## 2026-08-31T00:05Z — iteration 43
+Attempted: the stacking stat rows on /method, from a screenshot.
+Result: `make test` green, 414 -> 416. Two bugs, one visible and one not.
+Visible: `renderHero` and `renderScores` appended into containers they never emptied, so every
+fixture or system switch stacked another copy of the four stat tiles and another set of table
+rows under the previous ones — the screenshot shows six stacked copies. `renderDebug` had it too
+and had simply not been noticed. All three now go through one `clear()` helper.
+Not visible, and worse: the mode badge read **RECORD**. It was rendering `result.mode`, which is
+the mode the run was CAPTURED in — the baseline and marlon documents literally say `"record"` —
+so a page that only ever serves committed files was telling a viewer it was recording. The badge
+now says how the page is serving it, REPLAY, and the captured mode moved into the debug panel as
+provenance beside a new "served: replay from the committed cache" row. Confirmed the values that
+caused it: 2 of 3 run documents carry `mode=record`.
+Blockers: none. Cost unchanged at $0.41.

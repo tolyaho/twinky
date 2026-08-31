@@ -876,3 +876,28 @@ def test_card_states_are_distinguished_without_colour():
     for block in (grounded, abstained):
         for hue in ("--success", "--error", "--orb-"):
             assert hue not in block
+
+
+# --------------------------------------------------------------- re-render hygiene
+def test_every_render_target_is_cleared_before_it_is_filled():
+    """Three render functions appended into containers they never emptied, so each fixture or
+    system switch stacked another copy of the stat row and another set of table rows under the
+    previous ones. The page grew a new block per click."""
+    js = METHOD_JS.read_text(encoding="utf-8")
+
+    assert "function clear(node)" in js
+    for target in ('getElementById("hero-stats")', 'getElementById("scores-body")',
+                   'getElementById("debug-body")'):
+        assert f"clear(document.{target})" in js, f"{target} is filled without clearing"
+
+
+def test_the_badge_says_how_the_page_is_served_not_how_the_run_was_recorded():
+    """`result.mode` is the mode the run was captured in — the baseline document literally says
+    "record" — so the badge read RECORD forever on a page that only ever serves committed files.
+    That reads as a live capture."""
+    js = METHOD_JS.read_text(encoding="utf-8")
+
+    assert 'getElementById("mode-badge").textContent = "REPLAY"' in js
+    assert 'getElementById("mode-badge").textContent = result.mode' not in js
+    # the real value is provenance and still visible, in the debug panel
+    assert '["recorded in mode", result.mode]' in js

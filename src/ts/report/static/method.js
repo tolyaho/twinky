@@ -213,9 +213,10 @@ function renderCard(card, events, startMs) {
 
 function renderDebug(data) {
   const { meta, result } = data;
-  const dl = document.getElementById("debug-body");
+  const dl = clear(document.getElementById("debug-body"));
   const rows = [
-    ["mode", result.mode],
+    ["served", "replay from the committed cache"],
+    ["recorded in mode", result.mode],
     ["fixture", result.fixture_id],
     ["windows", result.counts.windows],
     ["window size", `${result.window_size_ms} ms`],
@@ -241,6 +242,14 @@ function renderDebug(data) {
    section stays hidden rather than rendering zeros that read like a measured result. */
 const rate = (v) => (typeof v === "number" ? v.toFixed(3) : "—");
 
+/* Every render target is emptied before it is filled. Three of these appended into a container
+   they never cleared, so switching fixture or system stacked another copy of the stat row and
+   another set of table rows under the previous ones — the page grew a new block per click. */
+function clear(node) {
+  while (node && node.firstChild) node.removeChild(node.firstChild);
+  return node;
+}
+
 function stat(dl, label, value) {
   const wrap = el("div");
   wrap.appendChild(el("dt", null, label));
@@ -249,7 +258,7 @@ function stat(dl, label, value) {
 }
 
 function renderHero(result, evaluation) {
-  const dl = document.getElementById("hero-stats");
+  const dl = clear(document.getElementById("hero-stats"));
   const counts = result.counts || {};
   stat(dl, "windows analysed", String(counts.windows != null ? counts.windows : "—"));
   stat(dl, "cards verified", String(counts.verified != null ? counts.verified : "—"));
@@ -282,7 +291,7 @@ const SYSTEM_LABEL = {
 
 function renderScores(evaluation) {
   if (!evaluation || !evaluation.systems) return;
-  const body = document.getElementById("scores-body");
+  const body = clear(document.getElementById("scores-body"));
   let rows = 0;
   for (const name of SYSTEM_ORDER) {
     const agg = evaluation.systems[name];
@@ -475,7 +484,10 @@ function renderRun(data) {
     document.getElementById(`n-${name}`).textContent = String(buckets[name].length);
   }
 
-  document.getElementById("mode-badge").textContent = result.mode;
+  /* How you are seeing this, not how it was once produced. `result.mode` is the mode the run was
+     recorded in — the baseline doc says "record" — and showing that read as a live capture on a
+     page that only ever serves committed files. The provenance moved to the debug panel. */
+  document.getElementById("mode-badge").textContent = "REPLAY";
   document.getElementById("run-line").textContent =
     `${result.fixture_id} · ${result.counts.windows} windows · ${result.system} · `
     + `replayed from cache, no API calls.`;
