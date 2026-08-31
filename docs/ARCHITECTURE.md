@@ -3,6 +3,10 @@
 Every node below is marked with what actually exists in the tree. A diagram that shows a design
 rather than a build is worth nothing to a reviewer who opens `src/`.
 
+**Paths inside the two diagrams are relative to `src/ts/`**, so a node reading
+workflow/agent.py is `src/ts/workflow/agent.py`. Paths in prose and in the table at the end are
+relative to the repository root, because they point outside `src/` as often as into it.
+
 ## The graded path
 
 ```
@@ -65,9 +69,9 @@ Cutting across all of it:
 
 | Concern | Where | Status |
 |---|---|---|
-| Model-call cache — the reproducibility spine | `cache.py` | ✔ three modes; a replay miss raises |
-| Clock abstraction — no wall-clock in a query path | `clock.py` | ✔ |
-| Provider adapters — text, vision, STT behind interfaces | `providers/` | ✔ |
+| Model-call cache — the reproducibility spine | `src/ts/cache.py` | ✔ three modes; a replay miss raises |
+| Clock abstraction — no wall-clock in a query path | `src/ts/clock.py` | ✔ |
+| Provider adapters — text, vision, STT behind interfaces | `src/ts/providers/` | ✔ |
 | Evaluation harness, gold labels, scorer | `evals/` | ✔ harness; 11 frozen cases on real captures |
 | Secret gate | `scripts/scan_secrets.py` | ✔ passes on a git-ignored `.env`, fails on anything shippable |
 | Grouping evaluation — pair precision/recall on frozen labels | `evals/grouping/` | ✔ arms A, B and C measured; labels frozen in a commit with no arm code |

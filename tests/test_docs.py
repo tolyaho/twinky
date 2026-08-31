@@ -744,3 +744,44 @@ def test_data_md_accounts_for_every_committed_fixture_directory():
             continue
         tracked = {p.name for p in d.iterdir() if p.is_file()}
         assert tracked == {"meta.json"}, f"{d.name} ships more than its meta: {sorted(tracked)}"
+
+
+def test_the_architecture_diagram_resolves_everywhere_it_points():
+    """Two conventions live in one file: the diagrams are relative to `src/ts/` and everything
+    else is relative to the repository. The cross-cutting table mixed them, so `cache.py` and
+    `clock.py` resolved from nowhere while `evals/` and `scripts/` beside them resolved fine.
+
+    Both are checked here — a node under the diagram root, a backticked path under the repo root
+    — because a diagram whose paths do not resolve is a picture, not a map.
+    """
+    import re
+
+    text = (REPO / "docs/ARCHITECTURE.md").read_text(encoding="utf-8")
+
+    nodes = set(re.findall(r"✔ ([\w/]+\.py|[\w/]+/)", text))
+    assert len(nodes) > 10, "the diagram lost its nodes, or the marker changed"
+    for node in sorted(nodes):
+        assert (REPO / "src/ts" / node).exists(), \
+            f"the diagram marks {node} as built and it is not under src/ts/"
+
+    cited = set(re.findall(r"`([A-Za-z0-9_][\w./-]*\.(?:md|py|json|jsonl|csv|svg|toml))`", text))
+    cited |= set(re.findall(
+        r"`((?:docs|evals|evidence|src|tests|video|trajectories|scripts|cache)/[\w./-]*)`", text))
+    missing = sorted(p for p in cited if not (REPO / p.rstrip("/")).exists())
+    assert not missing, f"cited from ARCHITECTURE.md and not in the tree: {missing}"
+
+
+def test_the_reporting_layer_really_does_call_one_model_at_most():
+    """`docs/ARCHITECTURE.md` claims the whole reporting pipeline is deterministic "with exactly
+    one cosmetic exception". That is the strongest claim in the file — it is why the board, the
+    rail and Tier 0 cost nothing — so it is checked rather than trusted."""
+    import re
+
+    builders = []
+    for path in sorted((REPO / "src/ts/report").glob("*.py")):
+        source = path.read_text(encoding="utf-8")
+        if re.search(r"build_chat_request|\.call\(", source):
+            builders.append(path.name)
+
+    assert builders == ["labels.py"], \
+        f"the reporting layer builds model requests in {builders}; ARCHITECTURE.md says only labels.py"
