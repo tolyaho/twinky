@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pytest
 
+from conftest import strip_js_comments
 from ts.report import serve as serve_mod
 
 REPO = Path(__file__).resolve().parents[1]
@@ -1808,3 +1809,24 @@ def test_the_baseline_offer_in_the_finding_line_is_not_empty():
         assert counts["agent"]["grounded"] == 0, f"{fixture}: the agent now grounds something"
         assert counts["baseline"]["grounded"] > 0, \
             f"{fixture}: the baseline grounds nothing, so the offer leads nowhere"
+
+
+def test_the_live_counting_box_belongs_to_the_board_and_only_the_board():
+    """`this minute so far · counting · no cause assigned yet` sat above whatever the middle
+    column was showing, because its visibility was decided by whether groups existed and never
+    by the active view.
+
+    Over **Signals** that reads as though the agent's gated cards were the pending things being
+    counted; they are a different pipeline entirely. Over **Questions** it contradicts that
+    panel's own line — questions are grouped across the whole stream, not per window. The box is
+    a board concept and now follows the board.
+    """
+    js = strip_js_comments(LIVE_JS.read_text(encoding="utf-8"))
+
+    assert 'state.view !== "board"' in js, "the live box no longer consults the active view"
+    assert "syncLiveBox()" in js.split("function showMiddle", 1)[1].split("\n}", 1)[0], \
+        "switching views must re-decide whether the live box is showing"
+    # The count still updates while hidden, so switching back to the board is instant rather than
+    # blank until the next tick.
+    tick = js.split("function addTick", 1)[1].split("\n}", 1)[0]
+    assert "state.liveGroups = groups.length" in tick and "clear(list)" in tick

@@ -3222,3 +3222,41 @@ the SVG parses, the new text sits at x=464 clear of the boxes at x=724, and the 
 **10.9 hours to the deadline. The 8-hour video gate is 2.9 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 39+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 101 — a board widget stopped captioning two panels it does not describe
+
+The middle column shows one of three things and swaps title, lede, count, pane and footer as you
+switch. One element never joined: `#board-live`, the dashed **"this minute so far · counting · no
+cause assigned yet"** block with its live group bars and window-close hairline. Its visibility was
+decided by `box.hidden = !groups.length` — whether the data existed, never which view was active.
+
+So it stayed pinned to the top of the panel on all three tabs:
+
+- On **Signals** it sat above the agent's gated cards, captioned *no cause assigned yet*, reading
+  as though those cards were the pending things being counted. They are a different pipeline.
+- On **Questions** it contradicted that panel's own line. Questions are grouped **across the whole
+  stream, not per window**, which the empty state says in those words — under a block announcing
+  what happened in this minute.
+
+It now follows the board. `state.liveGroups` records how many groups exist and `syncLiveBox()`
+decides whether they show, called from both `addTick` and `showMiddle`. The counts keep updating
+while hidden, so switching back to the board is instant rather than blank until the next
+two-second tick.
+
+**The shot list already described the fixed behaviour.** Shot 6 says to capture *"the finding line
+at the top"* of Signals — and in `index.html` the live box is markup order 108, the finding line
+128, so the finding line was never at the top. The instruction was right and the page was wrong;
+nothing in `video/SHOTLIST.md` needed changing. The same is true of shot 7, whose flagship
+Questions row is now the first thing in the panel.
+
+Checked the rest of the class before closing it: everything else inside the board panel —
+`#middle-lede`, `#board-n`, `#board-h`, the footers — is already switched by `showMiddle`, and the
+`.nextclose` hairline lives inside the box that now follows. This was the only one.
+
+Result: `make test` 701 → **702 passed**. 1 new guard, asserted against comment-stripped source.
+Served on 8000 and confirmed the delivered `live.js` carries the change. Cost **$0.00**, ledger
+$0.43.
+
+**10.4 hours to the deadline. The 8-hour video gate is 2.4 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 39+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
