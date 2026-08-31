@@ -4304,3 +4304,40 @@ model confirming them would make the disclosure line false, and README §6 alrea
 unconfirmed. It is a cost, not a blocker.
 
 Blockers: the video itself, which the author is cutting now.
+
+---
+
+## 2026-08-31T20:05Z — iteration 111 · verification, from the outside
+
+Attempted: prove everything except the video is actually ready — from what a judge gets, not from
+the tree that produced it.
+
+**Cloned the public repository fresh and ran it.** `make setup && make test && make eval` on a
+clean clone of `origin/main`: **729 passed**, **48 hits / 0 misses, no keys**. Served it on a free
+port: `/`, `/method` and `/api/fixtures` all answer, and a `board` event arrives over SSE within
+one window. That is the reproducibility gate measured from outside the machine that wrote it,
+which is the only place the measurement means anything.
+
+One near-miss worth recording. The first clone run looked like proof that `make setup` leaves
+`pytest` uninstalled — `make test` died on `No module named pytest`. It was mine: the first
+attempt used this machine's `python3`, which is 3.14 with a broken `ensurepip`, and left a
+half-built `.venv` that the second attempt reused instead of rebuilding. Re-cloned, ran once,
+green. Checking before reporting turned a false alarm about the graded path into nothing.
+
+**RISKS #7 closed by the author: MIT.** The repository had gone public with no licence, so default
+all-rights-reserved copyright was in force — a judge could read the code and had no right to run
+it. `LICENSE` added, named in README, with an explicit carve-out that it does not cover the Twitch
+fixtures, which are not the author's to license.
+
+Also reverted one dirty file: `make eval` rewrites `at_ms` inside a committed trajectory (1 → 2),
+a wall-clock duration that moves with machine speed. Noise, not a change.
+
+State: `make test` **729 passed** · `make eval` **48 hits / 0 misses** · working tree clean ·
+`origin/main == HEAD` · repository public · MIT · no secret in the tree or in any committed
+version · reproduction verified from a clean clone.
+
+Still not done, deliberately: the 11 gold labels remain model-drafted. `confirm_gold.py` requires
+`--by` because the point is that a *person* checked labels that score the agent. README §6 says
+so. A cost, not a blocker.
+
+Blockers: the video.
