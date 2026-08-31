@@ -35,10 +35,10 @@ make setup
 ```
 
 This creates `.venv`, installs the pinned dependencies from `requirements.txt`, and installs the
-package itself in editable mode so `python -m ts.cli` resolves. The replay path pulls exactly one
+package itself in editable mode so `.venv/bin/python -m ts.cli` resolves. The replay path pulls exactly one
 runtime package, `httpx`.
 
-If `python3 -m venv` fails with an `ensurepip` error — it does on Homebrew Python 3.11 and 3.14
+If `.venv/bin/python -m venv` fails with an `ensurepip` error — it does on Homebrew Python 3.11 and 3.14
 as installed on the development machine — create the environment another way and install the same
 two lines into it:
 
@@ -55,14 +55,14 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-31: **709 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-31: **711 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 
 ## 4. Inspect a fixture
 
 ```bash
-make inspect FIXTURE=evals/fixtures/sample     # or: python -m ts.cli inspect --fixture ...
+make inspect FIXTURE=evals/fixtures/sample     # or: .venv/bin/python -m ts.cli inspect --fixture ...
 ```
 
 Prints event counts, span, and the reducer's compression ratio. No model call.
@@ -187,7 +187,7 @@ All three are in `docs/IMPROVEMENT_CHANGELOG.md` as experiments that were built,
 fourth recorded system beside agent, baseline and ablation:
 
 ```bash
-TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+TS_LLM_MODE=replay .venv/bin/python -m evals.run_eval --ablation --grounded --out evidence/grounded
 ```
 
 Expect **70 cache hits, 0 misses**. It writes to `evidence/grounded/`, never to `evidence/`, so
@@ -201,7 +201,7 @@ prompt, so it ships as a patch and reverses cleanly:
 ```bash
 git apply experiments/h1-group-chat.patch
 TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
-  python -m evals.run_eval --ablation --out /tmp/h1
+  .venv/bin/python -m evals.run_eval --ablation --out /tmp/h1
 git apply -R experiments/h1-group-chat.patch
 ```
 
@@ -220,8 +220,8 @@ carries no banner.
 a commit that contained no arm code:
 
 ```bash
-TS_LLM_MODE=replay python -m evals.grouping.score_arms       # arms A and B
-TS_LLM_MODE=replay python -m pytest tests/test_arm_embeddings.py   # arm C, from cache
+TS_LLM_MODE=replay .venv/bin/python -m evals.grouping.score_arms       # arms A and B
+TS_LLM_MODE=replay .venv/bin/python -m pytest tests/test_arm_embeddings.py   # arm C, from cache
 ```
 
 Expect `A · exact canonical` at precision 1.000 / recall 0.057 and `B · token + prefix` at

@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 709 passed, ~1 s
+make test                        # 711 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 
@@ -82,11 +82,11 @@ engineering that usually leaves no trace.
 The last three reproduce with no keys — including the losses, because the recordings were kept:
 
 ```bash
-TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
-TS_LLM_MODE=replay python -m evals.grouping.score_arms
+TS_LLM_MODE=replay .venv/bin/python -m evals.run_eval --ablation --grounded --out evidence/grounded
+TS_LLM_MODE=replay .venv/bin/python -m evals.grouping.score_arms
 git apply experiments/h1-group-chat.patch && \
   TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
-    python -m evals.run_eval --ablation --out /tmp/h1 && \
+    .venv/bin/python -m evals.run_eval --ablation --out /tmp/h1 && \
   git apply -R experiments/h1-group-chat.patch   # 46 hits, 0 misses
 ```
 
