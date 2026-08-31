@@ -48,8 +48,23 @@ raw feed on camera for a related reason.
 
 ## Rights
 
-Only self-recorded or explicitly permitted material. Public chat text is retained solely as
-evaluation input, pseudonymised, and is not redistributed as a dataset.
+Only self-recorded or explicitly permitted material. Three derived artifacts are committed per
+enriched fixture and this covers all three:
+
+- **`chat.jsonl`** — public chat text, retained verbatim as evaluation input with authorship
+  pseudonymised. It is not redistributed as a dataset. The limit on what "pseudonymised" means is
+  stated above, with counts.
+- **`transcript.jsonl`** — speech from the public broadcast, as final segments only. No audio is
+  committed and none is redistributable; the derived text exists because the product's entire
+  claim is that chat cannot be explained without it.
+- **`frames.jsonl`** — model-written descriptions of what was on screen. **No raw image is
+  committed** for any evaluated fixture.
+
+**The captions were checked rather than assumed**, because the overlay they describe is the same
+one that carries real logins in `video/twinky-image-bank.zip` (RISKS #52). Across **72 caption
+rows and 29,216 characters** there are **zero usernames and zero `@mentions`** — the vision model
+declines the chat pane in its own words: *"The chat is visible but not described."* A test holds
+that, because a re-enrichment with a different model could quietly change it.
 
 ## Case inventory
 

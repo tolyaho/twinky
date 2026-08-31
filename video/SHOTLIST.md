@@ -21,7 +21,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 722 passed — this is also shot 14
+make test                             # 723 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -278,7 +278,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 722 passed
+make test        # 723 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
@@ -356,7 +356,7 @@ each. Two things about it belong out here rather than inside the archive:
 1. **`01-real/stream-frames/` are real captured frames with real logins visible.** Blur before
    use. See shot 3 and `RISKS.md` #52.
 2. **`02-product-stills/11_reproducibility.png` is stale.** It reads *"48 hits / 0 misses · 530
-   tests · $0.43"*. The suite is at **722** and the ledger at **$0.4364**, so cutting that still
+   tests · $0.43"*. The suite is at **723** and the ledger at **$0.4364**, so cutting that still
    puts a number on screen that shot 14 contradicts thirty seconds later with `make test` running
    live. The manifest says to re-render rather than retouch — but its generator, `build_bank.py`,
    **is not committed**, so re-rendering is only possible if the author still has it. If not:

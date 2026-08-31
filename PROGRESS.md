@@ -4069,3 +4069,46 @@ Result: `make test` 721 → **722 passed**. 1 new guard. Cost **$0.00**, ledger 
 the username column first, RISKS #52**; `git push` (70 commits behind); decide the licence
 question in RISKS #7; make the repository public after pushing; `make review`; rotate `.env` and
 the Telegram credentials.
+
+## Iteration 119 — the third artifact, and the one that turned out clean
+
+**Inside the video gate: 4.9 hours left, no video file.** Verification-only.
+
+Each enriched fixture commits three derived artifacts. #52 covered pixels, #53 covered chat text.
+This covers the other two, and it is the one that came back clean.
+
+**The frame captions describe the same overlay that leaks logins in the image bank, and they leak
+nothing.** Across the four evaluated fixtures — **72 caption rows, 29,216 characters** — there are
+**zero usernames and zero `@mentions`**. The vision model declines the chat pane in its own words:
+
+> The livestream shows three people sleeping in a dimly lit room… A word-guessing game is active
+> on screen with the prompt "GUESS THE WORD!" and the partial word "ba______." **The chat is
+> visible but not described.**
+
+The transcript is equally clean: 238 segments across three fixtures, no mentions.
+
+**Checked rather than assumed, and now held by a test.** This is a privacy property of what
+ships, not a stylistic accident, and a re-enrichment with a different vision model could quietly
+end it. The test asserts no caption contains a handle or transcribes the chat pane, and holds the
+published corpus size to the files.
+
+**And the Rights section was making a claim about one of three things.** It read *"public chat
+text is retained solely as evaluation input"* while `transcript.jsonl` and `frames.jsonl` ship
+beside it, both derived from the same broadcast. It now covers all three explicitly, including
+that no raw image is committed for any evaluated fixture.
+
+**One figure caught before it was published.** The first draft said *74 caption rows and 29,216
+characters* — the rows counted the synthetic `sample` scaffold and the characters did not. Two
+populations in one sentence. Corrected to 72, and the test derives both from the evaluated
+fixtures alone so the pair cannot drift apart again.
+
+That closes the privacy sweep: pixels (#52, open — author's call), chat text (#53, documented
+limitation), captions and transcript (clean, tested).
+
+Result: `make test` 722 → **723 passed**. 1 new guard. `scan_secrets` clean. Cost **$0.00**,
+ledger $0.4364.
+
+**4.9 hours to the deadline and no video exists.** Author-only: film and cut the video — **blur
+the username column first, RISKS #52**; `git push` (70 commits behind); decide the licence
+question in RISKS #7; make the repository public after pushing; `make review`; rotate `.env` and
+the Telegram credentials.

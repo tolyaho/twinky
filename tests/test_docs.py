@@ -917,3 +917,38 @@ def test_the_pseudonymisation_claim_is_the_narrow_one_and_is_counted():
     # The reason it is not fixed has to travel with it, or it reads as an oversight.
     assert "content-derived" in data or "derived from" in data
     assert "RISKS.md` #53" in data or "RISKS.md #53" in data
+
+
+def test_the_frame_captions_carry_no_chat_identity():
+    """The overlay these captions describe is the same one that carries real logins in
+    `video/twinky-image-bank.zip` (RISKS #52). In pixels it leaks; in the derived text it does
+    not, because the vision model declines the chat pane — *"The chat is visible but not
+    described."* That is a privacy property of what ships, not a stylistic accident, and a
+    re-enrichment with a different model could quietly end it.
+
+    Counted from the evaluated fixtures only. `sample` is a hand-written scaffold and including
+    it would mean the row count and the character count were drawn from different sets — which is
+    exactly the mistake this docstring's own figures were caught making.
+    """
+    import json
+    import re
+
+    mention = re.compile(r"@([A-Za-z0-9_]{3,25})")
+    names = re.compile(r"\b(username|usernames|user names?|login|handle|nickname)\b", re.I)
+    rows = chars = 0
+    for d in sorted((REPO / "evals/fixtures").iterdir()):
+        frames = d / "frames.jsonl"
+        if d.name == "sample" or not frames.is_file():
+            continue
+        for line in frames.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            caption = str(json.loads(line).get("caption") or "")
+            rows += 1
+            chars += len(caption)
+            assert not mention.search(caption), f"{d.name}: a caption names a handle"
+            assert not names.search(caption), f"{d.name}: a caption transcribes the chat pane"
+
+    data = (REPO / "evals/DATA.md").read_text(encoding="utf-8")
+    assert f"{rows} caption" in data and f"{chars:,} characters" in data, \
+        f"DATA.md misstates the caption corpus; measured {rows} rows / {chars:,} chars"
