@@ -12,9 +12,9 @@ eval. Use:
 
 ```bash
 make review                                                    # what is confirmed, what is not
-python scripts/confirm_gold.py --confirm c05_warning_no_cause --by "your name"
-python scripts/confirm_gold.py --disagree c11_sarcasm_mockery --by "your name" \
-                               --note "the cause is the clip at 4:12"
+.venv/bin/python scripts/confirm_gold.py --confirm c05_warning_no_cause --by "your name"
+.venv/bin/python scripts/confirm_gold.py --disagree c11_sarcasm_mockery --by "your name" \
+                                         --note "the cause is the clip at 4:12"
 ```
 
 It sets the flag, records who and refuses an anonymous confirmation, and touches no other field.
