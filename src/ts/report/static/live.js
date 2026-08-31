@@ -497,11 +497,13 @@ function renderRail(r) {
     ["reaction wave", r.reaction_wave || 0],
   ]));
 
+  /* "questions this window", not "questions to you" — the middle column has a tab under that
+     exact name showing the whole stream. Two panels on one screen headed identically, one
+     reading 22 and the other 72, is a reader with no way to know which is which. */
   const qs = r.questions || [];
-  const questions = railBlock("questions to you", qs.length
+  rail.appendChild(railBlock(`questions this window · ${qs.length}`, qs.length
     ? qs.slice(0, 4).map((q) => [q.text, `${q.count} asked`])
-    : [["none in this window", ""]]);
-  rail.appendChild(questions);
+    : [["none in this window", ""]]));
 
   /* Zero speech segments is the truth on stableronaldo, and a silent window is a finding about
      the stream rather than a hole in the data. It is stated rather than left blank. */
@@ -765,7 +767,7 @@ const VIEWS = {
   },
   questions: {
     pane: "questions", foot: "q-foot", tab: "tab-questions", title: "Questions to you",
-    lede: "asked by chat, answered or not by reading the transcript after it was asked",
+    lede: "every question this stream, grouped — answered or not by reading the transcript after it was asked",
   },
 };
 

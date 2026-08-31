@@ -1720,3 +1720,33 @@ def test_the_free_text_distribution_is_deliberately_not_drawn():
 
     assert "distribution" not in js, "prose is being drawn as if it were a tally"
     assert "free-text string" in risks, "the reason has to be written down, not just obeyed"
+
+
+def test_no_label_means_two_different_things_on_one_screen():
+    """The rail block and the middle-column tab were both headed "questions to you" while showing
+    22 and 72 — per window and per stream — with nothing to tell them apart. And the nav called
+    the product page "Live" while its own badge reads REPLAY and a control directly below offers
+    Replay | Live."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    # the nav names the page, the control names the source
+    assert ">Dashboard<" in html and ">Live<" in html
+    assert html.count(">Live<") == 1, "'Live' means the mode control and nothing else"
+
+    # the two question panels state their scope
+    assert "questions this window" in js
+    assert "every question this stream" in js
+
+
+def test_the_nav_is_the_same_on_every_page():
+    """One nav, three pages. It drifted into two different navs once already."""
+    import re
+
+    navs = []
+    for page in ("index.html", "method.html", "philosophy.html"):
+        html = (STATIC / page).read_text(encoding="utf-8")
+        nav = re.search(r'<nav class="bar-nav".*?</nav>', html, re.S).group(0)
+        navs.append(tuple(re.findall(r">([A-Za-z ]+)</a>", nav)))
+    assert len(set(navs)) == 1, f"the nav differs between pages: {navs}"
+    assert navs[0] == ("Dashboard", "Method", "Why")

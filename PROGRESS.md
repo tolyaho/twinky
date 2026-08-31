@@ -2822,3 +2822,36 @@ corrected. No new colour, still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **19.8 hours to the deadline; the video gate is 11.8 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 91 — 2026-08-31 — one word, two meanings, one screen
+
+Attempted: the rail panel. The layout bug was fixed two iterations ago; this looked at what it
+says.
+
+**Two panels on the same screen were both headed "questions to you", showing 22 and 72.** The
+rail's block is scoped to the current window; the middle column's tab is scoped to the whole
+stream. Nothing on screen distinguished them, so a viewer met two contradictory numbers under
+identical labels. Now `questions this window · 22`, against a tab whose lede reads *"every
+question this stream, grouped"*.
+
+That is a shape, not an incident, so I swept every visible label on the page for duplicates.
+Four came back; two were the same element named twice in markup and script. One was real:
+
+**The nav called the product page "Live".** Its own badge reads **REPLAY**, and a control
+directly beneath it offers `Replay | Live`. So the word meant "this page" in the nav and "a real
+broadcast happening now" eight pixels below — while the page it named was, by default, neither.
+The nav item is now **Dashboard** on all three pages, and `Live` means the mode control and
+nothing else. A test asserts `>Live<` appears exactly once.
+
+A second guard came out of it: the nav must be identical on all three pages. It drifted into two
+different navs once already, in an earlier iteration, and nothing had held it since.
+
+Verified as served rather than in source — all three pages return `['Dashboard', 'Method', 'Why']`
+and `/` contains exactly one `>Live<`.
+
+Result: `make test` 683 → **685 passed**. 2 new tests, three rows in DECISIONS.md. No CSS change,
+still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**19.7 hours to the deadline; the video gate is 11.7 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
