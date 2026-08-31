@@ -658,3 +658,35 @@ def test_the_shot_two_count_is_counted_from_the_fixture():
     assert f"holds {len(window)} messages" in shots
     assert f"**{len(single)} are one-word guesses**" in shots, \
         f"the shot list misstates the count; the fixture says {len(single)} of {len(window)}"
+
+
+def test_the_shooting_plan_and_the_cut_order_name_the_same_floor():
+    """Two sections of the shot list say what may not be dropped — one for a video that runs
+    long, one for an author who is out of hours. They were written a week apart and disagreeing
+    about which shots are load-bearing is how the wrong one gets cut at four in the morning."""
+    import re
+
+    # Both phrases wrap across lines in the source and one of them says "or" rather than a
+    # comma, so match against the text with its whitespace flattened.
+    shots = " ".join((REPO / "video/SHOTLIST.md").read_text(encoding="utf-8").split())
+
+    never = re.search(r"\*\*Never cut shots ([\d,or and]+?)\*\*", shots)
+    assert never, "the cut order no longer names the shots that may not be cut"
+    protected = set(re.findall(r"\d+", never.group(1)))
+
+    floor = re.search(r"shots \*\*([\d,or and]+?)\*\* and a close still make a complete "
+                      r"submission", shots)
+    assert floor, "the shooting plan no longer states a floor"
+    assert set(re.findall(r"\d+", floor.group(1))) == protected, \
+        "the two sections disagree about which shots are load-bearing"
+
+
+def test_the_shooting_plan_puts_the_network_shot_where_it_can_be_dropped():
+    """Shot 10 is the only one needing a live third-party broadcast, so it can fail on the day
+    through nobody's fault. It must be named as droppable, not discovered as a blocker."""
+    shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
+    plan = shots.split("## If you are short on HOURS", 1)[1].split("## Cut order", 1)[0]
+
+    assert "Drop this first" in plan and "Drop this second" in plan
+    assert "Shot 10" in plan and "needs a network" in plan
+    assert "**needs network**" in shots, "shot 10 no longer flags its own dependency"
