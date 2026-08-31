@@ -1,0 +1,41 @@
+diff --git a/src/ts/workflow/agent.py b/src/ts/workflow/agent.py
+index 7e85107..13b4f12 100644
+--- a/src/ts/workflow/agent.py
++++ b/src/ts/workflow/agent.py
+@@ -52,7 +52,11 @@ def cap_cards(raw):
+     return typed[:MAX_CARDS], max(0, len(typed) - MAX_CARDS)
+ 
+ TOOLS_DOC = """Available tools (all take start_ms and end_ms; windows are capped):
+-  group_repeated(start_ms, end_ms)        chat, deduplicated into bursts with counts and ids
++  group_repeated(start_ms, end_ms)        chat grouped into what the room is SAYING, not into
++                                          identical strings. Each group has `label` (what it is
++                                          about), `count`, `samples` (verbatim messages) and
++                                          `event_ids` (every message in it). Cite ids from
++                                          `event_ids` - `key` and `label` are not ids.
+   get_transcript_window(start_ms, end_ms) what the streamer said (final segments only)
+   get_frame_captions(start_ms, end_ms)    what was on screen
+   get_chat_window(start_ms, end_ms)       raw chat, ungrouped - use only if you need exact text"""
+diff --git a/src/ts/workflow/tools.py b/src/ts/workflow/tools.py
+index 4199fc1..dccacd3 100644
+--- a/src/ts/workflow/tools.py
++++ b/src/ts/workflow/tools.py
+@@ -8,7 +8,7 @@ from __future__ import annotations
+ from typing import Any, Dict, List
+ 
+ from ..events import EventIndex
+-from .reduce import reduce_chat
++from .reduce import group_chat
+ 
+ 
+ class Tools:
+@@ -51,7 +51,7 @@ class Tools:
+     def group_repeated(self, start_ms: int, end_ms: int) -> List[Dict[str, Any]]:
+         self._guard(start_ms, end_ms)
+         evs = self.index.window(start_ms, end_ms, types=["chat_message"])
+-        bursts = reduce_chat(evs)
++        groups = group_chat(evs)
+         self.calls.append({"tool": "group_repeated", "args": {"start_ms": start_ms, "end_ms": end_ms},
+-                           "n": len(bursts)})
+-        return [b.to_dict() for b in bursts]
++                           "n": len(groups)})
++        return [g.to_dict() for g in groups]

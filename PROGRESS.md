@@ -3260,3 +3260,57 @@ $0.43.
 **10.4 hours to the deadline. The 8-hour video gate is 2.4 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 39+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 102 — item H1, diagnosed and measured for free, reverted unrecorded
+
+Loop switched to `../AGENT_FIX.md` (item H) and rescheduled to every 20 minutes. 25 does not
+divide 60 — `*/25` fires at :00, :25, :50 and then leaves a ten-minute gap — so it runs at
+`2,22,42`, which is the direction the request pointed and evenly spaced.
+
+**The finding is real and confirmed.** `Tools.group_repeated` — the agent's only view of chat —
+called `reduce_chat` at `tools.py:54`. `group_chat`, which the board has rendered since the
+grouping work landed, was never wired into the agent's tools. The agent was asked what the room
+was reacting to while looking at `?` × 42 and `LOL` × 28, with `violet × 27` on screen beside it.
+
+**The free half of the measurement was done, and it removes the obvious objection.** Serialized
+tool output over the eleven frozen windows:
+
+| reducer | characters | rows per window |
+|---|---:|---|
+| `reduce_chat` (what ships) | 197,952 | 19–174, mostly count 1 |
+| `group_chat` (H1) | **51,358** | 2–20 |
+
+**0.26×.** It is not a bigger prompt, it is a quarter of one — exact canonical form makes a row
+per distinct string, so a 174-message window became 174 near-empty rows.
+
+Also verified before going near a provider: baseline and ablation over all eleven cases in replay
+give **22 hits, 0 misses**, so their requests are unchanged. `record` mode reads the cache before
+calling out, which means the frozen comparison could not have been re-recorded even by accident.
+
+**Then it stopped.** The prompt is the cache key, so H1 turns every committed agent entry into a
+miss — `make eval` exits 3 and `test_grounded_arm.py` goes red — until the agent arm is
+re-recorded. The paid run was refused by the sandbox permission layer, and there is no way to
+measure H1 without it.
+
+So: **reverted, and the work kept.** `git checkout` on `workflow/tools.py` and `workflow/agent.py`
+put the frozen numbers straight back; the suite is green at 702. The change survives as
+`experiments/h1-group-chat.patch` and `scripts/record_h1.py`, which is one command from a number —
+it records the agent arm only, into temp evidence and temp trajectory directories, refuses to
+start unless the 22 frozen requests still hit, takes only the key and base URL from `.env` (never
+the model names, which that file sets twice), prints the trigger-source and E_ census before and
+after, and says REVERT out loud if abstentions reach zero.
+
+`experiments/README.md` states in its own first line that a prepared experiment is not a result.
+Nothing in it is quoted as an outcome anywhere; the three measured experiments stay in the
+changelog with their numbers, two of them losses.
+
+**A repository that does not run ten hours before a deadline is worse than one without the
+improvement.** AGENT_FIX.md says the submission is already defensible without item H and to treat
+it as upside — that is exactly how it was treated.
+
+Result: `make test` **702 passed**, working tree green, `scan_secrets` clean. Cost **$0.00**,
+ledger $0.43 and logged as a zero-cost line so the attempt is on the record.
+
+**10.1 hours to the deadline. The 8-hour video gate is 2.1 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 40+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
