@@ -616,13 +616,21 @@ html, body.live-page { height: 100%; }
   font-size: 11px; font-weight: 600; letter-spacing: .96px; text-transform: uppercase;
   color: var(--muted-soft);
 }
+/* Measured scrollWidth 750 against clientWidth 348: the sentence was clipped to under half.
+   The clamp is right; the sentence was too long. The rest of it lives on the Method page. */
 .toolbar .picker-note {
   margin: 0 0 0 auto; font-size: 12px; color: var(--muted-soft);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46ch;
 }
+.empty.failure { color: var(--body-strong); }
 @media (max-width: 1200px) { .toolbar .picker-note { display: none; } }
 
 /* ---- the grid of panels ---- */
+/* `main > section { margin-top: 96px }` is the editorial rhythm and it applied to the panels
+   too, putting a 96px void above the dashboard. The two-col block overrode main's padding but
+   never this. Measured: getComputedStyle(main section).marginTop === "96px". */
+.live-page main.two-col > section { margin-top: 0; }
+
 .live-page main.two-col {
   flex: 1 1 auto; min-height: 0;
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);

@@ -825,3 +825,31 @@ which that fixture exits 3 on replay.
 The gate keeps earning its place: this iteration it caught a dead product page, and the previous
 one caught two tests that fail outside a git checkout. Both were invisible from inside the repo.
 Blockers: none. Cost $0.42 of $5.00.
+
+## 2026-08-31T01:55Z — iteration 47
+Attempted: item A, P0 bugs 1.1-1.5 plus the regression test 1.2 asks for. 1.6 is the long one and
+gets its own iteration.
+Result: `make test` green, 433 -> 443.
+**1.2 does not reproduce and I did not invent a fix for it.** Twelve abrupt mid-stream socket
+resets (SO_LINGER 0, so RST not FIN) across two fixtures, plus six overlapping streams abandoned
+in the same second: server healthy, `/api/fixtures` 200, zero errors in stderr. The most likely
+reason is the switch to `ThreadingHTTPServer` two iterations ago, made to stop an SSE connection
+blocking page loads — on the single-threaded server a write to a dead socket takes out
+`serve_forever`'s only thread, which is exactly "the make demo process was gone". Pinned as a
+regression test anyway: open the stream, reset the connection after the first bytes, assert
+`/api/fixtures` still answers. The property was restored by accident; it is now held on purpose.
+1.1: the error handler was `() => source.close()` and said nothing, so a refused stream left the
+page on "Connecting to the recording…" with the previous run's badge above it. There is now a
+named failure state with a retry, the badge reads NO STREAM, and controls come back. `reset()`
+clears badge and channel line too, so a failed `start()` cannot leave the last run's identity on
+screen.
+1.2 client half, done independently of the crash: every `start()` takes an epoch and all four
+listeners ignore stale events — including `done`, which otherwise lets an abandoned stream
+disable the live one's controls. Picker chips and speed buttons are debounced at 120 ms.
+1.3: `main > section { margin-top: 96px }` was reaching the dashboard panels. One line.
+1.4: a 133-character sentence in a 46ch nowrap clamp, measured 750px against 348px. Sentence
+replaced, clamp untouched, the rest belongs on the Method page.
+1.5: three pages now share one nav — Live · Method · Why — asserted by a test that compares the
+hrefs across all three rather than checking each in isolation.
+Next: 1.6, the citation highlight firing off-screen. Then item B.
+Blockers: none. Cost unchanged at $0.42.

@@ -27,6 +27,7 @@ const el = (tag, className, text) => {
 
 const state = {
   source: null,
+  epoch: 0,                     /* every start() gets one; stale listeners are ignored */
   fixture: null,
   system: "agent",
   speed: 1,
@@ -165,6 +166,14 @@ function reset() {
   state.rows.clear();
   state.counts = { chat: 0, grounded: 0, abstained: 0, rejected: 0 };
   state.notedUngrounded = false;
+
+  /* Identity is cleared here, not only on success. A failed start() used to leave the previous
+     run's badge and channel line on screen above an empty page, which reads as "still loading". */
+  const badge = document.getElementById("mode-badge");
+  clear(badge);
+  badge.appendChild(el("span", "dot"));
+  badge.appendChild(document.createTextNode("REPLAY"));
+  document.getElementById("captured-at").textContent = "";
   for (const id of ["chat-n", "sig-n", "c-chat", "c-grounded", "c-abstained", "c-rejected"]) {
     document.getElementById(id).textContent = "0";
   }
@@ -182,6 +191,7 @@ function reset() {
 }
 
 function start(fixtureId, system, speed) {
+  const epoch = ++state.epoch;
   reset();
   state.fixture = fixtureId || state.fixture;
   state.system = system || state.system;
@@ -194,7 +204,10 @@ function start(fixtureId, system, speed) {
   const source = new EventSource(`/api/stream${query}`);
   state.source = source;
 
+  const current = () => epoch === state.epoch;   /* a superseded stream must stay silent */
+
   source.addEventListener("meta", (e) => {
+    if (!current()) return;
     /* The badge is written from the server's own words, never the page's assumption. */
     const open = JSON.parse(e.data);
     const badge = document.getElementById("mode-badge");
@@ -225,15 +238,49 @@ function start(fixtureId, system, speed) {
       state.startedAt = Date.now();
     }
   });
-  source.addEventListener("chat", (e) => queueOrApply("chat", JSON.parse(e.data)));
-  source.addEventListener("card", (e) => queueOrApply("card", JSON.parse(e.data)));
+  source.addEventListener("chat", (e) => {
+    if (current()) queueOrApply("chat", JSON.parse(e.data));
+  });
+  source.addEventListener("card", (e) => {
+    if (current()) queueOrApply("card", JSON.parse(e.data));
+  });
   source.addEventListener("done", () => {
     source.close();
+    if (!current()) return;             /* an abandoned stream must not end the live one */
     const button = document.getElementById("pp");
     button.textContent = "Replay finished";
     button.disabled = true;
   });
-  source.addEventListener("error", () => source.close());
+
+  /* A stream error was silently swallowed: the page sat on "Connecting to the recording…" for
+     ever while the badge still showed the previous run. A judge reads that as loading. */
+  source.addEventListener("error", () => {
+    source.close();
+    if (!current()) return;
+    failStream(`The recording stream stopped. The server at ${location.host} may not be running.`);
+  });
+}
+
+function failStream(message) {
+  const empty = document.getElementById("signals-empty");
+  if (empty) {
+    empty.className = "empty failure";
+    clear(empty);
+    empty.appendChild(el("span", null, message));
+    const retry = el("button", "linkish", "Try again");
+    retry.type = "button";
+    retry.addEventListener("click", () => start(state.fixture, state.system, state.speed));
+    empty.appendChild(document.createTextNode(" "));
+    empty.appendChild(retry);
+  }
+  const badge = document.getElementById("mode-badge");
+  clear(badge);
+  badge.appendChild(el("span", "dot"));
+  badge.appendChild(document.createTextNode("NO STREAM"));
+  document.getElementById("captured-at").textContent = "";
+  const pp = document.getElementById("pp");
+  pp.disabled = false;                       /* controls come back, so retry is reachable */
+  pp.textContent = "Pause";
 }
 
 function queueOrApply(kind, event) {
@@ -261,7 +308,7 @@ for (const button of document.querySelectorAll(".speeds .seg")) {
       other.classList.toggle("is-active", other === button);
       other.setAttribute("aria-pressed", String(other === button));
     }
-    start(state.fixture, state.system, Number(button.dataset.speed));
+    debounced(() => start(state.fixture, state.system, Number(button.dataset.speed)));
   });
 }
 
@@ -344,6 +391,12 @@ document.getElementById("go-live").addEventListener("click", goLive);
 /* ------------------------------------------------------------------ the picker */
 let catalogue = [];
 
+let pending = null;
+function debounced(fn, ms = 120) {
+  if (pending) clearTimeout(pending);
+  pending = setTimeout(() => { pending = null; fn(); }, ms);
+}
+
 function renderChips(selected) {
   const box = document.getElementById("picker-chips");
   while (box.firstChild) box.removeChild(box.firstChild);
@@ -352,8 +405,9 @@ function renderChips(selected) {
     chip.type = "button";
     if (entry.fixture_id === selected) chip.classList.add("is-active");
     chip.addEventListener("click", () => {
-      start(entry.fixture_id, state.system, state.speed);
-      renderChips(entry.fixture_id);
+      /* Two clicks in the same tick used to open two streams and abandon one mid-write. */
+      debounced(() => { start(entry.fixture_id, state.system, state.speed);
+                        renderChips(entry.fixture_id); });
     });
     box.appendChild(chip);
   }
@@ -363,8 +417,7 @@ function renderChips(selected) {
     chip.type = "button";
     if (system === state.system) chip.classList.add("is-active");
     chip.addEventListener("click", () => {
-      start(state.fixture, system, state.speed);
-      renderChips(selected);
+      debounced(() => { start(state.fixture, system, state.speed); renderChips(selected); });
     });
     box.appendChild(chip);
   }

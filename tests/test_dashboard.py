@@ -620,7 +620,8 @@ def test_the_picker_is_over_recordings_and_says_so():
     html = LIVE_HTML.read_text(encoding="utf-8")
     js = LIVE_JS.read_text(encoding="utf-8")
 
-    assert "Recorded windows replayed at their true cadence" in html
+    # shortened: the old 133-char sentence was clipped to under half its width
+    assert "Recorded windows, replayed at their true cadence." in html
     assert "No recording of that channel yet" in js, "unknown channel is never a dead end"
     assert "/api/fixtures" in js and "/api/stream" in js
 
@@ -922,3 +923,65 @@ def test_philosophy_is_routed_and_linked():
 
     assert '"/philosophy"' in serve and "philosophy.html" in serve
     assert 'href="/philosophy"' in live
+
+
+# --------------------------------------------------------------- P0 bugs from the running page
+def test_a_stream_error_is_visible_and_recoverable():
+    """Observed: `/api/stream` refused, the page sat on "Connecting to the recording…" forever,
+    and the badge still read REPLAY · 1× with the previous run's channel. A judge reads that as
+    loading. The handler was `() => source.close()` and said nothing."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "function failStream(" in js
+    assert "The recording stream stopped" in js
+    assert "Try again" in js, "a failure state needs a way out"
+    assert "NO STREAM" in js, "the badge must stop claiming the previous run"
+    assert "pp.disabled = false" in js, "controls come back so retry is reachable"
+
+
+def test_reset_clears_the_previous_runs_identity():
+    """A failed start() must not leave the last run's badge and meta line on screen."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    body = js.split("function reset()", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "clear(badge)" in body
+    assert 'getElementById("captured-at").textContent = ""' in body
+
+
+def test_a_superseded_stream_cannot_write_to_the_page():
+    """Two clicks in a second open two streams. Without an epoch the abandoned one keeps
+    appending, and its `done` disables the controls of the live one."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "const epoch = ++state.epoch" in js
+    assert "const current = () => epoch === state.epoch" in js
+    for listener in ("meta", "chat", "card", "done"):
+        block = js.split(f'addEventListener("{listener}"', 1)[1][:220]
+        assert "current()" in block, f"{listener} does not check its epoch"
+
+
+def test_the_picker_is_debounced():
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "function debounced(" in js
+    assert js.count("debounced(") >= 4, "chips and speeds all go through it"
+
+
+def test_the_dashboard_does_not_inherit_the_editorial_section_rhythm():
+    """`main > section { margin-top: 96px }` put a 96px void above the panels. Measured on the
+    running page: getComputedStyle(main section).marginTop === "96px"."""
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert ".live-page main.two-col > section { margin-top: 0; }" in css
+
+
+def test_one_nav_on_every_page():
+    """The live page had `Method · Why`, the method page had five different items."""
+    navs = []
+    for name in ("index.html", "method.html", "philosophy.html"):
+        html = (STATIC / name).read_text(encoding="utf-8")
+        nav = html.split('<nav class="bar-nav"', 1)[1].split("</nav>", 1)[0]
+        navs.append(tuple(re.findall(r'href="([^"]+)"', nav)))
+
+    assert len(set(navs)) == 1, f"three pages, {len(set(navs))} different navs: {navs}"
+    assert navs[0] == ("/", "/method", "/philosophy")
