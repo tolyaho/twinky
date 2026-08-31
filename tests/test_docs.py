@@ -807,3 +807,37 @@ def test_the_review_guide_covers_every_gold_case():
     assert gold, "no gold labels to review"
     assert gold <= named, f"REVIEW_ME.md never mentions: {sorted(gold - named)}"
     assert not (named - gold), f"REVIEW_ME.md names cases that do not exist: {sorted(named - gold)}"
+
+
+def test_the_disclosure_accounts_for_the_committed_harness():
+    """`run-night.sh` sits in the repository root, is referenced by no Makefile target and no
+    other document, and defaults to a different model than the disclosure's table names. An
+    unexplained script in the root of a submission about how the work was run is a question the
+    disclosure should answer before a judge asks it."""
+    harness = REPO / "run-night.sh"
+    disclosure = (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8")
+
+    assert harness.is_file(), "the disclosure describes a harness that is no longer committed"
+    assert "run-night.sh" in disclosure, "the committed harness is undisclosed"
+
+    # If the script's default ever matches the disclosed model, the paragraph explaining the
+    # mismatch becomes wrong and should go rather than sit there misleading.
+    import re
+    default = re.search(r'MODEL="\$\{MODEL:-(\w+)\}"', harness.read_text(encoding="utf-8"))
+    assert default, "run-night.sh no longer sets a default model"
+    if default.group(1) == "opus":
+        assert "defaults to\n`MODEL=sonnet`" not in disclosure, \
+            "the script and the disclosure agree now; drop the paragraph that says they do not"
+    else:
+        assert "not recorded anywhere in this repository" in disclosure, \
+            "the model discrepancy is no longer stated"
+
+
+def test_the_night_logs_never_ship():
+    """`run-night.sh` writes every iteration's stdout and stderr to `.nightlogs/`. Those are raw
+    session output and belong nowhere near a public repository."""
+    tracked = [p for p in
+               __import__("subprocess").run(["git", "ls-files"], cwd=REPO, capture_output=True,
+                                            text=True).stdout.splitlines()
+               if p.startswith(".nightlogs")]
+    assert not tracked, f"session logs are committed: {tracked[:5]}"

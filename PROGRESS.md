@@ -3929,3 +3929,52 @@ Result: `make test` 716 → **717 passed**. 1 new guard, 1 widened. `scan_secret
 **6.2 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
 video; `git push` (origin/main 70 commits behind); make the repository public after pushing;
 `make review` — **now runnable exactly as written**; rotate `.env` and the Telegram credentials.
+
+## Iteration 116 — publication readiness, and the unexplained script in the root
+
+**Inside the video gate: 5.9 hours left, no video file.** Item H's own 12:00 UTC hard stop has
+now passed; Item H concluded three iterations before it. Verification-only, `src/ts/report/`
+untouched.
+
+Every document has now been swept, so this looked at what a judge sees when the repository goes
+public — the root listing, the licence, and what `legacy/` carries.
+
+**`run-night.sh` was sitting in the root, referenced by nothing.** No Makefile target, no
+document, no test. It is the real overnight harness: a fresh `claude -p` session per iteration
+reading the prompt from disk, 30-minute interval, sixteen-iteration cap, wall-clock stop, `STOP`
+file, and a circuit breaker after three consecutive failures — state in `PROGRESS.md` and
+`DECISIONS.md` rather than in conversation context, which is why the iteration count is legible at
+all. An unexplained script in the root of a submission **about how the work was run** is a
+question the disclosure should answer before a judge asks it. It is now described there, including
+that it will not run for anyone else: it hardcodes the author's path and reads a prompt from the
+directory above, which does not ship.
+
+**And it contradicts the disclosure, which is now stated rather than tidied away.**
+`run-night.sh` defaults to `MODEL=sonnet`; the disclosure's table names **Claude Opus 5**. Which
+model ran which iteration is recorded **nowhere in this repository** — the trajectories under
+`trajectories/product-agent/` record `gpt-4.1-nano`, the *product* agent's model, not the coding
+agent's. So that row rests on the author's account and a committed script disagrees with it by
+default. Deleting the script would have made the disclosure look tidier while destroying the only
+evidence of how the loop ran. A test holds the two together in both directions: if the default
+ever becomes `opus`, it says to delete the paragraph rather than leave a stale explanation.
+
+**No `LICENSE` file, and none added.** Publishing leaves default all-rights-reserved copyright in
+force. Whether that is right depends on the Participation Agreement — a legal choice with
+consequences, not a tidy-up — so `RISKS.md` #7 now records it as an author decision to make
+before making the repository public, rather than one taken unilaterally at T-6h.
+
+**`.nightlogs/` and `STOP` are now gitignored.** The harness writes raw per-iteration stdout and
+stderr into the working tree. Unignored, running the loop once more would have failed preflight's
+"working tree committed" check and put session output one `git add -A` away from a public
+repository. A test also asserts none are tracked.
+
+Checked and left alone: `legacy/` ships 32 files, all disclosed in `docs/PRE_EXISTING.md`, with
+`legacy/frontend/` removed (#13) and `legacy/README.original.md` cleared as a scanner false
+positive (#16).
+
+Result: `make test` 717 → **719 passed**. 2 new guards. `scan_secrets` clean. Cost **$0.00**,
+ledger $0.4364.
+
+**5.9 hours to the deadline and no video exists.** Author-only: film and cut the video;
+`git push` (origin/main 70 commits behind); **decide the licence question in RISKS #7**; make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

@@ -17,12 +17,29 @@ this repository was committed or published by an agent.
 ## How the work was actually run
 
 An unattended loop, one bounded unit of work per iteration. The cadence moved with the deadline —
-30 minutes, then 10 through the night, back to 30, and 20 for the last stretch; **115 iterations
-are logged**, of which 67 carry a `## Iteration` heading in `PROGRESS.md` and the remainder are
+30 minutes, then 10 through the night, back to 30, and 20 for the last stretch; **116 iterations
+are logged**, of which 68 carry a `## Iteration` heading in `PROGRESS.md` and the remainder are
 recorded in `DECISIONS.md` and the commit history. The loop specification changed as the work did
 — `NIGHT_LOOP.md`, then `FIX_AND_FINISH.md`, then `LOOP_FINAL.md`, then a version led by
 `RENAME.md`, and finally `AGENT_FIX.md` — and each lives one directory up, outside this
 repository.
+
+**The harness is committed: `run-night.sh`.** It is the overnight driver — a fresh `claude -p`
+session per iteration reading the prompt from disk, a 30-minute interval, a hard cap of sixteen
+iterations, a wall-clock stop, a `STOP` file, and a circuit breaker that quits after three
+consecutive failures. State lives in `PROGRESS.md`, `DECISIONS.md` and `COST_LEDGER.md` rather
+than in conversation context, which is why the iteration count above is legible at all. It will
+not run for anyone else: it hardcodes the author's path and reads a prompt from the directory
+above, which does not ship.
+
+**One discrepancy in it, stated rather than tidied away.** `run-night.sh` defaults to
+`MODEL=sonnet`, and the table above names Claude Opus 5 as the model behind the sessions. The
+variable is overridable and the default was written for mechanical overnight work, but **which
+model ran which iteration is not recorded anywhere in this repository** — the trajectories under
+`../product-agent/` record the *product* agent's model, `gpt-4.1-nano`, not the coding agent's.
+So that row rests on the author's account, and the committed script disagrees with it by default.
+Deleting the script would have made the disclosure look tidier and would have removed the only
+evidence of how the loop actually ran.
 
 Each iteration:
 
@@ -108,9 +125,9 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 | | |
 |---|---:|
-| Commits in the competition window | 177 |
-| Iterations logged | 115 |
-| Decisions recorded with rationale | 462 |
+| Commits in the competition window | 178 |
+| Iterations logged | 116 |
+| Decisions recorded with rationale | 467 |
 | Risks tracked | 51 |
 | Tests | 709 |
 | Total spend on model calls | $0.44 |
