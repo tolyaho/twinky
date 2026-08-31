@@ -3314,3 +3314,68 @@ ledger $0.43 and logged as a zero-cost line so the attempt is on the record.
 **10.1 hours to the deadline. The 8-hour video gate is 2.1 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 40+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 103 — item H1 recorded, measured, and reverted on the number
+
+The recording went through this time. H1 — `Tools.group_repeated` pointed at `group_chat` — is
+**measured and lost**, and the loss is worth more than the win would have been.
+
+| metric | shipped (`reduce_chat`) | H1 (`group_chat`) |
+|---|---:|---:|
+| trigger accuracy | **0.500** | **0.000** |
+| unsupported-card rate | 0.739 | **1.000** |
+| signal recall | 0.182 | 0.182 |
+| cards | 23 | 25 |
+| abstentions | 1 | **0** |
+
+The adopt rule was fixed before the run — accuracy ≥ 0.500 **and** abstentions above zero — and
+H1 fails both halves.
+
+**The trigger-source table is the explanation, and it has to resolve ids against the fixture**
+rather than read the model's claimed `kind`: a card saying `kind: "speech"` over a chat id is
+precisely the failure, and a table counting claimed kinds cannot see it.
+
+| trigger, resolved against the fixture | shipped | H1 |
+|---|---:|---:|
+| abstained | 1 | **0** |
+| `unknown` — declining to name a cause | 4 | **0** |
+| a real speech id | 4 | **0** |
+| a real frame id | 0 | **1** |
+| **a CHAT id — the message explaining itself** | 13 | **24** |
+| an id not in the fixture at all | 1 | 0 |
+
+`E_CIRCULAR_EVIDENCE` 8 → **25**. Every honest response the agent had collapsed to zero.
+
+**This is the third independent confirmation of one mechanism.** Removed experiment #2 improved
+the *trigger candidates* and abstentions went 5 → 0. H1 improved the *chat* and they went 1 → 0.
+Two interventions from opposite directions, one result: the agent's restraint was an artifact of
+having nothing coherent to say. Hand it a group it can describe and it writes a confident card,
+then reaches for the nearest id it has seen — a chat id from the group it just described — and
+labels it `speech`. That contradicts the standing hypothesis in `RISKS.md` #39, which was that the
+failure is a missing input. The fix has to make grounding *cheaper than* asserting.
+
+**A near-miss worth recording.** The record run was protected with `TS_TRACE_DIR`; the *replay
+verification* afterwards was not, and it rewrote **ten committed trajectories** with H1's content
+— trace ids derive from `(agent, case_id)`, so they overwrite in place rather than adding files.
+`test_the_committed_svg_is_what_the_generator_produces_today` caught it. Restored with
+`git checkout`, and both published reproduction commands now set `TS_TRACE_DIR`, because a judge
+pasting the documented command would have corrupted a deliverable.
+
+Written up as **Removed experiment #4** in the changelog, with both tables. `SUBMISSION.md` now
+says four rolled-back experiments rather than three. The 24 recorded responses are kept committed,
+so the loss reproduces with no key at 46 hits / 0 misses — the standard experiments #2 and #3
+already meet.
+
+Cost: **$0.0064** — 24 calls, 44,765 in and 4,825 out at `gpt-4.1-nano` list price. Cheaper than
+experiment #2's $0.0122, which is the 0.26× prompt showing up on the invoice. Ledger **$0.4364**;
+documents now quote **$0.44**. Baseline and ablation were never at risk: 22 replay hits and 0
+misses before the run, and both reproduced their published trigger accuracies exactly after it.
+
+Result: `make test` **702 passed**; shipped `make eval` back to **48 hits / 0 misses**;
+`evidence/` and `trajectories/product-agent/` byte-identical to what was committed.
+
+**10.0 hours to the deadline. The 8-hour video gate is 2.0 hours away and no video exists.**
+Item H is concluded — H2 alone cannot be measured without another record and H1's result says the
+problem is not the candidate list — so the loop moves to verification-only work.
+Author-only and unchanged: film and cut the video; `git push` (origin/main 40+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

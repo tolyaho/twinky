@@ -251,3 +251,83 @@ Recording the embeddings cost **$0.00001** — two calls, 723 tokens. The measur
 expensive part; deciding what it meant was.
 
 **All figures inherit `reviewed: false`.** Two windows, 164 messages, model-drafted labels.
+
+---
+
+## Removed experiment #4 — giving the agent the good chat groups made it worse
+
+The agent's only view of chat, `Tools.group_repeated`, called `reduce_chat`, which groups by
+exact canonical form. `group_chat` — the reaction-wave, prefix and token rules the board has
+rendered since the grouping work landed — was never wired into the agent's tools. So on the same
+window, at the same moment:
+
+| what the agent was handed | what the board drew beside it |
+|---|---|
+| `?` × 42 · `LOL` × 28 · `??` × 14 | `violet` × 27 · `para…` × 38 · `drac…` × 56 |
+
+It was being asked what the room was reacting to while looking at punctuation counts. This was
+not a design choice anyone defended; the method's own name says it groups repeated chat, and it
+had simply never been pointed at the reducer that does.
+
+**It also shrinks the prompt.** Serialized tool output over the eleven frozen windows: 197,952
+characters of bursts against **51,358** of groups, **0.26×**. Exact canonical form makes a row per
+distinct string, so a 174-message window became 174 near-empty rows.
+
+Everything about it looked right. It lost anyway.
+
+| metric | shipped (`reduce_chat`) | H1 (`group_chat`) |
+|---|---:|---:|
+| trigger accuracy | **0.500** | **0.000** |
+| unsupported-card rate | 0.739 | **1.000** |
+| signal recall | 0.182 | 0.182 |
+| cards | 23 | 25 |
+
+**The trigger-source table is the explanation**, and it has to be resolved against the fixture
+rather than read off the model's claimed `kind` — a card that says `kind: "speech"` over a chat id
+is precisely the failure, and a table counting claimed kinds cannot see it:
+
+| trigger, resolved against the fixture | shipped | H1 |
+|---|---:|---:|
+| abstained | 1 | **0** |
+| `unknown` — declining to name a cause | 4 | **0** |
+| a real speech id | 4 | **0** |
+| a real frame id | 0 | **1** |
+| **a CHAT id — the message explaining itself** | 13 | **24** |
+| an id not in the fixture at all | 1 | 0 |
+
+`E_CIRCULAR_EVIDENCE` went **8 → 25**. Every honest response the agent had — one abstention, four
+declines to name a cause, and all four of its real speech triggers — collapsed to zero. Twenty-four
+of twenty-five cards now name a chat message as the cause of that same chat. The single gain is
+one real frame id, up from none.
+
+**This is the third independent confirmation of one mechanism.** Removed experiment #2 put the
+window's speech and screen events directly in the model's turn; abstentions went 5 → 0. Item H1
+did not touch the trigger candidates at all — it improved the *chat* the model reads — and
+abstentions went 1 → 0 with circular triggers nearly doubling. Two different interventions, one
+result: **the agent's restraint was an artifact of having nothing coherent to say.** Give it a
+group it can describe and it writes a confident card, then reaches for the nearest id it has seen
+— which is a chat id from the very group it just described — and labels it `speech`.
+
+That is worth more than the improvement would have been. It says the failure is not a missing
+input, which was the standing hypothesis in `RISKS.md` #39 and the reason experiment #2 was built.
+The fix has to make grounding *cheaper than* asserting, not merely possible.
+
+**Reverted.** The adopt rule was set before the run — trigger accuracy ≥ 0.500 **and** abstentions
+above zero — and H1 fails both. `git checkout` on `workflow/` put the frozen numbers straight back;
+`make eval` is 48 hits / 0 misses again and `evidence/` never moved, because the arm was recorded
+into a temporary directory.
+
+**The recording is kept, so the loss reproduces with no key:**
+
+```bash
+git apply experiments/h1-group-chat.patch
+TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
+  python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
+git checkout -- src/ts/workflow/
+```
+
+Cost: **$0.0064** — 24 calls, 44,765 input and 4,825 output tokens at `gpt-4.1-nano` list price,
+logged in `COST_LEDGER.md`. Cheaper than experiment #2's $0.0122, which is the 0.26× prompt
+showing up on the invoice. Baseline and `ablation_chat_only` were untouched: verified before the
+run with 22 replay hits and 0 misses, and confirmed after by both reproducing their published
+figures — 0.000 and 1.000 trigger accuracy — exactly.
