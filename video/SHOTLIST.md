@@ -21,7 +21,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 711 passed — this is also shot 14
+make test                             # 713 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -269,7 +269,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 711 passed
+make test        # 713 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
@@ -338,6 +338,38 @@ make test && make eval
 - [ ] The poll-draft beat is either cut or named as a gap — never staged. See RISKS #42.
 - [ ] Gold labels are described as model-drafted and unconfirmed if labels are mentioned at all.
 - [ ] Runtime ≤ 5:00.
+
+## If you are short on HOURS, not minutes
+
+The cut order below is for a video that runs long. This section is for the other problem: not
+enough time to shoot eighteen setups. Written at T-8h with nothing filmed.
+
+**There are only two takes here, not eighteen.**
+
+| take | shots | surface | notes |
+|---|---|---|---|
+| **A — one browser session** | 4, 5, 6, 7, 8, 9 | `make demo`, then `/method` | Start the server **once** and never restart it. Every one of these is a click inside the same page: channel chips, the Board/Signals/Questions tabs, then the Method page. Switching fixtures mid-playback once killed the server (P0 1.2); it is fixed and tested, but a single unbroken session is still the safest recording |
+| **B — one terminal** | 11, 12, 13, 14, 15, 18 | a large-font terminal | All of them read the committed cache. Nothing here needs a key or a network |
+
+Everything else is optional in the sense that matters — a judge scoring the required deliverable
+will not miss it:
+
+1. **Shot 1, the generated hook.** Costs the most wall-clock of anything in this file, because
+   generating footage means iterating on it. Open on shot 4 instead, or a plain title card.
+   **Drop this first.**
+2. **Shot 10, live Tier 0.** The only shot that needs a network *and* a channel that happens to
+   be broadcasting when you press record. It can simply fail on the day. Its claim — keyless,
+   free, and honest about having no cause to give — is already in `README.md` and on the page.
+   **Drop this second.**
+3. **Shots 16 and 17** are talking to camera and need no setup, so they cost only their runtime.
+
+**The floor.** If everything goes wrong, shots **4, 5, 11, 15, 17** and a close still make a
+complete submission: the product working, the row that is the argument, the measurement
+reproduced on camera, the fix that was tried and lost, and the take. That is takes A and B with
+most of each thrown away, and it is well under five minutes.
+
+**Do not spend the saved time on polish.** A rough five-minute video that exists scores; a
+beautiful one that does not exist scores nothing.
 
 ## Cut order if you run long
 

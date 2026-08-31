@@ -3673,3 +3673,49 @@ Result: `make test` 709 → **711 passed**. 2 new guards, 1 corrected. `evidence
 Author-only and unchanged: film and cut the video; `git push` (origin/main 61+ commits behind);
 make the repository public after pushing; `make review`; rotate `.env` and the Telegram
 credentials.
+
+## Iteration 110 — INSIDE THE VIDEO GATE, so the work went into shortening the shoot
+
+**7.9 hours to the deadline, no video file, gate passed.** Nothing I can do about the deliverable
+itself — it is author-only — so this iteration went into the one thing that does help: making the
+shoot shorter.
+
+`video/SHOTLIST.md` already had a **"Cut order if you run long"**. That solves a video that is too
+long. At T-8h with nothing filmed the problem is the opposite one — an author out of hours — and
+it has a different answer. Added **"If you are short on HOURS, not minutes"**, whose whole point
+is:
+
+**There are only two takes here, not eighteen.**
+
+| take | shots | surface |
+|---|---|---|
+| **A — one browser session** | 4, 5, 6, 7, 8, 9 | `make demo`, then `/method` |
+| **B — one terminal** | 11, 12, 13, 14, 15, 18 | reads the committed cache; no key, no network |
+
+Take A is one uninterrupted server session: channel chips, the three middle tabs, then the Method
+page. **Verified rather than asserted** — started the server once, streamed and abandoned
+`stableronaldo`, `marlon` and `yugi` in sequence, then re-checked: `/` and `/api/fixtures` both
+200, **zero exceptions in the log**. That matters because switching fixtures mid-playback once
+killed the server (P0 1.2); it is fixed and tested, and now the recording plan is known to survive
+the exact sequence the author will perform on camera.
+
+The two things to drop, named and ordered rather than discovered:
+
+1. **Shot 1, the generated hook** — the most wall-clock in the file, because generating footage
+   means iterating on it. Open on shot 4 or a title card.
+2. **Shot 10, live Tier 0** — the only shot needing a third-party channel to be broadcasting at
+   the moment of recording. It can fail on the day through nobody's fault, and its claim is
+   already in `README.md` and on the page.
+
+And a stated floor: shots **4, 5, 11, 15, 17** and a close still make a complete submission — the
+product, the argument, the measurement reproduced on camera, the fix that lost, and the take.
+A test holds that floor identical to the one the runtime cut order protects, since the two
+sections were written a week apart and disagreeing about which shots are load-bearing is how the
+wrong one gets cut at four in the morning. Verified by making them disagree and watching it fail.
+
+Result: `make test` 711 → **713 passed**. 2 new guards. `evidence/` and
+`trajectories/product-agent/` byte-identical. Cost **$0.00**, ledger $0.4364.
+
+**7.9 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
+video; `git push` (origin/main 61+ commits behind); make the repository public after pushing;
+`make review`; rotate `.env` and the Telegram credentials.
