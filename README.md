@@ -289,3 +289,13 @@ time-limited, and records into a temporary cache so the committed one is never t
 remains the default and the documented route.
 
 Full guide, including what currently exits `3` and why: `docs/REPRODUCTION.md`.
+
+## Licence
+
+MIT — see [`LICENSE`](LICENSE). Chosen deliberately rather than left blank: a public repository
+with no licence carries default all-rights-reserved copyright, which would have let a reviewer
+read this code and given them no right to run it.
+
+The Twitch material under `evals/fixtures/` is not the author's to license and is not covered by
+it. Its provenance, retention and the limits of its pseudonymisation are stated in
+[`evals/DATA.md`](evals/DATA.md).
