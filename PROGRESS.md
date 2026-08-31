@@ -2706,3 +2706,41 @@ rule, no new colour — still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **20.1 hours to the deadline; the video gate is 12.1 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 88 — 2026-08-31 — spacing rhythm, and a suspicion that checking killed
+
+Attempted: spacing rhythm and alignment between the three zones — the second item on the polish
+list.
+
+**The real defect: the middle column twitched on every tab change.** `.boardrows`, `.signals` and
+`.questions` occupy the same column, one at a time. Two of them used `var(--sm) var(--base)`;
+`.signals` used `var(--sm)` on all sides. So switching to Signals shifted every card **4px left**
+— out of line with the other two panes and with the panel header above them. Now all four agree
+on 16px horizontal.
+
+**One suspicion, killed by checking.** `.btn-primary` carries `padding: 10px 20px` — off-scale on
+its face, and I went looking for the token it should use. DESIGN.md line 170: *"Button primary —
+bg `--primary`, white text, pill, **padding 10/20, height 40**"*. It implements the documented
+component spec exactly. Left alone. Had I "fixed" it I would have broken the button to satisfy a
+rule the design system does not make.
+
+The only genuine scale bypass was `.msg { padding: 4px … }`, now `var(--xxs)`. And
+`scroll-margin-top: 80px` stays hardcoded: it is functional clearance for the sticky header, not
+rhythm, and tokenising it would imply otherwise.
+
+Two guards: the panes sharing the middle column must have identical horizontal padding, and
+spacing must come from the token scale — with hairlines, the documented button padding and the
+scroll offset as the three named exceptions.
+
+**My test was wrong before the CSS was.** The pane-alignment guard crashed on `.boardrows`,
+because it took the *first* rule mentioning the selector and that is a `@media (max-width: 900px)`
+override carrying no padding at all. It now walks every matching rule and uses the one that
+declares padding. A test that reads the wrong rule would have passed while the column stayed
+crooked.
+
+Result: `make test` 677 → **679 passed**. 2 new tests, three rows in DECISIONS.md. No new colour,
+still 16 hexes; three routes 200. Cost: **$0.00**, ledger $0.43.
+
+**20.0 hours to the deadline; the video gate is 12.0 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

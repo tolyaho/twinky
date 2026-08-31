@@ -1638,3 +1638,41 @@ def test_every_zone_says_what_it_holds():
     assert "raw, unfiltered" in html            # the chat flood
     assert "measured, no model" in html         # the rail: its whole distinguishing property
     assert 'id="middle-lede"' in html           # the board
+
+
+def test_the_three_middle_panes_do_not_shift_when_you_switch_tab():
+    """`.boardrows`, `.signals` and `.questions` occupy the same column, one at a time. `.signals`
+    used `var(--sm)` on all sides while the others used `var(--sm) var(--base)`, so its content
+    sat 4px left of the other two and of the panel header above it — the column twitched on every
+    tab change."""
+    import re
+
+    css = re.sub(r"/\*.*?\*/", " ", _css(), flags=re.S)
+
+    def horizontal(selector):
+        """The rule that declares padding, not the first rule that mentions the selector — a
+        `@media` override appears earlier in the file and carries no padding at all."""
+        for block in re.finditer(r"(?:^|\n|\})\s*" + re.escape(selector) + r"\s*\{([^}]*)\}", css):
+            pad = re.search(r"padding:\s*([^;]+)", " ".join(block.group(1).split()))
+            if pad:
+                parts = pad.group(1).split()
+                return parts[1] if len(parts) > 1 else parts[0]   # shorthand: 2nd value is x
+        raise AssertionError(f"{selector} declares no padding")
+
+    lanes = {s: horizontal(s) for s in (".boardrows", ".signals", ".questions", ".panel-h")}
+    assert len(set(lanes.values())) == 1, f"the middle column is not flush: {lanes}"
+
+
+def test_spacing_comes_from_the_token_scale():
+    """The same drift the type scale had. Hairlines, the documented button padding (DESIGN.md:
+    "padding 10/20, height 40") and the sticky-header scroll offset are the only exceptions."""
+    import re
+
+    css = re.sub(r"/\*.*?\*/", " ", _css(), flags=re.S)
+    allowed = {"0", "1", "2", "10", "20", "80"}
+    off = set()
+    for m in re.finditer(r"(?:margin|padding|gap)(?:-[a-z]+)?\s*:\s*([^;{}]+);", css):
+        for px in re.findall(r"(\d+(?:\.\d+)?)px", m.group(1)):
+            if px.rstrip(".0") not in allowed and px not in allowed:
+                off.add(px)
+    assert not off, f"spacing values bypassing the token scale: {sorted(off)}"

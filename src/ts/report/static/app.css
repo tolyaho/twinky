@@ -688,7 +688,7 @@ html, body.live-page { height: 100%; }
 .msg {
   display: grid; grid-template-columns: 11ch minmax(0, 1fr); gap: var(--sm);
   align-items: baseline;
-  padding: 4px var(--base);
+  padding: var(--xxs) var(--base);
   border-left: 3px solid transparent;
   border-bottom: 1px solid var(--hairline-soft);
   transition: background .15s ease, border-color .15s ease;
@@ -708,7 +708,9 @@ html, body.live-page { height: 100%; }
 .signals {
   flex: 1 1 auto; min-height: 0; overflow-y: auto;
   display: flex; flex-direction: column; gap: var(--sm);
-  padding: var(--sm);
+  /* `var(--sm)` all round put this pane 4px left of `.boardrows` and `.questions`, which share
+     the column, and 4px left of the panel header above it. Switching tabs shifted the content. */
+  padding: var(--sm) var(--base);
 }
 .signals > * { flex: none; }
 .signals .card {
