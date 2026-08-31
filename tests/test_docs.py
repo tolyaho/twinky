@@ -440,6 +440,31 @@ def test_preflight_does_not_block_on_an_untracked_capture():
     assert "uncommitted source" in source
 
 
+def _will_ship(path: str) -> bool:
+    """True for a path git tracks and does not export-ignore, even if not committed yet.
+
+    Without this, citing a newly added directory fails until the commit lands, which is a
+    chicken-and-egg rather than a defect. It keeps the teeth: `.env.example` — the file that
+    prompted this test — was tracked and un-ignored and still export-ignored, so `check-attr`
+    reports it and it would still be caught.
+    """
+    import subprocess
+
+    tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "--", path],
+                             cwd=REPO, capture_output=True, text=True, timeout=30)
+    if tracked.returncode != 0 or not tracked.stdout.strip():
+        return False
+    for candidate in tracked.stdout.split():
+        attr = subprocess.run(["git", "check-attr", "export-ignore", "--", candidate],
+                              cwd=REPO, capture_output=True, text=True, timeout=30)
+        # `check-attr` prints `path: export-ignore: set|unset|unspecified`. `endswith("set")`
+        # matches "unset" too, which rejected `.env.example` — the one path `-export-ignore`
+        # exists to re-include. Compare the final field exactly.
+        if attr.stdout.strip().rsplit(": ", 1)[-1] == "set":
+            return False
+    return True
+
+
 def test_every_path_the_entry_documents_cite_exists_in_the_archive():
     """A judge reads `SUBMISSION.md`, `README.md` and `docs/REPRODUCTION.md` first and follows
     the paths in them. What matters is not whether a file exists in the working tree but whether
@@ -463,6 +488,8 @@ def test_every_path_the_entry_documents_cite_exists_in_the_archive():
         for path in cited:
             p = path.rstrip("/")
             if p in files or any(f.startswith(p + "/") for f in files):
+                continue
+            if _will_ship(p):
                 continue
             missing.append(f"{name} -> {path}")
 

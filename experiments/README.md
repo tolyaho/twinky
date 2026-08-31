@@ -28,7 +28,8 @@ H1 fails both, so the code was reverted and only the recording kept.
 
 ### Reproducing the loss, with no key
 
-The 24 recorded responses are committed, so this needs no credential and costs nothing:
+The 24 recorded responses are committed and so is the run's output, in `evidence/h1/`. This
+needs no credential and costs nothing:
 
 ```bash
 git apply experiments/h1-group-chat.patch

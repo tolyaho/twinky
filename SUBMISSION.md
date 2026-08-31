@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 704 passed, ~1 s
+make test                        # 707 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 
@@ -113,6 +113,7 @@ compresses perfectly and is useless. The labels are model-drafted and say so.
 | Improvement changelog: every repair with measured before/after | `docs/IMPROVEMENT_CHANGELOG.md` |
 | Architecture diagram, one file per node, gaps marked | `docs/ARCHITECTURE.md` |
 | Results table, per-case CSV, raw predictions with gate decisions | `evidence/` |
+| Evidence for the two rolled-back agent arms, reproducible with no key | `evidence/grounded/`, `evidence/h1/` |
 | Agent trajectories — **118 real runs**, written as each run happened | `trajectories/product-agent/` |
 | Coding-agent disclosure (how this was built) | `trajectories/coding-agents/README.md` |
 | Frozen cases, gold labels, fixture provenance | `evals/` and `evals/DATA.md` |

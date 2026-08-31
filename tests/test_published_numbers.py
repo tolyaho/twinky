@@ -140,3 +140,92 @@ def test_the_report_row_check_is_not_vacuous():
     report = (REPO / "evidence" / "report.md").read_text(encoding="utf-8")
 
     assert len(_report_rows(report)) == 3, "report.md no longer has three parseable system rows"
+
+
+# ------------------------------------------------------------ removed experiment #4, item H1
+# Experiments #2 and #3 both ship their evidence — `evidence/grounded/` and the arm scorer — so
+# every figure quoted for them can be recomputed. Experiment #4 was published from a run whose
+# output went to a temp directory that no longer exists, which left a dozen figures in the
+# changelog with nothing behind them but this file's word. `evidence/h1/` closes that: the run
+# reproduces from the committed cache at 46 hits and 0 misses, and the numbers are read out of it
+# here rather than remembered.
+
+H1 = REPO / "evidence" / "h1"
+
+
+def _agent_trigger_sources(predictions: Path):
+    """Triggers RESOLVED against the fixture, not read off the model's claimed `kind`.
+
+    A card that says `kind: "speech"` over a chat id is the failure being measured, so a census
+    that trusts the claim cannot see it — the published table would have read 18 speech triggers
+    where there are none.
+    """
+    import collections
+    import sys
+
+    sys.path[:0] = [str(REPO), str(REPO / "src")]
+    from evals.run_eval import FIXTURES_DIR, load_cases
+    from ts.ingest.replay import load_fixture
+
+    types = {}
+    for case in load_cases("all"):
+        for event in load_fixture(FIXTURES_DIR / case["fixture"]).events:
+            types[event.event_id] = event.type
+
+    counts, codes = collections.Counter(), collections.Counter()
+    for run in json.loads(predictions.read_text(encoding="utf-8")):
+        if run["system"] != "agent":
+            continue
+        for card in run["cards"]:
+            if card.get("status") == "abstained":
+                counts["abstained"] += 1
+            else:
+                event_id = (card.get("trigger") or {}).get("event_id")
+                counts["unknown" if event_id in (None, "unknown") else
+                       {"chat_message": "chat", "transcript_segment": "speech",
+                        "frame_caption": "frame"}.get(types.get(event_id), "absent")] += 1
+            for violation in (card.get("gate") or {}).get("violations") or []:
+                codes[violation if isinstance(violation, str) else violation.get("code")] += 1
+    return counts, codes
+
+
+def test_the_h1_arm_reproduces_from_the_committed_cache():
+    """A removed experiment nobody can re-run is an assertion. This one runs with no key."""
+    assert (H1 / "summary.json").is_file(), "evidence/h1/ is missing; regenerate it"
+    shipped = json.loads(SUMMARY.read_text(encoding="utf-8"))["systems"]["agent"]
+    h1 = json.loads((H1 / "summary.json").read_text(encoding="utf-8"))["systems"]["agent"]
+
+    assert shipped["trigger_accuracy"] == 0.5 and h1["trigger_accuracy"] == 0.0
+    assert h1["unsupported_rate"] == 1.0
+    assert h1["signal_recall"] == shipped["signal_recall"], "recall did not move; the changelog says so"
+
+
+def test_the_h1_arm_left_the_frozen_systems_alone():
+    """The one thing that could not be undone. Both must still produce their published figures."""
+    for system, accuracy in (("baseline", 0.0), ("ablation_chat_only", 1.0)):
+        for path in (SUMMARY, H1 / "summary.json"):
+            got = json.loads(path.read_text(encoding="utf-8"))["systems"][system]
+            assert got["trigger_accuracy"] == accuracy, f"{system} moved in {path.parent.name}"
+
+
+def test_the_changelog_quotes_the_trigger_table_it_measured():
+    """Twelve figures in Removed experiment #4, every one recomputed from `evidence/h1/`."""
+    before, before_codes = _agent_trigger_sources(REPO / "evidence" / "predictions.json")
+    after, after_codes = _agent_trigger_sources(H1 / "predictions.json")
+
+    # The finding itself: every honest response went to zero and circular triggers nearly doubled.
+    assert before["abstained"] == 1 and after["abstained"] == 0
+    assert before["unknown"] == 4 and after["unknown"] == 0
+    assert before["speech"] == 4 and after["speech"] == 0
+    assert before["frame"] == 0 and after["frame"] == 1
+    assert before["chat"] == 13 and after["chat"] == 24
+    assert before_codes["E_CIRCULAR_EVIDENCE"] == 8
+    assert after_codes["E_CIRCULAR_EVIDENCE"] == 25
+
+    changelog = (REPO / "docs/IMPROVEMENT_CHANGELOG.md").read_text(encoding="utf-8")
+    section = changelog.split("Removed experiment #4", 1)[1]
+    for row, b, a in (("abstained", 1, 0), ("a real speech id", 4, 0),
+                      ("a real frame id", 0, 1)):
+        line = next((l for l in section.splitlines() if l.startswith(f"| {row}")), None)
+        assert line, f"the trigger table lost its `{row}` row"
+        assert re.findall(r"\d+", line) == [str(b), str(a)], f"`{row}` row no longer measured"
