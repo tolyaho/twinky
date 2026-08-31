@@ -4276,3 +4276,31 @@ Result: `make test` 728 → **729 passed**. `make eval` still **48 hits / 0 miss
 Next: nothing autonomous.
 Blockers: video uncut, repository private, remote 79 behind, and the four live clips were
 recorded before the fragmentation fix — the board reads differently in them now.
+
+---
+
+## 2026-08-31T19:45Z — iteration 110 · final pass
+
+**PUSHED. The repository is public and `origin/main` now matches local** — it had been 82 commits
+behind a public repo, which meant every judge was reading code from before the SSE fix, the
+`hidden` fix, the agent graph and the board.
+
+Re-recorded the four live clips and the tabs clip. The previous take predates the masonry removal,
+so every board row in it was split mid-sentence. Verified on a frame at 45 s of the new
+`01_wordgame_board`: `NAMES IT · ON SCREEN +3:56 · 39`, the caption whole and ending on the word
+`"dracorex."`, over `drac… 21` — *"Audience is mentioning 'drac' or similar variations"* with
+`"dracorle" "dracorde" "dracorry"` beneath it. That is the product invariant in one frame, and it
+had never been legible in a recording before today.
+
+`video/clips/` — 01 17.7 MB · 02 19.3 MB · 03 17.3 MB · 04 19.6 MB · 05 10.6 MB · 06 0.9 MB.
+`video/press/` — five stills at 3840×2160.
+
+Final state: `make test` **729 passed**, `make eval` **48 hits / 0 misses**, working tree clean,
+`origin/main == HEAD`, repository public, no secret in the tree or in any committed version.
+
+**Not done, deliberately:** the 11 gold labels are still model-drafted. `confirm_gold.py` takes
+`--by`, because the point of the step is that a *person* checked labels that score the agent. A
+model confirming them would make the disclosure line false, and README §6 already states they are
+unconfirmed. It is a cost, not a blocker.
+
+Blockers: the video itself, which the author is cutting now.
