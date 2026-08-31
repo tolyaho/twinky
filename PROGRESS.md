@@ -4234,3 +4234,45 @@ Result: `make test` 725 → **728 passed**. `make eval` still **48 hits / 0 miss
 
 Next: nothing autonomous — the loop is stopped.
 Blockers: the video is still uncut, the repository is still private, the remote is 79 behind.
+
+---
+
+## 2026-08-31T19:30Z — iteration 109
+
+**PUSH AND MAKE PUBLIC — needs the author.** 79 commits ahead of `origin/main`, still private.
+
+Attempted: five press stills of the dashboard — one channel, one window, one run.
+
+**Found first, and it stopped everything else: the board fragmented every row it drew.**
+`.boardrows` flowed into two CSS columns above 1500px with `break-inside: avoid` to hold each row
+whole. Measured in a browser at 1920px — the width the demo runs at and every clip was recorded
+at — **33 of 33 rows split**, the vision caption breaking mid-sentence and resuming at the top of
+the next column with another row's group lines in between. `break-inside: avoid` is a request a
+browser drops when it has no choice, and it had none: the pane scrolls, so the column height is
+the pane height, and a row carrying a caption is taller than that. Removed. Re-measured: **0/33**.
+
+The test that was supposed to guard this asserted `columns: 2` and `break-inside: avoid` were
+*written down*. It never checked they worked. Replaced with two that check the effect.
+
+**The stills**, `scripts/press_shots.py`, all 3840×2160, one browser context, pointer parked:
+
+| still | state it waited for |
+|---|---|
+| `01_raw_chat` | 92 messages of raw feed, no committed rows — the flood before meaning |
+| `02_hero` | the whole dashboard lightly filled: 2 rows, 6 clusters |
+| `03_grouping` | a window grouped hard: 15 clusters, `NAMES IT · ON SCREEN +0:26 · 43` over `rang… 20` |
+| `04_grounded` | scrolled onto the strongest printable row, pills and quote and response |
+| `05_you_said` | `marlon` — the pill a silent stream can never show, over `slam 11` |
+
+Two things the script does that matter more than the pictures. It **waits on the page's state,
+never a stopwatch** — the first version waited per shot in order, spent the whole replay on the
+opening frame and matched on the last window, which also has a full feed and no rows, and so
+photographed the `Replay finished` screen. And it **audits every frame for real handles**: all
+five carry two to four `@mentions` of real logins, because `pseudonym()` covers the author field
+and not message text. That is RISKS #53, now surfaced at the moment of taking the shot.
+
+Result: `make test` 728 → **729 passed**. `make eval` still **48 hits / 0 misses**. Cost $0.00.
+
+Next: nothing autonomous.
+Blockers: video uncut, repository private, remote 79 behind, and the four live clips were
+recorded before the fragmentation fix — the board reads differently in them now.

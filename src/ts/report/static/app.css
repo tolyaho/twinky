@@ -1066,17 +1066,21 @@ html, body.live-page { height: 100%; }
 }
 
 
-/* ---------------------------------------------------------------------- masonry
-   Only where the board is genuinely wide. Varied-height rows in flowing columns stop a row with
-   six groups and a row with one from looking like a mistake, and `break-inside: avoid` keeps a
-   row whole. Rank still reads top-left first: CSS columns fill top-to-bottom, so the strongest
-   row is the first thing under the heading, exactly as in one column.
+/* ------------------------------------------------------------- masonry, removed and why
+   The board used to flow into two CSS columns above 1500px, with `break-inside: avoid` to keep
+   each row whole. It never kept one whole. Measured on the running page at 1920px, the width the
+   demo and every recording use: **33 of 33 rows fragmented**, every one of them, for the life of
+   the rule.
 
-   Not applied below 1500px. In a 600px column two tracks are 290px each, which is narrower than
-   the quote line they have to carry — masonry there costs legibility and buys nothing. */
+   `break-inside: avoid` is a request the browser drops when it has no choice, and here it never
+   had one: `.boardrows` is `overflow-y: auto`, so the column height is the pane height, and a row
+   carrying a vision caption is taller than that. The caption therefore broke mid-sentence and
+   resumed at the top of the second column, with the group lines of the row above it in between —
+   the product's central artifact, unreadable, in the exact viewport it is demonstrated at.
+
+   Masonry was buying an aesthetic: varied heights looking intentional rather than ragged. It was
+   costing the sentence. One column, whole rows. */
 @media (min-width: 1500px) {
-  .boardrows { columns: 2; column-gap: var(--sm); }
-  .brow { break-inside: avoid; }
   .livebox { margin-bottom: 0; }
 }
 
