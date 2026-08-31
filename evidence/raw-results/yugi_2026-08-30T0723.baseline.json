@@ -1,0 +1,1244 @@
+{
+ "system": "baseline",
+ "fixture": "evals/fixtures/yugi_2026-08-30T0723",
+ "fixture_id": "yugi_2026-08-30T0723",
+ "mode": "record",
+ "window_size_ms": 60000,
+ "span_ms": [
+  1788074588171,
+  1788075309122
+ ],
+ "counts": {
+  "windows": 13,
+  "verified": 9,
+  "rejected": 26
+ },
+ "cache": {
+  "hits": 0,
+  "misses": 13
+ },
+ "windows": [
+  {
+   "case_id": "yugi_2026-08-30T0723_w00",
+   "window_ms": [
+    1788074588171,
+    1788074648171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_58ff45d6ce",
+     "type": "reaction",
+     "title": "Casual Conversation",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_58ff45d6ce",
+      "quote": "Are you still full? Are you still full? No. I got a little hungry. Really? Yeah. Someone's gonna eat those meatballs."
+     },
+     "evidence": [
+      "5f9b0cc1-a372-4161-b46e-e633cb032c2f"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074588171,
+      1788074648171
+     ],
+     "trace_id": "trc_eb1b5208",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_58ff45d6ce at 1788074589851 is after earliest cited message 1788074588878"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_e6ddfa7a9e",
+     "type": "reaction",
+     "title": "Comment on Violet Myers",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_e6ddfa7a9e",
+      "quote": "Still You're alive."
+     },
+     "evidence": [
+      "8e0fe03b-0dbb-49dc-aede-179b836cd658"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788074588171,
+      1788074648171
+     ],
+     "trace_id": "trc_eb1b5208",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_e6ddfa7a9e at 1788074602196 is after earliest cited message 1788074600344"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_0c29699d0f",
+     "type": "audience_answer",
+     "title": "Yusuf or Phone",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_0c29699d0f",
+      "quote": "Is anyone more comfortable? Oh, yes, please. Oh my god. It's a bubble gum. Is that okay? Thank"
+     },
+     "evidence": [
+      "8615cfd7-b29e-4edf-b203-707eefb12278"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074588171,
+      1788074648171
+     ],
+     "trace_id": "trc_eb1b5208",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_0c29699d0f at 1788074638306 is after earliest cited message 1788074638270"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_eb1b5208",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w00_trc_eb1b5208.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w01",
+   "window_ms": [
+    1788074648171,
+    1788074708171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "b23a1b47-0d52-4545-9e22-4c620eadf76f",
+     "type": "audience_answer",
+     "title": "Get it lit",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_27e03eb584",
+      "quote": "get it lit"
+     },
+     "evidence": [
+      "b23a1b47-0d52-4545-9e22-4c620eadf76f"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074648171,
+      1788074708171
+     ],
+     "trace_id": "trc_c7bea631",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in tr_27e03eb584: 'get it lit'"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_c7bea631",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w01_trc_c7bea631.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w02",
+   "window_ms": [
+    1788074708171,
+    1788074768171
+   ],
+   "verified": [
+    {
+     "signal_id": "tr_b30532d637",
+     "type": "reaction",
+     "title": "Party Atmosphere",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_b30532d637",
+      "quote": "Nigga, stop. I'm not stop even spoiling me. I know this is gonna be a lit party chill."
+     },
+     "evidence": [
+      "f6b6364a-ccdf-4af7-8528-a8b8c80b9851"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074708171,
+      1788074768171
+     ],
+     "trace_id": "trc_b8b3780b",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "tr_6a93541095",
+     "type": "reaction",
+     "title": "Drinking Commitment",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_6a93541095",
+      "quote": "I'm drinking till I till I can't can't till I can't walk tomorrow."
+     },
+     "evidence": [
+      "d33cb38e-43c8-4d9b-a7af-c2f8e9642500"
+     ],
+     "confidence": 0.75,
+     "window_ms": [
+      1788074708171,
+      1788074768171
+     ],
+     "trace_id": "trc_b8b3780b",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_2a7c1c7d92",
+     "type": "reaction",
+     "title": "Walking and Party",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_2a7c1c7d92",
+      "quote": "I'm god."
+     },
+     "evidence": [
+      "tr_2a7c1c7d92"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788074708171,
+      1788074768171
+     ],
+     "trace_id": "trc_b8b3780b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_2a7c1c7d92 is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "tr_2a7c1c7d92 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.3333333333333333,
+   "total": 3,
+   "trace_id": "trc_b8b3780b",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w02_trc_b8b3780b.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w03",
+   "window_ms": [
+    1788074768171,
+    1788074828171
+   ],
+   "verified": [
+    {
+     "signal_id": "tr_4f06c3a1d9",
+     "type": "reaction",
+     "title": "Streamer reacts to chat",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_1b5a320da5",
+      "quote": "I want a. Hummus."
+     },
+     "evidence": [
+      "9791b44e-e580-468f-968b-eaff1845ff50"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074768171,
+      1788074828171
+     ],
+     "trace_id": "trc_e6cacfe3",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "unknown",
+     "type": "none",
+     "title": "No significant response",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": ""
+     },
+     "evidence": [],
+     "confidence": 0.1,
+     "window_ms": [
+      1788074768171,
+      1788074828171
+     ],
+     "trace_id": "trc_e6cacfe3",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_8ef76f9c33",
+     "type": "reaction",
+     "title": "Streamer comments on chat",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_f016990a39",
+      "quote": "You're a weirdest walk, bro. Come on."
+     },
+     "evidence": [
+      "4f778a4a-f3b0-4551-85f0-ffeb18df63b9"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074768171,
+      1788074828171
+     ],
+     "trace_id": "trc_e6cacfe3",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in tr_f016990a39: \"You're a weirdest walk, bro. Come on.\""
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.3333333333333333,
+   "total": 3,
+   "trace_id": "trc_e6cacfe3",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w03_trc_e6cacfe3.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w04",
+   "window_ms": [
+    1788074828171,
+    1788074888171
+   ],
+   "verified": [
+    {
+     "signal_id": "tr_caaf6337f1",
+     "type": "reaction",
+     "title": "Reaction to 'We're done. Wow. TDs.'",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_8e71cf3ddd",
+      "quote": "We're done. Wow. TDs."
+     },
+     "evidence": [
+      "e2fdb19b-dca4-4979-9d9f-9111930b0f31"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074828171,
+      1788074888171
+     ],
+     "trace_id": "trc_bbe56df8",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_7a1cab0c6a",
+     "type": "reaction",
+     "title": "Reaction to 'Damn. That's all.'",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_7a1cab0c6a",
+      "quote": "Damn. That's all."
+     },
+     "evidence": [
+      "6c5f8f74-630c-4773-b83a-57b6cba4609c"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074828171,
+      1788074888171
+     ],
+     "trace_id": "trc_bbe56df8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_7a1cab0c6a at 1788074832776 is after earliest cited message 1788074831739"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_b9ccda4282",
+     "type": "audience_answer",
+     "title": "Audience question about Marlon",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_b9ccda4282",
+      "quote": "He's got a little kick."
+     },
+     "evidence": [
+      "a1591229-fd5d-4740-abcf-82d144e1dfc8"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074828171,
+      1788074888171
+     ],
+     "trace_id": "trc_bbe56df8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_b9ccda4282 at 1788074834696 is after earliest cited message 1788074834320"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "trace_id": "trc_bbe56df8",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w04_trc_bbe56df8.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w05",
+   "window_ms": [
+    1788074888171,
+    1788074948171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_00f09f26e7",
+     "type": "reaction",
+     "title": "Last-minute explanation",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_c55e6a2bb5",
+      "quote": "It's because it was last minute. It happens, bro."
+     },
+     "evidence": [
+      "4ef25cac-a589-44b3-b37f-8d718210c95b"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074888171,
+      1788074948171
+     ],
+     "trace_id": "trc_448371d3",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in tr_c55e6a2bb5: \"It's because it was last minute. It happens, bro.\""
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_9cc35c887b",
+     "type": "reaction",
+     "title": "Acknowledgment of chat",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_9cc35c887b",
+      "quote": "I seen that chat. Bro, how do I tell you? I already know."
+     },
+     "evidence": [
+      "e8f22b16-9d64-4eb5-9441-39b10052cd01"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074888171,
+      1788074948171
+     ],
+     "trace_id": "trc_448371d3",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_9cc35c887b at 1788074922756 is after earliest cited message 1788074918932"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_7ac7eb6752",
+     "type": "reaction",
+     "title": "Memory of DM",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_7ac7eb6752",
+      "quote": "I seen it. I remember seeing the DM go in. I remember seeing it there. I remember looking at it."
+     },
+     "evidence": [
+      "e1705b7d-cf24-40b2-8c7f-ee75369120a1"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074888171,
+      1788074948171
+     ],
+     "trace_id": "trc_448371d3",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_7ac7eb6752 at 1788074934560 is after earliest cited message 1788074916983"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_448371d3",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w05_trc_448371d3.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w06",
+   "window_ms": [
+    1788074948171,
+    1788075008171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_24a917685b",
+     "type": "reaction",
+     "title": "Stream of Displeasure",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_24a917685b",
+      "quote": "Don't call me alone."
+     },
+     "evidence": [
+      "93b8aaaf-be23-456e-8ae7-253b8b97b224"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074948171,
+      1788075008171
+     ],
+     "trace_id": "trc_122a56bf",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_24a917685b at 1788074956536 is after earliest cited message 1788074949253"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_d5ea685590",
+     "type": "reaction",
+     "title": "Repeated Request for Privacy",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_d5ea685590",
+      "quote": "Leave me alone."
+     },
+     "evidence": [
+      "13805513-0e64-423c-a808-1370c442c9ed"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074948171,
+      1788075008171
+     ],
+     "trace_id": "trc_122a56bf",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_d5ea685590 at 1788074962351 is after earliest cited message 1788074954920"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_fc8b8de950",
+     "type": "reaction",
+     "title": "Expressing Surprise",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_fc8b8de950",
+      "quote": "Oh my god."
+     },
+     "evidence": [
+      "1788074980376"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074948171,
+      1788075008171
+     ],
+     "trace_id": "trc_122a56bf",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074980376 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_122a56bf",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w06_trc_122a56bf.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w07",
+   "window_ms": [
+    1788075008171,
+    1788075068171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "bccd638c-ac17-4c01-a856-b70209281129",
+     "type": "audience_answer",
+     "title": "Yugi on his phone",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_7516a92d25",
+      "quote": "Are"
+     },
+     "evidence": [
+      "062a189e-33a4-4e94-91da-7d4ba2c5caf0",
+      "79b83d1b-7acd-4f49-af89-7c622cd1889c",
+      "ee530698-47f4-48a4-a186-9e4ce86d5418"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075008171,
+      1788075068171
+     ],
+     "trace_id": "trc_d0cb3a09",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_7516a92d25 at 1788075013431 is after earliest cited message 1788075010529"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "d0aeae77-1be5-41ce-90c8-484cca6c4826",
+     "type": "reaction",
+     "title": "Yugi heading to Kode Party",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "frm_354fc65e88",
+      "quote": "Heading to... Kode Party."
+     },
+     "evidence": [
+      "SCREEN id=frm_354fc65e88"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075008171,
+      1788075068171
+     ],
+     "trace_id": "trc_d0cb3a09",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "SCREEN id=frm_354fc65e88 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_c68335b3b0",
+     "type": "none",
+     "title": "Streamers' consumption preferences",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_c68335b3b0",
+      "quote": "stuff that I, like, wanna consume, I guess, and I don't really wanna consume clips."
+     },
+     "evidence": [
+      "a3775cb5-9e26-4cd2-bdf0-99db7896d0c9",
+      "571ec2ed-56d9-4f7c-8075-af0d36c45bc4",
+      "054730c9-3ced-428e-bb5c-7fe54036a284"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788075008171,
+      1788075068171
+     ],
+     "trace_id": "trc_d0cb3a09",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_NONE_WITH_EVIDENCE",
+        "detail": "a 'none' card cites messages while claiming nothing happened"
+       },
+       {
+        "code": "E_NONE_WITH_TRIGGER",
+        "detail": "a 'none' card names a cause: tr_c68335b3b0"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_d0cb3a09",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w07_trc_d0cb3a09.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w08",
+   "window_ms": [
+    1788075068171,
+    1788075128171
+   ],
+   "verified": [
+    {
+     "signal_id": "tr_680e9928ff",
+     "type": "reaction",
+     "title": "Stream of consciousness about life choices",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_680e9928ff",
+      "quote": "You know how I beat? This this is the life we chose."
+     },
+     "evidence": [
+      "a790cc1a-5866-4ba2-a465-031568cb0c19"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075068171,
+      1788075128171
+     ],
+     "trace_id": "trc_31a806a6",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_b37a0b6fa2",
+     "type": "none",
+     "title": "No significant response",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_b37a0b6fa2",
+      "quote": "I haven't had any dramas."
+     },
+     "evidence": [
+      "a6bc4f38-97cf-449f-92f7-0eba00696d2d"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788075068171,
+      1788075128171
+     ],
+     "trace_id": "trc_31a806a6",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_NONE_WITH_EVIDENCE",
+        "detail": "a 'none' card cites messages while claiming nothing happened"
+       },
+       {
+        "code": "E_NONE_WITH_TRIGGER",
+        "detail": "a 'none' card names a cause: tr_b37a0b6fa2"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_8ff4efd979",
+     "type": "reaction",
+     "title": "Discussion about shooting experience",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_8ff4efd979",
+      "quote": "Yeah. No. I don't intend to. I've been shooting it for a nice measly three about two years now."
+     },
+     "evidence": [
+      "a958b50c-689d-4d35-aaa2-77f280115c16"
+     ],
+     "confidence": 0.75,
+     "window_ms": [
+      1788075068171,
+      1788075128171
+     ],
+     "trace_id": "trc_31a806a6",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "a958b50c-689d-4d35-aaa2-77f280115c16 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "trace_id": "trc_31a806a6",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w08_trc_31a806a6.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w09",
+   "window_ms": [
+    1788075128171,
+    1788075188171
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown",
+     "type": "unanswered_question",
+     "title": "Unanswered question",
+     "distribution": "public",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "how far"
+     },
+     "evidence": [
+      "d6b3c7cd-d335-4c27-8bb0-2bb55d7e4f03"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788075128171,
+      1788075188171
+     ],
+     "trace_id": "trc_de0828e4",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_df5e3ad7d3",
+     "type": "reaction",
+     "title": "Reaction to speech",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_df5e3ad7d3",
+      "quote": "I am very,"
+     },
+     "evidence": [
+      "c79fab3f-28f7-472e-84fd-a5abb8f5342b"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075128171,
+      1788075188171
+     ],
+     "trace_id": "trc_de0828e4",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_df5e3ad7d3 at 1788075131191 is after earliest cited message 1788075128360"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_4124eee51d",
+     "type": "reaction",
+     "title": "Reaction to speech",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_4124eee51d",
+      "quote": "Yo."
+     },
+     "evidence": [
+      "a90cae15-5270-4dc0-81c8-1f9d49a6308a"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075128171,
+      1788075188171
+     ],
+     "trace_id": "trc_de0828e4",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_4124eee51d at 1788075157700 is after earliest cited message 1788075142645"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "trace_id": "trc_de0828e4",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w09_trc_de0828e4.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w10",
+   "window_ms": [
+    1788075188171,
+    1788075248171
+   ],
+   "verified": [
+    {
+     "signal_id": "tr_86bf794929",
+     "type": "reaction",
+     "title": "Streamer comments on game scene",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_86bf794929",
+      "quote": "Game. What are game. No."
+     },
+     "evidence": [
+      "e012bf88-1c4a-42bc-9705-f619cbb5a9bd"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788075188171,
+      1788075248171
+     ],
+     "trace_id": "trc_d07eec85",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_37028f16c8",
+     "type": "reaction",
+     "title": "Streamer mentions wearing pimple patches",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_37028f16c8",
+      "quote": "Bro, I have a pimple under this, bro. I have a pimple under this. Chill."
+     },
+     "evidence": [
+      "e0e282be-ff55-42f5-aa27-69c44fec4db7"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075188171,
+      1788075248171
+     ],
+     "trace_id": "trc_d07eec85",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_37028f16c8 at 1788075190276 is after earliest cited message 1788075188504"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_c480a802ae",
+     "type": "audience_answer",
+     "title": "Audience comments on scene",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_c480a802ae",
+      "quote": "give me if they were like this, look, Yugi,"
+     },
+     "evidence": [
+      "a643c4b5-83ab-4fd4-9010-02d906aa461c"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788075188171,
+      1788075248171
+     ],
+     "trace_id": "trc_d07eec85",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_c480a802ae at 1788075204891 is after earliest cited message 1788075188947"
+       },
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in tr_c480a802ae: 'give me if they were like this, look, Yugi,'"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "trace_id": "trc_d07eec85",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w10_trc_d07eec85.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w11",
+   "window_ms": [
+    1788075248171,
+    1788075308171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_9de20a532e",
+     "type": "reaction",
+     "title": "Nostalgic Reflection",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_9de20a532e",
+      "quote": "I remember when a mod app turned into the who could give the most subs on the wheel. That was just funny, bro."
+     },
+     "evidence": [
+      "d0b6dde2-6528-4e0e-831d-a7d48dac26a0"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075248171,
+      1788075308171
+     ],
+     "trace_id": "trc_0e8ca014",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_9de20a532e at 1788075252886 is after earliest cited message 1788075248195"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_b842f79709",
+     "type": "none",
+     "title": "No clear response",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_b842f79709",
+      "quote": "Fix that. No."
+     },
+     "evidence": [
+      "frm_31cdceb1ca"
+     ],
+     "confidence": 0.4,
+     "window_ms": [
+      1788075248171,
+      1788075308171
+     ],
+     "trace_id": "trc_0e8ca014",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_NONE_WITH_EVIDENCE",
+        "detail": "a 'none' card cites messages while claiming nothing happened"
+       },
+       {
+        "code": "E_NONE_WITH_TRIGGER",
+        "detail": "a 'none' card names a cause: tr_b842f79709"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_f6af20a89e",
+     "type": "reaction",
+     "title": "Excitement about plans",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_f6af20a89e",
+      "quote": "No. No. I can't wait. I'm I'm excited. Me too. We we need to figure out what we wanna do and where we wanna go."
+     },
+     "evidence": [
+      "frm_31cdceb1ca"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075248171,
+      1788075308171
+     ],
+     "trace_id": "trc_0e8ca014",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "frm_31cdceb1ca is a frame_caption, not a chat message"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_0e8ca014",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w11_trc_0e8ca014.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w12",
+   "window_ms": [
+    1788075308171,
+    1788075309123
+   ],
+   "verified": [
+    {
+     "signal_id": "16fee84f-69e7-4ff0-b2ba-367c07ab6ab5",
+     "type": "reaction",
+     "title": "Audience responded to 'ono'",
+     "distribution": "public",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "ono"
+     },
+     "evidence": [
+      "16fee84f-69e7-4ff0-b2ba-367c07ab6ab5"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075308171,
+      1788075309123
+     ],
+     "trace_id": "trc_e4f13189",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "trace_id": "trc_e4f13189",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w12_trc_e4f13189.json"
+  }
+ ]
+}

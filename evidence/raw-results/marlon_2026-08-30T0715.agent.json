@@ -1,0 +1,907 @@
+{
+ "system": "agent",
+ "fixture": "evals/fixtures/marlon_2026-08-30T0715",
+ "fixture_id": "marlon_2026-08-30T0715",
+ "mode": "record",
+ "window_size_ms": 60000,
+ "span_ms": [
+  1788074109681,
+  1788074711171
+ ],
+ "counts": {
+  "windows": 11,
+  "verified": 3,
+  "rejected": 20
+ },
+ "cache": {
+  "hits": 0,
+  "misses": 24
+ },
+ "windows": [
+  {
+   "case_id": "marlon_2026-08-30T0715_w00",
+   "window_ms": [
+    1788074109681,
+    1788074169681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "1",
+     "type": "reaction",
+     "title": "Audience shows strong reactions and humor",
+     "distribution": "high",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "2c89b200-4e1e-4318-a808-36f406abe356",
+      "quote": "… sorry denied"
+     },
+     "evidence": [
+      "2c89b200-4e1e-4318-a808-36f406abe356",
+      "4bf24b40-4b22-40cd-9738-7acf3f4c4a0e",
+      "0c5321d9-71b6-49f8-8cdb-7ba2e00cb4ee",
+      "1a4c1ad2-30a3-4a2f-b1b7-1f77f15fb056",
+      "1788074110970"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074109681,
+      1788074169681
+     ],
+     "trace_id": "trc_db3130d7",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074110970 not in fixture"
+       },
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "2c89b200-4e1e-4318-a808-36f406abe356 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_db3130d7",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w00_trc_db3130d7.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w01",
+   "window_ms": [
+    1788074169681,
+    1788074229681
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown",
+     "type": "reaction",
+     "title": "Multiple punctuation messages indicating audience engagement",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "(punctuation only)"
+     },
+     "evidence": [
+      "d32948a9-31d9-4036-8957-3f9927ff25e3",
+      "b095ebea-109a-4c23-b9c9-060a33ef5b9d",
+      "2de83f90-ccb6-4178-9340-ce1929ecb702",
+      "d8800ba3-f42b-4a92-913a-ac48b8f8505a",
+      "ae62c7aa-2038-42c1-b51b-b85e4b8abd4e"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788074169681,
+      1788074229681
+     ],
+     "trace_id": "trc_ac2d261e",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "d43d5a33-997a-4c31-9d29-370312ca6f2e",
+     "type": "reaction",
+     "title": "Audience reacted to the phrase 'let me in Bud'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "d43d5a33-997a-4c31-9d29-370312ca6f2e",
+      "quote": "let me in Bud"
+     },
+     "evidence": [
+      "d43d5a33-997a-4c31-9d29-370312ca6f2e"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074169681,
+      1788074229681
+     ],
+     "trace_id": "trc_ac2d261e",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "d43d5a33-997a-4c31-9d29-370312ca6f2e is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "11ca4bbf-af93-47c9-9522-2336437dee8f",
+     "type": "reaction",
+     "title": "Audience reacted to the phrase 'yes really'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "11ca4bbf-af93-47c9-9522-2336437dee8f",
+      "quote": "yes really"
+     },
+     "evidence": [
+      "11ca4bbf-af93-47c9-9522-2336437dee8f"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074169681,
+      1788074229681
+     ],
+     "trace_id": "trc_ac2d261e",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "11ca4bbf-af93-47c9-9522-2336437dee8f is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_ac2d261e",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w01_trc_ac2d261e.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w02",
+   "window_ms": [
+    1788074229681,
+    1788074289681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "burst_1",
+     "type": "reaction",
+     "title": "Audience is laughing and reacting positively",
+     "distribution": "28 occurrences of LOL, LMFAOO, LMAOOO, and other laughter expressions",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "1788074230610",
+      "quote": "LOL"
+     },
+     "evidence": [
+      "e27c7a46-ea98-4db5-88b0-00f7c5149585",
+      "7c0bcbcd-451f-4af1-9aa2-e3cb3bb1f04c",
+      "64f08dc2-045e-455a-81d2-a90534328fd1"
+     ],
+     "window_ms": [
+      1788074229681,
+      1788074289681
+     ],
+     "trace_id": "trc_8fc0f296",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_TRIGGER",
+        "detail": "1788074230610 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "burst_2",
+     "type": "reaction",
+     "title": "Audience shows confusion or surprise",
+     "distribution": "Multiple messages like 'wtf', 'what the tree do', 'yup', 'u the tuffist 3'",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "1788074230608",
+      "quote": "WTF"
+     },
+     "evidence": [
+      "c40e0cf2-3550-4258-821e-8a170262d559",
+      "1788074231083",
+      "fe350275-a9d2-43fd-9fb6-52467569e108"
+     ],
+     "window_ms": [
+      1788074229681,
+      1788074289681
+     ],
+     "trace_id": "trc_8fc0f296",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074231083 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_TRIGGER",
+        "detail": "1788074230608 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "burst_3",
+     "type": "audience_answer",
+     "title": "Audience is engaging with the streamer about a game or event",
+     "distribution": "Messages like 'has he played yet', 'where is louis @Marlon', 'yo'",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "1788074280392",
+      "quote": "where is louis @Marlon"
+     },
+     "evidence": [
+      "014ef578-bdf8-46e6-9433-73b909c4ca00",
+      "50e326ba-45f9-4c7e-97d5-217e913a6abc",
+      "1788074280180"
+     ],
+     "window_ms": [
+      1788074229681,
+      1788074289681
+     ],
+     "trace_id": "trc_8fc0f296",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074280180 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_TRIGGER",
+        "detail": "1788074280392 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_8fc0f296",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w02_trc_8fc0f296.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w03",
+   "window_ms": [
+    1788074289681,
+    1788074349681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "fake_demon_burst",
+     "type": "reaction",
+     "title": "Audience reaction to 'Fake Demon'",
+     "distribution": "multiple",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "a368a38b-83ab-4901-8df6-7c41d01fa4f1",
+      "quote": "FAKE DEMON"
+     },
+     "evidence": [
+      "1e546a18-ba23-473b-a5ff-039517cc61c9",
+      "37b0c02f-3e67-412e-8f03-95c8808d7616",
+      "e1cf503d-d2d8-484a-84b2-76583ef556fa",
+      "a2bce10c-b374-4249-8872-b39b4c0d7a1c"
+     ],
+     "window_ms": [
+      1788074289681,
+      1788074349681
+     ],
+     "trace_id": "trc_cd91d97b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger a368a38b-83ab-4901-8df6-7c41d01fa4f1 at 1788074291043 is after earliest cited message 1788074289908"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "dans_dance",
+     "type": "reaction",
+     "title": "Audience reacting to dance segment",
+     "distribution": "many",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "e05bb22f-14d9-4fe1-bd9b-1d42aeeb6b8f",
+      "quote": "dans"
+     },
+     "evidence": [
+      "788feae7-5a16-40e6-9b4c-20fb4e0a8f9f",
+      "1b93fe56-0fd0-4ffe-aa0d-4bb5099fefc8",
+      "8267e09f-b9a5-460d-b3b5-98d26bf54f96",
+      "cd894e19-4681-49e5-8c73-4512ba9c04c0",
+      "e05bb22f-14d9-4fe1-bd9b-1d42aeeb6b8f"
+     ],
+     "window_ms": [
+      1788074289681,
+      1788074349681
+     ],
+     "trace_id": "trc_cd91d97b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "e05bb22f-14d9-4fe1-bd9b-1d42aeeb6b8f is cited as evidence for the signal it supposedly caused"
+       },
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger e05bb22f-14d9-4fe1-bd9b-1d42aeeb6b8f at 1788074330252 is after earliest cited message 1788074320351"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "yugi_slam",
+     "type": "reaction",
+     "title": "Audience mentions 'Yugi Slam'",
+     "distribution": "few",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "eaa3fa6a-932f-4313-98a2-7ae7b1b0dcd7",
+      "quote": "yugi slam"
+     },
+     "evidence": [
+      "eaa3fa6a-932f-4313-98a2-7ae7b1b0dcd7"
+     ],
+     "window_ms": [
+      1788074289681,
+      1788074349681
+     ],
+     "trace_id": "trc_cd91d97b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "eaa3fa6a-932f-4313-98a2-7ae7b1b0dcd7 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_cd91d97b",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w03_trc_cd91d97b.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w04",
+   "window_ms": [
+    1788074349681,
+    1788074409681
+   ],
+   "verified": [
+    {
+     "signal_id": "geeg",
+     "type": "reaction",
+     "title": "Frequent Chat Burst: 'geeg'",
+     "distribution": "14 mentions",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "geeg"
+     },
+     "evidence": [
+      "066242f1-5e4c-4007-ba0c-7961c1496a10",
+      "1ff6ddc7-a49f-43d0-a4b3-9e2d819334ec",
+      "bc30eac1-e515-4f48-ac97-99103aacee41",
+      "fe259e35-2210-4599-aa0f-fd642893d0c0",
+      "1b4f0d87-6943-4cbe-89cd-761ad89ab95d"
+     ],
+     "window_ms": [
+      1788074349681,
+      1788074409681
+     ],
+     "trace_id": "trc_864adde1",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_864adde1",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w04_trc_864adde1.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w05",
+   "window_ms": [
+    1788074409681,
+    1788074469681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "son",
+     "type": "reaction",
+     "title": "Audience is mentioning 'son'",
+     "distribution": "7 mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "8c1177fe-64c3-45e8-841a-c0ecbd51df59",
+      "quote": "son"
+     },
+     "evidence": [
+      "8c1177fe-64c3-45e8-841a-c0ecbd51df59",
+      "19ee2293-aa8a-46b0-be68-cc43f6765397",
+      "e671a7fe-366f-44a8-88ee-ac9ca3f2264b",
+      "9ffa5945-f0dc-4da2-a8bf-c869f083d773",
+      "d3688777-8970-46cf-9cd5-c8cf6fceffee"
+     ],
+     "window_ms": [
+      1788074409681,
+      1788074469681
+     ],
+     "trace_id": "trc_be91e571",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "8c1177fe-64c3-45e8-841a-c0ecbd51df59 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "lol",
+     "type": "reaction",
+     "title": "Audience is spamming 'lol'",
+     "distribution": "10 mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "5fe624f0-aedd-4e92-ab0d-8162586813c2",
+      "quote": "LOL"
+     },
+     "evidence": [
+      "5fe624f0-aedd-4e92-ab0d-8162586813c2",
+      "4993ee47-8fd8-4921-8d44-389255cfceaf",
+      "96a9058b-aba1-4cd5-b67d-968a3bdc4170",
+      "95c82530-313a-42b7-8d79-d4c7b1550b38",
+      "bac37568-ff68-4bd4-82eb-b3edcea1c5ea"
+     ],
+     "window_ms": [
+      1788074409681,
+      1788074469681
+     ],
+     "trace_id": "trc_be91e571",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "5fe624f0-aedd-4e92-ab0d-8162586813c2 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "wtf",
+     "type": "reaction",
+     "title": "Audience reacts with 'wtf'",
+     "distribution": "1 mention",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "8c6c087e-4968-4b7e-8d17-c583eb482c87",
+      "quote": "wtf"
+     },
+     "evidence": [
+      "8c6c087e-4968-4b7e-8d17-c583eb482c87"
+     ],
+     "window_ms": [
+      1788074409681,
+      1788074469681
+     ],
+     "trace_id": "trc_be91e571",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "8c6c087e-4968-4b7e-8d17-c583eb482c87 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_be91e571",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w05_trc_be91e571.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w06",
+   "window_ms": [
+    1788074469681,
+    1788074529681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "capri is 19",
+     "type": "audience_answer",
+     "title": "Audience discusses Capri's age",
+     "distribution": "2",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "ded60dec-3f9d-4a2c-9ccc-b7770509be1f",
+      "quote": "Capri is 19"
+     },
+     "evidence": [
+      "ded60dec-3f9d-4a2c-9ccc-b7770509be1f",
+      "1e0b147d-bc1f-4f24-ba91-558b22f25216"
+     ],
+     "window_ms": [
+      1788074469681,
+      1788074529681
+     ],
+     "trace_id": "trc_c11b4d5d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "ded60dec-3f9d-4a2c-9ccc-b7770509be1f is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_c11b4d5d",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w06_trc_c11b4d5d.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w07",
+   "window_ms": [
+    1788074529681,
+    1788074589681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "violet",
+     "type": "reaction",
+     "title": "Audience reacting to Violet",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "6c196552-90a8-41f1-8e5a-11ad94134810",
+      "quote": "violet ͏"
+     },
+     "evidence": [
+      "6c196552-90a8-41f1-8e5a-11ad94134810"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074529681,
+      1788074589681
+     ],
+     "trace_id": "trc_22eebc94",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "6c196552-90a8-41f1-8e5a-11ad94134810 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "wtf_on_going",
+     "type": "reaction",
+     "title": "Audience confusion or surprise",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "7e828421-74fa-400f-8703-e614d957d8fe",
+      "quote": "WTF GOING ON LOL"
+     },
+     "evidence": [
+      "7e828421-74fa-400f-8703-e614d957d8fe"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074529681,
+      1788074589681
+     ],
+     "trace_id": "trc_22eebc94",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "7e828421-74fa-400f-8703-e614d957d8fe is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "violet_fame",
+     "type": "reaction",
+     "title": "Audience recognizing Violet Myers",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "8808e3ff-79a1-404c-b463-31732db99f95",
+      "quote": "isnt violet banned from twitch?"
+     },
+     "evidence": [
+      "8808e3ff-79a1-404c-b463-31732db99f95"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074529681,
+      1788074589681
+     ],
+     "trace_id": "trc_22eebc94",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "8808e3ff-79a1-404c-b463-31732db99f95 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_22eebc94",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w07_trc_22eebc94.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w08",
+   "window_ms": [
+    1788074589681,
+    1788074649681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "interesting party",
+     "type": "reaction",
+     "title": "Audience found the party interesting",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "ce026b74-37aa-47f1-8748-096fb9712a23",
+      "quote": "interesting party"
+     },
+     "evidence": [
+      "ce026b74-37aa-47f1-8748-096fb9712a23",
+      "f80117c0-99c3-4995-9cc9-e1b9ada2d6d8"
+     ],
+     "window_ms": [
+      1788074589681,
+      1788074649681
+     ],
+     "trace_id": "trc_3602942b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "ce026b74-37aa-47f1-8748-096fb9712a23 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "grab the camera for an edit by eris",
+     "type": "reaction",
+     "title": "Audience is talking about grabbing the camera",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "08c0aad2-1140-4ebf-beff-5d30380c0a87",
+      "quote": "grab the camera for an edit by eris"
+     },
+     "evidence": [
+      "08c0aad2-1140-4ebf-beff-5d30380c0a87",
+      "bdaa5517-c333-45d5-87ca-706a87ffa595",
+      "988f32f9-b5a9-4cf7-832f-f42c2217ddad",
+      "92e849c6-805b-4548-98b8-9321053ec796",
+      "c1c9a1b7-ab5f-4847-bdf4-b940671cd98c"
+     ],
+     "window_ms": [
+      1788074589681,
+      1788074649681
+     ],
+     "trace_id": "trc_3602942b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "08c0aad2-1140-4ebf-beff-5d30380c0a87 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "lol",
+     "type": "reaction",
+     "title": "Audience is laughing or finding something funny",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "64f3a32d-53d2-49f0-aaf9-098a839d4532",
+      "quote": "LOL"
+     },
+     "evidence": [
+      "64f3a32d-53d2-49f0-aaf9-098a839d4532",
+      "10f20814-7337-4764-af42-c55909a618c3",
+      "b29c560b-8341-4c5c-9939-f41b574e0290",
+      "75aee304-e89c-431b-a748-e81ec72660c1",
+      "3fe91a05-0582-49a4-b6ae-271695c25d3a"
+     ],
+     "window_ms": [
+      1788074589681,
+      1788074649681
+     ],
+     "trace_id": "trc_3602942b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "64f3a32d-53d2-49f0-aaf9-098a839d4532 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_3602942b",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w08_trc_3602942b.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w09",
+   "window_ms": [
+    1788074649681,
+    1788074709681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "13f4b8f2-4f3a-4b4f-8f4a-4f3a4b4f8f4a",
+     "type": "reaction",
+     "title": "Audience Reacts to Content",
+     "distribution": "many viewers reacted with laughter and excitement",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "bba340db-097c-41c0-8d87-fd1f23f63f4e",
+      "quote": "LOL"
+     },
+     "evidence": [
+      "bba340db-097c-41c0-8d87-fd1f23f63f4e"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074649681,
+      1788074709681
+     ],
+     "trace_id": "trc_cb6887fb",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "bba340db-097c-41c0-8d87-fd1f23f63f4e is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_cb6887fb",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w09_trc_cb6887fb.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w10",
+   "window_ms": [
+    1788074709681,
+    1788074711172
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown_event_1",
+     "type": "none",
+     "title": "No clear audience reaction or speech detected",
+     "confidence": 0.5,
+     "window_ms": [
+      1788074709681,
+      1788074711172
+     ],
+     "trace_id": "trc_ecb397ef",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "steps": 4,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_ecb397ef",
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w10_trc_ecb397ef.json"
+  }
+ ]
+}

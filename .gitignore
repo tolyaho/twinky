@@ -9,9 +9,11 @@ __pycache__/
 .DS_Store
 **/.DS_Store
 
-# `evidence/` is COMMITTED on purpose - README section 7 lists comparison.csv, report.md and
-# predictions.json as graded artifacts. Only the per-window run documents are regenerable noise.
-evidence/raw-results/
+# `evidence/` is COMMITTED on purpose, INCLUDING raw-results. These were ignored once as
+# "regenerable noise" and that was wrong twice over: the product page reads them, so an archive
+# without them offered a judge zero channels and a signals panel that never filled, and
+# regenerating them needs `make replay` per fixture, which nothing tells a judge to run.
+# 164 KB against a demo that works on first launch.
 
 # large raw media stays out; captions/transcripts/chat are committed
 evals/fixtures/**/audio.opus

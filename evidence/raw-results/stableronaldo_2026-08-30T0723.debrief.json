@@ -1,0 +1,93 @@
+{
+ "fixture_id": "stableronaldo_2026-08-30T0723",
+ "channel": "stableronaldo",
+ "start_ms": 1788074587878,
+ "duration_ms": null,
+ "verified_cards": 5,
+ "sections": {
+  "audience_answers": [],
+  "unanswered_questions": [],
+  "reaction_waves": [
+   {
+    "signal_id": "0ab18844-f9b2-4263-ae39-2e04a8ad611c",
+    "type": "reaction",
+    "title": "Chat mention of 'tgraybird always the underdogs'",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": "tgraybird always the underdogs"
+    },
+    "evidence": [
+     "0ab18844-f9b2-4263-ae39-2e04a8ad611c"
+    ],
+    "confidence": null,
+    "trace_id": "trc_745a8fa6",
+    "ts_ms": 1788074887878,
+    "ts_source": "window",
+    "at": "00:05:00"
+   },
+   {
+    "signal_id": "55fb9dd5-a4d4-43b7-8346-6af50027c23c",
+    "type": "reaction",
+    "title": "Chat mention of 'mitosis'",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": "mitosis"
+    },
+    "evidence": [
+     "55fb9dd5-a4d4-43b7-8346-6af50027c23c"
+    ],
+    "confidence": null,
+    "trace_id": "trc_745a8fa6",
+    "ts_ms": 1788074887878,
+    "ts_source": "window",
+    "at": "00:05:00"
+   },
+   {
+    "signal_id": "73b50903-8239-4386-bd85-d4994b0a23ae",
+    "type": "reaction",
+    "title": "Chat mention of 'miracle'",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": "Miracle"
+    },
+    "evidence": [
+     "73b50903-8239-4386-bd85-d4994b0a23ae"
+    ],
+    "confidence": null,
+    "trace_id": "trc_745a8fa6",
+    "ts_ms": 1788074887878,
+    "ts_source": "window",
+    "at": "00:05:00"
+   },
+   {
+    "signal_id": "unknown_event_1",
+    "type": "reaction",
+    "title": "Audience reacted to a moment",
+    "distribution": "multiple",
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": ""
+    },
+    "evidence": [
+     "987dfebf-0c75-43f0-8608-20eb0cfca2fb",
+     "542cfe22-bcbd-464a-b84b-2fe2457a57bc"
+    ],
+    "confidence": null,
+    "trace_id": "trc_bb246231",
+    "ts_ms": 1788075307878,
+    "ts_source": "window",
+    "at": "00:12:00"
+   }
+  ],
+  "warnings": [],
+  "clip_candidates": [],
+  "recurring_themes": []
+ }
+}

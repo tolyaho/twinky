@@ -1,0 +1,983 @@
+{
+ "system": "baseline",
+ "fixture": "evals/fixtures/marlon_2026-08-30T0715",
+ "fixture_id": "marlon_2026-08-30T0715",
+ "mode": "record",
+ "window_size_ms": 60000,
+ "span_ms": [
+  1788074109681,
+  1788074711171
+ ],
+ "counts": {
+  "windows": 11,
+  "verified": 4,
+  "rejected": 20
+ },
+ "cache": {
+  "hits": 0,
+  "misses": 11
+ },
+ "windows": [
+  {
+   "case_id": "marlon_2026-08-30T0715_w00",
+   "window_ms": [
+    1788074109681,
+    1788074169681
+   ],
+   "verified": [
+    {
+     "signal_id": "tr_e7999d2ee6",
+     "type": "reaction",
+     "title": "Reaction to Slam",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_e7999d2ee6",
+      "quote": "fuck? Wait. Why are we stopping here? What is this? Why are we stopping here? This this money is a care Shit."
+     },
+     "evidence": [
+      "f664055e-343d-4dcf-b420-bfe30f48a9b2"
+     ],
+     "confidence": 0.75,
+     "window_ms": [
+      1788074109681,
+      1788074169681
+     ],
+     "trace_id": "trc_1d1bcbb4",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_7b25df5d77",
+     "type": "reaction",
+     "title": "Reaction to Get",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_7b25df5d77",
+      "quote": "Get"
+     },
+     "evidence": [
+      "2c89b200-4e1e-4318-a808-36f406abe356"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074109681,
+      1788074169681
+     ],
+     "trace_id": "trc_1d1bcbb4",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_7b25df5d77 at 1788074110599 is after earliest cited message 1788074109681"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_01f1c720b6",
+     "type": "audience_answer",
+     "title": "Audience Question or Comment",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_01f1c720b6",
+      "quote": "your fucking shit slant to the ground. Well, well, well. I'm well, well, well. Well, well, well. What the"
+     },
+     "evidence": [
+      "4f77ef85-6133-4f00-9615-3634cdc554dc"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074109681,
+      1788074169681
+     ],
+     "trace_id": "trc_1d1bcbb4",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_01f1c720b6 at 1788074111479 is after earliest cited message 1788074110732"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "trace_id": "trc_1d1bcbb4",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w00_trc_1d1bcbb4.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w01",
+   "window_ms": [
+    1788074169681,
+    1788074229681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_ad9678f2a6",
+     "type": "reaction",
+     "title": "Jealousy about the streamer",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_ad9678f2a6",
+      "quote": "all gonna be very jealous you. Yeah."
+     },
+     "evidence": [
+      "d43d5a33-997a-4c31-9d29-370312ca6f2e"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074169681,
+      1788074229681
+     ],
+     "trace_id": "trc_0c35d0a8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_ad9678f2a6 at 1788074175728 is after earliest cited message 1788074170279"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_e96e3bf15e",
+     "type": "audience_answer",
+     "title": "Audience didn't meet streamer",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_e96e3bf15e",
+      "quote": "Oh my god. I didn't meet him last time. You guys never met? No. Oh my gosh."
+     },
+     "evidence": [
+      "2f80993e-3258-421f-8ab6-3f21f7e13edb"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074169681,
+      1788074229681
+     ],
+     "trace_id": "trc_0c35d0a8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_e96e3bf15e at 1788074181193 is after earliest cited message 1788074176898"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_84ee8980e3",
+     "type": "reaction",
+     "title": "Comment on security",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_84ee8980e3",
+      "quote": "Really most important part is just cars. That's it. Yeah. Like, people"
+     },
+     "evidence": [
+      "a7dbe13d-827e-43bd-a3c7-1cdcc9a2313b"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074169681,
+      1788074229681
+     ],
+     "trace_id": "trc_0c35d0a8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_84ee8980e3 at 1788074198209 is after earliest cited message 1788074187887"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_0c35d0a8",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w01_trc_0c35d0a8.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w02",
+   "window_ms": [
+    1788074229681,
+    1788074289681
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown",
+     "type": "none",
+     "title": "No Significant Signal",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": ""
+     },
+     "evidence": [],
+     "confidence": 0.2,
+     "window_ms": [
+      1788074229681,
+      1788074289681
+     ],
+     "trace_id": "trc_c3464592",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_d30f0ca768",
+     "type": "reaction",
+     "title": "Livestream Scene Description",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_d30f0ca768",
+      "quote": "Brad, we don't let nobody in. We partial brat. Brat. Is Wrecked? Obviously, you say Yeah."
+     },
+     "evidence": [
+      "7f26fd11-b302-4471-821d-431f1ef7ceb8",
+      "f995b2c9-c601-4b2e-a5a1-e6c71b487891",
+      "2a79605e-51a2-4c74-8c82-50fe40a3bf07",
+      "frm_ccc45dff54"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074229681,
+      1788074289681
+     ],
+     "trace_id": "trc_c3464592",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "frm_ccc45dff54 is a frame_caption, not a chat message"
+       },
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_d30f0ca768 at 1788074231549 is after earliest cited message 1788074230114"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_41b8a8fedf",
+     "type": "reaction",
+     "title": "Nighttime Scene and Comment",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_41b8a8fedf",
+      "quote": "literally almost got slammed at night. Holy fuck. Does Burberry not ever talk to me like that."
+     },
+     "evidence": [
+      "38d40edd-cbb2-4bb3-b6ac-82617a0a93e7",
+      "e41b8a8fedf"
+     ],
+     "confidence": 0.75,
+     "window_ms": [
+      1788074229681,
+      1788074289681
+     ],
+     "trace_id": "trc_c3464592",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "e41b8a8fedf not in fixture"
+       },
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_41b8a8fedf at 1788074273554 is after earliest cited message 1788074248102"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.6666666666666666,
+   "total": 3,
+   "trace_id": "trc_c3464592",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w02_trc_c3464592.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w03",
+   "window_ms": [
+    1788074289681,
+    1788074349681
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown",
+     "type": "none",
+     "title": "No Significant Signal",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": ""
+     },
+     "evidence": [],
+     "confidence": 0.1,
+     "window_ms": [
+      1788074289681,
+      1788074349681
+     ],
+     "trace_id": "trc_6eb328f7",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [
+    {
+     "signal_id": "tr_830fd02933",
+     "type": "reaction",
+     "title": "Thirst for Water",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_830fd02933",
+      "quote": "Anybody else a little thirsty, Aya? Guys, team. Yeah. I love some good water. I'm pretty thirsty. Yeah. I need me a lot of water. You too. You too?"
+     },
+     "evidence": [
+      "1e546a18-ba23-473b-a5ff-039517cc61c9",
+      "43624de0-5502-42c3-813a-41ef4ec4fc89",
+      "e2e5ae72-ce61-437b-a52b-182f7ff71f3b"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074289681,
+      1788074349681
+     ],
+     "trace_id": "trc_6eb328f7",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_830fd02933 at 1788074293094 is after earliest cited message 1788074289908"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 0.5,
+   "total": 2,
+   "trace_id": "trc_6eb328f7",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w03_trc_6eb328f7.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w04",
+   "window_ms": [
+    1788074349681,
+    1788074409681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_21184829fe",
+     "type": "reaction",
+     "title": "Water Comment",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_21184829fe",
+      "quote": "The fucking water is this shit."
+     },
+     "evidence": [
+      "066242f1-5e4c-4007-ba0c-7961c1496a10"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074349681,
+      1788074409681
+     ],
+     "trace_id": "trc_8ab88c22",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_21184829fe at 1788074382554 is after earliest cited message 1788074349760"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_8ab88c22",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w04_trc_8ab88c22.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w05",
+   "window_ms": [
+    1788074409681,
+    1788074469681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_3269d2cda1",
+     "type": "reaction",
+     "title": "Recognition of the scene",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_3269d2cda1",
+      "quote": "But yeah. Looking"
+     },
+     "evidence": [
+      "8c1177fe-64c3-45e8-841a-c0ecbd51df59",
+      "b17acb6d-5580-4b47-bccc-bffe793625bd",
+      "SCREEN id=frm_b02fb4f954"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074409681,
+      1788074469681
+     ],
+     "trace_id": "trc_1ec403fe",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "SCREEN id=frm_b02fb4f954 not in fixture"
+       },
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_3269d2cda1 at 1788074410774 is after earliest cited message 1788074410385"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_1ec403fe",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w05_trc_1ec403fe.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w06",
+   "window_ms": [
+    1788074469681,
+    1788074529681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_215b4adaab",
+     "type": "reaction",
+     "title": "Support for Swedish identity",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_215b4adaab",
+      "quote": "Heh, man. They're coming for you, bro. They love you. They're your people."
+     },
+     "evidence": [
+      "48ea7a5f-a611-40a0-b3a9-da63ceadb9cb"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074469681,
+      1788074529681
+     ],
+     "trace_id": "trc_57326821",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_215b4adaab at 1788074487244 is after earliest cited message 1788074469923"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_8a63ef0fe4",
+     "type": "reaction",
+     "title": "Hold on comment",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_8a63ef0fe4",
+      "quote": "hold on."
+     },
+     "evidence": [
+      "18d99773-787e-4319-85ee-88d9a77e9693"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074469681,
+      1788074529681
+     ],
+     "trace_id": "trc_57326821",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_8a63ef0fe4 at 1788074519334 is after earliest cited message 1788074484877"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_cbf0c43817",
+     "type": "reaction",
+     "title": "Question about group",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_cbf0c43817",
+      "quote": "Are we on the list? You're on the list? We're all on."
+     },
+     "evidence": [
+      "ea76f810-f9c7-4e28-b241-9d967f90c350"
+     ],
+     "confidence": 0.75,
+     "window_ms": [
+      1788074469681,
+      1788074529681
+     ],
+     "trace_id": "trc_57326821",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_cbf0c43817 at 1788074514294 is after earliest cited message 1788074509399"
+       },
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in tr_cbf0c43817: \"Are we on the list? You're on the list? We're all on.\""
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_57326821",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w06_trc_57326821.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w07",
+   "window_ms": [
+    1788074529681,
+    1788074589681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_8e127ae1a2",
+     "type": "audience_answer",
+     "title": "Recognition of Violet",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_8e127ae1a2",
+      "quote": "good. Brad right here? Let him know what? Hey, dog. Buddy, did you let him know. Yo, Brad, he should be on the list. Make sure I check. What's"
+     },
+     "evidence": [
+      "33b53a14-b387-4bc2-99ae-498874c25b54",
+      "6a665dcb-b2c7-4fdc-bfdb-ba1287f1d687",
+      "89554bd4-0030-447e-848e-5e82a67764d6"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074529681,
+      1788074589681
+     ],
+     "trace_id": "trc_bb586137",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_8e127ae1a2 at 1788074532899 is after earliest cited message 1788074530169"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_0d7b2fa397",
+     "type": "reaction",
+     "title": "Recognition of Violet Myers",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_0d7b2fa397",
+      "quote": "Yep. You're good."
+     },
+     "evidence": [
+      "2f83f642-7bd8-43e6-b992-e3fdd2453eac"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074529681,
+      1788074589681
+     ],
+     "trace_id": "trc_bb586137",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_0d7b2fa397 at 1788074542964 is after earliest cited message 1788074532382"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_c2f591e426",
+     "type": "reaction",
+     "title": "Confirmation of Violet's presence",
+     "distribution": "public",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_c2f591e426",
+      "quote": "Alrighty. Keep close."
+     },
+     "evidence": [
+      "a95e5e11-9b3d-4c3d-970b-c655efad088f"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074529681,
+      1788074589681
+     ],
+     "trace_id": "trc_bb586137",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_c2f591e426 at 1788074563638 is after earliest cited message 1788074536215"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_bb586137",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w07_trc_bb586137.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w08",
+   "window_ms": [
+    1788074589681,
+    1788074649681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "ce7d6734-f62b-4652-8d8e-9bc0fd4d7a23",
+     "type": "reaction",
+     "title": "Grab the camera for an edit by eris",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_54f2aafa71",
+      "quote": "With the door, like, you know, that's It's really loud. Alright. What's your name? Cheyenne with an s."
+     },
+     "evidence": [
+      "f0a8c9f2-7008-4d8b-8f6e-23903fd74c3d",
+      "64f3a32d-53d2-49f0-aaf9-098a839d4532",
+      "10f20814-7337-4764-af42-c55909a618c3",
+      "bdaa5517-c333-45d5-87ca-706a87ffa595",
+      "91faa9bc-cfdf-44ff-8042-452236181934",
+      "b29c560b-8341-4c5c-9939-f41b574e0290",
+      "011a92db-bc9f-4cbc-96ce-c6c03ec0bad5",
+      "988f32f9-b5a9-4cf7-832f-f42c2217ddad",
+      "1e88434e-1282-4926-a322-9629f1e60e2e",
+      "dda5707b-764e-41d4-b30c-722b5133bd6c",
+      "78f42ff2-e70b-446a-a243-7bd7d7c94c0e",
+      "75aee304-e89c-431b-a748-e81ec72660c1",
+      "3fe91a05-0582-49a4-b6ae-271695c25d3a",
+      "92e849c6-805b-4548-98b8-9321053ec796",
+      "5753c44c-8ffd-4f29-8703-910c025500ea",
+      "4d28d672-01bd-49fa-b241-78d86de4814a",
+      "1a6654b5-0d7b-4325-b13d-6d0ac7f387b7",
+      "63d6d3f4-1161-4e18-8f9a-4bcc756f9110",
+      "00808eaf-c3e8-4afd-863d-a391f5d382d9",
+      "ac2afcbb-18b2-4743-ac83-a9d818867070",
+      "96fa2985-43a7-44d5-a091-928cecb1b433",
+      "bcff02e7-3d98-4983-a0fd-5219095a0d71",
+      "734fe975-5fe2-4187-bffc-fe31002434e5",
+      "bb3862bd-e7ad-4a97-a4d3-d0e179852be2",
+      "b8fda590-08bd-45e0-aea4-50b52c1f6bc7",
+      "d6c2eb09-8c4b-472b-9c31-795a1f97d7d7",
+      "f35f66af-71d2-4531-9ff3-3f30f3a1e382",
+      "speak_0",
+      "tr_54f2aafa71",
+      "tr_c14a4e9f20",
+      "tr_996e99c39b",
+      "tr_17f9fb3e56",
+      "tr_2bdd976e58",
+      "tr_39680797ae",
+      "tr_67be57beae"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074589681,
+      1788074649681
+     ],
+     "trace_id": "trc_cdebbd7e",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "speak_0 not in fixture"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_54f2aafa71 is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_c14a4e9f20 is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_996e99c39b is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_17f9fb3e56 is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_2bdd976e58 is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_39680797ae is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_EVIDENCE_NOT_A_MESSAGE",
+        "detail": "tr_67be57beae is a transcript_segment, not a chat message"
+       },
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "tr_54f2aafa71 is cited as evidence for the signal it supposedly caused"
+       },
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_54f2aafa71 at 1788074598479 is after earliest cited message 1788074591066"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_cdebbd7e",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w08_trc_cdebbd7e.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w09",
+   "window_ms": [
+    1788074649681,
+    1788074709681
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_4478a6a128",
+     "type": "reaction",
+     "title": "Scene Interaction",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_4478a6a128",
+      "quote": "But, yeah, bro. Yeah. Massive."
+     },
+     "evidence": [
+      "63e42f31-c85e-4e2d-abff-12f21921c17c"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074649681,
+      1788074709681
+     ],
+     "trace_id": "trc_f1e700c8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_4478a6a128 at 1788074653234 is after earliest cited message 1788074649940"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_93ccc8788f",
+     "type": "reaction",
+     "title": "Command to Turn Around",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_93ccc8788f",
+      "quote": "Turn around and get the fuck over here."
+     },
+     "evidence": [
+      "63e42f31-c85e-4e2d-abff-12f21921c17c"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074649681,
+      1788074709681
+     ],
+     "trace_id": "trc_f1e700c8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_93ccc8788f at 1788074657714 is after earliest cited message 1788074649940"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "tr_e5e7d8c29b",
+     "type": "reaction",
+     "title": "Order to Slam",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_e5e7d8c29b",
+      "quote": "Guys, slam him."
+     },
+     "evidence": [
+      "63e42f31-c85e-4e2d-abff-12f21921c17c"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074649681,
+      1788074709681
+     ],
+     "trace_id": "trc_f1e700c8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_e5e7d8c29b at 1788074666594 is after earliest cited message 1788074649940"
+       },
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in tr_e5e7d8c29b: 'Guys, slam him.'"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_f1e700c8",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w09_trc_f1e700c8.json"
+  },
+  {
+   "case_id": "marlon_2026-08-30T0715_w10",
+   "window_ms": [
+    1788074709681,
+    1788074711172
+   ],
+   "verified": [
+    {
+     "signal_id": "0f035595-8d78-46f2-84f4-496b4af60dd3",
+     "type": "reaction",
+     "title": "Confused Reaction",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "???"
+     },
+     "evidence": [
+      "0f035595-8d78-46f2-84f4-496b4af60dd3"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074709681,
+      1788074711172
+     ],
+     "trace_id": "trc_a42b5917",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "trace_id": "trc_a42b5917",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/marlon_2026-08-30T0715_w10_trc_a42b5917.json"
+  }
+ ]
+}

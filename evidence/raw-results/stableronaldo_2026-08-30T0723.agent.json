@@ -1,0 +1,953 @@
+{
+ "system": "agent",
+ "fixture": "evals/fixtures/stableronaldo_2026-08-30T0723",
+ "fixture_id": "stableronaldo_2026-08-30T0723",
+ "mode": "replay",
+ "window_size_ms": 60000,
+ "span_ms": [
+  1788074587878,
+  1788075310258
+ ],
+ "counts": {
+  "windows": 13,
+  "verified": 5,
+  "rejected": 19
+ },
+ "cache": {
+  "hits": 29,
+  "misses": 0
+ },
+ "windows": [
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w00",
+   "window_ms": [
+    1788074587878,
+    1788074647878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "fa364ae2-fd73-4eb2-b3b3-c4118e5e33f0",
+     "type": "reaction",
+     "title": "Audience expressed confusion or apology",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "fa364ae2-fd73-4eb2-b3b3-c4118e5e33f0",
+      "quote": "sorry I won’t @ you then SAJ"
+     },
+     "evidence": [
+      "fa364ae2-fd73-4eb2-b3b3-c4118e5e33f0"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074587878,
+      1788074647878
+     ],
+     "trace_id": "trc_f23764f4",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "fa364ae2-fd73-4eb2-b3b3-c4118e5e33f0 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_f23764f4",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w00_trc_f23764f4.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w01",
+   "window_ms": [
+    1788074647878,
+    1788074707878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "8079d29f-42df-4d8d-8b9a-e036b5ab168a",
+     "type": "reaction",
+     "title": "Audience mentioned 'stocks'",
+     "distribution": "single mention",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "8079d29f-42df-4d8d-8b9a-e036b5ab168a",
+      "quote": "stocks"
+     },
+     "evidence": [
+      "8079d29f-42df-4d8d-8b9a-e036b5ab168a"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074647878,
+      1788074707878
+     ],
+     "trace_id": "trc_5eb51e28",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "8079d29f-42df-4d8d-8b9a-e036b5ab168a is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_5eb51e28",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w01_trc_5eb51e28.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w02",
+   "window_ms": [
+    1788074707878,
+    1788074767878
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown_event",
+     "type": "none",
+     "title": "No clear speech or on-screen content detected",
+     "confidence": 0.9,
+     "window_ms": [
+      1788074707878,
+      1788074767878
+     ],
+     "trace_id": "trc_02aba8d1",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "steps": 3,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_02aba8d1",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w02_trc_02aba8d1.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w03",
+   "window_ms": [
+    1788074767878,
+    1788074827878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "dreamer",
+     "type": "reaction",
+     "title": "Audience mentions 'dreamer'",
+     "distribution": "single mention",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "e51d6ba4-9516-45bf-8e20-8b43c8478eb5",
+      "quote": "dreamer"
+     },
+     "evidence": [
+      "1788074767986"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074767878,
+      1788074827878
+     ],
+     "trace_id": "trc_7cfea2c6",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074767986 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "draconic",
+     "type": "reaction",
+     "title": "Audience mentions 'draconic'",
+     "distribution": "multiple mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "7ba49f08-cfc4-4de4-ab70-855494318967",
+      "quote": "draconic"
+     },
+     "evidence": [
+      "1788074771004"
+     ],
+     "confidence": 0.75,
+     "window_ms": [
+      1788074767878,
+      1788074827878
+     ],
+     "trace_id": "trc_7cfea2c6",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074771004 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "dracula",
+     "type": "reaction",
+     "title": "Audience mentions 'dracula'",
+     "distribution": "multiple mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "c187e767-4d08-4cc8-846a-565e458204d5",
+      "quote": "dracula"
+     },
+     "evidence": [
+      "1788074774861"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074767878,
+      1788074827878
+     ],
+     "trace_id": "trc_7cfea2c6",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788074774861 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_7cfea2c6",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w03_trc_7cfea2c6.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w04",
+   "window_ms": [
+    1788074827878,
+    1788074887878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "chat_burst_1",
+     "type": "reaction",
+     "title": "Multiple chat messages with similar key phrases",
+     "distribution": "multiple users",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "d4d67363-bdcb-46ed-8037-039bd3d15c47",
+      "quote": "dracorle"
+     },
+     "evidence": [
+      "d4d67363-bdcb-46ed-8037-039bd3d15c47",
+      "28fdcc75-f39b-4cd6-b8dc-14062164af63",
+      "1f253883-8416-4a65-ac4f-cd7015b958cb"
+     ],
+     "window_ms": [
+      1788074827878,
+      1788074887878
+     ],
+     "trace_id": "trc_8ce508fa",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "d4d67363-bdcb-46ed-8037-039bd3d15c47 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "reaction_2",
+     "type": "reaction",
+     "title": "Audience comments about Los",
+     "distribution": "multiple viewers",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "0edcf4d6-9352-42f3-b1f6-f799b42fffd8",
+      "quote": "holy shit los 🍆"
+     },
+     "evidence": [
+      "0edcf4d6-9352-42f3-b1f6-f799b42fffd8",
+      "18d9e321-67d6-405e-86c9-03b33c095e06"
+     ],
+     "window_ms": [
+      1788074827878,
+      1788074887878
+     ],
+     "trace_id": "trc_8ce508fa",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "0edcf4d6-9352-42f3-b1f6-f799b42fffd8 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "audience_answer_3",
+     "type": "audience_answer",
+     "title": "Viewer engagement with the stream",
+     "distribution": "multiple viewers",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "a55b11c4-cc48-4a85-8501-d1beec647c99",
+      "quote": "12k people playing a word game??"
+     },
+     "evidence": [
+      "a55b11c4-cc48-4a85-8501-d1beec647c99"
+     ],
+     "window_ms": [
+      1788074827878,
+      1788074887878
+     ],
+     "trace_id": "trc_8ce508fa",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "a55b11c4-cc48-4a85-8501-d1beec647c99 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_8ce508fa",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w04_trc_8ce508fa.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w05",
+   "window_ms": [
+    1788074887878,
+    1788074947878
+   ],
+   "verified": [
+    {
+     "signal_id": "0ab18844-f9b2-4263-ae39-2e04a8ad611c",
+     "type": "reaction",
+     "title": "Chat mention of 'tgraybird always the underdogs'",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "tgraybird always the underdogs"
+     },
+     "evidence": [
+      "0ab18844-f9b2-4263-ae39-2e04a8ad611c"
+     ],
+     "window_ms": [
+      1788074887878,
+      1788074947878
+     ],
+     "trace_id": "trc_745a8fa6",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "55fb9dd5-a4d4-43b7-8346-6af50027c23c",
+     "type": "reaction",
+     "title": "Chat mention of 'mitosis'",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "mitosis"
+     },
+     "evidence": [
+      "55fb9dd5-a4d4-43b7-8346-6af50027c23c"
+     ],
+     "window_ms": [
+      1788074887878,
+      1788074947878
+     ],
+     "trace_id": "trc_745a8fa6",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "73b50903-8239-4386-bd85-d4994b0a23ae",
+     "type": "reaction",
+     "title": "Chat mention of 'miracle'",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "Miracle"
+     },
+     "evidence": [
+      "73b50903-8239-4386-bd85-d4994b0a23ae"
+     ],
+     "window_ms": [
+      1788074887878,
+      1788074947878
+     ],
+     "trace_id": "trc_745a8fa6",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_745a8fa6",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w05_trc_745a8fa6.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w06",
+   "window_ms": [
+    1788074947878,
+    1788075007878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "herdes",
+     "type": "reaction",
+     "title": "Chat reaction to 'herdes'",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "d2ac689a-76e8-4b77-a48e-068206d603e0",
+      "quote": "herdes"
+     },
+     "evidence": [
+      "d2ac689a-76e8-4b77-a48e-068206d603e0"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074947878,
+      1788075007878
+     ],
+     "trace_id": "trc_aa01aa6b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "d2ac689a-76e8-4b77-a48e-068206d603e0 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "window",
+     "type": "reaction",
+     "title": "Chat reaction to window caption",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "9eb9966b-9ebc-43e0-bbde-85989b570c09",
+      "quote": "window"
+     },
+     "evidence": [
+      "9eb9966b-9ebc-43e0-bbde-85989b570c09"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074947878,
+      1788075007878
+     ],
+     "trace_id": "trc_aa01aa6b",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "9eb9966b-9ebc-43e0-bbde-85989b570c09 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 2,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_aa01aa6b",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w06_trc_aa01aa6b.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w07",
+   "window_ms": [
+    1788075007878,
+    1788075067878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "depression",
+     "type": "audience_answer",
+     "title": "Audience expresses concern about depression",
+     "distribution": "7 mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "24c7fff8-8298-427c-8c8d-071f2a6d4e22",
+      "quote": "Depression"
+     },
+     "evidence": [
+      "4e8a405c-3fce-4d46-b22b-c823a4909f67",
+      "e308dec1-4c9e-4d07-8b06-28242a9bb9a4",
+      "28d0d4e1-33a6-419d-8501-c666c4120d6e",
+      "e832a4b7-b676-4b58-8412-d9fec9e6491d",
+      "314cd56d-f184-4b42-b9ec-30f672fd0b36"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075007878,
+      1788075067878
+     ],
+     "trace_id": "trc_ed0024fa",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger 24c7fff8-8298-427c-8c8d-071f2a6d4e22 at 1788075014084 is after earliest cited message 1788075008185"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_ed0024fa",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w07_trc_ed0024fa.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w08",
+   "window_ms": [
+    1788075067878,
+    1788075127878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "researching",
+     "type": "reaction",
+     "title": "Audience is researching or mentioning 'researching'",
+     "distribution": "single",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "8bd00f00-4cfd-4918-bc30-675ff6385b23",
+      "quote": "researching"
+     },
+     "evidence": [
+      "8bd00f00-4cfd-4918-bc30-675ff6385b23"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075067878,
+      1788075127878
+     ],
+     "trace_id": "trc_3d566b4f",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "8bd00f00-4cfd-4918-bc30-675ff6385b23 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "pandas",
+     "type": "reaction",
+     "title": "Audience mentions 'pandas'",
+     "distribution": "multiple",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "1013b1b0-4ac7-4b53-bfa8-7a16570ef1d5",
+      "quote": "pandas"
+     },
+     "evidence": [
+      "1013b1b0-4ac7-4b53-bfa8-7a16570ef1d5",
+      "78af7e03-759b-431d-ac5b-958502405615",
+      "1c3f2a89-293d-4a36-a1d7-556bf2cffb14"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075067878,
+      1788075127878
+     ],
+     "trace_id": "trc_3d566b4f",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "1013b1b0-4ac7-4b53-bfa8-7a16570ef1d5 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "parrot",
+     "type": "reaction",
+     "title": "Audience mentions 'parrot'",
+     "distribution": "multiple",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "b390c76c-d455-4ce6-8b17-d768cba5f2fe",
+      "quote": "parrot"
+     },
+     "evidence": [
+      "b390c76c-d455-4ce6-8b17-d768cba5f2fe",
+      "ea49abdd-f83e-4587-a7c7-194c70e917d0",
+      "7e267954-68e7-4118-a50f-9df8623641bc"
+     ],
+     "confidence": 0.85,
+     "window_ms": [
+      1788075067878,
+      1788075127878
+     ],
+     "trace_id": "trc_3d566b4f",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "b390c76c-d455-4ce6-8b17-d768cba5f2fe is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_3d566b4f",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w08_trc_3d566b4f.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w09",
+   "window_ms": [
+    1788075127878,
+    1788075187878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "parade",
+     "type": "reaction",
+     "title": "Audience Reaction to Parade Mention",
+     "distribution": "2 mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "94b2c019-7b53-42d7-8dcf-ec869f975ba5",
+      "quote": "parade"
+     },
+     "evidence": [
+      "94b2c019-7b53-42d7-8dcf-ec869f975ba5",
+      "4d254b7b-5891-48ee-b2aa-d038a6709c37"
+     ],
+     "window_ms": [
+      1788075127878,
+      1788075187878
+     ],
+     "trace_id": "trc_ef60bdf6",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "94b2c019-7b53-42d7-8dcf-ec869f975ba5 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_ef60bdf6",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w09_trc_ef60bdf6.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w10",
+   "window_ms": [
+    1788075187878,
+    1788075247878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "heretic",
+     "type": "reaction",
+     "title": "Audience reaction to heretic",
+     "distribution": "single",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "374d234a-aafe-43e4-8a94-909ed046fcb0",
+      "quote": "heretic"
+     },
+     "evidence": [
+      "374d234a-aafe-43e4-8a94-909ed046fcb0"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075187878,
+      1788075247878
+     ],
+     "trace_id": "trc_052c9eca",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "374d234a-aafe-43e4-8a94-909ed046fcb0 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "heaven",
+     "type": "reaction",
+     "title": "Audience reaction to heaven",
+     "distribution": "single",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "dbd94f0f-45d2-4d6a-8a54-db0e287dc5a3",
+      "quote": "Heaven"
+     },
+     "evidence": [
+      "dbd94f0f-45d2-4d6a-8a54-db0e287dc5a3"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075187878,
+      1788075247878
+     ],
+     "trace_id": "trc_052c9eca",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "dbd94f0f-45d2-4d6a-8a54-db0e287dc5a3 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "hellos",
+     "type": "reaction",
+     "title": "Audience greeting",
+     "distribution": "single",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "dd2d8d4e-eca4-4c1f-b67f-1ed5d464e209",
+      "quote": "Hellos"
+     },
+     "evidence": [
+      "dd2d8d4e-eca4-4c1f-b67f-1ed5d464e209"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075187878,
+      1788075247878
+     ],
+     "trace_id": "trc_052c9eca",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "dd2d8d4e-eca4-4c1f-b67f-1ed5d464e209 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_052c9eca",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w10_trc_052c9eca.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w11",
+   "window_ms": [
+    1788075247878,
+    1788075307878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "criminal",
+     "type": "reaction",
+     "title": "Audience reaction to the word 'criminal'",
+     "distribution": "8 mentions",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "b8acfab4-ffab-46ea-8757-9bc6171415e9",
+      "quote": "criminal"
+     },
+     "evidence": [
+      "1788075248098",
+      "1788075248098",
+      "1788075248098",
+      "1788075248098",
+      "1788075248098",
+      "1788075248098",
+      "1788075248098",
+      "1788075248098"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075247878,
+      1788075307878
+     ],
+     "trace_id": "trc_7017884d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "1788075248098 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_7017884d",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w11_trc_7017884d.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w12",
+   "window_ms": [
+    1788075307878,
+    1788075310259
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown_event_1",
+     "type": "reaction",
+     "title": "Audience reacted to a moment",
+     "distribution": "multiple",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": ""
+     },
+     "evidence": [
+      "987dfebf-0c75-43f0-8608-20eb0cfca2fb",
+      "542cfe22-bcbd-464a-b84b-2fe2457a57bc"
+     ],
+     "window_ms": [
+      1788075307878,
+      1788075310259
+     ],
+     "trace_id": "trc_bb246231",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "steps": 4,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_bb246231",
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w12_trc_bb246231.json"
+  }
+ ]
+}

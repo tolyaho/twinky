@@ -1,0 +1,855 @@
+{
+ "system": "baseline",
+ "fixture": "evals/fixtures/stableronaldo_2026-08-30T0723",
+ "fixture_id": "stableronaldo_2026-08-30T0723",
+ "mode": "record",
+ "window_size_ms": 60000,
+ "span_ms": [
+  1788074587878,
+  1788075310258
+ ],
+ "counts": {
+  "windows": 13,
+  "verified": 15,
+  "rejected": 8
+ },
+ "cache": {
+  "hits": 2,
+  "misses": 11
+ },
+ "windows": [
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w00",
+   "window_ms": [
+    1788074587878,
+    1788074647878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "frm_bfd997f846",
+     "type": "reaction",
+     "title": "Correct Guess of 'ranger'",
+     "distribution": "public",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "frm_bfd997f846",
+      "quote": "the word \"ranger\" correctly guessed by a user named alanrepa"
+     },
+     "evidence": [
+      "173f0182-f78f-474d-9621-caed1423ca3c"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074587878,
+      1788074647878
+     ],
+     "trace_id": "trc_b30fb034",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger frm_bfd997f846 at 1788074617878 is after earliest cited message 1788074593914"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_b30fb034",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w00_trc_b30fb034.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w01",
+   "window_ms": [
+    1788074647878,
+    1788074707878
+   ],
+   "verified": [
+    {
+     "signal_id": "7a92a142-503c-45e0-936a-d649d56d3fbd",
+     "type": "reaction",
+     "title": "Viewer comments stopping",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "stopping"
+     },
+     "evidence": [
+      "7a92a142-503c-45e0-936a-d649d56d3fbd"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074647878,
+      1788074707878
+     ],
+     "trace_id": "trc_21bf9f0a",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "fc2bd7e6-31e1-4a81-bf63-bcc39d1a5173",
+     "type": "reaction",
+     "title": "Viewer comments grown men watching sleep",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "grown ass men still in here watching mfs sleep LMAO"
+     },
+     "evidence": [
+      "fc2bd7e6-31e1-4a81-bf63-bcc39d1a5173"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074647878,
+      1788074707878
+     ],
+     "trace_id": "trc_21bf9f0a",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "83d5968f-7625-4055-9310-d28d758a15fb",
+     "type": "reaction",
+     "title": "Viewer comments labratory",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "labrotoires"
+     },
+     "evidence": [
+      "83d5968f-7625-4055-9310-d28d758a15fb"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074647878,
+      1788074707878
+     ],
+     "trace_id": "trc_21bf9f0a",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 3,
+   "trace_id": "trc_21bf9f0a",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w01_trc_21bf9f0a.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w02",
+   "window_ms": [
+    1788074707878,
+    1788074767878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc",
+     "type": "audience_answer",
+     "title": "armament",
+     "distribution": null,
+     "trigger": {
+      "kind": "chat",
+      "event_id": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc",
+      "quote": "armament"
+     },
+     "evidence": [
+      "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788074707878,
+      1788074767878
+     ],
+     "trace_id": "trc_554fbc48",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_554fbc48",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w02_trc_554fbc48.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w03",
+   "window_ms": [
+    1788074767878,
+    1788074827878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "frm_fda30e530c",
+     "type": "reaction",
+     "title": "Suspicious Sleep Scene",
+     "distribution": "public",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "frm_fda30e530c",
+      "quote": "The livestream shows a dimly lit room with three people sleeping on separate beds. The time displayed is 3:26 am. On screen, a word-guessing game is active with the prompt \"GUESS THE WORD!\" and the partial word \"draco___\" visible."
+     },
+     "evidence": [
+      "id=1d2bbb3b-4bea-4312-a15d-fa1bcc807189",
+      "id=bd7816f7-6ddd-4f5c-ac31-c13f009b0e0a"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074767878,
+      1788074827878
+     ],
+     "trace_id": "trc_f1f1c54e",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=1d2bbb3b-4bea-4312-a15d-fa1bcc807189 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=bd7816f7-6ddd-4f5c-ac31-c13f009b0e0a not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_f1f1c54e",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w03_trc_f1f1c54e.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w04",
+   "window_ms": [
+    1788074827878,
+    1788074887878
+   ],
+   "verified": [
+    {
+     "signal_id": "d4d67363-bdcb-46ed-8037-039bd3d15c47",
+     "type": "audience_answer",
+     "title": "Guess the Word!",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "dracorle"
+     },
+     "evidence": [
+      "d4d67363-bdcb-46ed-8037-039bd3d15c47"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074827878,
+      1788074887878
+     ],
+     "trace_id": "trc_b2c09ffe",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "36c9dcbc-abad-469b-9cb7-b8b1c145bfa1",
+     "type": "reaction",
+     "title": "Word Guessing Game",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "frm_d1be74cb37",
+      "quote": "librarian"
+     },
+     "evidence": [
+      "36c9dcbc-abad-469b-9cb7-b8b1c145bfa1"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074827878,
+      1788074887878
+     ],
+     "trace_id": "trc_b2c09ffe",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "a55b11c4-cc48-4a85-8501-d1beec647c99",
+     "type": "audience_answer",
+     "title": "Word Guessing Game",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "12k people playing a word game??"
+     },
+     "evidence": [
+      "a55b11c4-cc48-4a85-8501-d1beec647c99"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788074827878,
+      1788074887878
+     ],
+     "trace_id": "trc_b2c09ffe",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 3,
+   "trace_id": "trc_b2c09ffe",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w04_trc_b2c09ffe.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w05",
+   "window_ms": [
+    1788074887878,
+    1788074947878
+   ],
+   "verified": [
+    {
+     "signal_id": "frm_d27387bd07",
+     "type": "none",
+     "title": "No significant response detected",
+     "confidence": 0.9,
+     "window_ms": [
+      1788074887878,
+      1788074947878
+     ],
+     "trace_id": "trc_10cf04de",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "trace_id": "trc_10cf04de",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w05_trc_10cf04de.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w06",
+   "window_ms": [
+    1788074947878,
+    1788075007878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "2566e7a7-d455-4eb0-9b69-55419800d061",
+     "type": "audience_answer",
+     "title": "Guessing game - herald",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "1788074954103",
+      "quote": "herald"
+     },
+     "evidence": [
+      "2566e7a7-d455-4eb0-9b69-55419800d061"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074947878,
+      1788075007878
+     ],
+     "trace_id": "trc_cd2dbfb0",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_TRIGGER",
+        "detail": "1788074954103 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "4de493c1-8be0-4fca-95ee-23ef68add099",
+     "type": "reaction",
+     "title": "Guessing game - value",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "1788074977878",
+      "quote": "value"
+     },
+     "evidence": [
+      "4de493c1-8be0-4fca-95ee-23ef68add099"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074947878,
+      1788075007878
+     ],
+     "trace_id": "trc_cd2dbfb0",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_TRIGGER",
+        "detail": "1788074977878 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "9cd9d5b4-5d8c-4f44-a177-196d245e08de",
+     "type": "audience_answer",
+     "title": "Guessing game - value",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "1788074981430",
+      "quote": "value"
+     },
+     "evidence": [
+      "9cd9d5b4-5d8c-4f44-a177-196d245e08de"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074947878,
+      1788075007878
+     ],
+     "trace_id": "trc_cd2dbfb0",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_TRIGGER",
+        "detail": "1788074981430 not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "trace_id": "trc_cd2dbfb0",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w06_trc_cd2dbfb0.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w07",
+   "window_ms": [
+    1788075007878,
+    1788075067878
+   ],
+   "verified": [
+    {
+     "signal_id": "frm_cd8c22a1b5",
+     "type": "none",
+     "title": "No significant response",
+     "confidence": 0.8,
+     "window_ms": [
+      1788075007878,
+      1788075067878
+     ],
+     "trace_id": "trc_02829cbe",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "trace_id": "trc_02829cbe",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w07_trc_02829cbe.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w08",
+   "window_ms": [
+    1788075067878,
+    1788075127878
+   ],
+   "verified": [
+    {
+     "signal_id": "8bd00f00-4cfd-4918-bc30-675ff6385b23",
+     "type": "reaction",
+     "title": "Viewer researching",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "researching"
+     },
+     "evidence": [
+      "8bd00f00-4cfd-4918-bc30-675ff6385b23"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788075067878,
+      1788075127878
+     ],
+     "trace_id": "trc_e63df995",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "3eaf5435-b02b-4c92-9548-da300ca7a4b5",
+     "type": "reaction",
+     "title": "Viewer recognizing 'respectable'",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "respect able"
+     },
+     "evidence": [
+      "3eaf5435-b02b-4c92-9548-da300ca7a4b5"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788075067878,
+      1788075127878
+     ],
+     "trace_id": "trc_e63df995",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "77452a79-3b89-4d05-bf2a-2266ae1940b2",
+     "type": "reaction",
+     "title": "Viewer respiring",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "respirate"
+     },
+     "evidence": [
+      "77452a79-3b89-4d05-bf2a-2266ae1940b2"
+     ],
+     "confidence": 0.6,
+     "window_ms": [
+      1788075067878,
+      1788075127878
+     ],
+     "trace_id": "trc_e63df995",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 3,
+   "trace_id": "trc_e63df995",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w08_trc_e63df995.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w09",
+   "window_ms": [
+    1788075127878,
+    1788075187878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "frm_e69e97246c",
+     "type": "reaction",
+     "title": "Guessing the Word",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "frm_e69e97246c",
+      "quote": "GUESS THE WORD!"
+     },
+     "evidence": [
+      "id=58c9fd54-d829-4a60-a037-6dbc7c11e439",
+      "id=ecd4d46c-92b8-43d7-996d-3e7016da317e",
+      "id=6b2f5681-6128-4b06-aad8-47cf49d90a11",
+      "id=7a06a28c-373d-4fc1-9398-2ddceea708a8",
+      "id=3f171fba-4baa-421a-aca4-7679a7a8403b",
+      "id=4ac959e4-2143-4899-94d3-88ec0a8d8cd4",
+      "id=7f49b21c-c7fb-4dd9-9bc9-f75e626f70a6",
+      "id=cc3b59fc-add2-4836-b6cc-0e88a3b663ee",
+      "id=ef823ac5-889d-4475-bf98-be8dc3f1bf2a",
+      "id=c632fb3f-ad8a-4e16-b6ad-c64aa3da715c"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075127878,
+      1788075187878
+     ],
+     "trace_id": "trc_ad7fc463",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=58c9fd54-d829-4a60-a037-6dbc7c11e439 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=ecd4d46c-92b8-43d7-996d-3e7016da317e not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=6b2f5681-6128-4b06-aad8-47cf49d90a11 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=7a06a28c-373d-4fc1-9398-2ddceea708a8 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=3f171fba-4baa-421a-aca4-7679a7a8403b not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=4ac959e4-2143-4899-94d3-88ec0a8d8cd4 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=7f49b21c-c7fb-4dd9-9bc9-f75e626f70a6 not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=cc3b59fc-add2-4836-b6cc-0e88a3b663ee not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=ef823ac5-889d-4475-bf98-be8dc3f1bf2a not in fixture"
+       },
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "id=c632fb3f-ad8a-4e16-b6ad-c64aa3da715c not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_ad7fc463",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w09_trc_ad7fc463.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w10",
+   "window_ms": [
+    1788075187878,
+    1788075247878
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "f2c11ced-8f58-4204-801c-5797dc8705a6",
+     "type": "audience_answer",
+     "title": "Correct Guess of 'helmet'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "f2c11ced-8f58-4204-801c-5797dc8705a6",
+      "quote": "helmet"
+     },
+     "evidence": [
+      "f2c11ced-8f58-4204-801c-5797dc8705a6"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075187878,
+      1788075247878
+     ],
+     "trace_id": "trc_57ba6ec7",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "f2c11ced-8f58-4204-801c-5797dc8705a6 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "trace_id": "trc_57ba6ec7",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w10_trc_57ba6ec7.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w11",
+   "window_ms": [
+    1788075247878,
+    1788075307878
+   ],
+   "verified": [
+    {
+     "signal_id": "b8acfab4-ffab-46ea-8757-9bc6171415e9",
+     "type": "audience_answer",
+     "title": "Audience guessed 'criminal'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "unknown",
+      "quote": "criminal"
+     },
+     "evidence": [
+      "b8acfab4-ffab-46ea-8757-9bc6171415e9"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075247878,
+      1788075307878
+     ],
+     "trace_id": "trc_604ad41c",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "f41de116-f86d-4c84-8db5-c283daf2b49a",
+     "type": "reaction",
+     "title": "Report about sleeping scene",
+     "distribution": null,
+     "trigger": {
+      "kind": "screen",
+      "event_id": "frm_65da01eb7a",
+      "quote": "The livestream shows three people sleeping in a dimly lit room"
+     },
+     "evidence": [
+      "f41de116-f86d-4c84-8db5-c283daf2b49a"
+     ],
+     "confidence": 0.7,
+     "window_ms": [
+      1788075247878,
+      1788075307878
+     ],
+     "trace_id": "trc_604ad41c",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    },
+    {
+     "signal_id": "82b5159c-0ac6-492f-a7c1-599e802f4cf0",
+     "type": "reaction",
+     "title": "Reason for scene",
+     "distribution": null,
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "reason"
+     },
+     "evidence": [
+      "82b5159c-0ac6-492f-a7c1-599e802f4cf0"
+     ],
+     "confidence": 0.4,
+     "window_ms": [
+      1788075247878,
+      1788075307878
+     ],
+     "trace_id": "trc_604ad41c",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "verified"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 3,
+   "trace_id": "trc_604ad41c",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w11_trc_604ad41c.json"
+  },
+  {
+   "case_id": "stableronaldo_2026-08-30T0723_w12",
+   "window_ms": [
+    1788075307878,
+    1788075310259
+   ],
+   "verified": [
+    {
+     "signal_id": "unknown",
+     "type": "none",
+     "title": "No significant response detected",
+     "confidence": 0,
+     "window_ms": [
+      1788075307878,
+      1788075310259
+     ],
+     "trace_id": "trc_6961fe4f",
+     "gate": {
+      "ok": true,
+      "violations": []
+     },
+     "status": "abstained"
+    }
+   ],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 1,
+   "trace_id": "trc_6961fe4f",
+   "cards_dropped_by_cap": 0,
+   "parse_error": null,
+   "trace_path": "trajectories/product-agent/stableronaldo_2026-08-30T0723_w12_trc_6961fe4f.json"
+  }
+ ]
+}

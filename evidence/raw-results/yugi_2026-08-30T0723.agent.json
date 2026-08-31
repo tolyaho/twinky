@@ -1,0 +1,862 @@
+{
+ "system": "agent",
+ "fixture": "evals/fixtures/yugi_2026-08-30T0723",
+ "fixture_id": "yugi_2026-08-30T0723",
+ "mode": "record",
+ "window_size_ms": 60000,
+ "span_ms": [
+  1788074588171,
+  1788075309122
+ ],
+ "counts": {
+  "windows": 13,
+  "verified": 0,
+  "rejected": 21
+ },
+ "cache": {
+  "hits": 6,
+  "misses": 25
+ },
+ "windows": [
+  {
+   "case_id": "yugi_2026-08-30T0723_w00",
+   "window_ms": [
+    1788074588171,
+    1788074648171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "the coughing",
+     "type": "reaction",
+     "title": "Audience reacted to coughing",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "5f9b0cc1-a372-4161-b46e-e633cb032c2f",
+      "quote": "the coughing"
+     },
+     "evidence": [
+      "5f9b0cc1-a372-4161-b46e-e633cb032c2f"
+     ],
+     "window_ms": [
+      1788074588171,
+      1788074648171
+     ],
+     "trace_id": "trc_2df6ee31",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "5f9b0cc1-a372-4161-b46e-e633cb032c2f is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "the party looks hella dead and people are leaving",
+     "type": "reaction",
+     "title": "Audience comments on party atmosphere",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "4652004b-357d-4ee1-8dfe-151a93703050",
+      "quote": "the party looks hella dead and people are leaving"
+     },
+     "evidence": [
+      "4652004b-357d-4ee1-8dfe-151a93703050"
+     ],
+     "window_ms": [
+      1788074588171,
+      1788074648171
+     ],
+     "trace_id": "trc_2df6ee31",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "4652004b-357d-4ee1-8dfe-151a93703050 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "yo quit with the coughing",
+     "type": "audience_answer",
+     "title": "Audience told streamer to stop coughing",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "3bf7185e-1144-4fab-8c0a-12cfda1150f1",
+      "quote": "YO QUIT WITH THE COUGHING"
+     },
+     "evidence": [
+      "3bf7185e-1144-4fab-8c0a-12cfda1150f1"
+     ],
+     "window_ms": [
+      1788074588171,
+      1788074648171
+     ],
+     "trace_id": "trc_2df6ee31",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "3bf7185e-1144-4fab-8c0a-12cfda1150f1 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_2df6ee31",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w00_trc_2df6ee31.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w01",
+   "window_ms": [
+    1788074648171,
+    1788074708171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "7514e2bb-baa3-4f2d-84ce-fa5327112b9e",
+     "type": "reaction",
+     "title": "Audience comments 'nah its lit'",
+     "distribution": "single",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "7514e2bb-baa3-4f2d-84ce-fa5327112b9e",
+      "quote": "nah its lit"
+     },
+     "evidence": [
+      "7514e2bb-baa3-4f2d-84ce-fa5327112b9e"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074648171,
+      1788074708171
+     ],
+     "trace_id": "trc_d2cc0135",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "7514e2bb-baa3-4f2d-84ce-fa5327112b9e is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_d2cc0135",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w01_trc_d2cc0135.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w02",
+   "window_ms": [
+    1788074708171,
+    1788074768171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "burst_1",
+     "type": "reaction",
+     "title": "Audience engaged with multiple reactions and comments",
+     "distribution": "high",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "multiple chat bursts"
+     },
+     "window_ms": [
+      1788074708171,
+      1788074768171
+     ],
+     "trace_id": "trc_1bb2e09f",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_NO_EVIDENCE",
+        "detail": "card cites no representative messages"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_1bb2e09f",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w02_trc_1bb2e09f.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w03",
+   "window_ms": [
+    1788074768171,
+    1788074828171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "marlon slaming you",
+     "type": "reaction",
+     "title": "Audience mentions Marlon slamming the streamer",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "9791b44e-e580-468f-968b-eaff1845ff50",
+      "quote": "marlon slaming you"
+     },
+     "evidence": [
+      "9791b44e-e580-468f-968b-eaff1845ff50"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074768171,
+      1788074828171
+     ],
+     "trace_id": "trc_589f45ef",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "9791b44e-e580-468f-968b-eaff1845ff50 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "dont gas it",
+     "type": "reaction",
+     "title": "Audience comments on 'dont gas it'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "1592eed7-1ce1-4c5e-8fae-648f7fb2ee2e",
+      "quote": "dont gas it"
+     },
+     "evidence": [
+      "1592eed7-1ce1-4c5e-8fae-648f7fb2ee2e"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074768171,
+      1788074828171
+     ],
+     "trace_id": "trc_589f45ef",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "1592eed7-1ce1-4c5e-8fae-648f7fb2ee2e is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "funerealbuzz thanks for the updates",
+     "type": "reaction",
+     "title": "Audience thanks funerealbuzz for updates",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "ac113230-a166-4310-a9de-ef2956cbf5ae",
+      "quote": "@funerealbuzz thanks for the updates"
+     },
+     "evidence": [
+      "ac113230-a166-4310-a9de-ef2956cbf5ae"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788074768171,
+      1788074828171
+     ],
+     "trace_id": "trc_589f45ef",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "ac113230-a166-4310-a9de-ef2956cbf5ae is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_589f45ef",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w03_trc_589f45ef.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w04",
+   "window_ms": [
+    1788074828171,
+    1788074888171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "6c5f8f74-630c-4773-b83a-57b6cba4609c",
+     "type": "reaction",
+     "title": "Audience mentioned 'marlon ome5'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "6c5f8f74-630c-4773-b83a-57b6cba4609c",
+      "quote": "Marlon ome5"
+     },
+     "evidence": [
+      "6c5f8f74-630c-4773-b83a-57b6cba4609c"
+     ],
+     "window_ms": [
+      1788074828171,
+      1788074888171
+     ],
+     "trace_id": "trc_87f1071d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "6c5f8f74-630c-4773-b83a-57b6cba4609c is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "a1591229-fd5d-4740-abcf-82d144e1dfc8",
+     "type": "reaction",
+     "title": "Audience asked 'what if marlon's takes ur girl'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "a1591229-fd5d-4740-abcf-82d144e1dfc8",
+      "quote": "what if marlon's takes ur girl"
+     },
+     "evidence": [
+      "a1591229-fd5d-4740-abcf-82d144e1dfc8"
+     ],
+     "window_ms": [
+      1788074828171,
+      1788074888171
+     ],
+     "trace_id": "trc_87f1071d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "a1591229-fd5d-4740-abcf-82d144e1dfc8 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "69813593-3eec-45fe-9688-00dbe09c8681",
+     "type": "reaction",
+     "title": "Audience sent punctuation only",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "69813593-3eec-45fe-9688-00dbe09c8681",
+      "quote": "(punctuation only)"
+     },
+     "evidence": [
+      "69813593-3eec-45fe-9688-00dbe09c8681"
+     ],
+     "window_ms": [
+      1788074828171,
+      1788074888171
+     ],
+     "trace_id": "trc_87f1071d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "69813593-3eec-45fe-9688-00dbe09c8681 is cited as evidence for the signal it supposedly caused"
+       },
+       {
+        "code": "E_QUOTE_MISMATCH",
+        "detail": "quote not found in 69813593-3eec-45fe-9688-00dbe09c8681: '(punctuation only)'"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_87f1071d",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w04_trc_87f1071d.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w05",
+   "window_ms": [
+    1788074888171,
+    1788074948171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "burst_1",
+     "type": "reaction",
+     "title": "Audience reacts to chat content",
+     "distribution": "multiple",
+     "trigger": {
+      "kind": "unknown",
+      "event_id": "unknown",
+      "quote": "chat bursts"
+     },
+     "evidence": [
+      "4ef25cac-a589-44b3-b37f-8d718210c95b",
+      "7d8de1c6-3160-4752-ac68-d7970e8ee717",
+      "8f7e8f56-21e9-4ef5-bc00-2a23cdcec6b",
+      "08a26247-8619-44eb-80bf-cff3edf70a98",
+      "d32880ef-1fa4-49d9-9524-4cd4ba0e7e1b",
+      "77c3a68a-378e-447c-a075-d4bb716b7c13",
+      "020d2ee7-b015-41b6-b7a4-a6137c22c65a",
+      "e1705b7d-cf24-40b2-8c7f-ee75369120a1",
+      "e8f22b16-9d64-4eb5-9441-39b10052cd01",
+      "bd0a385c-bfe2-4445-886e-995d725c1622"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788074888171,
+      1788074948171
+     ],
+     "trace_id": "trc_a687cd83",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "8f7e8f56-21e9-4ef5-bc00-2a23cdcec6b not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_a687cd83",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w05_trc_a687cd83.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w06",
+   "window_ms": [
+    1788074948171,
+    1788075008171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "xenoezy leave me alone",
+     "type": "reaction",
+     "title": "Audience reaction to Xenoezy",
+     "distribution": "single",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "93b8aaaf-be23-456e-8ae7-253b8b97b224",
+      "quote": "leave me alone"
+     },
+     "evidence": [
+      "93b8aaaf-be23-456e-8ae7-253b8b97b224"
+     ],
+     "window_ms": [
+      1788074948171,
+      1788075008171
+     ],
+     "trace_id": "trc_6f288136",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "93b8aaaf-be23-456e-8ae7-253b8b97b224 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "lol",
+     "type": "reaction",
+     "title": "Laughter from chat",
+     "distribution": "multiple",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "427214ce-33de-41db-aa9a-921440f3ce3b",
+      "quote": "LOL"
+     },
+     "evidence": [
+      "427214ce-33de-41db-aa9a-921440f3ce3b",
+      "45011b80-1084-43a7-8705-7c3a83a6a002",
+      "32e1c358-25ad-495e-8910-e287093b822d"
+     ],
+     "window_ms": [
+      1788074948171,
+      1788075008171
+     ],
+     "trace_id": "trc_6f288136",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "427214ce-33de-41db-aa9a-921440f3ce3b is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 2,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_6f288136",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w06_trc_6f288136.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w07",
+   "window_ms": [
+    1788075008171,
+    1788075068171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "yugi on his phone",
+     "type": "reaction",
+     "title": "Audience notices Yugi on his phone",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "c5d3ee90-9993-40ad-a758-684c6f70d0cc",
+      "quote": "YugiOnHisPhoneInsteadOfStreaming"
+     },
+     "evidence": [
+      "c5d3ee90-9993-40ad-a758-684c6f70d0cc",
+      "ee530698-47f4-48a4-a186-9e4ce86d5418",
+      "47784b12-6fe1-47cd-a713-9b363658951c",
+      "7a98287f-8ea7-4ee7-bff5-f3f50d80b5d8"
+     ],
+     "confidence": 0.9,
+     "window_ms": [
+      1788075008171,
+      1788075068171
+     ],
+     "trace_id": "trc_adca75d8",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "c5d3ee90-9993-40ad-a758-684c6f70d0cc is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_adca75d8",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w07_trc_adca75d8.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w08",
+   "window_ms": [
+    1788075068171,
+    1788075128171
+   ],
+   "verified": [],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 0,
+   "steps": 4,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_f2e2f5a4",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w08_trc_f2e2f5a4.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w09",
+   "window_ms": [
+    1788075128171,
+    1788075188171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "tr_f441b4e92d",
+     "type": "reaction",
+     "title": "Audience reacts to chat behavior",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "tr_f441b4e92d",
+      "quote": "like, you don't fuck with anyone in my chat. Oh, well, I'll tell you in this chat, he loves slanging that n word. He white. What? What?"
+     },
+     "evidence": [
+      "d5c7dd00-74fb-4cd9-8613-da6743670a5b"
+     ],
+     "confidence": 0.8,
+     "window_ms": [
+      1788075128171,
+      1788075188171
+     ],
+     "trace_id": "trc_d38ee2fa",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_TRIGGER_LATE",
+        "detail": "trigger tr_f441b4e92d at 1788075133351 is after earliest cited message 1788075128575"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 1,
+   "steps": 3,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_d38ee2fa",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w09_trc_d38ee2fa.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w10",
+   "window_ms": [
+    1788075188171,
+    1788075248171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "yugi_crying_misses_bf",
+     "type": "audience_answer",
+     "title": "Yugi's emotional moment about missing his boyfriend",
+     "distribution": "multiple viewers expressed concern or mentioned Yusuf crying",
+     "trigger": {
+      "kind": "speech",
+      "event_id": "3e8998a7-0e38-4180-9d46-4712b50028f6",
+      "quote": "yusuf crying saying he misses his boyfriend"
+     },
+     "evidence": [
+      "3e8998a7-0e38-4180-9d46-4712b50028f6",
+      "dec79b7a-cec1-4e7d-8a50-c15361a906f8"
+     ],
+     "window_ms": [
+      1788075188171,
+      1788075248171
+     ],
+     "trace_id": "trc_2214642d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "3e8998a7-0e38-4180-9d46-4712b50028f6 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "chat_burst_cap",
+     "type": "reaction",
+     "title": "Multiple viewers mention 'cap'",
+     "distribution": "high frequency of 'cap' messages",
+     "trigger": {
+      "kind": "screen",
+      "event_id": "81013474-8f3e-412d-bf04-4571721b4da3",
+      "quote": "cap"
+     },
+     "evidence": [
+      "81013474-8f3e-412d-bf04-4571721b4da3",
+      "217dbc25-591b-4be3-8a17-240363c359d9",
+      "3ee8343b-8731-4236-a021-072b7f07f331",
+      "28d19b44-b5b9-48b5-8729-f44d75838c29",
+      "70edff79-adba-4783-a2ef-7edefdf7adb6"
+     ],
+     "window_ms": [
+      1788075188171,
+      1788075248171
+     ],
+     "trace_id": "trc_2214642d",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_CIRCULAR_EVIDENCE",
+        "detail": "81013474-8f3e-412d-bf04-4571721b4da3 is cited as evidence for the signal it supposedly caused"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 2,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_2214642d",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w10_trc_2214642d.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w11",
+   "window_ms": [
+    1788075248171,
+    1788075308171
+   ],
+   "verified": [],
+   "rejected": [
+    {
+     "signal_id": "d0b6dde2-6528-4e0e-831d-a7d48dac26a0",
+     "type": "audience_answer",
+     "title": "Audience introduced themselves with 'strokes'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "d0b6dde2-6528-4e0e-831d-a7d48dac26a0",
+      "quote": "strokes"
+     },
+     "evidence": [
+      "@snysaulght adriel5monka  . STROKES  ill introduce myself to them with STROKES"
+     ],
+     "window_ms": [
+      1788075248171,
+      1788075308171
+     ],
+     "trace_id": "trc_5cc8fb79",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "@snysaulght adriel5monka  . STROKES  ill introduce myself to them with STROKES not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "6169ff99-6e53-4446-8287-95219b3db03f",
+     "type": "reaction",
+     "title": "Audience mentions needing food, shelter, video games, and weed",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "6169ff99-6e53-4446-8287-95219b3db03f",
+      "quote": "all i need is food and shelter and video games well and weed"
+     },
+     "evidence": [
+      "all i need is food and shelter and video games well and weed"
+     ],
+     "window_ms": [
+      1788075248171,
+      1788075308171
+     ],
+     "trace_id": "trc_5cc8fb79",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "all i need is food and shelter and video games well and weed not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    },
+    {
+     "signal_id": "8571ef54-f40c-4b14-aaa3-0416be72968a",
+     "type": "reaction",
+     "title": "Audience responds with 'yeah aight'",
+     "distribution": null,
+     "trigger": {
+      "kind": "speech",
+      "event_id": "8571ef54-f40c-4b14-aaa3-0416be72968a",
+      "quote": "yeah aight"
+     },
+     "evidence": [
+      "yeah aight"
+     ],
+     "window_ms": [
+      1788075248171,
+      1788075308171
+     ],
+     "trace_id": "trc_5cc8fb79",
+     "gate": {
+      "ok": false,
+      "violations": [
+       {
+        "code": "E_UNKNOWN_MSG",
+        "detail": "yeah aight not in fixture"
+       }
+      ]
+     },
+     "status": "rejected"
+    }
+   ],
+   "unsupported_rate": 1.0,
+   "total": 3,
+   "steps": 2,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_5cc8fb79",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w11_trc_5cc8fb79.json"
+  },
+  {
+   "case_id": "yugi_2026-08-30T0723_w12",
+   "window_ms": [
+    1788075308171,
+    1788075309123
+   ],
+   "verified": [],
+   "rejected": [],
+   "unsupported_rate": 0.0,
+   "total": 0,
+   "steps": 4,
+   "cards_dropped_by_cap": 0,
+   "trace_id": "trc_c349c340",
+   "trace_path": "trajectories/product-agent/yugi_2026-08-30T0723_w12_trc_c349c340.json"
+  }
+ ]
+}
