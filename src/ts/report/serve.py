@@ -11,6 +11,7 @@ them as real output, which is an integrity-gate failure, not a cosmetic one.
 from __future__ import annotations
 
 import json
+import re
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from pathlib import Path
@@ -23,6 +24,7 @@ from .poll import attach_drafts
 STATIC = Path(__file__).parent / "static"
 ROUTES = ["/", "/method", "/api/replay", "/api/fixtures",
           "/api/stream?fixture=<id>&system=<agent|baseline>&speed=<1|4|8>",
+          "/api/live?channel=<name>", "/api/budget", "/philosophy",
           "/static/<file>"]
 
 PLACEHOLDER = """<!doctype html>
@@ -309,6 +311,42 @@ class ReplayHandler(BaseHTTPRequestHandler):
         target = self.fixture.parent / name
         return target if (target / "meta.json").is_file() else self.fixture
 
+    def _live(self, params: Dict[str, str]) -> None:
+        """Live capture over the same SSE channel as replay.
+
+        Explicitly reached and never the default: the graded path is keyless replay, and a page
+        that started spending on load would put that at risk. Every event carries the running
+        estimate and the ledger state, so the number on screen is the number being spent.
+        """
+        from ..live import session
+
+        channel = re.sub(r"[^A-Za-z0-9_]", "", params.get("channel", ""))[:40]
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+
+        def emit(event: str, data: Any) -> bool:
+            try:
+                self.wfile.write(
+                    f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+                    .encode("utf-8"))
+                self.wfile.flush()
+                return True
+            except (BrokenPipeError, ConnectionResetError, ValueError):
+                return False
+
+        if not channel:
+            emit("stopped", {"kind": "stopped", "reason": "no_channel",
+                             "message": "Name a channel to go live on."})
+            return
+        try:
+            for event in session(channel):
+                if not emit(event["kind"], event):
+                    return                       # navigating away ends the spending
+        except Exception as exc:                 # noqa: BLE001
+            emit("stopped", {"kind": "stopped", "reason": "error", "message": str(exc)})
+
     def _stream(self, params: Dict[str, str]) -> None:
         """Server-Sent Events: the recorded run replayed at its true cadence.
 
@@ -382,6 +420,15 @@ class ReplayHandler(BaseHTTPRequestHandler):
         route, _, query = self.path.partition("?")
         params = dict(p.split("=", 1) for p in query.split("&") if "=" in p)
 
+        if route == "/api/budget":
+            from ..live import budget_state
+            self._json(200, budget_state())
+            return
+
+        if route == "/api/live":
+            self._live(params)
+            return
+
         if route == "/api/stream":
             self._stream(params)
             return
@@ -404,8 +451,9 @@ class ReplayHandler(BaseHTTPRequestHandler):
                 self._json(404, {"error": str(exc), "fixture": target.name, "system": system})
             return
 
-        if route in ("/", "/index.html", "/method"):
-            name = "method.html" if route == "/method" else "index.html"
+        if route in ("/", "/index.html", "/method", "/philosophy"):
+            name = {"/method": "method.html",
+                    "/philosophy": "philosophy.html"}.get(route, "index.html")
             page = STATIC / name
             body = page.read_text(encoding="utf-8") if page.is_file() else PLACEHOLDER
             self._send(200, body, "text/html; charset=utf-8")

@@ -901,3 +901,24 @@ def test_the_badge_says_how_the_page_is_served_not_how_the_run_was_recorded():
     assert 'getElementById("mode-badge").textContent = result.mode' not in js
     # the real value is provenance and still visible, in the debug panel
     assert '["recorded in mode", result.mode]' in js
+
+
+def test_the_philosophy_page_keeps_the_uncomfortable_numbers():
+    """It is the argument, not a pitch. The result that counts against the product is stated in
+    the same voice as everything else, and the open failures are listed rather than implied."""
+    html = " ".join((STATIC / "philosophy.html").read_text(encoding="utf-8").split())
+
+    assert "chat-only ablation" in html and "0.280" in html and "0.739" in html
+    assert "It won by abstaining" in html
+    assert "grounds <strong>nothing</strong>" in html
+    assert '"reviewed": false' in html or "reviewed&quot;: false" in html
+    assert "does not exist" in html          # the unbuilt summary hierarchy
+    assert "reconstructed" in html.lower()   # the git history
+
+
+def test_philosophy_is_routed_and_linked():
+    serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
+    live = LIVE_HTML.read_text(encoding="utf-8")
+
+    assert '"/philosophy"' in serve and "philosophy.html" in serve
+    assert 'href="/philosophy"' in live

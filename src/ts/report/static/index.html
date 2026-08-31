@@ -32,7 +32,10 @@
          the server reports, and the server only ever reports a replay in this build. -->
     <span class="pill" id="mode-badge"><span class="dot"></span>REPLAY</span>
     <span class="meta" id="captured-at"></span>
-    <nav class="bar-nav" aria-label="Sections"><a href="/method">Method</a></nav>
+    <nav class="bar-nav" aria-label="Sections">
+      <a href="/method">Method</a>
+      <a href="/philosophy">Why</a>
+    </nav>
     <button class="btn-outline" id="debug-toggle" aria-expanded="false">Debug</button>
   </div>
  </div>
@@ -52,6 +55,8 @@
     <span class="toolbar-label">Channel</span>
     <div class="chips" id="picker-chips"></div>
   </div>
+  <button class="btn-outline go-live" id="go-live" type="button">Go live</button>
+  <span class="live-spend" id="live-spend" hidden></span>
   <p class="picker-note" id="picker-note">
     Recorded windows replayed at their true cadence. Live capture uses the same pipeline and is
     documented in the reproduction guide.

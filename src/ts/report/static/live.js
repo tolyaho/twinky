@@ -272,6 +272,75 @@ debug.addEventListener("click", () => {
   debug.setAttribute("aria-expanded", String(!panel.hidden));
 });
 
+/* ------------------------------------------------------------------ live capture
+   The demo path, never the default. Replay is what a judge reproduces with no keys, so nothing
+   here runs on page load — it takes a deliberate click, and every event carries the spend so the
+   number on screen is the number being spent. The lag is stated, not hidden: a 60-second window
+   cannot be analysed until it has finished. */
+function goLive() {
+  const channel = (document.getElementById("picker-input").value.trim()
+    || (catalogue[0] || {}).channel || "").toLowerCase();
+  const note = document.getElementById("picker-note");
+  const spend = document.getElementById("live-spend");
+  if (!channel) { note.textContent = "Name a channel to go live on."; return; }
+
+  reset();
+  if (state.source) { state.source.close(); state.source = null; }
+  const source = new EventSource(`/api/live?channel=${encodeURIComponent(channel)}`);
+  state.source = source;
+  spend.hidden = false;
+  spend.textContent = "starting…";
+
+  const badge = document.getElementById("mode-badge");
+  source.addEventListener("status", (e) => {
+    const s = JSON.parse(e.data);
+    clear(badge);
+    badge.appendChild(el("span", "dot"));
+    badge.appendChild(document.createTextNode(`LIVE · ~${s.lag_seconds}s behind`));
+    note.textContent = s.message;
+    document.getElementById("captured-at").textContent = `${s.channel} · capturing now`;
+  });
+
+  source.addEventListener("window", (e) => {
+    const w = JSON.parse(e.data);
+    for (const m of w.chat) addMessage({ id: m.id, author: m.author, text: m.text });
+    for (const card of w.verified) {
+      addCard({ kind: "card", state: cardState(card), card: card });
+    }
+    for (const card of w.rejected) addCard({ kind: "card", state: "rejected", card: card });
+    spend.textContent = `window ${w.window} · ~$${w.estimated_usd.toFixed(4)} this session `
+      + `· $${w.budget.spent_usd.toFixed(2)} of $${w.budget.cap_usd.toFixed(2)} cap`;
+  });
+
+  source.addEventListener("stopped", (e) => {
+    const s = JSON.parse(e.data);
+    source.close();
+    note.textContent = s.message;
+    clear(badge);
+    badge.appendChild(el("span", "dot"));
+    badge.appendChild(document.createTextNode("REPLAY"));
+    spend.textContent = s.estimated_usd
+      ? `stopped · ~$${Number(s.estimated_usd).toFixed(4)} spent this session` : "";
+  });
+  source.addEventListener("error", () => source.close());
+}
+
+/* A card's state, computed the same way the gate does — grounded means it named a cause its
+   evidence supports. */
+function cardState(card) {
+  const t = card.trigger || {};
+  const ok = (card.gate && card.gate.ok) && card.type !== "none"
+    && t.event_id && t.event_id !== UNKNOWN && !!t.quote && (card.evidence || []).length > 0;
+  return ok ? "grounded" : "abstained";
+}
+
+function clear(node) {
+  while (node && node.firstChild) node.removeChild(node.firstChild);
+  return node;
+}
+
+document.getElementById("go-live").addEventListener("click", goLive);
+
 /* ------------------------------------------------------------------ the picker */
 let catalogue = [];
 

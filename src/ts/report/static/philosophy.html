@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twitch Agent — what this is for</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
+
+<header class="bar">
+ <div class="bar-inner">
+  <div class="bar-left">
+    <a class="mark" href="/" aria-label="Twitch Agent — home"><svg class="mark-glyph" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1"/><circle cx="21" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="8" r="3.5" fill="currentColor"/></svg><span class="mark-name">Twitch&nbsp;Agent</span></a>
+  </div>
+  <nav class="bar-nav" aria-label="Sections">
+    <a href="/">Live</a>
+    <a href="/method">Method</a>
+    <a href="/philosophy" class="is-active">Why</a>
+  </nav>
+  <div class="bar-right"></div>
+ </div>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="eyebrow">the argument</span>
+    <h1 class="display hero-title">A chat message is not text. It is a response to something.</h1>
+    <p class="lede hero-lede">
+      <code>10</code> means nothing. <code>10</code> thirty seconds after <em>“how would you rate
+      this?”</em> is a rating. Every attempt to read chat as text is reading the answer without
+      the question — and the question is in the audio and on the screen, never in the chat.
+    </p>
+  </section>
+
+  <section>
+    <span class="eyebrow">01 — the claim</span>
+    <h2 class="display sub">Grounding is retrieval and proof, not summarization</h2>
+    <p class="lede">
+      A language model will happily summarise a thousand chat messages. It will also happily tell
+      you what caused them, and it has no way to know. The difficulty is not producing a fluent
+      account of a stream — that is easy, and it is why every chat tool produces one. The
+      difficulty is <strong>showing which stream event caused which audience reaction</strong>,
+      and being willing to say when you cannot.
+    </p>
+    <p class="lede">
+      So the unit here is not a summary. It is a card that names a cause, quotes it verbatim, and
+      cites the messages it is standing on — and a deterministic gate that throws the card away
+      when any of that fails to check out. The gate is not a safety net bolted on afterwards. It
+      is the product.
+    </p>
+  </section>
+
+  <section>
+    <span class="eyebrow">02 — the uncomfortable part</span>
+    <h2 class="display sub">The system that knew least won the headline metric</h2>
+    <p class="lede">
+      The evaluation compares three systems on eleven frozen cases. The chat-only ablation — the
+      one deliberately starved of speech and screen — came first on unsupported-card rate,
+      <strong>0.280</strong> against the full agent's 0.739.
+    </p>
+    <p class="lede">
+      It won by abstaining. With no transcript and no captions it had no candidate causes to
+      name, so it returned <code>unknown</code> eighteen times out of twenty-five, and an
+      abstention is always gate-clean. Give a system more context and it starts making claims;
+      claims can be wrong, and this metric measures wrongness.
+    </p>
+    <p class="lede">
+      Two things follow, and neither is convenient. An unsupported-card rate <em>cannot be read
+      alone</em> — it is minimised by saying nothing, so it belongs beside recall, where the
+      ablation's single matched card tells the rest of the story. And the shape of the problem is
+      exactly this trade: the agent is the only system here that ever named a correct cause, and
+      it paid for that by being wrong more often. Moving recall without buying it in unsupported
+      claims is the whole game. This run says we have not won it.
+    </p>
+  </section>
+
+  <section>
+    <span class="eyebrow">03 — the discipline</span>
+    <h2 class="display sub">Nothing was tuned after the numbers were seen</h2>
+    <p class="lede">
+      Every change made after the first measurement is labelled <code>repair</code> in
+      <code>DECISIONS.md</code>, with its reason. There are no <code>tuning</code> entries. Two
+      obvious score-raising changes were identified, written down, and refused — including one
+      that follows from a principle this project had already adopted elsewhere, because applying
+      it here would have moved a published number in our favour after publication.
+    </p>
+    <p class="lede">
+      The first measured run was discarded rather than reported: the baseline had been handed the
+      agent's tool-calling prompt and scored zero cards across all eleven cases. <code>make
+      eval</code> now prints <strong>BROKEN — NOT A RESULT</strong> and exits non-zero if any
+      system emits nothing, because that failure looks exactly like a result.
+    </p>
+  </section>
+
+  <section>
+    <span class="eyebrow">04 — what is still wrong</span>
+    <h2 class="display sub">Stated here rather than buried</h2>
+    <ol class="changelog">
+      <li>
+        <span class="chip">main failure</span>
+        The agent names a chat message as the cause of the chat it is explaining — fourteen of
+        twenty-three cards — and grounds <strong>nothing</strong> on any recorded fixture. The fix
+        is a tool-selection change, and it was not made, because choosing it after seeing the
+        score is the definition of tuning.
+      </li>
+      <li>
+        <span class="chip">unconfirmed</span>
+        Gold labels were drafted with model assistance. All eleven still read
+        <code>"reviewed": false</code>. Claiming a human review that did not happen would be the
+        one unrecoverable mistake in an evaluation.
+      </li>
+      <li>
+        <span class="chip">not built</span>
+        The 1m/5m/30m/2h summary hierarchy is part of the product thesis and does not exist. It is
+        marked as a gap in the README and the architecture diagram rather than quietly omitted.
+      </li>
+      <li>
+        <span class="chip">reconstructed</span>
+        This repository's git history was rebuilt from a tree that was never under version
+        control. The order is real; the dates are assigned from the session log.
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <span class="eyebrow">05 — the hot take</span>
+    <h2 class="display sub">Livestreaming is the only medium whose artifact is built to evaporate</h2>
+    <p class="lede">
+      The honest objection is that top streamers do not read chat and do not want a tool that
+      reads it for them. That is right, and it is not what this is. The pitch is
+      <em>recover what you are structurally unable to see, and what the platform is about to
+      delete.</em> A streamer who ignores chat live still wants the unanswered-question list and
+      the clip candidates afterwards.
+    </p>
+    <p class="lede">
+      Twitch deletes the VOD, and the chat replay with it, within weeks. Everything the audience
+      said is gone. The second half of this product is memory — and memory is only worth having
+      if each thing in it can show why it is there.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <span>Every number on this site is reproduced by <code>make eval</code> from a committed cache,
+  with no API keys and zero cost. The ones that count against the product are on the
+  <a href="/method">method page</a>, unchanged.</span>
+</footer>
+</body>
+</html>

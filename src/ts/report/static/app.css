@@ -777,3 +777,12 @@ html, body.live-page { height: 100%; }
   .counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat dd { font-size: 26px; }
 }
+
+/* ---------------------------------------------------------------- live control
+   Deliberate, never automatic: replay is the keyless default a judge reproduces, so going live
+   costs a click and shows the spend it is incurring. */
+.go-live { height: 30px; padding: 0 var(--sm); font-size: 13px; }
+.live-spend {
+  font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0;
+  padding: 0 var(--xs);
+}

@@ -756,3 +756,29 @@ now says how the page is serving it, REPLAY, and the captured mode moved into th
 provenance beside a new "served: replay from the committed cache" row. Confirmed the values that
 caused it: 2 of 3 run documents carry `mode=record`.
 Blockers: none. Cost unchanged at $0.41.
+
+## 2026-08-31T00:45Z — iteration 44
+Attempted: live mode (Phase 2) and the philosophy page.
+Result: `make test` green, 416 -> 433. Cost $0.41 -> $0.42.
+**Live works end to end against a real broadcast.** stableronaldo was live; one 60-second window
+captured, enriched and analysed: 113 chat messages, 3 cards, 104.8 s wall clock, ~$0.006. My
+first liveness probe said every channel was offline and was wrong — the shell loop used `timeout`,
+which does not exist on macOS, so the whole probe silently reported nothing live. Worth noting
+because it nearly stopped this being built at all.
+Two real bugs found by running it rather than reasoning about it. The cache defaulted to REPLAY
+mode, and live audio has by definition never been seen, so the first window died on a cache miss.
+Fixed to record — into a temporary cache of its own, which matters more: `cache/llm/` IS the
+artifact a judge replays, and filling it with entries keyed on bytes that can never recur would
+grow it with entries no replay will ever hit. Verified the committed cache is byte-unchanged
+across a live run, 289 entries before and after.
+The second was caught by an existing guard: the live session wrote a trace straight into
+`trajectories/`, the graded deliverable — the same pollution that once put 55 test artifacts
+there. Traces now go to a temp directory. The guard from iteration 9 earned its keep.
+Guards: refuses to start past a $3.00 live cap (the project cap is $5.00), stops itself after ten
+minutes, reports spend per window against the ledger, sanitises the channel name before it
+reaches a subprocess, and treats an offline channel as a message rather than an error. Replay
+remains the default and nothing goes live on page load. 14 tests, all deterministic.
+`/philosophy` written: the thesis, the uncomfortable ablation result stated in full, the
+discipline of not tuning, and four open failures listed rather than implied — including that the
+agent grounds nothing. A test asserts those numbers and admissions stay on the page.
+Blockers: none. Cost $0.42 of $5.00.
