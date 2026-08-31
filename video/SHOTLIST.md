@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 679 passed — this is also shot 14
+make test                             # 681 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -135,6 +135,11 @@ that Reddify switching you for XQC?"*. Then scroll to the unanswered list.
 **Say:** *"Whether a question was answered is decided by reading the transcript after it was
 asked. A tool that only reads chat has the question and no way to know."*
 
+Every row carries its timestamps: when it was asked, and — if answered — when you answered it.
+On yugi, *"why violet myers at the party"* is **asked at 0:56 and answered at 1:04**, eight
+seconds later, which a viewer can go and check. On the unanswered list the asked time is the
+actionable half: a point to go back to.
+
 Measured on yugi: **38 questions, 45 asked, 2 answered.** On marlon the top unanswered question is
 `violet murders?`, **asked 14 times and never picked up**.
 
@@ -221,7 +226,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 679 passed
+make test        # 681 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.

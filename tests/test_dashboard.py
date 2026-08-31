@@ -1676,3 +1676,25 @@ def test_spacing_comes_from_the_token_scale():
             if px.rstrip(".0") not in allowed and px not in allowed:
                 off.add(px)
     assert not off, f"spacing values bypassing the token scale: {sorted(off)}"
+
+
+def test_a_question_row_says_when_it_was_asked_and_when_it_was_answered():
+    """`answered.ts_ms` sat in the payload unused while FEATURES_V2's spec shows
+    `→ answered at 04:12`. On the unanswered list the asked time is the actionable half — a
+    timestamp to go back to — and on an answered one it makes the claim checkable."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    block = js.split("function renderQuestions", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "clock(item.ts_ms - state.origin)" in block, "no asked time"
+    assert "you said, at ${clock(item.answered.ts_ms - state.origin)}" in block
+
+
+def test_a_question_time_is_omitted_rather_than_shown_wrong():
+    """Tier 0 live chat has no stream origin. A relative timestamp against an unknown zero is a
+    wrong number, and a wrong number is worse than a missing one."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    block = js.split("function renderQuestions", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "item.ts_ms && state.origin" in block
+    assert 'item.answered.ts_ms && state.origin' in block
+    assert '? `you said, at' in block and ': "you said"' in block

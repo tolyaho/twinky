@@ -2744,3 +2744,41 @@ still 16 hexes; three routes 200. Cost: **$0.00**, ledger $0.43.
 **20.0 hours to the deadline; the video gate is 12.0 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 89 — 2026-08-31 — the questions panel was throwing away its best evidence
+
+Attempted: the questions panel — the feature FEATURES_V2 calls *"the strongest feature you are not
+showing"* and puts on the never-cut list.
+
+**The data was there and the UI dropped it.** `answered_by()` returns `{event_id, ts_ms, text,
+matched}`, and the row rendered the text and discarded the timestamp — while FEATURES_V2's own
+spec shows `→ answered at 04:12`. Nothing needed measuring or computing; it was already in the
+payload, already flowing to the browser, and simply not drawn.
+
+Both times now appear. Verified against a live `/api/stream`, not the source:
+
+```
+[unanswered] asked 0:05   x1   'ETA?'
+[unanswered] asked 0:32   x1   'ong im wylin?'
+[answered]   asked 0:56  ->  you said, at 1:04
+             'why violet myers at the party'
+```
+
+Asked at 0:56, answered at 1:04 — **eight seconds**, and a viewer can go to 1:04 and check. That
+is the difference between a panel that claims a link and a panel that hands you the receipt. On
+the unanswered list the asked time is the actionable half: the point to go back to.
+
+**A timestamp is omitted rather than shown wrong.** Tier 0 live chat has no stream origin, so both
+times are rendered only when the origin is known. A relative time against an unknown zero is a
+wrong number, and a wrong number is worse than a missing one on the one panel whose entire value
+is that its claims can be checked.
+
+`video/SHOTLIST.md` shot 7 updated in the same iteration, with the 0:56 → 1:04 pair as the thing
+to hold on.
+
+Result: `make test` 679 → **681 passed**. 2 new tests, two rows in DECISIONS.md. One new CSS rule,
+no new colour — still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**19.9 hours to the deadline; the video gate is 11.9 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

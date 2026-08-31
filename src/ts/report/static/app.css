@@ -978,6 +978,13 @@ html, body.live-page { height: 100%; }
   margin: var(--xxs) 0 0;
   font-size: 15px; font-weight: 300; line-height: 1.5; color: var(--body-strong);
 }
+/* When it was asked. On the unanswered list this is the actionable half — the timestamp to go
+   back to — and it sat unused in the payload. */
+.qat {
+  font-family: var(--mono); font-size: 13px; color: var(--muted-soft);
+  font-variant-numeric: tabular-nums;
+}
+
 /* The line the streamer actually said, so the reader judges the link rather than trusting it. */
 .qans {
   margin: var(--xs) 0 0; padding-left: var(--sm);

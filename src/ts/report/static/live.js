@@ -342,6 +342,11 @@ function renderQuestions(q) {
     const head = el("div", "qrow-h");
     head.appendChild(el("span", "qdot"));
     head.appendChild(el("span", "qstate", item.answered ? "answered" : "unanswered"));
+    /* When it was asked. On the unanswered list this is the actionable part — a timestamp to go
+       back to — and it was in the payload unused. */
+    if (item.ts_ms && state.origin) {
+      head.appendChild(el("span", "qat", clock(item.ts_ms - state.origin)));
+    }
     head.appendChild(el("span", "qn", `${item.count} asked`));
     row.appendChild(head);
     row.appendChild(el("p", "qtext", `“${item.text}”`));
@@ -349,7 +354,9 @@ function renderQuestions(q) {
       /* The line the streamer actually said, so the reader judges the link rather than
          trusting it. Two shared content words is the test, and it is stated on the method page. */
       const ans = el("p", "qans");
-      ans.appendChild(el("span", "label", "you said"));
+      const when = item.answered.ts_ms && state.origin
+        ? `you said, at ${clock(item.answered.ts_ms - state.origin)}` : "you said";
+      ans.appendChild(el("span", "label", when));
       ans.appendChild(document.createTextNode(`“${item.answered.text}”`));
       row.appendChild(ans);
     }
