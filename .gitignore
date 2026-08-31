@@ -28,3 +28,9 @@ evals/fixtures/**/raw/
 # never commit
 telegram-export/
 *.ogg
+
+# Raw stdout/stderr from `run-night.sh`, one pair per iteration. Session output, and the loop
+# writes them into the working tree — an unignored directory here fails preflight's
+# "working tree committed" check the moment the loop is run again.
+.nightlogs/
+STOP
