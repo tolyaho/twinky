@@ -3890,3 +3890,42 @@ $0.4364.
 **6.6 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
 video; `git push` (origin/main 70 commits behind); make the repository public after pushing;
 `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 115 — the fix from two iterations ago missed half the defect
+
+**Inside the video gate: 6.2 hours left, no video file.** Verification-only. `src/ts/report/`
+untouched.
+
+Swept `evals/REVIEW_ME.md`, the last unchecked document, and found the same `command not found`
+defect I fixed in sixteen places two iterations ago — **in the guide for the one outstanding
+author task that is cheap to finish**:
+
+```bash
+python scripts/confirm_gold.py --confirm c05_warning_no_cause --by "your name"
+```
+
+**It survived a sweep that was looking for it**, because the rule I wrote was scoped to
+`python -m foo` and this is `python foo.py`. Same interpreter, same failure, different spelling.
+A rule that catches one form and not the other is worse than no rule, because the sweep it
+justified reported the class closed.
+
+Both commands repaired, the guard widened to the script form, and its coverage extended to
+`evals/REVIEW_ME.md` and `evals/DATA.md`, which were outside the original list.
+
+**The guide is otherwise correct, and that was checked rather than assumed.** It already refuses
+hand-editing JSON and points at `make review` and `confirm_gold.py` — the script that exists
+precisely because an earlier version of the guide asked for eleven hand edits. It names **all
+eleven gold cases and no phantom ones**, now held by a test: a guide that silently skips a case
+would leave a label unreviewed while the count says the review is done, which is worse than not
+reviewing at all.
+
+The commands were verified by running them, without touching a label: `make review` reports
+**0 of 11 confirmed**, and `--confirm` without `--by` refuses with *"an anonymous confirmation is
+not a confirmation"*, as designed.
+
+Result: `make test` 716 → **717 passed**. 1 new guard, 1 widened. `scan_secrets` clean;
+`evidence/` and `trajectories/product-agent/` byte-identical. Cost **$0.00**, ledger $0.4364.
+
+**6.2 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
+video; `git push` (origin/main 70 commits behind); make the repository public after pushing;
+`make review` — **now runnable exactly as written**; rotate `.env` and the Telegram credentials.

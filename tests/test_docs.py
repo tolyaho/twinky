@@ -626,14 +626,21 @@ def test_no_documented_command_calls_an_interpreter_that_may_not_exist():
     """
     import re
 
+    # `python foo.py` is the same failure as `python -m foo` and the first version of this rule
+    # missed it, because it only looked for `-m`. It survived in `evals/REVIEW_ME.md`, which is
+    # the guide for the one author task that is cheap to finish.
     offenders = []
     for name in ("README.md", "SUBMISSION.md", "docs/REPRODUCTION.md",
                  "docs/IMPROVEMENT_CHANGELOG.md", "video/SHOTLIST.md",
-                 "experiments/README.md", "trajectories/h1-arm/README.md"):
+                 "experiments/README.md", "trajectories/h1-arm/README.md",
+                 "evals/REVIEW_ME.md", "evals/DATA.md"):
         path = REPO / name
         if not path.is_file():
             continue
         for line in path.read_text(encoding="utf-8").splitlines():
+            script = re.search(r"(?<![\w./-])python3? +[\w./-]+\.py", line)
+            if script:
+                offenders.append(f"{name}: {line.strip()}")
             hit = re.search(r"(?<![\w./-])python3? -m (\w+)", line)
             # `venv`, `pip` and `ensurepip` are the exceptions and they are not arbitrary: they
             # are stdlib modules that run BEFORE the environment exists, so they cannot use the
@@ -785,3 +792,18 @@ def test_the_reporting_layer_really_does_call_one_model_at_most():
 
     assert builders == ["labels.py"], \
         f"the reporting layer builds model requests in {builders}; ARCHITECTURE.md says only labels.py"
+
+
+def test_the_review_guide_covers_every_gold_case():
+    """`make review` is one of the outstanding author actions and README §6 sends a judge here.
+    A guide that silently skips a case would leave a label unreviewed while the count says the
+    review is done, which is worse than not reviewing at all."""
+    import re
+
+    gold = {p.stem for p in (REPO / "evals/gold").glob("*.json")}
+    named = set(re.findall(r"c\d{2}_[a-z_]+",
+                           (REPO / "evals/REVIEW_ME.md").read_text(encoding="utf-8")))
+
+    assert gold, "no gold labels to review"
+    assert gold <= named, f"REVIEW_ME.md never mentions: {sorted(gold - named)}"
+    assert not (named - gold), f"REVIEW_ME.md names cases that do not exist: {sorted(named - gold)}"
