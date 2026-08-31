@@ -21,7 +21,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 719 passed — this is also shot 14
+make test                             # 721 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -67,10 +67,19 @@ amemetrn, amitturure, amenities…*
 ```bash
 grep 1788074707878 evals/fixtures/stableronaldo_2026-08-30T0723/frames.jsonl
 ```
-> The raw JPEG is in the author's tree only — `raw/` is gitignored, so frames and audio are not in
-> the repo or the archive. The committed caption is what the system actually reads, and it is the
-> reproducible shot. Use `open evals/fixtures/…/raw/frames/1788074707878.jpg` only if you want the
-> image on screen and can accept that a judge cannot re-run it.
+> **Correction, 2026-08-31.** This note used to say frames "are not in the repo or the archive".
+> `raw/` is gitignored, but **four real frames from this capture do ship**, inside
+> `video/twinky-image-bank.zip` under `bank/01-real/stream-frames/` — including the hero frame
+> `09-30_wordgame_para_.jpg`. The committed caption is still what the system actually reads and is
+> still the reproducible shot; the JPEG is now reproducible too.
+>
+> ⚠ **BLUR THE USERNAME COLUMN BEFORE THIS GOES ON CAMERA.** Those frames have **real Twitch
+> logins burned into the overlay**. Every chatter in every fixture is pseudonymised and
+> `README.md`, `evals/DATA.md` and each `meta.json` say so — so putting an unblurred frame on
+> screen shows exactly what the pipeline is documented as not storing. The warning was written in
+> the bank's own `MANIFEST.md`, inside the zip, where nobody reads it at four in the morning. It
+> is here now. See `RISKS.md` #52, which is also where the decision about whether that zip should
+> ship at all belongs.
 
 **Capture:** the caption naming the on-screen word game.
 **Proves:** the thesis in one cut. The cause is on screen or it is nowhere. Nobody is speaking —
@@ -269,7 +278,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 719 passed
+make test        # 721 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
@@ -338,6 +347,26 @@ make test && make eval
 - [ ] The poll-draft beat is either cut or named as a gap — never staged. See RISKS #42.
 - [ ] Gold labels are described as model-drafted and unconfirmed if labels are mentioned at all.
 - [ ] Runtime ≤ 5:00.
+
+## The image bank, and the one still you must not cut
+
+`video/twinky-image-bank.zip` holds 30 assets in four folders with a `MANIFEST.md` explaining
+each. Two things about it belong out here rather than inside the archive:
+
+1. **`01-real/stream-frames/` are real captured frames with real logins visible.** Blur before
+   use. See shot 3 and `RISKS.md` #52.
+2. **`02-product-stills/11_reproducibility.png` is stale.** It reads *"48 hits / 0 misses · 530
+   tests · $0.43"*. The suite is at **721** and the ledger at **$0.4364**, so cutting that still
+   puts a number on screen that shot 14 contradicts thirty seconds later with `make test` running
+   live. The manifest says to re-render rather than retouch — but its generator, `build_bank.py`,
+   **is not committed**, so re-rendering is only possible if the author still has it. If not:
+   **do not cut that still.** Every other figure in the bank was checked against the fixtures
+   when it was built and no other still carries a test count or a total.
+
+The manifest's own usage rule is worth repeating because it is the one a judge would most easily
+catch you breaking: `02-product-stills/` and `03-titles/` are **renderings you authored**, not
+screen recordings. Cut them as graphics. When the video says *"here is the product running"*,
+that footage must be an actual recording of `make demo`.
 
 ## If you are short on HOURS, not minutes
 

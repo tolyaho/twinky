@@ -3978,3 +3978,50 @@ ledger $0.4364.
 **5.9 hours to the deadline and no video exists.** Author-only: film and cut the video;
 `git push` (origin/main 70 commits behind); **decide the licence question in RISKS #7**; make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 117 — measuring the push found real logins about to be published
+
+**Inside the video gate: 5.6 hours left, no video file.** Verification-only. This is the most
+consequential thing found in a while and it is on the critical path for the next hour.
+
+Started by measuring what `git push` would actually carry, because 70 commits going out at T-5h
+with no rehearsal is a risk nobody had checked. **The push is safe**: `.git` is 32 MB and the
+largest committed blob is 6.27 MB, comfortably under GitHub's 50 MB warning and 100 MB rejection.
+
+**But the largest blob was `video/twinky-image-bank.zip`, and nothing in the repository mentioned
+it.** 30 assets in four folders. Inside `bank/01-real/stream-frames/` are **four real JPEGs from
+the `stableronaldo` capture with the chat overlay visible — real Twitch logins burned in**.
+
+`README.md`, `evals/DATA.md` and every `meta.json` state that chatters are pseudonymised.
+`video/SHOTLIST.md` shot 3 stated that `raw/` is gitignored *"so frames and audio are not in the
+repo or the archive"*. **That sentence was false**, and the frames it describes ship.
+
+The bank's own `MANIFEST.md` had already caught it:
+
+> ⚠ These frames have real Twitch logins burned into the overlay… Blur the username column before
+> this goes in the video, or you are showing on camera exactly what the pipeline is documented as
+> not storing.
+
+**Written inside the zip, which is where a warning goes to not exist.** It is now in
+`video/SHOTLIST.md` beside shot 3 in capitals, and in `RISKS.md` **#52** with three named options
+— blur the username column, drop `01-real/`, or drop the zip. **Nothing was deleted**: it is the
+author's video material, shot 3 depends on the hero frame, and that choice changes the video.
+
+**A second find in the same zip.** `02-product-stills/11_reproducibility.png` reads *"48 hits /
+0 misses · 530 tests · $0.43"*. The suite is at **721** and the ledger at **$0.4364** — cutting
+that still would put a figure on screen that **shot 14 contradicts thirty seconds later** with
+`make test` running live. The manifest says to re-render rather than retouch, but its generator
+`build_bank.py` **is not committed**, so re-rendering is impossible from this repository. The shot
+list now says: do not cut that still.
+
+Also hoisted out of the zip: the manifest's usage rule that `02-product-stills/` and `03-titles/`
+are **renderings, not screen recordings** — the rule a judge would most easily catch being broken,
+and previously readable only by unzipping.
+
+Result: `make test` 719 → **721 passed**. 2 new guards, one relaxed to let a correction quote the
+sentence it corrects — the same treatment RISKS #22 and #37 got. Cost **$0.00**, ledger $0.4364.
+
+**5.6 hours to the deadline and no video exists.** Author-only: film and cut the video — **blur
+the username column first, RISKS #52**; `git push` (70 commits behind, and the push itself is
+clear); decide the licence question in RISKS #7; make the repository public after pushing;
+`make review`; rotate `.env` and the Telegram credentials.

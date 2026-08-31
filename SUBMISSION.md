@@ -10,7 +10,7 @@ micro1 Frontier Engineering Challenge 2026. Everything a judge needs, in one pla
 
 ```bash
 make setup PYTHON=python3.12     # needs CPython 3.10+; macOS system python3 is 3.9
-make test                        # 719 passed, ~1 s
+make test                        # 721 passed, ~1 s
 make eval                        # 48 cache hits, 0 API calls, $0.00
 ```
 
