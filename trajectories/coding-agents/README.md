@@ -125,7 +125,7 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 | | |
 |---|---:|
-| Commits in the competition window | 185 |
+| Commits in the competition window | 188 |
 | Iterations logged | 120 |
 | Decisions recorded with rationale | 501 |
 | Risks tracked | 53 |
