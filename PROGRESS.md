@@ -3810,3 +3810,41 @@ $0.4364.
 **7.2 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
 video; `git push` (**origin/main is 70 commits behind**); make the repository public after
 pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 113 — the architecture map, checked against the tree it claims to describe
+
+**Inside the video gate: 6.9 hours left, no video file.** Verification-only.
+
+`docs/ARCHITECTURE.md` was the largest unswept surface — SUBMISSION lists it as *"architecture
+diagram, one file per node, gaps marked"*, so a judge who opens one file and finds it wrong
+learns something about the whole submission.
+
+**The diagram itself is accurate.** All **16 ✔ nodes** resolve under `src/ts/`, and the
+substantive claims hold: four read-only time-capped tools, `max_steps=4`, `group_chat`'s three
+rules named correctly.
+
+**The file used two path conventions and never said so.** Diagram nodes are relative to `src/ts/`;
+prose and the cross-cutting table are relative to the repository. The table mixed them, so
+`cache.py`, `clock.py` and `providers/` pointed at nothing while `evals/`, `scripts/scan_secrets.py`
+and `evals/grouping/` beside them resolved fine. The root is now stated once at the top, those
+three cells are repo-relative, and a test resolves both kinds — diagram nodes under `src/ts/`,
+backticked paths under the root. Verified by breaking one and watching it fail.
+
+**The file's strongest claim is now checked rather than trusted.** It says the reporting pipeline
+calls no model *"with exactly one cosmetic exception"* — which is the reason the board, the rail
+and Tier 0 cost nothing, and it is quoted in three other documents. A test asserts that
+`report/labels.py` is the only module under `report/` that builds a model request. It is:
+`serve.py` constructs a `ResponseCache` and hands it over, and makes no call itself.
+
+**One near-miss avoided.** `docs/PRE_EXISTING.md` cites `legacy/frontend/` and
+`chat-simulator.js`, neither of which exists — and both are *correct*, because the sentence
+containing them says that directory was deliberately removed. Widening the guard to cover that
+file would have forced a wrong "fix", so it is scoped to `ARCHITECTURE.md`. Checking why a
+citation fails to resolve before repairing it is the difference between the two.
+
+Result: `make test` 714 → **716 passed**. 2 new guards. `evidence/` and
+`trajectories/product-agent/` byte-identical. Cost **$0.00**, ledger $0.4364.
+
+**6.9 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
+video; `git push` (origin/main 70 commits behind); make the repository public after pushing;
+`make review`; rotate `.env` and the Telegram credentials.

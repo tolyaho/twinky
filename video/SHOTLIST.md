@@ -21,7 +21,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 714 passed — this is also shot 14
+make test                             # 716 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -269,7 +269,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 714 passed
+make test        # 716 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
