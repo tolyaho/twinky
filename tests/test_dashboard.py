@@ -1200,10 +1200,16 @@ def test_switching_fixture_clears_the_board_and_the_rail():
 
 def test_the_rail_is_the_first_zone_to_go_when_the_window_narrows():
     """It is the glanceable zone; the board is the one a streamer reads."""
+    # Found by what the rule does, not by the width it does it at — the threshold is a design
+    # decision that may legitimately move, and pinning the number made this fail for a change
+    # that was correct.
     css = _css()
-    narrow = css.split("@media (max-width: 1280px)", 1)[1].split("}\n\n", 1)[0]
+    narrow = next(b for b in css.split("@media (max-width:")[1:]
+                  if ".panel-rail { display: none; }" in b.split("\n}\n", 1)[0])
 
     assert ".panel-rail { display: none; }" in narrow
+    assert "grid-template-columns: minmax(0, 4fr) minmax(0, 7fr)" in narrow, \
+        "dropping the rail must leave two columns, not a broken three"
 
 
 
@@ -1750,3 +1756,33 @@ def test_the_nav_is_the_same_on_every_page():
         navs.append(tuple(re.findall(r">([A-Za-z ]+)</a>", nav)))
     assert len(set(navs)) == 1, f"the nav differs between pages: {navs}"
     assert navs[0] == ("Dashboard", "Method", "Why")
+
+
+def test_the_rail_survives_a_common_laptop_width():
+    """It was hidden below 1280px — a threshold set while the rail was wrongly laid out as a
+    two-column grid and genuinely needed the room. As a stacked column it holds up far narrower,
+    and 1280x800 is an ordinary laptop, so the gate ledger was being thrown away for nothing."""
+    import re
+
+    css = _css()
+    hide = re.search(r"@media \(max-width: (\d+)px\) \{[^@]*?\.panel-rail \{ display: none", css,
+                     re.S)
+    assert hide, "nothing hides the rail any more"
+    threshold = int(hide.group(1))
+
+    # 4fr : 7fr : 3fr, 48px page padding, two 12px gaps — the rail must clear its ~185px floor
+    rail_at = lambda w: (w - 48 - 24) * 3 / 14
+    assert rail_at(threshold) >= 185, f"at {threshold}px the rail is {rail_at(threshold):.0f}px"
+    assert threshold <= 1152, "1280 and 1152 laptops must keep the rail"
+    assert rail_at(threshold - 1) >= 185 or threshold <= 1100
+
+
+def test_the_site_stays_navigable_when_the_window_narrows():
+    """Below 900px the bar dropped `.bar-nav` and kept the Debug toggle, so `/method` and
+    `/philosophy` became unreachable while a developer affordance survived."""
+    css = _css()
+
+    assert ".bar-nav { display: none; }" not in css, "navigation is being hidden with no replacement"
+    narrow = [b for b in css.split("@media (max-width: 900px)")[1:]]
+    assert any(".bar .meta { display: none; }" in b and "#debug-toggle { display: none; }" in b
+               for b in narrow), "the bar must shed its optional parts, not its nav"

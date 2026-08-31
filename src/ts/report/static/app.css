@@ -505,7 +505,13 @@ footer {
 main > section, section[id] { scroll-margin-top: 80px; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-@media (max-width: 900px) { .bar-nav { display: none; } }
+/* The bar used to drop the NAV here and keep the Debug toggle, which made `/method` and
+   `/philosophy` — two of the three deliverable pages — unreachable while a developer affordance
+   survived. The capture meta and the debug toggle go first; the site stays navigable. */
+@media (max-width: 900px) {
+  .bar .meta { display: none; }
+  .bar #debug-toggle { display: none; }
+}
 
 /* ---------------------------------------------------------------- the picker */
 .sr-only {
@@ -784,8 +790,19 @@ html, body.live-page { height: 100%; }
 .speeds { margin: 0; border-color: var(--hairline-strong); }
 .speeds .seg { padding: var(--xxs) var(--sm); font-size: 13px; }
 
-@media (max-width: 1280px) {
-  /* The rail is the first thing to go: it is the glanceable zone, and the board is not. */
+/* The rail is the first zone to go — it is the glanceable one and the board is not — but not
+   nearly as early as it used to. The 1280px cut-off was chosen while the rail was wrongly laid
+   out as a two-column grid and genuinely needed the width; as a stacked column it holds up much
+   narrower.
+
+   The arithmetic, at 4fr : 7fr : 3fr with 48px page padding and two 12px gaps:
+       1280px -> rail 259px      1152px -> rail 231px
+       1100px -> rail 220px      1080px -> rail 217px
+        960px -> rail 190px  <-- below the floor
+   The floor is ~185px: `.rstats` is `1fr auto` at 13px, so "msgs per chatter" needs ~110px, the
+   value ~40px and the padding 32px. 1080px keeps the gate ledger on a 1280, 1152 or 1100 laptop,
+   which is where it was being thrown away for nothing. */
+@media (max-width: 1080px) {
   .live-page main.two-col { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); }
   .panel-rail { display: none; }
 }

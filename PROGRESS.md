@@ -2855,3 +2855,48 @@ still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **19.7 hours to the deadline; the video gate is 11.7 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 92 — 2026-08-31 — a breakpoint set for a bug that no longer exists
+
+Attempted: responsive behaviour at 1280 and 900 — the last unaddressed item on the polish list.
+
+**The rail was hidden below 1280px, and that threshold was set for a defect I fixed three
+iterations ago.** It was chosen while the rail was wrongly rendering as a two-column grid, which
+genuinely needed the room. As a stacked column the arithmetic is different — 4fr : 7fr : 3fr,
+48px page padding, two 12px gaps:
+
+| viewport | rail |
+|---|---:|
+| 1280px | 259px |
+| 1152px | 231px |
+| 1100px | 220px |
+| **1080px** | **217px** |
+| 960px | 190px — below the floor |
+
+The floor is about 185px: `.rstats` is `1fr auto` at 13px, so *"msgs per chatter"* needs ~110px,
+its value ~40px, the padding 32px. The threshold is now **1080px**, which keeps the gate ledger —
+the strongest agent-engineering artifact on the page — on a 1280, 1152 or 1100 laptop, where it
+was being discarded for nothing.
+
+The existing guard failed on that change, and it was the guard that was wrong: it split the
+stylesheet on the literal string `@media (max-width: 1280px)`. The threshold is a design decision
+that may legitimately move, so it now finds the rule by **what it does** — the block containing
+`.panel-rail { display: none; }` — and additionally asserts that dropping the rail leaves two
+columns rather than a broken three.
+
+**Second finding, from reading the same breakpoint table: below 900px the bar dropped the NAV and
+kept the Debug toggle.** So on a narrow window `/method` and `/philosophy` — two of the three
+deliverable pages — became unreachable, while a developer affordance survived. Inverted: the
+capture meta and the Debug button go first, the site stays navigable.
+
+Result: `make test` 685 → **687 passed**. 2 new tests, one rewritten, three rows in DECISIONS.md.
+No colour change, still 16 hexes; `/` serves 200 with the nav intact. Cost: **$0.00**, ledger
+$0.43.
+
+Every item on the polish list has now been through a pass: type scale, board row, keyboard access,
+empty states, reduced motion, id collisions, dead CSS, reading order, spacing rhythm, the
+questions and rail panels, label ambiguity, and responsive behaviour.
+
+**19.6 hours to the deadline; the video gate is 11.6 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
