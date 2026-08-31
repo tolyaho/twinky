@@ -782,3 +782,25 @@ remains the default and nothing goes live on page load. 14 tests, all determinis
 discipline of not tuning, and four open failures listed rather than implied — including that the
 agent grounds nothing. A test asserts those numbers and admissions stay on the page.
 Blockers: none. Cost $0.42 of $5.00.
+
+## 2026-08-31T01:15Z — iteration 45
+Attempted: fix and finish — re-run the qualification gate now that live, SSE, threading and two
+new routes exist, and bring the submission documents up to date with them.
+Result: `make test` green, 433, and the gate passes from a freshly built archive.
+The gate found a real defect, which is why it is run rather than assumed. Two tests added in the
+packaging pass call `git ls-files`, which raises outside a repository — so a judge who unzips the
+archive and runs `make test` got two failures on a tree that is otherwise perfect. They now ask
+what would reach a judge and answer it correctly in both contexts: the tracked set in a checkout,
+the files on disk in an unpacked archive. The archive form is the stronger check.
+Also ruled out a reproducibility regression before it could bite: `ts.live` imports `capture`,
+and `streamlink`/`websockets` are deliberately absent from the graded requirements. They are
+imported lazily inside functions, so `ts.live` loads without them — verified in a venv built from
+`requirements.txt` alone.
+Verified from the extracted zip with a stripped environment: 433 tests green, `make eval`
+reproduces at 48 hits / 0 misses, and all five routes plus the SSE stream serve correctly with
+`mode: replay`. `make scan` reports zero project-file findings. No stale test count or cost
+figure remains in any document.
+Docs updated for what now exists: SUBMISSION.md lists the three routes and the live demo path
+with its guards and its one measured session; README describes them; RISKS #43 opened for live
+being exercised once rather than hardened, with what is and is not covered stated explicitly.
+Blockers: none. Cost $0.42 of $5.00.
