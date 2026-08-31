@@ -34,7 +34,7 @@ The 24 recorded responses are committed, so this needs no credential and costs n
 git apply experiments/h1-group-chat.patch
 TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
   python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
-git checkout -- src/ts/workflow/
+git apply -R experiments/h1-group-chat.patch
 ```
 
 **`TS_TRACE_DIR` is not optional.** Trace ids derive from `(agent, case_id)` and are therefore

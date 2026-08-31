@@ -3379,3 +3379,50 @@ Item H is concluded — H2 alone cannot be measured without another record and H
 problem is not the candidate list — so the loop moves to verification-only work.
 Author-only and unchanged: film and cut the video; `git push` (origin/main 40+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 104 — the archive check, and four tests that were answering a question they could not ask
+
+Item H concluded, so this is verification-only work. `make preflight`: every check I control
+passes — 702 tests, 48 hits / 0 misses keyless, no secret in the tree or in history, working tree
+committed. The three blockers are the author-only ones, and **`origin/main` is now 61 commits
+behind, not 40** — that figure had been quoted stale for several iterations and is corrected here.
+
+Then the clean-clone archive check, because the tree moved a lot: a new `experiments/` directory,
+`scripts/record_h1.py`, and 24 new cache entries. All present in `git archive HEAD`, and the cache
+ships complete — 371 entries in the archive against 371 in the working tree, which is what the
+newly published H1 reproduction command depends on.
+
+**Running `pytest` inside the extracted archive found three failures that cannot happen in the
+working tree, and they were all one bug.** Four tests ask what `git archive HEAD` would ship.
+Inside the archive there is no git, the call fails, and the old code read the failure as an empty
+listing:
+
+- `test_the_env_template_ships` — failed: `.env.example` "missing"
+- `test_every_test_file_ships` — failed: all 33 test files "missing"
+- `test_every_path_the_entry_documents_cite_exists_in_the_archive` — failed: every cited path
+- `test_the_local_only_files_never_ship` — **PASSED, by examining an empty set**
+
+The vacuous pass is the serious one: the check that no `.env` or `.capture_salt` reaches the
+archive reported success having looked at nothing. All four now go through `archived_or_skip()` in
+`conftest.py`, which returns the listing or skips with a reason. **The archive runs 698 passed and
+4 skipped**, and the four skips say why rather than being silent.
+
+Two smaller things confirmed by running them rather than reasoning about them:
+
+- **`make setup` still dies in a clean archive** on Homebrew Python 3.14's `ensurepip`, exactly as
+  `RISKS.md` #23 and `docs/REPRODUCTION.md` §2 describe, and the documented `uv venv` route still
+  produces a working environment. That workaround is the only path a judge on this machine has, so
+  it is worth re-confirming rather than assuming.
+- **The published H1 reproduction command now reverts with `git apply -R`** instead of
+  `git checkout -- src/ts/workflow/`. The old form discards any other local edit in that directory
+  and needs a repository; reverse-applying touches only what the patch touched and works from the
+  extracted archive. Verified end to end: apply → 46 hits / 0 misses → reverse → working tree
+  clean, `trajectories/` untouched.
+
+Result: `make test` **702 passed**; archive **698 passed, 4 skipped**; `scan_secrets` clean;
+`evidence/` and `trajectories/product-agent/` byte-identical.
+
+**9.8 hours to the deadline. The 8-hour video gate is 1.8 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (**origin/main is 61 commits
+behind**); make the repository public after pushing; `make review`; rotate `.env` and the Telegram
+credentials.

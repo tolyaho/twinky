@@ -345,11 +345,12 @@ def test_the_scanner_own_test_fixtures_do_not_trip_the_history_scan():
 # extracted zip, which is the only place this shows up.
 
 def _archived():
-    import subprocess
+    """The listing, or a skip. `git archive` failing is not the same as shipping nothing, and
+    treating it as such made two of these fail inside the extracted archive while the one that
+    matters most — no local-only file ships — passed by checking an empty set."""
+    from conftest import archived_or_skip
 
-    out = subprocess.run(["git", "archive", "HEAD"], cwd=REPO, capture_output=True, timeout=120)
-    listing = subprocess.run(["tar", "-t"], input=out.stdout, capture_output=True, timeout=60)
-    return set(listing.stdout.decode("utf-8", "replace").split())
+    return archived_or_skip()
 
 
 def test_the_env_template_ships():
