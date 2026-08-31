@@ -4112,3 +4112,60 @@ ledger $0.4364.
 the username column first, RISKS #52**; `git push` (70 commits behind); decide the licence
 question in RISKS #7; make the repository public after pushing; `make review`; rotate `.env` and
 the Telegram credentials.
+
+## Iteration 120 — recorded the page, and the recording found two P0s
+
+**PUSH AND MAKE PUBLIC — needs the author.** Loop stopped on request. Item I from
+`RECORD_THEN_FIX.md`; I2 was already done four iterations ago (H1 measured, lost, reverted,
+written up as Removed experiment #4), so this is **I1**.
+
+Six clips recorded with `scripts/record_demo.py` driving a real Chromium against the running
+page. **The first frame of the first take found a defect. Fixing it revealed a bigger one.**
+
+**P0 · `hidden` did not hide.** `.boardrows`, `.signals` and `.questions` each set an explicit
+`display`, and the UA rule `[hidden] { display: none }` is a bare attribute selector that loses
+to a class. So `element.hidden = true` set the attribute and changed nothing — the board, the
+agent's cards and the questions list rendered **stacked on top of each other in every view**.
+
+**P0 · the board had never rendered at all.** With the panes fixed, the middle column still read
+`THE BOARD 0` after 955 messages. `apply()` routes four event kinds; `start()` subscribed
+`meta`, `chat`, `card`, `done` and `error`. The server sends every event **named** — `event:
+board`, `event: tick` — and `EventSource` silently drops a named event nothing listens for. No
+error, no console warning. **The board, the rail, the questions panel and the live counter
+received their data and threw it away, for the entire life of the project.**
+
+Nothing caught it because every check ever run read the markup, the CSS or the `/api/stream`
+payloads — and all three were correct. The page was not. **Rendering is not the same as reading.**
+
+Both fixed and verified in the browser: at t=12 s the board holds 4 rows and the footer reads
+`139 messages · 3 rows · 75 singletons not shown`, with the rail populated. Both are now held by
+source-level tests that need no browser, each verified by breaking it.
+
+**Then re-recorded.** Six clips, no failures:
+
+| clip | duration | mp4 |
+|---|---:|---:|
+| `01_wordgame_board` | 65 s | 18.0 MB |
+| `02_violet_27` | 58 s | 19.5 MB |
+| `03_questions_panel` | 65 s | 17.3 MB |
+| `04_agent_vs_baseline` | 63 s | 19.4 MB |
+| `05_method_graph` | 25 s | 2.9 MB |
+| `06_replay_live_tabs` | 14 s | 0.8 MB |
+
+Sampled a frame from each and checked it. Shot 01 at 52 s is the thesis in one image: the live
+counter climbing (`hera… 7`, `herd… 6`, `heal… 5`), a board row carrying the frame caption
+*"a word-guessing game is active with the prompt 'GUESS THE WORD!' and the letters 'h e _ _ _ _'
+visible"* over `heal… 5` and `heav… 4`, the rail reading `silent window · 2 frame captions ·
+27 unique chatters · top 10% share 23%`, and the footer `73 messages · 2 rows · 36 singletons
+not shown`.
+
+`video/clips/` is gitignored — 120 MB has no business in the archive — and `record_demo.py` is
+committed, so it regenerates in six minutes.
+
+Result: `make test` 723 → **725 passed**. 2 new guards, 2 P0 fixes. `make eval` still **48 hits /
+0 misses**. Cost **$0.00**, ledger $0.4364.
+
+**4.0 hours to the deadline. There is now real footage; there is still no cut video.**
+Author-only: cut the clips into ≤5:00 — **blur the username column if you use the image bank,
+RISKS #52**; `git push` (70 commits behind); decide the licence question in RISKS #7; make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

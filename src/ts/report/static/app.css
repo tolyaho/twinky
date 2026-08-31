@@ -710,6 +710,15 @@ html, body.live-page { height: 100%; }
 .msg.cited { background: var(--surface-strong); border-left-color: var(--ink); }
 .msg.cited .msg-text { color: var(--ink); font-weight: 500; }
 
+/* `hidden` must actually hide. The three middle panes each set an explicit `display`, and the
+   UA's `[hidden] { display: none }` is a bare attribute selector that loses to a class — so
+   `element.hidden = true` set the attribute and changed nothing, and the board, the agent's
+   cards and the questions list rendered stacked on top of each other in every view. Twenty
+   iterations of reading the markup did not find this; the first frame of the first screen
+   recording did. Specificity, not `!important`. */
+.boardrows[hidden], .signals[hidden], .questions[hidden],
+.livebox[hidden], .board-foot[hidden] { display: none; }
+
 /* ---- signals ---- */
 .signals {
   flex: 1 1 auto; min-height: 0; overflow-y: auto;
