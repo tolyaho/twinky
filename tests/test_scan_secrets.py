@@ -337,3 +337,40 @@ def test_the_scanner_own_test_fixtures_do_not_trip_the_history_scan():
     source = (REPO / "scripts/scan_secrets.py").read_text(encoding="utf-8")
 
     assert "Path(path).name in ALLOWLIST" in source
+
+
+# ------------------------------------------------------ what actually reaches the archive
+# `make archive` runs `git archive HEAD`, so `.gitattributes export-ignore` decides the contents
+# and a tracked, un-ignored file can still be absent. Found by running `make test` inside the
+# extracted zip, which is the only place this shows up.
+
+def _archived():
+    import subprocess
+
+    out = subprocess.run(["git", "archive", "HEAD"], cwd=REPO, capture_output=True, timeout=120)
+    listing = subprocess.run(["tar", "-t"], input=out.stdout, capture_output=True, timeout=60)
+    return set(listing.stdout.decode("utf-8", "replace").split())
+
+
+def test_the_env_template_ships():
+    """`.env.* export-ignore` was defence-in-depth against `.env.local` and it also excluded
+    `.env.example` — the one file in that family a judge needs, and the one six tests read. The
+    archive's `make test` went red and nothing else noticed."""
+    assert ".env.example" in _archived()
+
+
+def test_the_local_only_files_never_ship():
+    """The rule the export-ignore exists for, still holding after the exception was added."""
+    archived = _archived()
+
+    assert ".env" not in archived
+    assert ".capture_salt" not in archived
+    assert not [p for p in archived if p.endswith("/.env") or p.endswith("/.capture_salt")]
+
+
+def test_every_test_file_ships():
+    """A test that cannot run in the archive is a test a judge never sees pass."""
+    archived = _archived()
+    local = {f"tests/{p.name}" for p in (REPO / "tests").glob("test_*.py")}
+
+    assert local <= archived, f"missing from the archive: {sorted(local - archived)}"

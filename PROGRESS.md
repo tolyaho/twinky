@@ -2935,3 +2935,50 @@ $0.43.
 **19.5 hours to the deadline; the video gate is 11.5 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 94 — 2026-08-31 — `make test` was red inside the archive
+
+Attempted: the structural audits stopped finding things last iteration, so this one verified
+instead of hunting. Two checks, both overdue: a full-stream soak (last run at iteration 72, before
+ten iterations of UI change) and the clean-clone archive check (iteration 68, twenty commits ago).
+
+**The soak is unchanged.** The full 12-minute yugi fixture at 8×: **875 events** — 625 chat, 214
+tick, 21 card, 13 board, meta and done — **0 unparseable frames, `done` reached, 0 server
+errors.** Identical to iteration 72, so ten iterations of UI work regressed nothing.
+
+**The archive check found a real defect: `make test` was RED inside the zip while green in the
+working tree.**
+
+`.gitattributes` carried `.env.* export-ignore` — defence-in-depth against `.env.local` and
+friends, written when RISKS #17 established that *"`.gitignore` does not protect a directory that
+is zipped rather than committed"*. It also matched **`.env.example`**, the one file in that family
+that has to ship.
+
+Three consequences, in rising order of seriousness:
+
+1. Six tests that read the template failed, so `make test` failed in the archive.
+2. A judge who wanted to record had **no template at all**.
+3. **Last iteration's entire finding — that `.env.example` set a model name which breaks keyless
+   replay, now fixed and safe to copy — never reached anyone**, because the fixed file was not in
+   the archive.
+
+The file was tracked and not gitignored, so nothing in the working tree could see it: `git
+archive` is decided by `.gitattributes`, and the only place it shows is inside the extracted zip.
+Fixed with a later, more specific `-export-ignore` line, since `.gitattributes` is last-match-wins
+and the blanket defence stays intact.
+
+Verified after the fix, in the extracted archive with a stripped environment: **`make test` 688
+passed**, `make eval` 48 hits / 0 misses, `evidence/report.md` byte-identical to the committed
+one, `.env.example` present — and sourcing it then running the eval still gives 4 hits / 0 misses,
+which is the property last iteration claimed and could not previously demonstrate.
+
+Three guards assert what the archive **contains** rather than what is tracked: the template ships,
+`.env` and `.capture_salt` do not, and every test file is present — because a test that cannot run
+in the archive is a test a judge never sees pass.
+
+Result: `make test` 688 → **691 passed**. 3 new tests, three rows in DECISIONS.md, RISKS #51.
+Cost: **$0.00**, ledger $0.43.
+
+**19.4 hours to the deadline; the video gate is 11.4 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 34+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
