@@ -4169,3 +4169,68 @@ Result: `make test` 723 → **725 passed**. 2 new guards, 2 P0 fixes. `make eval
 Author-only: cut the clips into ≤5:00 — **blur the username column if you use the image bank,
 RISKS #52**; `git push` (70 commits behind); decide the licence question in RISKS #7; make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+---
+
+## 2026-08-31T18:30Z — iteration 108
+
+**PUSH AND MAKE PUBLIC — needs the author.** Local is 79 commits ahead of `origin/main` and the
+repository is private. A private repository is not scored at all, whatever is in it.
+
+Attempted: "fix graph view" — the agent graph on the Method page, from a screenshot showing the
+provenance gate printed across the tool caption.
+
+**Three defects, all measured rather than eyeballed.**
+
+**1 · The diagram overlapped itself in three places.** Measured with real `getBBox` in Chromium,
+not by looking: the tool caption ran 418 px from `x=464` and the gate box starts at `x=724`, so
+`executed and validat|ed by the controller` disappeared under it; the `calls, across / 118 runs
+with tools` label sat entirely inside the same box; and the legend's first key cleared the second
+swatch by **1.4 px** here and overlapped it on the author's machine.
+
+That last number is the actual cause of all three. The file names `Inter` and carries no
+`@font-face` — a test forbids one, because the diagram has to draw with no network — so the
+browser substitutes whatever it has, and a substituted face runs wider. The layout had been
+tuned against one machine's rendering.
+
+Rebuilt on an explicit four-column grid with the gutters named, and every gap now checked against
+`text_width()`, which assumes **0.58 em per character** — above every real sentence measured here
+(0.46–0.57) so a wider fallback still fits. Fixes that fell out of it: the `reduce` subtitle
+overran its own box by 33 px under that estimate (8.7 px of real clearance), and the `answer`
+edge label could not sit in a 44 px gutter without touching a box on one side, so the branch is
+named on the node it lands in and the other branch is labelled beside its own line.
+
+Canvas 412 → **448 px tall**. Width stays 980 on purpose: `.graph img` is `width: 100%`, so the
+canvas width sets the type size on screen and widening it would have shrunk every label.
+
+**Two new guards, both verified by running them against the previous file:**
+`test_nothing_in_the_diagram_is_drawn_on_top_of_anything_else` → *'deterministic — checkable, no
+model' sits -29.3px from the box at x=240*, and `test_every_label_fits_the_node_it_is_printed_in`
+→ *'canonical, counted, ids kept' overruns its box by 33px*. Both pass on the new file, and
+Chromium confirms **0 collisions** in the real render. Twelve tests read this diagram's numbers
+and none of them looked at where the numbers were drawn, which is how it shipped for weeks
+correct and unreadable at the same time.
+
+**2 · The Method hero panel was an empty white box.** Found while verifying, then measured:
+the stream is empty in **53 of 60 samples over 30 seconds**. The messages fade to `opacity: 0`
+and the block titled *"hero proof card, rebuilt"* had overridden `.stage-cards` from `absolute`
+to `position: static` — so the invisible list kept its 363 px of layout and pushed the card
+underneath it instead of the card landing on top. Now the stream **recedes** to `.26` and the
+cited message stays at full strength, so the panel ends on a card beside the evidence it cites.
+Re-measured: **0 of 60 empty.**
+
+**3 · The pan in `record_demo.py` did not last what it claimed.** It counted
+`requestAnimationFrame` ticks, so a 26 s glide ran 19 s at whatever rate headless chose; driving
+it from Python instead cost a round trip per step and stretched it to 83 s. Now driven off
+`performance.now()` — the take is 35 s, which is what the shot asks for. Shot 05 also pans to
+`figure.graph` and **holds 9 s** on it rather than sweeping past the artifact it exists to show.
+
+Re-recorded `05_method_graph` — 35 s, 4.6 MB webm / 11.1 MB mp4. Frame at 18 s is the whole
+diagram, legible, nothing overlapping. The other five clips are unaffected: they are the live
+page, which did not change.
+
+Result: `make test` 725 → **728 passed**. `make eval` still **48 hits / 0 misses**. Cost
+**$0.00**, ledger $0.4364.
+
+Next: nothing autonomous — the loop is stopped.
+Blockers: the video is still uncut, the repository is still private, the remote is 79 behind.

@@ -45,7 +45,45 @@ TRAJECTORIES = Path("trajectories/product-agent")
 # the right box before the file arrives. The attribute said 470 against a 412 canvas, which CSS
 # `height: auto` hid on screen while the reserved space stayed 14% too tall — a layout shift on
 # every load of the page the argument lives on. A test now holds the two together.
-WIDTH, HEIGHT = 980, 412
+#
+# The width is fixed and the height is not. `.graph img` is `width: 100%; height: auto`, so the
+# canvas width sets the scale every label is drawn at — widening it to win space would shrink the
+# type on screen. Height is free: growing it costs nothing but vertical room on a page that
+# scrolls anyway. So the layout below buys space downwards, never sideways.
+WIDTH, HEIGHT = 980, 448
+
+# --- the column grid -------------------------------------------------------------------------
+# Four columns and three gutters across the flow row, stated once so a node cannot quietly drift
+# into its neighbour. The gutters are what the arrows are drawn in.
+MARGIN = 24
+GUTTER = 44
+COL_SOURCES = (MARGIN, 170)                                              # 24 .. 194
+COL_REDUCE = (COL_SOURCES[0] + COL_SOURCES[1] + GUTTER, 210)             # 238 .. 448
+COL_MODEL = (COL_REDUCE[0] + COL_REDUCE[1] + GUTTER, 210)                # 492 .. 702
+COL_GATE = (COL_MODEL[0] + COL_MODEL[1] + GUTTER, 210)                   # 746 .. 956
+
+# The tool list and its captions live under the model, in its column. The captions may run into
+# the gutter beside it — nothing is drawn there — but not into the gate column.
+TOOLS_X = COL_MODEL[0]
+TOOLS_W = COL_MODEL[1]
+CAPTION_MAX = COL_GATE[0] - 8 - TOOLS_X
+
+# Font sizes, named because the collision guard has to know them.
+F_TITLE, F_SUB, F_BODY, F_SMALL, F_CODE = 13, 10.5, 11, 10, 10.5
+
+# A rendered label is wider than this file can know: it names Inter, carries no `@font-face` — a
+# test forbids one, the diagram has to draw with no network — and so gets whatever face the
+# machine has. Measured in Chromium the widest real sentence here sits at 0.57 em per character.
+# 0.58 leaves headroom for a fallback that runs wider still, and every gap in the layout is
+# checked against that rather than against one machine's rendering. The legend is why: it cleared
+# the next swatch by 1.4 px here and overlapped it on the author's screen.
+EM_PROPORTIONAL = 0.58
+EM_MONO = 0.62
+
+
+def text_width(text: str, size: float, *, mono: bool = False) -> float:
+    """A deliberately generous estimate of how wide a label will render."""
+    return len(text) * size * (EM_MONO if mono else EM_PROPORTIONAL)
 
 
 def gate_codes(source: Path | str = Path("src/ts/provenance.py")) -> Tuple[List[str], List[str]]:
@@ -109,18 +147,19 @@ def _box(x: int, y: int, w: int, h: int, title: str, sub: str, *, model: bool) -
     return (
         f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="{fill}" '
         f'stroke="{stroke}" stroke-width="1"{dash}/>'
-        f'<text x="{x + 14}" y="{y + 25}" font-size="13" font-weight="500" fill="{INK}">'
+        f'<text x="{x + 14}" y="{y + 25}" font-size="{F_TITLE}" font-weight="500" fill="{INK}">'
         f'{title}</text>'
-        f'<text x="{x + 14}" y="{y + 44}" font-size="11" fill="{MUTED}">{sub}</text>'
+        f'<text x="{x + 14}" y="{y + 44}" font-size="{F_SUB}" fill="{MUTED}">{sub}</text>'
     )
 
 
-def _arrow(x1: int, y1: int, x2: int, y2: int, label: str = "") -> str:
-    mid_x, mid_y = (x1 + x2) // 2, (y1 + y2) // 2
-    text = (f'<text x="{mid_x}" y="{mid_y - 6}" font-size="10" fill="{MUTED_SOFT}" '
-            f'text-anchor="middle">{label}</text>') if label else ""
+def _arrow(x1: int, y1: int, x2: int, y2: int) -> str:
+    """A connector. Edge labels are placed by the caller, never centred on the line: a word
+    dropped into a 44 px gutter clears the boxes on either side by four pixels, which survives
+    one font and not the next. Where an edge needs naming, the name goes beside it or into the
+    node it points at."""
     return (f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{HAIRLINE}" '
-            f'stroke-width="1" marker-end="url(#a)"/>{text}')
+            f'stroke-width="1" marker-end="url(#a)"/>')
 
 
 def render(*, trajectories: Path | str = TRAJECTORIES,
@@ -142,89 +181,107 @@ def render(*, trajectories: Path | str = TRAJECTORIES,
         f'<rect width="{WIDTH}" height="{HEIGHT}" fill="{SURFACE}"/>',
     ]
 
-    # legend — the argument, stated once, at the top
+    # legend — the argument, stated once, at the top. The third item is anchored to the right
+    # margin instead of a hand-picked x, so it cannot creep left into the second as the run count
+    # grows a digit.
     parts += [
-        f'<rect x="24" y="18" width="14" height="14" rx="3" fill="{CANVAS_SOFT}" '
+        f'<rect x="{MARGIN}" y="14" width="14" height="14" rx="3" fill="{CANVAS_SOFT}" '
         f'stroke="{INK}"/>',
-        f'<text x="46" y="30" font-size="11" fill="{BODY}">deterministic — checkable, '
-        f'no model</text>',
-        f'<rect x="240" y="18" width="14" height="14" rx="3" fill="none" stroke="{MUTED}" '
+        f'<text x="{MARGIN + 22}" y="26" font-size="{F_BODY}" fill="{BODY}">deterministic — '
+        f'checkable, no model</text>',
+        f'<rect x="286" y="14" width="14" height="14" rx="3" fill="none" stroke="{MUTED}" '
         f'stroke-dasharray="4 3"/>',
-        f'<text x="262" y="30" font-size="11" fill="{BODY}">the model — two nodes, and only '
-        f'these two</text>',
-        f'<text x="612" y="30" font-size="11" fill="{MUTED_SOFT}">every count is measured: '
-        f'{counts["runs"]} recorded runs</text>',
+        f'<text x="308" y="26" font-size="{F_BODY}" fill="{BODY}">the model — two nodes, and '
+        f'only these two</text>',
+        f'<text x="{WIDTH - MARGIN}" y="26" font-size="{F_BODY}" fill="{MUTED_SOFT}" '
+        f'text-anchor="end">every count is measured: {counts["runs"]} recorded runs</text>',
     ]
 
-    parts.append(_box(24, 60, 170, 62, "sources", "chat · speech · frames", model=False))
-    parts.append(_arrow(194, 91, 244, 91))
-    parts.append(_box(244, 60, 170, 62, "reduce", "canonical, counted, ids kept", model=False))
-    parts.append(_arrow(414, 91, 464, 91))
+    parts.append(_box(COL_SOURCES[0], 60, COL_SOURCES[1], 62, "sources",
+                      "chat · speech · frames", model=False))
+    parts.append(_arrow(COL_SOURCES[0] + COL_SOURCES[1], 91, COL_REDUCE[0], 91))
+    parts.append(_box(COL_REDUCE[0], 60, COL_REDUCE[1], 62, "reduce",
+                      "canonical, counted, ids kept", model=False))
+    parts.append(_arrow(COL_REDUCE[0] + COL_REDUCE[1], 91, COL_MODEL[0], 91))
 
-    parts.append(_box(464, 48, 210, 86, "the model",
-                      f"picks tools or answers · t=0", model=True))
-    parts.append(_arrow(674, 91, 724, 91, "answer"))
+    parts.append(_box(COL_MODEL[0], 48, COL_MODEL[1], 86, "the model",
+                      "picks tools or answers · t=0", model=True))
+    parts.append(_arrow(COL_MODEL[0] + COL_MODEL[1], 91, COL_GATE[0], 91))
+
+    # The fork out of the model: one branch down to the tools, one right to the answer. The down
+    # branch is labelled beside its line; the right branch is named by the node it lands in.
+    fork_x = TOOLS_X + TOOLS_W // 2
+    parts.append(_arrow(fork_x, 134, fork_x, 172))
+    parts.append(f'<text x="{fork_x + 8}" y="157" font-size="{F_SMALL}" fill="{MUTED_SOFT}">'
+                 f'tool call</text>')
 
     # the tool row, with real call counts
-    parts.append(f'<text x="464" y="168" font-size="11" fill="{MUTED}">'
-                 f'{len(tools)} bounded tools · max {MAX_TOOL_CALLS_PER_STEP} calls per step, '
-                 f'executed and validated by the controller</text>')
     for i, tool in enumerate(tools):
-        y = 180 + i * 34
+        y = 178 + i * 34
         n = calls.get(tool, 0)
         emphasis = INK if n else MUTED_SOFT
         parts.append(
-            f'<rect x="464" y="{y}" width="210" height="26" rx="6" fill="{SURFACE}" '
+            f'<rect x="{TOOLS_X}" y="{y}" width="{TOOLS_W}" height="26" rx="6" fill="{SURFACE}" '
             f'stroke="{HAIRLINE}"/>'
-            f'<text x="476" y="{y + 17}" font-size="11" fill="{BODY}">{tool}</text>'
-            f'<text x="662" y="{y + 17}" font-size="11" fill="{emphasis}" '
-            f'text-anchor="end">{n}</text>')
-    parts.append(_arrow(569, 134, 569, 176, ""))
+            f'<text x="{TOOLS_X + 12}" y="{y + 17}" font-size="{F_BODY}" fill="{BODY}">'
+            f'{tool}</text>'
+            f'<text x="{TOOLS_X + TOOLS_W - 12}" y="{y + 17}" font-size="{F_BODY}" '
+            f'fill="{emphasis}" text-anchor="end">{n}</text>')
+
+    # The bound, then the denominator — under the list rather than over it, because the sentence
+    # is wider than the column and the only room wide enough is below the gate's outcome boxes.
     # The denominator is the runs that could call a tool, not every trajectory. Baselines have no
     # tools, so counting them here would make the agent look half as curious as it is — and the
     # true number is damning enough without help.
-    parts.append(f'<text x="700" y="196" font-size="10" fill="{MUTED_SOFT}">calls, across</text>'
-                 f'<text x="700" y="210" font-size="10" fill="{MUTED_SOFT}">'
-                 f'{counts["tool_runs"]} runs with tools</text>')
+    parts.append(
+        f'<text x="{TOOLS_X}" y="328" font-size="{F_CODE}" fill="{MUTED}">{len(tools)} bounded '
+        f'tools · max {MAX_TOOL_CALLS_PER_STEP} calls per step</text>'
+        f'<text x="{TOOLS_X}" y="343" font-size="{F_CODE}" fill="{MUTED}">executed and checked '
+        f'by the controller</text>'
+        f'<text x="{TOOLS_X}" y="358" font-size="{F_SMALL}" fill="{MUTED_SOFT}">calls across '
+        f'{counts["tool_runs"]} runs with tools</text>')
 
     # The finding the totals alone hide: it is not that the agent looks a little, it is that it
     # looks once. Four steps available, one spent, and always on the one modality that cannot
-    # explain itself.
-    # Two short lines rather than one long one: the tool column is 210 wide and the verified box
-    # starts at x=724, so a 47-character line would have run into it.
+    # explain itself. It sits below the outcome boxes, which is the only band on the canvas wide
+    # enough to set it at reading size.
     budget, used = counts["budget"], counts["steps_used"]
     single = used.get(1, 0)
     if single and budget:
         parts.append(
-            f'<text x="464" y="328" font-size="11" fill="{INK}">{single} of '
+            f'<text x="{TOOLS_X}" y="384" font-size="12" fill="{INK}">{single} of '
             f'{counts["tool_runs"]} runs spent 1 of their {budget} steps</text>'
-            f'<text x="464" y="344" font-size="11" fill="{MUTED}">and the one step '
+            f'<text x="{TOOLS_X}" y="401" font-size="{F_BODY}" fill="{MUTED}">and the one step '
             f'was chat</text>')
 
-    parts.append(_box(724, 60, 232, 62, "card JSON",
-                      f"at most {MAX_CARDS}, capped by the controller", model=True))
-    parts.append(_arrow(840, 122, 840, 168))
+    gate_x, gate_w = COL_GATE
+    spine = gate_x + gate_w // 2
+    parts.append(_box(gate_x, 60, gate_w, 62, "card JSON",
+                      f"the answer · at most {MAX_CARDS}", model=True))
+    parts.append(_arrow(spine, 122, spine, 168))
 
-    parts.append(_box(724, 168, 232, 76, "provenance gate",
+    parts.append(_box(gate_x, 168, gate_w, 76, "provenance gate",
                       f"{len(card_codes)} card checks · {len(abstain_codes)} abstention",
                       model=False))
-    parts.append(_arrow(840, 244, 840, 288))
+    parts.append(_arrow(spine, 244, spine, 288))
 
     verified = counts["gate"].get("verified", 0)
     rejected = counts["gate"].get("rejected", 0)
-    parts.append(_box(724, 288, 110, 56, "verified", f"{verified}", model=False))
-    parts.append(_box(846, 288, 110, 56, "rejected", f"{rejected}", model=False))
+    outcome_w = (gate_w - 10) // 2
+    parts.append(_box(gate_x, 288, outcome_w, 56, "verified", f"{verified}", model=False))
+    parts.append(_box(gate_x + outcome_w + 10, 288, outcome_w, 56, "rejected", f"{rejected}",
+                      model=False))
 
     # the codes, listed — a gate whose checks are not named is a claim, not a mechanism
-    parts.append(f'<text x="24" y="172" font-size="11" fill="{MUTED}">'
+    parts.append(f'<text x="{MARGIN}" y="176" font-size="{F_BODY}" fill="{MUTED}">'
                  f'every check the gate makes:</text>')
     for i, code in enumerate(card_codes + abstain_codes):
         col, row = divmod(i, 5)
-        parts.append(f'<text x="{24 + col * 210}" y="{194 + row * 18}" font-size="10.5" '
+        parts.append(f'<text x="{MARGIN + col * 210}" y="{198 + row * 18}" font-size="{F_CODE}" '
                      f'fill="{BODY if i < len(card_codes) else MUTED_SOFT}" '
                      f'font-family="ui-monospace, monospace">{code}</text>')
 
-    parts.append(f'<text x="24" y="384" font-size="11" fill="{MUTED}">'
+    parts.append(f'<text x="{MARGIN}" y="428" font-size="{F_BODY}" fill="{MUTED}">'
                  f'The model chooses and writes. Everything that can be checked is checked '
                  f'without it — and a card that fails any check is thrown away.</text>')
     parts.append("</svg>")

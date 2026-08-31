@@ -556,7 +556,7 @@ def test_the_filming_guidance_matches_the_fixtures():
     assert "window 0 is clean" in shots
 
 
-def test_the_disclosure_scale_table_is_counted_not_remembered():
+def test_the_disclosure_scale_table_is_counted_not_remembered(request):
     """Every row of it had drifted. `Tests` said 623 against 702, `Risks tracked` 42 against 51,
     `Decisions` 303 against 414, `Commits` 129 against 165 — a table headed "for calibration"
     that miscalibrated by a third. It was the only published figure set with no guard, which is
@@ -587,6 +587,13 @@ def test_the_disclosure_scale_table_is_counted_not_remembered():
         assert label in rows, f"the scale table lost its `{label}` row"
         assert abs(int(rows[label]) - actual) <= slack, \
             f"disclosure says {label} = {rows[label]}; the file says {actual}"
+
+    # The `Tests` row was outside this loop and drifted by nineteen without anything noticing,
+    # while three rows beside it were held to a tolerance of two. A count the suite can answer
+    # about itself has no business being remembered.
+    if len(request.session.items) >= 100:
+        assert int(rows["Tests"]) == len(request.session.items), \
+            f'disclosure says Tests = {rows["Tests"]}; the suite has {len(request.session.items)}'
 
     # Commits are counted from the window open, which is the disclosure's own definition. In an
     # archive there is no git and the question has no answer from here, so it is skipped rather

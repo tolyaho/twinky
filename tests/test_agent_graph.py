@@ -7,17 +7,76 @@ written (five tools, eight gate codes); there are four tools, and eight codes on
 plus two on the abstention path. That is exactly the drift this file exists to prevent.
 """
 import json
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from ts.report.graph import HEIGHT, WIDTH, gate_codes, render, trajectory_counts
+from ts.report.graph import HEIGHT, WIDTH, gate_codes, render, text_width, trajectory_counts
 from ts.workflow.agent import ALLOWED_TOOLS, MAX_CARDS, MAX_TOOL_CALLS_PER_STEP
 
 ROOT = Path(__file__).resolve().parents[1]
 SVG = ROOT / "src/ts/report/static/agent-graph.svg"
+SVG_NS = "{http://www.w3.org/2000/svg}"
+
+# What counts as too close. Nothing may overlap, and a label inside a node keeps a real gutter
+# rather than kissing the border it sits in.
+CLEARANCE = 6
+NODE_PADDING = 10
 
 
 def _committed():
     return SVG.read_text(encoding="utf-8")
+
+
+def _boxes():
+    """Every drawn thing as a rectangle in canvas coordinates.
+
+    Text is measured with `text_width`, which over-estimates on purpose — see its docstring. A
+    label's box runs from its baseline up by the font size and down by a quarter of it for the
+    descenders, which is close enough for a collision test and does not need a browser.
+    """
+    root = ET.fromstring(_committed())
+    rects, texts = [], []
+    for el in root.iter():
+        if el.tag == f"{SVG_NS}rect":
+            x, y = float(el.get("x", 0)), float(el.get("y", 0))
+            w, h = float(el.get("width")), float(el.get("height"))
+            if w >= WIDTH and h >= HEIGHT:
+                continue                                   # the canvas itself, not a node
+            rects.append((x, y, w, h, ""))
+        elif el.tag == f"{SVG_NS}text":
+            label = "".join(el.itertext())
+            size = float(el.get("font-size"))
+            mono = "mono" in (el.get("font-family") or "")
+            w = text_width(label, size, mono=mono)
+            x, y = float(el.get("x")), float(el.get("y"))
+            anchor = el.get("text-anchor", "start")
+            x = x - w if anchor == "end" else x - w / 2 if anchor == "middle" else x
+            texts.append((x, y - size, w, size * 1.25, label))
+    return rects, texts
+
+
+def _hgap(a, b):
+    return max(b[0] - (a[0] + a[2]), a[0] - (b[0] + b[2]))
+
+
+def _vgap(a, b):
+    return max(b[1] - (a[1] + a[3]), a[1] - (b[1] + b[3]))
+
+
+def _too_close(a, b):
+    """Why this is not one distance: two labels stacked as lines of a paragraph sit a couple of
+    pixels apart by design, and that is leading, not a collision. Only things sharing a
+    horizontal band are competing for the same room, and those need a real gutter."""
+    if _vgap(a, b) >= 0:
+        return None                                        # different bands; leading is fine
+    gap = _hgap(a, b)
+    return gap if gap < CLEARANCE else None
+
+
+def _contains(outer, inner):
+    ox, oy, ow, oh, _ = outer
+    ix, iy, iw, ih, _ = inner
+    return ox <= ix and oy <= iy and ix + iw <= ox + ow and iy + ih <= oy + oh
 
 
 def test_the_committed_svg_is_what_the_generator_produces_today():
@@ -164,6 +223,64 @@ def test_the_shot_list_points_at_numbers_that_are_on_the_diagram():
                      "and the one step was chat"]:
         assert any(fragment in q for q in quoted), f"shot 9 no longer quotes {fragment!r}"
         assert fragment in svg, f"shot 9 quotes {fragment!r} and the diagram does not say it"
+
+
+def test_nothing_in_the_diagram_is_drawn_on_top_of_anything_else():
+    """The diagram shipped for weeks with the provenance gate sitting across the tool caption and
+    the run count, and the legend's second key printed over the end of the first. Every check
+    here reads the numbers rather than the picture, so none of them saw it — the argument was
+    correct and unreadable at the same time.
+
+    The gaps were not wrong by much. The legend cleared the next swatch by 1.4 px in Chromium and
+    overlapped it on the author's machine, because the file names a font it cannot ship and gets
+    whatever the browser has. So this measures against a width that assumes the wider face.
+    """
+    rects, texts = _boxes()
+    collisions = []
+
+    for label in texts:
+        for node in rects:
+            if _contains(node, label):
+                continue
+            gap = _too_close(label, node)
+            if gap is not None:
+                collisions.append(f"{label[4]!r} sits {gap:.1f}px from the box at "
+                                  f"x={node[0]:.0f} y={node[1]:.0f}")
+    for i, a in enumerate(texts):
+        for b in texts[i + 1:]:
+            gap = _too_close(a, b)
+            if gap is not None:
+                collisions.append(f"{a[4]!r} sits {gap:.1f}px from {b[4]!r}")
+
+    assert not collisions, "\n".join(collisions)
+
+
+def test_every_label_fits_the_node_it_is_printed_in():
+    """A subtitle wider than its own box is the same defect one step earlier: it does not look
+    broken until the fallback font is 10% wider, and then it hangs out of the border."""
+    rects, texts = _boxes()
+    overflows = []
+
+    for label in texts:
+        holders = [r for r in rects if r[1] <= label[1] and label[1] + label[3] <= r[1] + r[3]
+                   and r[0] <= label[0] < r[0] + r[2]]
+        for node in holders:
+            room = node[0] + node[2] - NODE_PADDING - (label[0] + label[2])
+            if room < 0:
+                overflows.append(f"{label[4]!r} overruns its box by {-room:.0f}px")
+
+    assert not overflows, "\n".join(overflows)
+
+
+def test_the_canvas_is_tall_enough_for_everything_drawn_on_it():
+    rects, texts = _boxes()
+    lowest = max(b[1] + b[3] for b in rects + texts)
+    widest = max(b[0] + b[2] for b in rects + texts)
+
+    assert lowest <= HEIGHT - 8, f"the diagram runs {lowest - HEIGHT:.0f}px past the canvas"
+    assert widest <= WIDTH - 8, f"the diagram runs {widest - WIDTH:.0f}px past the canvas"
+    # Slack, not a fixed size: the point is that the canvas is fitted, not that it is 448 tall.
+    assert HEIGHT - lowest < 40, "the canvas has a band of dead space at the bottom"
 
 
 def test_the_figure_has_a_real_alt_text():

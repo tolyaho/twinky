@@ -125,9 +125,9 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 | | |
 |---|---:|
-| Commits in the competition window | 181 |
-| Iterations logged | 119 |
-| Decisions recorded with rationale | 480 |
+| Commits in the competition window | 182 |
+| Iterations logged | 120 |
+| Decisions recorded with rationale | 495 |
 | Risks tracked | 53 |
-| Tests | 709 |
+| Tests | 728 |
 | Total spend on model calls | $0.44 |
