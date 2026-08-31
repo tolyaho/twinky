@@ -1126,3 +1126,13 @@ html, body.live-page { height: 100%; }
   grid-column: 1 / -1; margin: var(--xxs) 0 0;
   font-size: 13px; line-height: 1.5; color: var(--body-strong);
 }
+
+
+/* The middle column's orientation line. It says what a row IS, which the tabs took the space
+   for — and the board is the zone a first-time viewer most needs told about, not the chat flood
+   beside it. One line, quiet, never competing with the rows underneath. */
+.panel-lede {
+  flex: none; margin: 0;
+  padding: var(--xs) var(--base) 0;
+  font-size: 13px; line-height: 1.5; color: var(--muted);
+}

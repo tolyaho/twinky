@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 675 passed — this is also shot 14
+make test                             # 677 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -77,6 +77,10 @@ make demo                              # defaults to the recorded stableronaldo 
 ```
 Playback defaults to **4×** because a window is 60 seconds and at 1× the first row is a minute
 away.
+
+The middle column carries a one-line answer to *what is a row here* that follows the active tab —
+*"what was said or shown → what the room said back, grouped, with the messages behind it"*. Let it
+be readable in the frame before anything moves; it is the fastest orientation the page gives.
 
 **Capture, in this order:**
 1. **The live counts appearing within seconds** — the dashed *"this minute so far · counting · no
@@ -217,7 +221,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 675 passed
+make test        # 677 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.

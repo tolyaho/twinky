@@ -2666,3 +2666,43 @@ re-checked: three routes 200, 16 hexes. Cost: **$0.00**, ledger $0.43.
 **20.2 hours to the deadline; the video gate is 12.2 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 87 — 2026-08-31 — the zone that most needed explaining was the only one unlabelled
+
+Attempted: reading order and visual hierarchy on `/` — the first item on the polish list and the
+one I had not addressed directly.
+
+**The board had no sub-line and the chat flood did.** Checked rather than assumed:
+
+| zone | what it told a first-time viewer |
+|---|---|
+| Live chat | *"raw, unfiltered"* |
+| **The board** | **nothing** |
+| This window | nothing |
+
+The chat column explains itself — it is chat. The board is the one thing on the page whose
+contents are not self-evident, and it was the only zone with no answer to *what am I looking at*.
+I removed its sub-line myself when the `Board \| Signals \| Questions` tabs took that space in the
+header.
+
+Restored as a **lede under the header**, not back into it: the header already holds a title, a
+count and three tabs, and a fourth element would crowd it. And it **follows the active tab**,
+because the three views are three different kinds of claim and a fixed line describing the board
+while questions are on screen would be worse than none:
+
+- board — *what was said or shown → what the room said back, grouped, with the messages behind it*
+- signals — *the agent's cards, and what the provenance gate did with each one*
+- questions — *asked by chat, answered or not by reading the transcript after it was asked*
+
+The rail got one too: **"measured, no model"** — its distinguishing property rather than a list of
+its contents, on a page whose other two panels do involve a model.
+
+`video/SHOTLIST.md` updated in the same iteration, since shot 4 is filmed from this column: the
+line is now something to let land in frame before anything moves.
+
+Result: `make test` 675 → **677 passed**. 2 new tests, three rows in DECISIONS.md. One new CSS
+rule, no new colour — still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**20.1 hours to the deadline; the video gate is 12.1 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

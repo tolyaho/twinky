@@ -1613,3 +1613,28 @@ def test_the_reset_path_writes_the_same_copy_as_the_markup():
                    "No question yet. Questions are grouped"):
         assert phrase in html, f"markup lost: {phrase}"
         assert phrase in js, f"the reset path lost: {phrase}"
+
+
+def test_the_middle_column_says_what_a_row_is():
+    """It shows three different kinds of thing, and the tabs took the space where the sub-line
+    used to say which. The board is the zone a first-time viewer most needs told about — the chat
+    flood beside it explains itself, and it was the only one with a sub-line."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert 'id="middle-lede"' in html
+    assert "what the room said back" in html
+    # and it follows the active view rather than describing the board over the questions
+    assert 'document.getElementById("middle-lede").textContent = VIEWS[view].lede;' in js
+    for view in ("board", "signals", "questions"):
+        block = js.split(f"  {view}: {{", 1)[1].split("},", 1)[0]
+        assert "lede:" in block, f"the {view} view has no orientation line"
+
+
+def test_every_zone_says_what_it_holds():
+    """Three panels of identical weight, and only the self-evident one was labelled."""
+    html = LIVE_HTML.read_text(encoding="utf-8")
+
+    assert "raw, unfiltered" in html            # the chat flood
+    assert "measured, no model" in html         # the rail: its whole distinguishing property
+    assert 'id="middle-lede"' in html           # the board

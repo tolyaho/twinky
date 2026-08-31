@@ -741,9 +741,18 @@ for (const button of document.querySelectorAll(".speeds .seg")) {
 /* The middle column shows one kind of thing at a time. A deterministic row and a gated card
    drawn in the same column would read as the same kind of claim, and they are not. */
 const VIEWS = {
-  board:     { pane: "boardrows", foot: "board-foot", tab: "tab-board",     title: "The board" },
-  signals:   { pane: "signals",   foot: "sig-split",  tab: "tab-signals",   title: "Signals" },
-  questions: { pane: "questions", foot: "q-foot",     tab: "tab-questions", title: "Questions to you" },
+  board: {
+    pane: "boardrows", foot: "board-foot", tab: "tab-board", title: "The board",
+    lede: "what was said or shown → what the room said back, grouped, with the messages behind it",
+  },
+  signals: {
+    pane: "signals", foot: "sig-split", tab: "tab-signals", title: "Signals",
+    lede: "the agent's cards, and what the provenance gate did with each one",
+  },
+  questions: {
+    pane: "questions", foot: "q-foot", tab: "tab-questions", title: "Questions to you",
+    lede: "asked by chat, answered or not by reading the transcript after it was asked",
+  },
 };
 
 function showMiddle(view) {
@@ -757,6 +766,7 @@ function showMiddle(view) {
     tab.setAttribute("aria-pressed", String(on));
   }
   document.getElementById("board-h").textContent = VIEWS[view].title;
+  document.getElementById("middle-lede").textContent = VIEWS[view].lede;
   document.getElementById("board-n").textContent = String(
     view === "board" ? (state.boardRows || 0)
       : view === "questions" ? (state.questionCount || 0)
