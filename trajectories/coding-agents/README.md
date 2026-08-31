@@ -129,5 +129,5 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 | Iterations logged | 120 |
 | Decisions recorded with rationale | 495 |
 | Risks tracked | 53 |
-| Tests | 728 |
+| Tests | 729 |
 | Total spend on model calls | $0.44 |

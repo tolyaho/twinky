@@ -39,3 +39,4 @@ STOP
 # scripts/record_demo.py, and useless inside the archive. The SCRIPT is committed; the footage
 # is not.
 video/clips/
+video/press/

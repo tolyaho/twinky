@@ -1426,15 +1426,20 @@ def test_switching_fixture_hides_the_live_block():
 # Varied-height rows in flowing columns, but only where the column is genuinely wide. The point
 # is that a row with six groups and a row with one both look deliberate.
 
-def test_masonry_only_where_the_board_is_wide_enough():
-    """In a 600px column two tracks are 290px each — narrower than the quote line they carry.
-    Masonry there costs legibility and buys nothing."""
-    css = _css()
-    wide = css.split("@media (min-width: 1500px)", 1)[1].split("\n}\n", 1)[0]
+def test_a_board_row_is_never_split_across_columns():
+    """This asserted `columns: 2` and `break-inside: avoid` were present, and read as proof that
+    a row was never split. It proved only that the request had been made. Measured in a browser
+    at 1920px, the request was refused **33 times out of 33** — see
+    `test_the_board_is_never_a_scroll_container_and_a_multicolumn_at_once` for why it could never
+    be granted. The property this one was reaching for is the absence of the columns, so that is
+    what it checks now."""
+    # Comments stripped: the rule's obituary names both properties, and a guard that cannot tell
+    # a declaration from the note explaining why it was deleted is not reading CSS.
+    css = re.sub(r"/\*.*?\*/", " ", _css(), flags=re.S)
 
-    assert "columns: 2" in wide
-    assert "break-inside: avoid" in wide, "a row must never be split across columns"
-    assert "columns: 2" not in css.split("@media (min-width: 1500px)", 1)[0]
+    assert "columns: 2" not in css, "the board flows into columns again; rows will fragment"
+    assert "break-inside" not in css, \
+        "nothing needs `break-inside` any more — and it never worked where it was used"
 
 
 def test_rows_space_themselves_with_margins_not_a_flex_gap():
@@ -1884,3 +1889,32 @@ def test_the_hidden_attribute_actually_hides_the_middle_panes():
     for pane in (".boardrows", ".signals", ".questions"):
         assert re.search(rf"\{re.escape(pane)}\[hidden\]", css) or f"{pane}[hidden]" in css, \
             f"{pane} sets a display and has no [hidden] override; `hidden` will not hide it"
+
+
+def test_the_board_is_never_a_scroll_container_and_a_multicolumn_at_once():
+    """`.boardrows` flowed into two CSS columns above 1500px with `break-inside: avoid` to keep
+    each row whole. It never kept one whole: measured in a browser at 1920px, the width the demo
+    and every recording use, **33 of 33 rows fragmented** — every row, for the life of the rule.
+
+    `break-inside: avoid` is a request a browser drops when it has no choice, and it had none.
+    `.boardrows` is `overflow-y: auto`, so the column height is the pane height, and a row
+    carrying a vision caption is taller than that. The caption broke mid-sentence and resumed at
+    the top of the next column with another row's group lines in between — the product's central
+    artifact, unreadable, at exactly the viewport it is demonstrated at.
+
+    Guarded from the stylesheet rather than a browser: the two properties cannot coexist on this
+    element whatever the media query, so the text is enough to say so.
+    """
+    css = re.sub(r"/\*.*?\*/", " ", (STATIC / "app.css").read_text(encoding="utf-8"), flags=re.S)
+
+    blocks = [body for sel, body in re.findall(r"([^{}]*)\{([^{}]*)\}", css)
+              if ".boardrows" in sel]
+    assert blocks, "`.boardrows` has no rules; this guard needs rewriting"
+
+    declared = " ".join(blocks)
+    assert re.search(r"overflow-y\s*:\s*(auto|scroll)", declared), \
+        "the board no longer scrolls — re-check whether columns are safe before allowing them"
+    for prop in ("columns", "column-count"):
+        assert not re.search(rf"(^|[;\s]){prop}\s*:", declared), \
+            (f"`.boardrows` sets `{prop}` while it scrolls; every row taller than the pane will "
+             f"be split across columns, and the vision captions always are")
