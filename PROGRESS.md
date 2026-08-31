@@ -4025,3 +4025,47 @@ sentence it corrects — the same treatment RISKS #22 and #37 got. Cost **$0.00*
 the username column first, RISKS #52**; `git push` (70 commits behind, and the push itself is
 clear); decide the licence question in RISKS #7; make the repository public after pushing;
 `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 118 — asking #52's question completely, and finding the narrower answer
+
+**Inside the video gate: 5.2 hours left, no video file.** Verification-only.
+
+RISKS #52 was found by accident — the image bank surfaced because it was the largest blob when I
+measured the push. This iteration asked that question properly: **what does this repository
+actually publish about real people?**
+
+**Media: clean.** Four committed non-text files in total — the image bank already flagged as #52,
+`.env.example`, the H1 patch, and a checksum. No other undisclosed binary anywhere in the tree.
+
+**Text: narrower than the claim.** `pseudonym()` in `ingest/capture.py` replaces the **author** of
+every message with a salted one-way hash, and that is all it does. Message text is verbatim, and
+chat text contains `@mentions`:
+
+| fixture | @-mentions in message text |
+|---|---:|
+| `yugi_2026-08-30T0723` | 86 |
+| `marlon_2026-08-30T0715` | 59 |
+| `stableronaldo_2026-08-30T0723` | 26 |
+| `marlon_2026-08-30T0701` | 1 |
+
+**172 mentions, 88 distinct real handles, none pseudonymised.** `meta.json` says *"chatter logins
+pseudonymised"*, which is true of authorship. `evals/DATA.md` said `chat.jsonl (pseudonymised)`,
+which reads wider than it is — and that is the line a reader forms an impression from.
+
+**Stated, not fixed, and the reason travels with it.** Event ids are derived from message content,
+so rewriting text changes every id, every prompt and every cache key, and keyless reproduction —
+the property the whole submission rests on — stops working. The fixtures are frozen for exactly
+this reason. Scrubbing them five hours out would trade a documented limitation for a broken
+evaluation. `evals/DATA.md` now carries the limit, the table above and that explanation;
+`RISKS.md` #53 carries the risk.
+
+The counts are **recomputed by a test**, per fixture and in total, and the test also requires the
+explanation to be present — a limitation stated with a number is a disclosure, one stated in
+general terms is a hedge, and one stated without its reason reads as an oversight.
+
+Result: `make test` 721 → **722 passed**. 1 new guard. Cost **$0.00**, ledger $0.4364.
+
+**5.2 hours to the deadline and no video exists.** Author-only: film and cut the video — **blur
+the username column first, RISKS #52**; `git push` (70 commits behind); decide the licence
+question in RISKS #7; make the repository public after pushing; `make review`; rotate `.env` and
+the Telegram credentials.

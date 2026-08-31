@@ -883,3 +883,37 @@ def test_no_shipped_still_quotes_a_test_count_the_suite_has_left_behind():
         "the stale still is no longer flagged for the author"
     assert "build_bank.py" in shots and "not committed" in shots, \
         "the shot list must say the bank cannot be re-rendered from this repository"
+
+
+def test_the_pseudonymisation_claim_is_the_narrow_one_and_is_counted():
+    """`pseudonym()` hashes the author of every message and does not touch message text, which
+    carries real `@mentions`. `evals/DATA.md` said `chat.jsonl (pseudonymised)` — wider than the
+    truth. The counts are recomputed here rather than quoted, because a limitation stated with a
+    number is a disclosure and one stated in general terms is a hedge.
+    """
+    import json
+    import re
+
+    mention = re.compile(r"@([A-Za-z0-9_]{3,25})")
+    per_fixture, handles = {}, set()
+    for d in sorted((REPO / "evals/fixtures").iterdir()):
+        chat = d / "chat.jsonl"
+        if not chat.is_file():
+            continue
+        found = [m for line in chat.read_text(encoding="utf-8").splitlines() if line.strip()
+                 for m in mention.findall(json.loads(line).get("text") or "")]
+        if found:
+            per_fixture[d.name] = len(found)
+            handles.update(h.lower() for h in found)
+
+    data = (REPO / "evals/DATA.md").read_text(encoding="utf-8")
+    assert "does not touch message **text**" in data, "the limit is no longer stated"
+    assert f"**{sum(per_fixture.values())} mentions naming {len(handles)} distinct handles**" in data, \
+        (f"DATA.md misstates the exposure; measured {sum(per_fixture.values())} mentions / "
+         f"{len(handles)} handles")
+    for name, count in per_fixture.items():
+        assert f"| `{name}` | {count} |" in data, f"the per-fixture row for {name} is wrong"
+
+    # The reason it is not fixed has to travel with it, or it reads as an oversight.
+    assert "content-derived" in data or "derived from" in data
+    assert "RISKS.md` #53" in data or "RISKS.md #53" in data

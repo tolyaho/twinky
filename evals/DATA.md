@@ -17,8 +17,34 @@ not committed. Broadcaster login is retained since it is public and identifies t
 
 ## What is committed
 
-`meta.json`, `chat.jsonl` (pseudonymised), `frames/` captions, `transcript.jsonl`.
-Raw audio is **not** committed (see `.gitignore`).
+`meta.json`, `chat.jsonl` (author field pseudonymised — see the limit below), `frames/`
+captions, `transcript.jsonl`. Raw audio is **not** committed (see `.gitignore`).
+
+### What "pseudonymised" covers, exactly
+
+`pseudonym()` in `src/ts/ingest/capture.py` replaces the **author** of every message with a
+salted one-way hash, and the salt is not distributed. It does not touch message **text**.
+
+Chat text contains `@mentions`, and those are real handles. Measured across the four evaluated
+fixtures: **172 mentions naming 88 distinct handles**, none of them pseudonyms.
+
+| fixture | @-mentions in message text |
+|---|---:|
+| `yugi_2026-08-30T0723` | 86 |
+| `marlon_2026-08-30T0715` | 59 |
+| `stableronaldo_2026-08-30T0723` | 26 |
+| `marlon_2026-08-30T0701` | 1 |
+
+**This is stated rather than fixed, and the reason is structural.** Event ids are derived from
+message content, so rewriting the text would change every id, which changes every prompt, which
+changes every cache key — and keyless reproduction, the property the whole submission rests on,
+would stop working. The fixtures are frozen for exactly this reason. Scrubbing them now would
+trade a documented limitation for a broken evaluation.
+
+So the honest claim is the narrow one: **authorship is pseudonymised; the public chat text is
+retained verbatim, mentions included**, as evaluation input and not as a redistributable dataset.
+`RISKS.md` #53 carries it, and `video/SHOTLIST.md` already tells the author not to dwell on the
+raw feed on camera for a related reason.
 
 ## Rights
 
