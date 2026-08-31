@@ -1,0 +1,2486 @@
+[
+ {
+  "case_id": "c01_word_puzzle_amethyst",
+  "system": "baseline",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074707878,
+   1788074767878
+  ],
+  "trace_id": "trc_13e23152",
+  "trace_path": "/tmp/h1-traj/c01_word_puzzle_amethyst_trc_13e23152.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc",
+    "type": "audience_answer",
+    "title": "armament",
+    "distribution": null,
+    "trigger": {
+     "kind": "chat",
+     "event_id": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc",
+     "quote": "armament"
+    },
+    "evidence": [
+     "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc"
+    ],
+    "confidence": 0.6,
+    "window_ms": [
+     1788074707878,
+     1788074767878
+    ],
+    "trace_id": "trc_13e23152",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "ab6b053c-b9a4-46c5-9a57-fbf60a2877bc is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c01_word_puzzle_amethyst",
+  "system": "ablation_chat_only",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074707878,
+   1788074767878
+  ],
+  "trace_id": "trc_6d7054b6",
+  "trace_path": "/tmp/h1-traj/c01_word_puzzle_amethyst_trc_6d7054b6.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "49074b47-f279-43b0-964e-711c34a15329",
+    "type": "audience_answer",
+    "title": "Reaction to comment",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "yeah you’re retarded"
+    },
+    "evidence": [
+     "047d1c2c-d44f-4f74-b39f-27603305e158"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074707878,
+     1788074767878
+    ],
+    "trace_id": "trc_6d7054b6",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "81a677c5-6d41-4528-b7f0-e76a8edd6907",
+    "type": "reaction",
+    "title": "Making fun",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "I just came in here to make fun of u guys"
+    },
+    "evidence": [
+     "81a677c5-6d41-4528-b7f0-e76a8edd6907"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074707878,
+     1788074767878
+    ],
+    "trace_id": "trc_6d7054b6",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "d51bb9f2-04d5-41f6-9b5d-9db3dbf9bad0",
+    "type": "reaction",
+    "title": "Faking comment",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "they faking"
+    },
+    "evidence": [
+     "d51bb9f2-04d5-41f6-9b5d-9db3dbf9bad0"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074707878,
+     1788074767878
+    ],
+    "trace_id": "trc_6d7054b6",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c01_word_puzzle_amethyst",
+  "system": "agent",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074707878,
+   1788074767878
+  ],
+  "trace_id": "trc_13ffd83b",
+  "trace_path": "/tmp/h1-traj/c01_word_puzzle_amethyst_trc_13ffd83b.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "screen:word_guess_game",
+    "type": "reaction",
+    "title": "Word Guessing Game Displayed",
+    "distribution": null,
+    "trigger": {
+     "kind": "screen",
+     "event_id": "frm_2358b7ce3e",
+     "quote": "The livestream shows three people sleeping in a dimly lit room with two beds and a mattress on the floor. The time displayed is 3:25 am. On screen, a word guessing game is active with the partially completed word \"ameth_____\" visible. The streamer is not actively interacting, as all individuals appear to be asleep. The room contains water bottles and some personal items on a small table between the beds."
+    },
+    "evidence": [
+     "frm_b78f94d5a1",
+     "frm_2358b7ce3e"
+    ],
+    "window_ms": [
+     1788074707878,
+     1788074767878
+    ],
+    "trace_id": "trc_13ffd83b",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_EVIDENCE_NOT_A_MESSAGE",
+       "detail": "frm_b78f94d5a1 is a frame_caption, not a chat message"
+      },
+      {
+       "code": "E_EVIDENCE_NOT_A_MESSAGE",
+       "detail": "frm_2358b7ce3e is a frame_caption, not a chat message"
+      },
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "frm_2358b7ce3e is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c02_word_puzzle_herald",
+  "system": "baseline",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074917878,
+   1788074977878
+  ],
+  "trace_id": "trc_05fcff72",
+  "trace_path": "/tmp/h1-traj/c02_word_puzzle_herald_trc_05fcff72.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "b686b3e7-1ef2-4d54-9957-c60bd39ff8fd",
+    "type": "reaction",
+    "title": "People keep the streams tabbed",
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": "people keep the streams tabbed"
+    },
+    "evidence": [
+     "b686b3e7-1ef2-4d54-9957-c60bd39ff8fd"
+    ],
+    "confidence": 0.6,
+    "window_ms": [
+     1788074917878,
+     1788074977878
+    ],
+    "trace_id": "trc_05fcff72",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c02_word_puzzle_herald",
+  "system": "ablation_chat_only",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074917878,
+   1788074977878
+  ],
+  "trace_id": "trc_ea8c2e88",
+  "trace_path": "/tmp/h1-traj/c02_word_puzzle_herald_trc_ea8c2e88.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "b686b3e7-1ef2-4d54-9957-c60bd39ff8fd",
+    "type": "audience_answer",
+    "title": "People keep the streams tabbed",
+    "distribution": "public",
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": "people keep the streams tabbed"
+    },
+    "evidence": [
+     "b686b3e7-1ef2-4d54-9957-c60bd39ff8fd"
+    ],
+    "confidence": 0.6,
+    "window_ms": [
+     1788074917878,
+     1788074977878
+    ],
+    "trace_id": "trc_ea8c2e88",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c02_word_puzzle_herald",
+  "system": "agent",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074917878,
+   1788074977878
+  ],
+  "trace_id": "trc_be50fb07",
+  "trace_path": "/tmp/h1-traj/c02_word_puzzle_herald_trc_be50fb07.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "p:hera",
+    "type": "reaction",
+    "title": "Audience reacting to 'hera'",
+    "distribution": "7 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "2566e7a7-d455-4eb0-9b69-55419800d061",
+     "quote": "hera"
+    },
+    "evidence": [
+     "2566e7a7-d455-4eb0-9b69-55419800d061",
+     "604349b7-fe4e-4836-ba3b-577921dd9ae4",
+     "0057f518-4056-4b0a-b73f-31cf15eb5313",
+     "bc61f29c-f8c4-4081-b864-904e6bfc7464",
+     "2662fab6-e20a-4ffe-8885-5336ed0bd222",
+     "33d396fc-ce41-4602-91b9-2ab92d3b1489",
+     "c91e4fad-f9e4-4733-b5b6-2c16aa581d65"
+    ],
+    "window_ms": [
+     1788074917878,
+     1788074977878
+    ],
+    "trace_id": "trc_be50fb07",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "2566e7a7-d455-4eb0-9b69-55419800d061 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "p:herd",
+    "type": "reaction",
+    "title": "Audience reacting to 'herd'",
+    "distribution": "6 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "b893c5a7-4005-47e8-a7a4-54e631c7869e",
+     "quote": "herd"
+    },
+    "evidence": [
+     "b893c5a7-4005-47e8-a7a4-54e631c7869e",
+     "d084b83a-7938-469a-a026-d76716639a24",
+     "131aa9e1-3668-4712-9cc0-22987effdbe0",
+     "645eaa08-1f06-4590-9761-ebe82572f93f",
+     "d2ac689a-76e8-4b77-a48e-068206d603e0",
+     "f27b8be9-ee90-45b5-8282-224db67ea6d9"
+    ],
+    "window_ms": [
+     1788074917878,
+     1788074977878
+    ],
+    "trace_id": "trc_be50fb07",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "b893c5a7-4005-47e8-a7a4-54e631c7869e is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c03_failure_laughter",
+  "system": "baseline",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074254219,
+   1788074314219
+  ],
+  "trace_id": "trc_22807dd7",
+  "trace_path": "/tmp/h1-traj/c03_failure_laughter_trc_22807dd7.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_1fe5a148a1",
+    "type": "reaction",
+    "title": "Reaction to Water",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_1fe5a148a1",
+     "quote": "You too? You too? You Hey,"
+    },
+    "evidence": [
+     "a2a9d882-3bc3-414f-92ec-e4bfc93f1ab1"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_22807dd7",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_1fe5a148a1 at 1788074301414 is after earliest cited message 1788074271118"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_3515c2c347",
+    "type": "reaction",
+    "title": "Reaction to Shoes",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_3515c2c347",
+     "quote": "Your shoes are ugly."
+    },
+    "evidence": [
+     "984bf5ea-a5e3-4a1e-8f4b-7ae49a685571"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_22807dd7",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_3515c2c347 at 1788074259219 is after earliest cited message 1788074254796"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_f3cbb2c678",
+    "type": "reaction",
+    "title": "Reaction to Prowl",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_f3cbb2c678",
+     "quote": "Prowl for cars. Prowl? Yeah. Like, just like, we're on the prowl."
+    },
+    "evidence": [
+     "b529f329-bbee-4d42-9017-062e7c45a1ee"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_22807dd7",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c03_failure_laughter",
+  "system": "ablation_chat_only",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074254219,
+   1788074314219
+  ],
+  "trace_id": "trc_000835d7",
+  "trace_path": "/tmp/h1-traj/c03_failure_laughter_trc_000835d7.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "a61be580-d897-446f-b835-75dd555eca36",
+    "type": "reaction",
+    "title": "Comment on MIJO",
+    "trigger": {
+     "kind": "chat",
+     "event_id": "id=a61be580-d897-446f-b835-75dd555eca36",
+     "quote": "MIJO"
+    },
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_000835d7",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_NO_EVIDENCE",
+       "detail": "card cites no representative messages"
+      },
+      {
+       "code": "E_UNKNOWN_TRIGGER",
+       "detail": "id=a61be580-d897-446f-b835-75dd555eca36 not in fixture"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "b69fd03b-c7f9-468e-abf5-3f1f159c55be",
+    "type": "reaction",
+    "title": "Comment on almost getting hit",
+    "trigger": {
+     "kind": "chat",
+     "event_id": "id=67686500-9c49-4384-9f19-89c6b8b69322",
+     "quote": "almost caught a right hook"
+    },
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_000835d7",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_NO_EVIDENCE",
+       "detail": "card cites no representative messages"
+      },
+      {
+       "code": "E_UNKNOWN_TRIGGER",
+       "detail": "id=67686500-9c49-4384-9f19-89c6b8b69322 not in fixture"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "e2e5ae72-ce61-437b-a52b-182f7ff71f3b",
+    "type": "reaction",
+    "title": "Comment on Yugi leaving",
+    "trigger": {
+     "kind": "chat",
+     "event_id": "id=937426f0-57f7-4a3a-9340-79b991208a1c",
+     "quote": "🤔🤔"
+    },
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_000835d7",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_NO_EVIDENCE",
+       "detail": "card cites no representative messages"
+      },
+      {
+       "code": "E_UNKNOWN_TRIGGER",
+       "detail": "id=937426f0-57f7-4a3a-9340-79b991208a1c not in fixture"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c03_failure_laughter",
+  "system": "agent",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074254219,
+   1788074314219
+  ],
+  "trace_id": "trc_5c4fe123",
+  "trace_path": "/tmp/h1-traj/c03_failure_laughter_trc_5c4fe123.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "t:slam",
+    "type": "reaction",
+    "title": "slam",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "d805c22c-51a1-4b8a-968f-034669996b55",
+     "quote": "Slam her"
+    },
+    "evidence": [
+     "d805c22c-51a1-4b8a-968f-034669996b55",
+     "fb144eb9-a4c2-411c-b2ec-dc29b3095a02"
+    ],
+    "confidence": 0.85,
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_5c4fe123",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "d805c22c-51a1-4b8a-968f-034669996b55 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "∎reaction",
+    "type": "reaction",
+    "title": "reaction wave",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "2cf3f99a-c70b-4026-bbd0-ce4089f61105",
+     "quote": "lol"
+    },
+    "evidence": [
+     "2cf3f99a-c70b-4026-bbd0-ce4089f61105",
+     "e2567aec-8b55-47b0-93e9-daca2752831a",
+     "37d69b09-e79c-4aaf-af88-eeb8a2ba7a80"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074254219,
+     1788074314219
+    ],
+    "trace_id": "trc_5c4fe123",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "2cf3f99a-c70b-4026-bbd0-ce4089f61105 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c05_warning_no_cause",
+  "system": "baseline",
+  "fixture": "marlon_2026-08-30T0701",
+  "window_ms": [
+   1788073323294,
+   1788073383294
+  ],
+  "trace_id": "trc_b59057a1",
+  "trace_path": "/tmp/h1-traj/c05_warning_no_cause_trc_b59057a1.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "frm_0f1904fe88",
+    "type": "reaction",
+    "title": "Tense Rooftop Scene",
+    "trigger": {
+     "kind": "screen",
+     "event_id": "frm_0f1904fe88",
+     "quote": "The livestream frame shows two characters standing on a rooftop at night in a video game."
+    },
+    "evidence": [
+     "7035ffda-398b-45c9-b9f2-394ea163c598",
+     "e3d48b2a-cb2b-44da-a299-93dc82561e10"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788073323294,
+     1788073383294
+    ],
+    "trace_id": "trc_b59057a1",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c05_warning_no_cause",
+  "system": "ablation_chat_only",
+  "fixture": "marlon_2026-08-30T0701",
+  "window_ms": [
+   1788073323294,
+   1788073383294
+  ],
+  "trace_id": "trc_e303b340",
+  "trace_path": "/tmp/h1-traj/c05_warning_no_cause_trc_e303b340.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "0cdc2452-beca-4367-98a3-6f51c5e9c0ae",
+    "type": "reaction",
+    "title": "Audience reaction to roof activity",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "509ec606-a6f6-4b5e-97e0-0182d2fad2b0",
+     "quote": "they said no one on the roof and they went up lol"
+    },
+    "evidence": [
+     "6f008400-6656-4017-a24a-518bc8f3634f",
+     "0cdc2452-beca-4367-98a3-6f51c5e9c0ae",
+     "57eb5b4d-27fd-4fd5-82ce-328f6409e9e1",
+     "509ec606-a6f6-4b5e-97e0-0182d2fad2b0"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788073323294,
+     1788073383294
+    ],
+    "trace_id": "trc_e303b340",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "509ec606-a6f6-4b5e-97e0-0182d2fad2b0 is cited as evidence for the signal it supposedly caused"
+      },
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger 509ec606-a6f6-4b5e-97e0-0182d2fad2b0 at 1788073324036 is after earliest cited message 1788073323548"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c05_warning_no_cause",
+  "system": "agent",
+  "fixture": "marlon_2026-08-30T0701",
+  "window_ms": [
+   1788073323294,
+   1788073383294
+  ],
+  "trace_id": "trc_5445166e",
+  "trace_path": "/tmp/h1-traj/c05_warning_no_cause_trc_5445166e.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "t:aura",
+    "type": "reaction",
+    "title": "Audience reacting to aura",
+    "distribution": "33 mentions of 'aura'",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "6f008400-6656-4017-a24a-518bc8f3634f",
+     "quote": "AURA"
+    },
+    "evidence": [
+     "6f008400-6656-4017-a24a-518bc8f3634f",
+     "0cdc2452-beca-4367-98a3-6f51c5e9c0ae",
+     "83d35137-10fb-49af-8ec0-5f0558bccff1"
+    ],
+    "window_ms": [
+     1788073323294,
+     1788073383294
+    ],
+    "trace_id": "trc_5445166e",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "6f008400-6656-4017-a24a-518bc8f3634f is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:eww",
+    "type": "reaction",
+    "title": "Audience EWW reaction",
+    "distribution": "6 mentions of 'eww'",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "1511364b-0f4f-488f-89b4-c0c7b7d952c0",
+     "quote": "eww"
+    },
+    "evidence": [
+     "1511364b-0f4f-488f-89b4-c0c7b7d952c0",
+     "07083d88-b30a-460c-a4d4-660e344bf8aa"
+    ],
+    "window_ms": [
+     1788073323294,
+     1788073383294
+    ],
+    "trace_id": "trc_5445166e",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "1511364b-0f4f-488f-89b4-c0c7b7d952c0 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:reaction",
+    "type": "reaction",
+    "title": "Audience reaction wave",
+    "distribution": "7 mentions of reactions like LOL, LMFAO",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "1bfbbcf8-1ba2-41bd-abc9-954d132ae5b9",
+     "quote": "LOL"
+    },
+    "evidence": [
+     "1bfbbcf8-1ba2-41bd-abc9-954d132ae5b9",
+     "feb9e742-73f8-4ae5-b984-51286e9e3918"
+    ],
+    "window_ms": [
+     1788073323294,
+     1788073383294
+    ],
+    "trace_id": "trc_5445166e",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "1bfbbcf8-1ba2-41bd-abc9-954d132ae5b9 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c06_two_speakers_laughter",
+  "system": "baseline",
+  "fixture": "yugi_2026-08-30T0723",
+  "window_ms": [
+   1788075083171,
+   1788075143171
+  ],
+  "trace_id": "trc_fbca54f9",
+  "trace_path": "/tmp/h1-traj/c06_two_speakers_laughter_trc_fbca54f9.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_8ff4efd979",
+    "type": "audience_answer",
+    "title": "Yugi's Focus",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_8ff4efd979",
+     "quote": "I've been shooting it for a nice measly three about two years now"
+    },
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_fbca54f9",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_NO_EVIDENCE",
+       "detail": "card cites no representative messages"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c06_two_speakers_laughter",
+  "system": "ablation_chat_only",
+  "fixture": "yugi_2026-08-30T0723",
+  "window_ms": [
+   1788075083171,
+   1788075143171
+  ],
+  "trace_id": "trc_243f38e7",
+  "trace_path": "/tmp/h1-traj/c06_two_speakers_laughter_trc_243f38e7.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "7f9d3b69-aa32-4a16-bd23-a961e92b17f2",
+    "type": "reaction",
+    "title": "Yugi's behavior noted",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "Yugi is chronically addicted to using his phone"
+    },
+    "evidence": [
+     "71136dd4-343a-4e67-9198-06010a23f7fb"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_243f38e7",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "7f9d3b69-aa32-4a16-bd23-a961e92b17f2",
+    "type": "reaction",
+    "title": "Yugi's location",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "he in iceland"
+    },
+    "evidence": [
+     "954bf0f0-3f78-49d1-b240-0d901066b988"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_243f38e7",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "7f9d3b69-aa32-4a16-bd23-a961e92b17f2",
+    "type": "reaction",
+    "title": "Yusuf crying",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "yusuf crying for you rn"
+    },
+    "evidence": [
+     "7e51356d-4b05-415d-921b-aca8fce01a38"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_243f38e7",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c06_two_speakers_laughter",
+  "system": "agent",
+  "fixture": "yugi_2026-08-30T0723",
+  "window_ms": [
+   1788075083171,
+   1788075143171
+  ],
+  "trace_id": "trc_4427301f",
+  "trace_path": "/tmp/h1-traj/c06_two_speakers_laughter_trc_4427301f.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "reaction_wave",
+    "type": "reaction",
+    "title": "Reaction Wave",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "83f5e36a-9112-4abe-85f8-ee9a354f1bd5",
+     "quote": "LMAO"
+    },
+    "evidence": [
+     "83f5e36a-9112-4abe-85f8-ee9a354f1bd5",
+     "f3fa6415-5cdd-40e2-b7dc-95d7707ae5e5",
+     "9c1a2168-1cb5-4e1f-80f7-1e3dfa834bed"
+    ],
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_4427301f",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "83f5e36a-9112-4abe-85f8-ee9a354f1bd5 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:crying",
+    "type": "reaction",
+    "title": "Crying Mention",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "7e51356d-4b05-415d-921b-aca8fce01a38",
+     "quote": "yusuf crying for you rn"
+    },
+    "evidence": [
+     "7e51356d-4b05-415d-921b-aca8fce01a38",
+     "5c02886f-51f2-43ad-8d28-ae9b6d99fb26"
+    ],
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_4427301f",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "7e51356d-4b05-415d-921b-aca8fce01a38 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:marlon",
+    "type": "audience_answer",
+    "title": "Marlon Mention",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "7ac4d565-e06a-4216-8a7b-42759eb94a58",
+     "quote": "eggs marlon waiting for you"
+    },
+    "evidence": [
+     "7ac4d565-e06a-4216-8a7b-42759eb94a58",
+     "b4d7848e-a7d7-4650-bb65-d9f5923fed17"
+    ],
+    "window_ms": [
+     1788075083171,
+     1788075143171
+    ],
+    "trace_id": "trc_4427301f",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_UNKNOWN_MSG",
+       "detail": "b4d7848e-a7d7-4650-bb65-d9f5923fed17 not in fixture"
+      },
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "7ac4d565-e06a-4216-8a7b-42759eb94a58 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c07_frame_only_dracorex",
+  "system": "baseline",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074767878,
+   1788074827878
+  ],
+  "trace_id": "trc_21369d34",
+  "trace_path": "/tmp/h1-traj/c07_frame_only_dracorex_trc_21369d34.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "frm_fda30e530c",
+    "type": "reaction",
+    "title": "Suspicious Sleep Scene",
+    "distribution": "public",
+    "trigger": {
+     "kind": "screen",
+     "event_id": "frm_fda30e530c",
+     "quote": "The livestream shows a dimly lit room with three people sleeping on separate beds. The time displayed is 3:26 am. On screen, a word-guessing game is active with the prompt \"GUESS THE WORD!\" and the partial word \"draco___\" visible."
+    },
+    "evidence": [
+     "id=1d2bbb3b-4bea-4312-a15d-fa1bcc807189",
+     "id=bd7816f7-6ddd-4f5c-ac31-c13f009b0e0a"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074767878,
+     1788074827878
+    ],
+    "trace_id": "trc_21369d34",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_UNKNOWN_MSG",
+       "detail": "id=1d2bbb3b-4bea-4312-a15d-fa1bcc807189 not in fixture"
+      },
+      {
+       "code": "E_UNKNOWN_MSG",
+       "detail": "id=bd7816f7-6ddd-4f5c-ac31-c13f009b0e0a not in fixture"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c07_frame_only_dracorex",
+  "system": "ablation_chat_only",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074767878,
+   1788074827878
+  ],
+  "trace_id": "trc_ff040d65",
+  "trace_path": "/tmp/h1-traj/c07_frame_only_dracorex_trc_ff040d65.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "21b18468-4e90-4dbb-b8d4-fa64c4766439",
+    "type": "audience_answer",
+    "title": "Drawing reaction",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "drawing"
+    },
+    "evidence": [
+     "21b18468-4e90-4dbb-b8d4-fa64c4766439"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074767878,
+     1788074827878
+    ],
+    "trace_id": "trc_ff040d65",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c07_frame_only_dracorex",
+  "system": "agent",
+  "fixture": "stableronaldo_2026-08-30T0723",
+  "window_ms": [
+   1788074767878,
+   1788074827878
+  ],
+  "trace_id": "trc_1df0f8b4",
+  "trace_path": "/tmp/h1-traj/c07_frame_only_dracorex_trc_1df0f8b4.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "p:drac",
+    "type": "reaction",
+    "title": "Audience reacting to 'drac...'",
+    "distribution": "55 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "7ba49f08-cfc4-4de4-ab70-855494318967",
+     "quote": "drac…"
+    },
+    "evidence": [
+     "7ba49f08-cfc4-4de4-ab70-855494318967",
+     "c187e767-4d08-4cc8-846a-565e458204d5",
+     "99c01ad7-2c96-4aab-b0e3-02ee5f38fc16"
+    ],
+    "window_ms": [
+     1788074767878,
+     1788074827878
+    ],
+    "trace_id": "trc_1df0f8b4",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "7ba49f08-cfc4-4de4-ab70-855494318967 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "p:drag",
+    "type": "reaction",
+    "title": "Audience reacting to 'drag...'",
+    "distribution": "13 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "1bcad30e-d426-4b7e-aa98-fb49ba73dcc7",
+     "quote": "drag…"
+    },
+    "evidence": [
+     "1bcad30e-d426-4b7e-aa98-fb49ba73dcc7",
+     "ae8a1a3e-6840-4c85-890e-a033e31013dd",
+     "42721737-11ee-4f67-abe4-9822767eefc9"
+    ],
+    "window_ms": [
+     1788074767878,
+     1788074827878
+    ],
+    "trace_id": "trc_1df0f8b4",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "1bcad30e-d426-4b7e-aa98-fb49ba73dcc7 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c08_pool_jump_reaction",
+  "system": "baseline",
+  "fixture": "marlon_2026-08-30T0701",
+  "window_ms": [
+   1788073366308,
+   1788073426308
+  ],
+  "trace_id": "trc_a9738cc4",
+  "trace_path": "/tmp/h1-traj/c08_pool_jump_reaction_trc_a9738cc4.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_9df704bdca",
+    "type": "reaction",
+    "title": "Question about safety and proximity",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_9df704bdca",
+     "quote": "Well, I can't really get closer. Like, what do you want in the zone?"
+    },
+    "evidence": [
+     "e8509200-fa89-4a7b-964a-990cc6ba6893"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_a9738cc4",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_9df704bdca at 1788073400533 is after earliest cited message 1788073366330"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_c2d453d47a",
+    "type": "reaction",
+    "title": "Confidence in safety",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_c2d453d47a",
+     "quote": "Boat up. Bro, I'm not gonna die."
+    },
+    "evidence": [
+     "d177a6dc-4167-4b98-b3b9-ea9f2b9b50f0"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_a9738cc4",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "unknown",
+    "type": "none",
+    "title": "No significant event",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": ""
+    },
+    "evidence": [],
+    "confidence": 0.1,
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_a9738cc4",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "abstained"
+   }
+  ]
+ },
+ {
+  "case_id": "c08_pool_jump_reaction",
+  "system": "ablation_chat_only",
+  "fixture": "marlon_2026-08-30T0701",
+  "window_ms": [
+   1788073366308,
+   1788073426308
+  ],
+  "trace_id": "trc_7887ff39",
+  "trace_path": "/tmp/h1-traj/c08_pool_jump_reaction_trc_7887ff39.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "01cba1c1-8e11-4716-9243-a85d0d346580",
+    "type": "reaction",
+    "title": "Audience Recognizes Batman",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "043911a7-af53-437b-a611-be7817590826",
+     "quote": "LOOKING LIKE BATMAN UP THERE"
+    },
+    "evidence": [
+     "043911a7-af53-437b-a611-be7817590826"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_7887ff39",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "043911a7-af53-437b-a611-be7817590826 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "d3fe65cd-1729-4674-9c99-2a30b726caac",
+    "type": "reaction",
+    "title": "Audience Comments on Jump Safety",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "a06cd9dd-3c52-405a-b7f5-afad6da61f40",
+     "quote": "no beo thats not safe"
+    },
+    "evidence": [
+     "a06cd9dd-3c52-405a-b7f5-afad6da61f40"
+    ],
+    "confidence": 0.75,
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_7887ff39",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "a06cd9dd-3c52-405a-b7f5-afad6da61f40 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "de501ba4-25f7-40e3-b542-64e0ca94ebdf",
+    "type": "reaction",
+    "title": "Audience Comments on Jump Outcome",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "b8373d10-8478-438e-9a8d-8d078aae8536",
+     "quote": "he dead"
+    },
+    "evidence": [
+     "b8373d10-8478-438e-9a8d-8d078aae8536"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_7887ff39",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "b8373d10-8478-438e-9a8d-8d078aae8536 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c08_pool_jump_reaction",
+  "system": "agent",
+  "fixture": "marlon_2026-08-30T0701",
+  "window_ms": [
+   1788073366308,
+   1788073426308
+  ],
+  "trace_id": "trc_e8f4d74f",
+  "trace_path": "/tmp/h1-traj/c08_pool_jump_reaction_trc_e8f4d74f.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "t:jet",
+    "type": "reaction",
+    "title": "Audience mentions jet getting closer",
+    "distribution": "18 mentions",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "8cd4a046-e487-4a37-81ae-c38a547b499a",
+     "quote": "JET GET CLOSER"
+    },
+    "evidence": [
+     "8cd4a046-e487-4a37-81ae-c38a547b499a",
+     "92b28bca-33f1-484b-a2d4-008a4888df7a",
+     "7dafa741-2996-402f-971b-f99d1f835b4e"
+    ],
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_e8f4d74f",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "8cd4a046-e487-4a37-81ae-c38a547b499a is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:making",
+    "type": "unanswered_question",
+    "title": "Audience questions if the character will make it",
+    "distribution": "6 mentions",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "6308ef3e-6ce3-43de-ac07-927396bc5467",
+     "quote": "he not making that shit"
+    },
+    "evidence": [
+     "6308ef3e-6ce3-43de-ac07-927396bc5467",
+     "de501ba4-25f7-40e3-b542-64e0ca94ebdf"
+    ],
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_e8f4d74f",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "6308ef3e-6ce3-43de-ac07-927396bc5467 is cited as evidence for the signal it supposedly caused"
+      },
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger 6308ef3e-6ce3-43de-ac07-927396bc5467 at 1788073404379 is after earliest cited message 1788073369332"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:reaction",
+    "type": "reaction",
+    "title": "Audience reacts with laughter and emojis",
+    "distribution": "9 reactions",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "16a737bd-df2f-4cc5-9aa8-2c75e9f22388",
+     "quote": "LOL"
+    },
+    "evidence": [
+     "16a737bd-df2f-4cc5-9aa8-2c75e9f22388",
+     "92719189-bfc6-4cdd-9956-ed0c3bc2169c",
+     "c8af4bc1-b688-4a74-8c18-7744a7967c04"
+    ],
+    "window_ms": [
+     1788073366308,
+     1788073426308
+    ],
+    "trace_id": "trc_e8f4d74f",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "16a737bd-df2f-4cc5-9aa8-2c75e9f22388 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c09_two_topics",
+  "system": "baseline",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074514681,
+   1788074574681
+  ],
+  "trace_id": "trc_33c22164",
+  "trace_path": "/tmp/h1-traj/c09_two_topics_trc_33c22164.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_8a63ef0fe4",
+    "type": "reaction",
+    "title": "Recognition of Violet Myers",
+    "distribution": "public",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_8a63ef0fe4",
+     "quote": "hold on."
+    },
+    "evidence": [
+     "c2be039d-e83a-4ca9-b321-2807760b9c78",
+     "d2281dc4-b77c-485d-9a76-d5403815a2ba",
+     "e285ab39-f32e-4918-b0ed-262cd7552e2d"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_33c22164",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_8a63ef0fe4 at 1788074519334 is after earliest cited message 1788074514699"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c09_two_topics",
+  "system": "ablation_chat_only",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074514681,
+   1788074574681
+  ],
+  "trace_id": "trc_a16c3ea6",
+  "trace_path": "/tmp/h1-traj/c09_two_topics_trc_a16c3ea6.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "a6911f0f-d429-4627-96d1-c626d2272dd4",
+    "type": "reaction",
+    "title": "Y'all fuckin gooners",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "y'all fuckin gooners"
+    },
+    "evidence": [
+     "a6911f0f-d429-4627-96d1-c626d2272dd4"
+    ],
+    "confidence": 0.6,
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_a16c3ea6",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "c2be039d-e83a-4ca9-b321-2807760b9c78",
+    "type": "audience_answer",
+    "title": "Is that my corn?",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "IS THAT MY CORN"
+    },
+    "evidence": [
+     "c2be039d-e83a-4ca9-b321-2807760b9c78"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_a16c3ea6",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "d2281dc4-b77c-485d-9a76-d5403815a2ba",
+    "type": "reaction",
+    "title": "Violet",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "no way she here"
+    },
+    "evidence": [
+     "d2281dc4-b77c-485d-9a76-d5403815a2ba"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_a16c3ea6",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c09_two_topics",
+  "system": "agent",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074514681,
+   1788074574681
+  ],
+  "trace_id": "trc_734174ae",
+  "trace_path": "/tmp/h1-traj/c09_two_topics_trc_734174ae.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "t:know",
+    "type": "audience_answer",
+    "title": "Audience Recognizes Violet",
+    "distribution": "9 mentions of recognition or surprise",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "b934600d-d210-494f-8690-0e914d91dfe6",
+     "quote": "WAIT HE DONT KNOW"
+    },
+    "evidence": [
+     "b934600d-d210-494f-8690-0e914d91dfe6",
+     "bc84b827-47a6-4158-bc19-77121eef9153"
+    ],
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_734174ae",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "b934600d-d210-494f-8690-0e914d91dfe6 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:violet",
+    "type": "reaction",
+    "title": "Violet's Emotional Response",
+    "distribution": "28 mentions of crying or sadness",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "d29ec10a-69fc-4b5d-aa1a-dd270d324ee9",
+     "quote": "violet myers 😭😭😭😭"
+    },
+    "evidence": [
+     "d29ec10a-69fc-4b5d-aa1a-dd270d324ee9",
+     "220f99e0-d3d0-4f80-9af5-8242657c4cf7",
+     "cf0b9706-d338-4839-a46c-0e0118e67252"
+    ],
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_734174ae",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "d29ec10a-69fc-4b5d-aa1a-dd270d324ee9 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:wtf",
+    "type": "reaction",
+    "title": "Audience Confused or Surprised",
+    "distribution": "5 mentions of 'wtf'",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "84024b2c-bf6c-4301-9c42-aa31ea32d5b9",
+     "quote": "wtf"
+    },
+    "evidence": [
+     "84024b2c-bf6c-4301-9c42-aa31ea32d5b9"
+    ],
+    "window_ms": [
+     1788074514681,
+     1788074574681
+    ],
+    "trace_id": "trc_734174ae",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "84024b2c-bf6c-4301-9c42-aa31ea32d5b9 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c10_spam_collapse",
+  "system": "baseline",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074574681,
+   1788074634681
+  ],
+  "trace_id": "trc_55429aeb",
+  "trace_path": "/tmp/h1-traj/c10_spam_collapse_trc_55429aeb.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_12e834c6fe",
+    "type": "audience_answer",
+    "title": "Brad on the list?",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_12e834c6fe",
+     "quote": "on the list or not on the I'm Brad. I know. Okay."
+    },
+    "evidence": [
+     "90288761-d9b8-4f2b-984d-57cd90f60c97"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_55429aeb",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_12e834c6fe at 1788074578893 is after earliest cited message 1788074574964"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_54f2aafa71",
+    "type": "reaction",
+    "title": "Loud door",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_54f2aafa71",
+     "quote": "that's It's really loud. Alright. What's your name?"
+    },
+    "evidence": [
+     "8e1e04d8-7912-43e8-ba4b-a7ee30462b95"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_55429aeb",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_54f2aafa71 at 1788074598479 is after earliest cited message 1788074580762"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_996e99c39b",
+    "type": "warning",
+    "title": "Dye issue",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_996e99c39b",
+     "quote": "the dye is fucked up in the back. Fuck you. It's not the fuck out of here. I try to wash it off. Right?"
+    },
+    "evidence": [
+     "tr_996e99c39b"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_55429aeb",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_EVIDENCE_NOT_A_MESSAGE",
+       "detail": "tr_996e99c39b is a transcript_segment, not a chat message"
+      },
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "tr_996e99c39b is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c10_spam_collapse",
+  "system": "ablation_chat_only",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074574681,
+   1788074634681
+  ],
+  "trace_id": "trc_5857ea3f",
+  "trace_path": "/tmp/h1-traj/c10_spam_collapse_trc_5857ea3f.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "038989f4-fd71-4b24-adc2-6cefda0aa968",
+    "type": "audience_answer",
+    "title": "Yog",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "yog"
+    },
+    "evidence": [
+     "038989f4-fd71-4b24-adc2-6cefda0aa968"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_5857ea3f",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "8c0aad2-1140-4ebf-beff-5d30380c0a87",
+    "type": "reaction",
+    "title": "grab the camera for an edit by eris",
+    "trigger": {
+     "kind": "screen",
+     "event_id": "unknown",
+     "quote": "grab the camera for an edit by eris"
+    },
+    "evidence": [
+     "08c0aad2-1140-4ebf-beff-5d30380c0a87"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_5857ea3f",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "c1c9a1b7-ab5f-4847-bdf4-b940671cd98c",
+    "type": "reaction",
+    "title": "grab the camera for an edit by eris",
+    "trigger": {
+     "kind": "screen",
+     "event_id": "unknown",
+     "quote": "grab the camera for an edit by eris"
+    },
+    "evidence": [
+     "c1c9a1b7-ab5f-4847-bdf4-b940671cd98c"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_5857ea3f",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c10_spam_collapse",
+  "system": "agent",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074574681,
+   1788074634681
+  ],
+  "trace_id": "trc_f582b0dc",
+  "trace_path": "/tmp/h1-traj/c10_spam_collapse_trc_f582b0dc.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "reaction_wave",
+    "type": "reaction",
+    "title": "reaction wave",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "5f498d6d-7567-40ee-b51e-f4f9b420a0e2",
+     "quote": "lol"
+    },
+    "evidence": [
+     "5f498d6d-7567-40ee-b51e-f4f9b420a0e2",
+     "64f3a32d-53d2-49f0-aaf9-098a839d4532",
+     "10f20814-7337-4764-af42-c55909a618c3"
+    ],
+    "confidence": 0.9,
+    "window_ms": [
+     1788074574681,
+     1788074634681
+    ],
+    "trace_id": "trc_f582b0dc",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "5f498d6d-7567-40ee-b51e-f4f9b420a0e2 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c11_sarcasm_mockery",
+  "system": "baseline",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074296000,
+   1788074356000
+  ],
+  "trace_id": "trc_634972cc",
+  "trace_path": "/tmp/h1-traj/c11_sarcasm_mockery_trc_634972cc.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_1fe5a148a1",
+    "type": "reaction",
+    "title": "Yugi Slam",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_1fe5a148a1",
+     "quote": "You too? You too? You Hey,"
+    },
+    "evidence": [
+     "2405e9b6-d2c9-4b85-bdf9-369cbb3098e5"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_634972cc",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_1fe5a148a1 at 1788074301414 is after earliest cited message 1788074296043"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_2fe9505e54",
+    "type": "audience_answer",
+    "title": "Water Break",
+    "distribution": null,
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_2fe9505e54",
+     "quote": "bro. Hold it down. I'm a go get a water real quick. Yeah. When you like one? Yeah. 64525567."
+    },
+    "evidence": [
+     "94a70f8a-6155-431f-83d7-fa01e59d355e"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_634972cc",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "unknown",
+    "type": "none",
+    "title": "No significant event",
+    "distribution": null,
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": ""
+    },
+    "evidence": [],
+    "confidence": 0.1,
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_634972cc",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "abstained"
+   }
+  ]
+ },
+ {
+  "case_id": "c11_sarcasm_mockery",
+  "system": "ablation_chat_only",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074296000,
+   1788074356000
+  ],
+  "trace_id": "trc_9b982b02",
+  "trace_path": "/tmp/h1-traj/c11_sarcasm_mockery_trc_9b982b02.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "88ec24c0-4679-4fce-916f-b40a76998cb2",
+    "type": "reaction",
+    "title": "Slam Chant",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "SLAAAAAAMM"
+    },
+    "evidence": [
+     "88ec24c0-4679-4fce-916f-b40a76998cb2"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_9b982b02",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "93f5ec0f-17eb-41bf-8f3e-1e3f749dba86",
+    "type": "audience_answer",
+    "title": "Slam Count",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "unknown",
+     "quote": "You almost slammed him mar I saw that Kappa"
+    },
+    "evidence": [
+     "93f5ec0f-17eb-41bf-8f3e-1e3f749dba86"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_9b982b02",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "a94f7c49-44c3-4893-b36e-561dba67d4c8",
+    "type": "reaction",
+    "title": "LMAO Reaction",
+    "trigger": {
+     "kind": "chat",
+     "event_id": "unknown",
+     "quote": "LMAOOO"
+    },
+    "evidence": [
+     "b1fea1a8-8a1e-4593-a098-7d98584c7fb7"
+    ],
+    "confidence": 0.6,
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_9b982b02",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c11_sarcasm_mockery",
+  "system": "agent",
+  "fixture": "marlon_2026-08-30T0715",
+  "window_ms": [
+   1788074296000,
+   1788074356000
+  ],
+  "trace_id": "trc_6b4b2523",
+  "trace_path": "/tmp/h1-traj/c11_sarcasm_mockery_trc_6b4b2523.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "p:dans",
+    "type": "reaction",
+    "title": "Audience is repeating 'dans'",
+    "distribution": "21 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "788feae7-5a16-40e6-9b4c-20fb4e0a8f9f",
+     "quote": "dans"
+    },
+    "evidence": [
+     "788feae7-5a16-40e6-9b4c-20fb4e0a8f9f",
+     "1b93fe56-0fd0-4ffe-aa0d-4bb5099fefc8",
+     "8267e09f-b9a5-460d-b3b5-98d26bf54f96"
+    ],
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_6b4b2523",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "788feae7-5a16-40e6-9b4c-20fb4e0a8f9f is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "p:geeg",
+    "type": "reaction",
+    "title": "Audience is repeating 'geeg'",
+    "distribution": "10 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "066242f1-5e4c-4007-ba0c-7961c1496a10",
+     "quote": "geeg"
+    },
+    "evidence": [
+     "066242f1-5e4c-4007-ba0c-7961c1496a10",
+     "1ff6ddc7-a49f-43d0-a4b3-9e2d819334ec",
+     "bc30eac1-e515-4f48-ac97-99103aacee41"
+    ],
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_6b4b2523",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "066242f1-5e4c-4007-ba0c-7961c1496a10 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "∎reaction",
+    "type": "reaction",
+    "title": "Audience is reacting with LOL, LMAO",
+    "distribution": "9 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "6fe4a932-49fa-47df-9fd4-fe7df15126f4",
+     "quote": "LOL"
+    },
+    "evidence": [
+     "6fe4a932-49fa-47df-9fd4-fe7df15126f4",
+     "1ce22af9-6f4c-4bbd-b4a7-adb338ce7e8e",
+     "fa91424d-6bc3-4e4e-894f-21aac4280b8b"
+    ],
+    "window_ms": [
+     1788074296000,
+     1788074356000
+    ],
+    "trace_id": "trc_6b4b2523",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "6fe4a932-49fa-47df-9fd4-fe7df15126f4 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c12_no_signal_abstain",
+  "system": "baseline",
+  "fixture": "yugi_2026-08-30T0723",
+  "window_ms": [
+   1788074603171,
+   1788074663171
+  ],
+  "trace_id": "trc_d3e51701",
+  "trace_path": "/tmp/h1-traj/c12_no_signal_abstain_trc_d3e51701.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "tr_15aa4becb3",
+    "type": "reaction",
+    "title": "Comment on Time Passing",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_15aa4becb3",
+     "quote": "Damn. Thirteen minutes."
+    },
+    "evidence": [
+     "0010cb3e-b257-4c80-b68a-d05d6ef7a39f"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074603171,
+     1788074663171
+    ],
+    "trace_id": "trc_d3e51701",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_15aa4becb3 at 1788074606756 is after earliest cited message 1788074603542"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "tr_86b5de3e55",
+    "type": "audience_answer",
+    "title": "Yugi's Phone or Friend Time",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_86b5de3e55",
+     "quote": "I'm"
+    },
+    "evidence": [
+     "99db7392-6410-457a-b158-7691b2242d12"
+    ],
+    "confidence": 0.7,
+    "window_ms": [
+     1788074603171,
+     1788074663171
+    ],
+    "trace_id": "trc_d3e51701",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   },
+   {
+    "signal_id": "tr_c3dd4938a7",
+    "type": "reaction",
+    "title": "Question about Party Attendance",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "tr_c3dd4938a7",
+     "quote": "do y'all think I go to parties"
+    },
+    "evidence": [
+     "a88b0feb-8afc-4d8b-9976-ed91c4eeb590"
+    ],
+    "confidence": 0.6,
+    "window_ms": [
+     1788074603171,
+     1788074663171
+    ],
+    "trace_id": "trc_d3e51701",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_TRIGGER_LATE",
+       "detail": "trigger tr_c3dd4938a7 at 1788074663026 is after earliest cited message 1788074648048"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ },
+ {
+  "case_id": "c12_no_signal_abstain",
+  "system": "ablation_chat_only",
+  "fixture": "yugi_2026-08-30T0723",
+  "window_ms": [
+   1788074603171,
+   1788074663171
+  ],
+  "trace_id": "trc_c35c948e",
+  "trace_path": "/tmp/h1-traj/c12_no_signal_abstain_trc_c35c948e.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "unknown",
+    "type": "reaction",
+    "title": "Party Atmosphere",
+    "distribution": "public",
+    "trigger": {
+     "kind": "unknown",
+     "event_id": "unknown",
+     "quote": "THE PARTY LOOKS HELLA DEAD AND PEOPLE ARE LEAVING"
+    },
+    "evidence": [
+     "4652004b-357d-4ee1-8dfe-151a93703050"
+    ],
+    "confidence": 0.8,
+    "window_ms": [
+     1788074603171,
+     1788074663171
+    ],
+    "trace_id": "trc_c35c948e",
+    "gate": {
+     "ok": true,
+     "violations": []
+    },
+    "status": "verified"
+   }
+  ]
+ },
+ {
+  "case_id": "c12_no_signal_abstain",
+  "system": "agent",
+  "fixture": "yugi_2026-08-30T0723",
+  "window_ms": [
+   1788074603171,
+   1788074663171
+  ],
+  "trace_id": "trc_6f23b821",
+  "trace_path": "/tmp/h1-traj/c12_no_signal_abstain_trc_6f23b821.json",
+  "parse_error": null,
+  "cards": [
+   {
+    "signal_id": "t:ong",
+    "type": "reaction",
+    "title": "Audience is reacting to the word 'ong'",
+    "distribution": "4 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "2f9ac35e-8ddd-4eeb-aad7-58c5206bb770",
+     "quote": "ong this the quill car"
+    },
+    "evidence": [
+     "2f9ac35e-8ddd-4eeb-aad7-58c5206bb770",
+     "fc532634-f9d0-4d6f-a67b-f2e67ae722e7",
+     "38cfb649-7fc0-44ab-8331-c37417156147",
+     "070ec9d2-a3a8-4fb1-8bec-f40f0e26ae45"
+    ],
+    "window_ms": [
+     1788074603171,
+     1788074663171
+    ],
+    "trace_id": "trc_6f23b821",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "2f9ac35e-8ddd-4eeb-aad7-58c5206bb770 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   },
+   {
+    "signal_id": "t:yugi",
+    "type": "reaction",
+    "title": "Audience is reacting to 'yugi'",
+    "distribution": "4 messages",
+    "trigger": {
+     "kind": "speech",
+     "event_id": "351ce7f7-35e3-40ed-b27f-ac74a5d8d060",
+     "quote": "yugi party is closed for idf veterans"
+    },
+    "evidence": [
+     "351ce7f7-35e3-40ed-b27f-ac74a5d8d060",
+     "99db7392-6410-457a-b158-7691b2242d12",
+     "42f431f7-6f06-49d0-a42e-e6375b14abd1",
+     "8615cfd7-b29e-4edf-b203-707eefb12278"
+    ],
+    "window_ms": [
+     1788074603171,
+     1788074663171
+    ],
+    "trace_id": "trc_6f23b821",
+    "gate": {
+     "ok": false,
+     "violations": [
+      {
+       "code": "E_CIRCULAR_EVIDENCE",
+       "detail": "351ce7f7-35e3-40ed-b27f-ac74a5d8d060 is cited as evidence for the signal it supposedly caused"
+      }
+     ]
+    },
+    "status": "rejected"
+   }
+  ]
+ }
+]

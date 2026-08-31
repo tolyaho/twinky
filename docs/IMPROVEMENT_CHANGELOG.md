@@ -317,7 +317,10 @@ above zero — and H1 fails both. `git checkout` on `workflow/` put the frozen n
 `make eval` is 48 hits / 0 misses again and `evidence/` never moved, because the arm was recorded
 into a temporary directory.
 
-**The recording is kept, so the loss reproduces with no key:**
+**The evidence is committed and the loss reproduces with no key.** The run's own output is in
+`evidence/h1/`, beside `evidence/grounded/` from experiment #2, so every figure above can be
+recomputed rather than taken on trust — and three tests in `tests/test_published_numbers.py` do
+exactly that on each run. To regenerate it:
 
 ```bash
 git apply experiments/h1-group-chat.patch

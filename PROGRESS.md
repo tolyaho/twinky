@@ -3472,3 +3472,52 @@ Result: `make test` 702 → **704 passed**. 2 new guards. Cost **$0.00**, ledger
 Author-only and unchanged: film and cut the video; `git push` (origin/main 61 commits behind);
 make the repository public after pushing; `make review`; rotate `.env` and the Telegram
 credentials.
+
+## Iteration 106 — the newest removed experiment had no evidence behind it
+
+Verification-only. Removed experiment #4 was written up last night from a run whose output went to
+`/var/folders/.../h1-evidence-wx_abf9u`, a temp directory that no longer exists. That left twelve
+published figures — trigger accuracy, the unsupported rate, the whole resolved trigger table,
+the `E_CIRCULAR_EVIDENCE` census — resting on nothing but this file's word.
+
+Experiments #2 and #3 both ship their evidence (`evidence/grounded/`, the arm scorer). #4 now
+does too. Regenerated it from the committed cache — apply the patch, run, reverse-apply — at **46
+hits and 0 misses**, into `evidence/h1/`, and every figure came back identical:
+
+| | shipped | H1 |
+|---|---:|---:|
+| trigger accuracy | 0.500 | 0.000 |
+| unsupported | 0.739 | 1.000 |
+| recall | 0.182 | 0.182 |
+| abstained · unknown · speech · frame · **chat** | 1 · 4 · 4 · 0 · **13** | 0 · 0 · 0 · 1 · **24** |
+| `E_CIRCULAR_EVIDENCE` | 8 | 25 |
+
+Three tests now recompute them on every run, including the resolved trigger table — which has to
+look each id up in the fixture rather than trust the model's claimed `kind`, since a card saying
+`kind: "speech"` over a chat id is precisely the failure being measured. The claimed-kind census
+reads 18 speech triggers where there are none. Verified by breaking it: changed the frame row from
+1 to 3, watched it fail, restored it.
+
+**Two defects found on the way, both in guards rather than in the product.**
+
+`test_every_path_the_entry_documents_cite_exists_in_the_archive` failed the moment `evidence/h1/`
+was cited in `SUBMISSION.md`, because a directory added this iteration is not yet in
+`git archive HEAD`. That is a chicken-and-egg, not a defect, so a cited path now also counts as
+shipping if git tracks it and does not export-ignore it. The guard keeps its teeth — `.env.example`,
+the file that prompted the test, was tracked, un-ignored **and** export-ignored, and `check-attr`
+still catches exactly that.
+
+The first version of that helper tested `attr.stdout.strip().endswith("set")`, which matches
+**`unset`** as well as `set` — so it rejected `.env.example`, the one path `-export-ignore` exists
+to re-include. Harmless here because that file is in the archive and passes the earlier check, but
+wrong. Found by printing the helper's verdict on four paths rather than trusting the green test:
+`.env.example` True, `evidence/h1` True, `evidence/nope` False, `.env` False.
+
+Result: `make test` 704 → **707 passed**. 3 new guards, 1 guard repaired. Shipped `make eval`
+still **48 hits / 0 misses**; `trajectories/product-agent/` untouched; `scan_secrets` clean.
+Cost **$0.00**, ledger $0.4364.
+
+**9.1 hours to the deadline. The 8-hour video gate is 1.1 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 61 commits behind);
+make the repository public after pushing; `make review`; rotate `.env` and the Telegram
+credentials.
