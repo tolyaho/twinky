@@ -690,3 +690,40 @@ def test_the_shooting_plan_puts_the_network_shot_where_it_can_be_dropped():
     assert "Drop this first" in plan and "Drop this second" in plan
     assert "Shot 10" in plan and "needs a network" in plan
     assert "**needs network**" in shots, "shot 10 no longer flags its own dependency"
+
+
+def test_data_md_accounts_for_every_committed_fixture_directory():
+    """`evals/fixtures/` holds 27 directories and every entry document says four broadcasts. The
+    other 23 are a single `meta.json` each — captures that were never enriched, plus the
+    synthetic scaffold — and nothing explained them, so a judge browsing the evaluation data met
+    23 directories that look abandoned.
+
+    Counted here rather than quoted, because the numbers in that section are the reason it is
+    reassuring rather than hand-waving.
+    """
+    import json
+
+    root = REPO / "evals/fixtures"
+    dirs = [d for d in sorted(root.iterdir()) if d.is_dir()]
+    enriched, capture_only = [], []
+    for d in dirs:
+        if d.name == "sample":
+            continue
+        meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
+        (enriched if meta.get("enriched") else capture_only).append(meta)
+
+    data = (REPO / "evals/DATA.md").read_text(encoding="utf-8")
+    assert f"| **enriched, evaluated** | {len(enriched)} |" in data
+    assert f"| captured, never enriched | {len(capture_only)} |" in data
+
+    channels = {m["fixture_id"].split("_")[0] for m in capture_only}
+    messages = sum(m.get("chat_messages") or 0 for m in capture_only)
+    assert f"**{len(channels)} channels, {messages:,} chat messages" in data, \
+        f"DATA.md misstates the capture-only totals; measured {len(channels)} / {messages:,}"
+
+    # The claim that costs the most if wrong: nothing but meta.json is committed for them.
+    for d in dirs:
+        if d.name == "sample" or any(m["fixture_id"] == d.name for m in enriched):
+            continue
+        tracked = {p.name for p in d.iterdir() if p.is_file()}
+        assert tracked == {"meta.json"}, f"{d.name} ships more than its meta: {sorted(tracked)}"

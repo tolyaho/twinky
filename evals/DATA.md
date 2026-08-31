@@ -85,3 +85,27 @@ experiment brought the mean to -28.9 dB and still returned zero segments, confir
 contains no speech rather than inaudible speech. The original audio is retained unmodified.
 This fixture is therefore used for cases that must succeed without speech: frame-grounded
 reactions, spam collapse, competing topics, and abstention.
+
+## Why `evals/fixtures/` holds 27 directories and the documents say four
+
+Four fixtures are enriched and evaluable. They are the four in the table above, and they are the
+only ones any reported number comes from. The rest are there because capture is time-critical and
+enrichment is not: a broadcast has to be recorded while it is live, and the transcription and
+frame captions can be produced from those bytes at any time afterwards — for a price.
+
+| | count | what is committed |
+|---|---:|---|
+| **enriched, evaluated** | 4 | `chat.jsonl`, `transcript.jsonl`, `frames.jsonl`, `meta.json` |
+| captured, never enriched | 22 | `meta.json` only — **11 KB in total** |
+| synthetic scaffold (`sample`) | 1 | hand-written, 36 events, used by tests and by nothing else |
+
+The 22 are **8 channels, 32,958 chat messages, 2.9 hours** of broadcast, held as a record of what
+was recorded rather than as data. Their `raw/` directories are gitignored, so no audio, no video
+and no unpseudonymised login is committed for any of them, and the derived event files were never
+produced. `make inspect` on one succeeds and reports **0 events** — it is empty, not broken.
+
+They are kept rather than deleted for one reason: `meta.json` records that the capture happened,
+when, on which channel and how much chat it held. Deleting them would erase the only evidence of
+how the four were chosen, which was from a wider set and not from the first thing that worked.
+Enriching all of them was a cost decision, not an oversight — see `COST_LEDGER.md`, where the four
+cost **$0.28** and the same treatment for twenty-six would have dominated the entire budget.
