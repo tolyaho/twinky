@@ -2,7 +2,8 @@
 
 Max 5:00. Storyboard and generative-footage rules: `../notes/06-VIDEO.md`.
 
-**Every number below was re-measured against the built product on 2026-08-30**, after the board,
+**Every number below was re-measured against the built product on 2026-08-30**, and shot 9's
+figures again on 2026-08-31 when the diagram gained the step-budget line, after the board,
 the rail, the questions panel, Tier 0 live chat and the generated agent graph landed. The previous
 version of this file described a two-column page that no longer exists and quoted a test count
 that had moved by a hundred. If you are reading it from a print-out, throw the print-out away.
@@ -20,7 +21,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 697 passed — this is also shot 14
+make test                             # 701 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -196,8 +197,15 @@ arithmetic you can re-run. And this picture is generated from the code — the t
 controller's bounds, the gate's eight card checks and two abstention checks, and the call counts
 from a hundred and eighteen recorded runs. A test fails if it stops matching."*
 
-**Point at `get_frame_captions: 2`.** That is the grounding failure as a number, and it sets up
-Act 5.
+**Point at `get_frame_captions: 2`,** then at the line under the tool column: **`51 of 59 runs
+spent 1 of their 4 steps` / `and the one step was chat`.**
+
+**Say:** *"Fifty-nine of those runs could call a tool at all — the rest are baselines with no
+tools. Fifty-one of them used one step out of four, and spent it on chat. That is the failure in
+Act 5, before it happens: the agent doesn't look."*
+
+The two numbers do different work. `get_frame_captions: 2` says it never read the screen; the
+line beneath says that wasn't a budget problem — it had three steps left every time.
 
 ### Shot 10 — live, and it costs nothing (**needs network**)
 Switch the toolbar control to **Live**, type a channel that is broadcasting, press **Watch chat**.
@@ -261,7 +269,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 697 passed
+make test        # 701 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
