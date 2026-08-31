@@ -853,3 +853,25 @@ replaced, clamp untouched, the rest belongs on the Method page.
 hrefs across all three rather than checking each in isolation.
 Next: 1.6, the citation highlight firing off-screen. Then item B.
 Blockers: none. Cost unchanged at $0.42.
+
+## 2026-08-31T02:10Z — iteration 48
+Attempted: P0 1.6 — the citation highlight firing off-screen. Item A is now complete.
+Result: `make test` green, 443 -> 447.
+The feed pinned to the bottom on every message, while a card is emitted at its window's END and
+cites messages from the window's start — up to 60 seconds and roughly 100 rows above. So the
+highlight always fired somewhere nobody could see, and it is the single gesture the whole product
+rests on: this cluster, that cause.
+The feed now yields to it. When a card lands, following stops, the first cited row scrolls to
+centre, the highlight holds 1.8 s, and after a 1.5 s hold the feed resumes — unless another
+citation arrived or the reader took over, tracked by a hold token so two citations in quick
+succession do not fight. Scrolling up is treated as a deliberate act: following stops and a
+"↓ follow live" pill appears until clicked, with 40px of the bottom counted as still following.
+A cited row that has already been evicted past the 200-row DOM cap is skipped rather than
+throwing, and a card whose rows are all gone leaves the feed alone.
+FEATURES_V2.md added to the loop with its own priority order: after the board, the free
+deterministic set — questions panel, chatter stats, masonry — then group labels, then D and E.
+Embeddings only if the board is green and the video is scheduled, and only with hand-labelled
+pair-level precision and recall frozen before any arm runs. The team measured embedding
+clustering twice and got ~100 poor clusters; it goes in as a measured arm or not at all.
+Next: item B, the deterministic grouping rules.
+Blockers: none. Cost unchanged at $0.42.

@@ -794,3 +794,14 @@ html, body.live-page { height: 100%; }
   font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0;
   padding: 0 var(--xs);
 }
+
+/* The follow affordance. Shown whenever the feed is not pinned to the bottom — either because a
+   citation asked the reader to look up, or because they scrolled there themselves. */
+.follow {
+  position: absolute; left: 50%; bottom: var(--sm); transform: translateX(-50%);
+  padding: var(--xxs) var(--sm);
+  border: 1px solid var(--ink); border-radius: var(--r-pill);
+  background: var(--surface-card); color: var(--ink);
+  font-family: var(--ui); font-size: 12px; font-weight: 500; letter-spacing: 0;
+}
+.panel-chat { position: relative; }

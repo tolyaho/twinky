@@ -11,7 +11,8 @@
 
 const UNKNOWN = "unknown";
 const MAX_ROWS = 200;          /* the DOM is capped; the counter is not */
-const CITE_HIGHLIGHT_MS = 1200;
+const CITE_HIGHLIGHT_MS = 1800;
+const CITE_HOLD_MS = 1500;      /* long enough to read the cited row before the feed resumes */
 
 const clock = (ms) => {
   const s = Math.max(0, Math.round(ms / 1000));
@@ -28,6 +29,8 @@ const el = (tag, className, text) => {
 const state = {
   source: null,
   epoch: 0,                     /* every start() gets one; stale listeners are ignored */
+  pinned: true,                 /* following the flood, until a citation asks to be looked at */
+  holdUntil: 0,
   fixture: null,
   system: "agent",
   speed: 1,
@@ -51,7 +54,11 @@ function addMessage(event) {
     for (const [id, node] of state.rows) if (node === first) state.rows.delete(id);
     feed.removeChild(first);
   }
-  feed.scrollTop = feed.scrollHeight;
+  /* Only follow the flood while pinned. A card cites messages from the START of its window —
+     up to 60 seconds and ~100 rows back — so pinning to the bottom on every message meant the
+     citation highlight always fired somewhere nobody could see. That gesture is the one the
+     product rests on, so the feed yields to it. */
+  if (state.pinned) feed.scrollTop = feed.scrollHeight;
 
   state.counts.chat += 1;
   document.getElementById("chat-n").textContent = String(state.counts.chat);
@@ -66,12 +73,39 @@ function addMessage(event) {
 /* The one gesture that is the whole argument: when a card lands, the messages it cites light up
    in the flood beside it. This cluster, that cause. */
 function highlightCited(card) {
+  const rows = [];
   for (const id of card.evidence || []) {
     const row = state.rows.get(id);
-    if (!row) continue;
+    if (!row) continue;                       /* evicted past the 200-row cap; nothing to show */
     row.classList.add("cited");
+    rows.push(row);
     setTimeout(() => row.classList.remove("cited"), CITE_HIGHLIGHT_MS);
   }
+  if (!rows.length) return;
+
+  /* Stop following, bring the first cited message into view, hold, then resume. */
+  state.pinned = false;
+  showFollow(true);
+  rows[0].scrollIntoView({ block: "center", behavior: "smooth" });
+
+  const holdToken = state.holdUntil = Date.now() + CITE_HOLD_MS;
+  setTimeout(() => {
+    if (state.holdUntil !== holdToken) return;   /* another citation, or the reader took over */
+    resumeFollowing();
+  }, CITE_HOLD_MS);
+}
+
+function showFollow(visible) {
+  const button = document.getElementById("follow");
+  if (button) button.hidden = !visible;
+}
+
+function resumeFollowing() {
+  state.pinned = true;
+  state.holdUntil = 0;
+  showFollow(false);
+  const feed = document.getElementById("feed");
+  if (feed) feed.scrollTop = feed.scrollHeight;
 }
 
 /* ------------------------------------------------------------------ signals column */
@@ -166,6 +200,9 @@ function reset() {
   state.rows.clear();
   state.counts = { chat: 0, grounded: 0, abstained: 0, rejected: 0 };
   state.notedUngrounded = false;
+  state.pinned = true;
+  state.holdUntil = 0;
+  showFollow(false);
 
   /* Identity is cleared here, not only on success. A failed start() used to leave the previous
      run's badge and channel line on screen above an empty page, which reads as "still loading". */
@@ -387,6 +424,16 @@ function clear(node) {
 }
 
 document.getElementById("go-live").addEventListener("click", goLive);
+document.getElementById("follow").addEventListener("click", resumeFollowing);
+
+/* Scrolling up is a deliberate act: stop following and leave the affordance until they come
+   back. Within 40px of the bottom counts as still following. */
+document.getElementById("feed").addEventListener("scroll", () => {
+  const feed = document.getElementById("feed");
+  const atBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 40;
+  if (atBottom && !state.holdUntil) { state.pinned = true; showFollow(false); }
+  else if (!atBottom) { state.pinned = false; showFollow(true); }
+}, { passive: true });
 
 /* ------------------------------------------------------------------ the picker */
 let catalogue = [];

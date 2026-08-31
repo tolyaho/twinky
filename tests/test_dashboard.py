@@ -985,3 +985,41 @@ def test_one_nav_on_every_page():
 
     assert len(set(navs)) == 1, f"three pages, {len(set(navs))} different navs: {navs}"
     assert navs[0] == ("/", "/method", "/philosophy")
+
+
+def test_the_feed_yields_to_a_citation_instead_of_pinning_to_the_bottom():
+    """A card cites messages from the START of its window — up to 60 seconds and roughly 100 rows
+    back — while the feed pinned to the bottom on every message. The citation highlight always
+    fired somewhere nobody could see, and that gesture is the one the product rests on."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "if (state.pinned) feed.scrollTop = feed.scrollHeight;" in js
+    assert "scrollIntoView({ block: \"center\"" in js
+    assert "state.pinned = false;" in js
+    assert "CITE_HOLD_MS" in js and "resumeFollowing" in js
+
+
+def test_a_missing_cited_row_is_not_an_error():
+    """The DOM is capped at 200 rows, so a cited message may already be gone."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    body = js.split("function highlightCited", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "if (!row) continue;" in body
+    assert "if (!rows.length) return;" in body
+
+
+def test_the_reader_can_get_back_to_live():
+    html = LIVE_HTML.read_text(encoding="utf-8")
+    js = LIVE_JS.read_text(encoding="utf-8")
+    css = (STATIC / "app.css").read_text(encoding="utf-8")
+
+    assert 'id="follow"' in html and "follow live" in html
+    assert 'getElementById("follow").addEventListener("click", resumeFollowing)' in js
+    assert ".follow {" in css
+
+
+def test_scrolling_up_takes_control_of_the_feed():
+    js = LIVE_JS.read_text(encoding="utf-8")
+
+    assert "atBottom" in js and "{ passive: true }" in js
+    assert "state.pinned = false; showFollow(true);" in js
