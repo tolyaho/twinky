@@ -103,6 +103,23 @@ def test_no_script_writes_untrusted_text_as_html(script):
 # those targets were plain <article> and <div> elements with a click handler: reachable with a
 # mouse and by nothing else.
 
+def test_the_method_page_has_no_mouse_only_control(js_source):
+    """The same audit that found four mouse-only regions on the product page, applied to the one
+    that holds the evidence. Every click target there resolves to a real `<button>` — checked by
+    resolving each handler back to its construction, not by pattern-matching the markup, because
+    a grep for `<button class="seg"` missed `<button role="tab" class="seg">` and reported a
+    false alarm."""
+    import re
+
+    js = js_source("method.js")
+    for m in re.finditer(r"(\w+)\.addEventListener\(\"click\"", js):
+        name = m.group(1)
+        decls = re.findall(rf"(?:const|let)\s+{re.escape(name)}\s*=\s*([^;]+);", js[:m.start()])
+        built = decls[-1] if decls else ""
+        assert (not built) or 'el("button"' in built or "getElementById" in built, \
+            f"method.js attaches a click handler to {name} <- {built[:60]}"
+
+
 def test_every_rich_click_target_goes_through_the_activatable_helper(js_source):
     js = js_source("live.js")
 

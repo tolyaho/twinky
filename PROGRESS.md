@@ -2900,3 +2900,38 @@ questions and rail panels, label ambiguity, and responsive behaviour.
 **19.6 hours to the deadline; the video gate is 11.6 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 93 — 2026-08-31 — turning the audits on the pages they had not been run against
+
+Attempted: every polish item had a pass on `/`, and the audits that found things there had never
+been run against `/method` — the page holding the evidence and filmed in Act 3 — or
+`/philosophy`.
+
+**The Method page came back clean on all three, and that is the result.** Click targets, empty
+states and duplicate labels: nothing. Every one of its five click handlers resolves to a real
+`<button>`, its one empty state has its text set before it is un-hidden, and its two repeated
+labels are technical terms in prose. `/philosophy` carries no script at all — static argument and
+three links — so there is nothing there to be operable or empty.
+
+**Two false alarms of my own on the way, both from grepping instead of parsing.**
+
+A grep for `<button class="seg"` returned **zero** matches and I briefly had the Method page's tab
+list down as a set of non-operable `<div>`s — the same defect I had just fixed on the product
+page. The markup is `<button role="tab" class="seg">`: my pattern assumed attribute order.
+
+Then `#rail-empty` is an empty `<p>` in the markup, which looked like the reduced-motion empty
+stage all over again — a container that gets un-hidden with nothing in it. `paint()` sets its
+`textContent` before showing it. Fine.
+
+Both were resolved by checking, and both would have been "fixes" to things that were not broken.
+The guard I added therefore resolves each click handler **back to its construction** rather than
+pattern-matching markup, because that is the method that did not lie. Verified in both directions:
+a planted `el("div", …)` with a click handler fails it; the real file passes.
+
+Result: `make test` 687 → **688 passed**. 1 new test, two rows in DECISIONS.md. No source change
+to the pages themselves — this iteration found nothing to fix and says so. Cost: **$0.00**, ledger
+$0.43.
+
+**19.5 hours to the deadline; the video gate is 11.5 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
