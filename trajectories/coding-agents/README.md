@@ -16,12 +16,13 @@ this repository was committed or published by an agent.
 
 ## How the work was actually run
 
-An unattended loop, one bounded unit of work per iteration. The cadence started at 30 minutes and
-was shortened to 10 as the deadline closed; **70 iterations are logged**, of which 22 carry a
-`## Iteration` heading in `PROGRESS.md` and the remainder are recorded in `DECISIONS.md` and the
-commit history. The loop specification changed as the work did — `NIGHT_LOOP.md`, then
-`FIX_AND_FINISH.md`, then `LOOP_FINAL.md`, then a version led by `RENAME.md` — and each lives one
-directory up, outside this repository.
+An unattended loop, one bounded unit of work per iteration. The cadence moved with the deadline —
+30 minutes, then 10 through the night, back to 30, and 20 for the last stretch; **104 iterations
+are logged**, of which 56 carry a `## Iteration` heading in `PROGRESS.md` and the remainder are
+recorded in `DECISIONS.md` and the commit history. The loop specification changed as the work did
+— `NIGHT_LOOP.md`, then `FIX_AND_FINISH.md`, then `LOOP_FINAL.md`, then a version led by
+`RENAME.md`, and finally `AGENT_FIX.md` — and each lives one directory up, outside this
+repository.
 
 Each iteration:
 
@@ -107,9 +108,9 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 | | |
 |---|---:|
-| Commits in the competition window | 129 |
-| Iterations logged | 70 |
-| Decisions recorded with rationale | 303 |
-| Risks tracked | 42 |
-| Tests | 702 |
+| Commits in the competition window | 165 |
+| Iterations logged | 104 |
+| Decisions recorded with rationale | 414 |
+| Risks tracked | 51 |
+| Tests | 704 |
 | Total spend on model calls | $0.44 |
