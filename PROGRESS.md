@@ -3521,3 +3521,61 @@ Cost **$0.00**, ledger $0.4364.
 Author-only and unchanged: film and cut the video; `git push` (origin/main 61 commits behind);
 make the repository public after pushing; `make review`; rotate `.env` and the Telegram
 credentials.
+
+## Iteration 107 — an arm's report was indistinguishable from the published one
+
+Verification-only, and it found the most damaging misreading available in the repository.
+
+`evidence/h1/report.md` — committed last iteration — opened like this:
+
+```
+# Evaluation report
+
+| system | ... | trigger accuracy | ... | unsupported | recall |
+| agent  | ... |          0.000   | ... |     1.000   | 0.182  |
+```
+
+Byte-identical framing to `evidence/report.md`, whose `agent` row says **0.500** and **0.739**.
+Nothing on the page said it was a rolled-back experiment. A judge who opens that file, or greps
+`evidence/` for "Evaluation report", reads the product's headline as **zero**. `evidence/grounded/`
+was safer only by luck — it happens to carry the correct `agent` row beside `agent_grounded`.
+
+The repository already had the mechanism: `report.md` grows a **BROKEN — NOT A RESULT** banner
+when a system emits nothing, and a **NOT A REPORTED RESULT** banner when a fixture was not
+captured from a broadcast. The comment above the second one reads *"A judge opening this file must
+not be able to mistake a pipeline smoke-run for a result."* Same principle, third case. Any report
+written somewhere other than the canonical `evidence/` now opens with:
+
+> **NOT THE SHIPPED RESULT.** This report was written to `h1/`, not to `evidence/` …
+
+Written by the runner rather than pasted in, because the documented commands regenerate both arms
+and a pasted banner would be stripped by the next run. `evidence/report.md` is byte-identical —
+the canonical path is excluded by construction, and a test holds the banner ON both arms and OFF
+the real one.
+
+**A second defect, mine, from last iteration.** `evidence/h1/predictions.json` shipped with
+`trace_path: "/tmp/h1-traj/…"` — a path that exists nowhere. Experiment #2's trajectories are
+committed; #4's now are too, in **`trajectories/h1-arm/`** (33 files, 484 KB), so every card in
+that report traces back to the conversation that produced it.
+
+They cannot go in `product-agent/`: **all 33 filenames collide with shipped ones**, because trace
+ids derive from `(agent, case_id)`. The directory is the only thing keeping them apart, so the
+test checks content rather than names — the shipped `c01` trace must still carry
+`deduplicated into bursts` and the arm's must carry `what the room is SAYING`. My first version of
+that test asserted the filenames were disjoint and failed immediately, which was the test being
+wrong about the hazard rather than the hazard being absent.
+
+Two smaller corrections found by diffing deliverables after regeneration instead of trusting the
+runs: `README.md` said `trajectories/` holds "118 real runs" when that directory now holds 151, so
+it is scoped to `product-agent/`; and re-running the canonical eval with `TS_TRACE_DIR` set
+rewrites `trace_path` throughout `evidence/predictions.json` to point at the temp directory, so
+the canonical run is done without it.
+
+Result: `make test` 707 → **709 passed**. 3 new guards, 1 corrected while writing it. Shipped
+`make eval` **48 hits / 0 misses**, `evidence/report.md` and `trajectories/product-agent/`
+byte-identical, `scan_secrets` clean. Cost **$0.00**, ledger $0.4364.
+
+**8.7 hours to the deadline. The 8-hour video gate is 0.7 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 61+ commits behind);
+make the repository public after pushing; `make review`; rotate `.env` and the Telegram
+credentials.
