@@ -7,6 +7,10 @@
 # one refactor away from being false.
 .env            export-ignore
 .env.*          export-ignore
+# `.env.*` also matched `.env.example`, which is the ONE file in that family that must ship — a
+# judge who wants to record has no template without it, and six tests read it. A later, more
+# specific line unsets the attribute. Found 2026-08-31 by `make test` failing inside the archive.
+.env.example    -export-ignore
 .capture_salt   export-ignore
 .farmlogs/      export-ignore
 STOP_FARM       export-ignore
