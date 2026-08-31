@@ -71,7 +71,9 @@ def prove_the_frozen_systems_are_untouched() -> None:
 
 def main() -> int:
     os.chdir(REPO)
-    sys.path.insert(0, str(REPO / "src"))
+    # `evals` lives at the repo root and `ts` under `src/`; both are needed and only one of them
+    # is where `python -m` would have put it.
+    sys.path[:0] = [str(REPO), str(REPO / "src")]
 
     print("H1 — group_repeated -> group_chat\n")
     print("checking nothing frozen is about to move…")

@@ -66,9 +66,9 @@ only system that ever names a correct cause; its unsupported-card rate is the wo
 Both halves are reported. The full account, including a first run that was discarded rather than
 published, is in `docs/IMPROVEMENT_CHANGELOG.md`.
 
-## Three things that were tried, measured, and rolled back
+## Four things that were tried, measured, and rolled back
 
-The changelog carries three experiments that did not ship. Each was diagnosed from data, built,
+The changelog carries four experiments that did not ship. Each was diagnosed from data, built,
 measured against the frozen cases or frozen labels, and then declined — which is the part of
 engineering that usually leaves no trace.
 
@@ -77,12 +77,17 @@ engineering that usually leaves no trace.
 | **Louder audio** — the sleep stream was thought too quiet to transcribe, so it was amplified 28 dB and re-run | **zero** additional transcript segments | It turned a suspected pipeline bug into a verified property of the fixture |
 | **Inlining the stream context** — the agent had never once named a frame caption, so the window's speech and screen events were put in its turn with their ids | Frame citations **0 → 4**, and abstentions **5 → 0**. Same recall, unsupported rate 0.739 → 0.882 | Handed candidates it stopped abstaining entirely, and picking one is how a card becomes scoreable and therefore wrong |
 | **Embedding clustering** — measured as a third grouping arm against labels frozen in a commit containing no arm code | Best pooled F1 **0.583** vs the shipped arm's 0.403 — but the same threshold scores **0.770** on one window and **precision 0.164** on the other | The threshold does not transfer, and it was chosen by looking at the labels. It won on a metric the product is not bought on |
+| **The good chat groups** — the agent's chat tool called the old exact-match reducer, so it read `?` × 42 while the board showed `violet × 27` beside it. Pointed at the shipped grouper | Trigger accuracy **0.500 → 0.000**, unsupported **0.739 → 1.000**, `E_CIRCULAR_EVIDENCE` **8 → 25**. Every abstention, every honest `unknown`, and all four real speech triggers went to zero | Handed a group it could describe, it wrote a confident card and named a message from that group as its own cause. Same collapse as the second experiment, from the opposite direction |
 
-Both later experiments reproduce with no keys:
+The last three reproduce with no keys — including the losses, because the recordings were kept:
 
 ```bash
 TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
 TS_LLM_MODE=replay python -m evals.grouping.score_arms
+git apply experiments/h1-group-chat.patch && \
+  TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
+    python -m evals.run_eval --ablation --out /tmp/h1 && \
+  git checkout -- src/ts/workflow/          # 46 hits, 0 misses
 ```
 
 ## Grouping, evaluated rather than asserted
@@ -161,4 +166,4 @@ while a hard blocker stands. It reports and never repairs.
    default and the documented route. Exercised once end to end against a live broadcast:
    113 messages, 3 cards, 104.8 s, ~$0.006.
 
-Cost of every model call ever made in this project: **$0.43**, itemised in `COST_LEDGER.md`.
+Cost of every model call ever made in this project: **$0.44**, itemised in `COST_LEDGER.md`.

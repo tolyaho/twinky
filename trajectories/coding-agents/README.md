@@ -33,8 +33,8 @@ Each iteration:
 5. Append to `PROGRESS.md`; add any decision to `DECISIONS.md`.
 
 The loop prompts are the specification the sessions were run against, including the budget
-guardrails. Those guardrails held: **every paid call is itemised in `COST_LEDGER.md`, ten entries
-totalling $0.43** against a $5.00 hard cap, and `TS_LLM_MODE=replay` — where a cache miss raises
+guardrails. Those guardrails held: **every paid call is itemised in `COST_LEDGER.md`, nine entries
+totalling $0.4364** against a $5.00 hard cap, and `TS_LLM_MODE=replay` — where a cache miss raises
 rather than calling an API — was the default in every other iteration.
 
 ## Where the evidence is
@@ -111,5 +111,5 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 | Iterations logged | 70 |
 | Decisions recorded with rationale | 303 |
 | Risks tracked | 42 |
-| Tests | 623 |
-| Total spend on model calls | $0.43 |
+| Tests | 702 |
+| Total spend on model calls | $0.44 |
