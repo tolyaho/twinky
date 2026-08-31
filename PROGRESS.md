@@ -804,3 +804,24 @@ Docs updated for what now exists: SUBMISSION.md lists the three routes and the l
 with its guards and its one measured session; README describes them; RISKS #43 opened for live
 being exercised once rather than hardened, with what is and is not covered stated explicitly.
 Blockers: none. Cost $0.42 of $5.00.
+
+## 2026-08-31T01:35Z — iteration 46
+Attempted: finish the gate properly by opening the archive and using it as a judge would.
+Result: found the worst defect of the session and fixed it. `make test` 433 green in the archive,
+`make eval` reproduces at 48 hits / 0 misses, and all three fixtures replay at 0 misses.
+**The product page was non-functional in the archive.** `evidence/raw-results/` was gitignored in
+the packaging pass, described there as "regenerable noise". It is not noise: the picker lists a
+fixture only when a run document exists for it, and the stream reads cards from the same files.
+In the archive the picker offered ZERO channels and the stream carried ZERO cards — a judge
+unzipping it and running `make demo` would have watched chat scroll into an empty panel forever.
+Nothing failed, nothing errored; it simply showed nothing, which is why the earlier route checks
+all returned 200 and looked fine.
+Two things made it invisible until now. The checks were run against the working tree, where the
+files exist. And "regenerable" was true in the narrow sense — `make replay` rebuilds them from
+cache at zero cost — but nothing tells a judge to run it, and a demo that requires three
+undocumented commands before it shows anything is a broken demo. 164 KB was the whole cost.
+Also committed 46 cache entries from the marlon recording that had never been staged, without
+which that fixture exits 3 on replay.
+The gate keeps earning its place: this iteration it caught a dead product page, and the previous
+one caught two tests that fail outside a git checkout. Both were invisible from inside the repo.
+Blockers: none. Cost $0.42 of $5.00.

@@ -1,0 +1,15 @@
+{
+ "fixture_id": "jynxzi_2026-08-30T1258",
+ "channel": "jynxzi",
+ "captured_utc": "2026-08-30T1258",
+ "duration_s": 480,
+ "chat_messages": 1685,
+ "pseudonymised": true,
+ "enriched": false,
+ "provenance": "Captured from a public Twitch broadcast. Chatter logins pseudonymised at capture time with a local salt that is not distributed. Raw audio is not committed; only the derived transcript is.",
+ "quality": "480p",
+ "start_ms": 1788094717398,
+ "frames": 16,
+ "audio": "raw/audio.wav",
+ "frame_interval_s": 30
+}
