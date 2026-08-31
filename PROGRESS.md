@@ -3167,3 +3167,58 @@ Cost: **$0.00**, ledger $0.43.
 **18.9 hours to the deadline; the video gate is 10.9 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 39+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 100 — the agent graph says what it measured, and over the right denominator
+
+Started from a direct question — *why is the agent so weak* — and answered it from the
+trajectories rather than from memory. The answer turned out to be a defect in how the Method page
+was reporting itself.
+
+**The denominator was wrong.** The diagram printed `every count is measured: 118 recorded runs`
+and, a few pixels away, `get_frame_captions 2` under a caption reading `calls, across 118 runs`.
+But 59 of those 118 trajectories are baselines, which have **no tools at all** and could not have
+called anything. The tool row's real denominator is the 59 runs that recorded a step budget. Half
+the divisor was runs that were never in the running.
+
+`trajectory_counts` now separates `runs` from `tool_runs`, and decides which is which by reading
+`meta.max_steps` off the trajectory rather than matching on the agent's name — the controller
+writes that field and a baseline never has one.
+
+**And the totals were hiding the actual finding.** 70 tool calls across 59 runs reads like
+coverage. The distribution does not:
+
+| | |
+|---|---:|
+| tool-capable runs | 59, every one with a 4-step budget |
+| runs that made exactly one call | **51 (86%)** |
+| runs that used the whole budget | **0** |
+| single-call runs whose one call was chat | **51 of 51** |
+| `get_frame_captions` | **2 calls, in 59 runs** |
+
+So the agent does not look a little. It looks **once**, always at chat, and stops with three steps
+in hand. That is a different claim from "it under-reads the screen", and a stronger one: it is not
+a budget problem. The diagram now carries it in two lines under the tool column — `51 of 59 runs
+spent 1 of their 4 steps` / `and the one step was chat` — placed left of the verified/rejected
+boxes because a single 47-character line would have run into them.
+
+`"on chat"` is a claim about 51 runs, so a test reads all 59 trajectories and checks that every
+single-call run's one call was `group_repeated` or `get_chat_window`. It is; 49 and 2.
+
+**A layout shift found on the way.** `method.html` gave the `<img>` `height="470"` against a
+412-high SVG. CSS `height: auto` hid the stretch, so the only symptom was the browser reserving a
+box 14% too tall and the page jumping when the diagram arrived. The canvas dimensions are now
+exported from the generator and a test holds the attribute to them.
+
+Shot 9 was updated in the same iteration: its narration said *"call counts from a hundred and
+eighteen recorded runs"*, which the screen now contradicts. It points at both numbers and says why
+they do different work — `get_frame_captions: 2` says it never read the screen; the line beneath
+says that was not for want of steps. A test checks the figures the shot list quotes are the
+figures the diagram prints.
+
+Result: `make test` 697 → **701 passed**. 4 new tests. Served and verified on 8000: `/method` 200,
+the SVG parses, the new text sits at x=464 clear of the boxes at x=724, and the `<img>` serves
+`width="980" height="412"`. Cost: **$0.00**, ledger $0.43.
+
+**10.9 hours to the deadline. The 8-hour video gate is 2.9 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 39+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

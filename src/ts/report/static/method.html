@@ -130,12 +130,15 @@
       <img src="/static/agent-graph.svg" alt="One window becomes a card: sources and reduce are
         deterministic, the model picks tools and writes card JSON, and a deterministic provenance
         gate with eight card checks and two abstention checks decides what is verified and what is
-        rejected." width="980" height="470">
+        rejected." width="980" height="412">
       <figcaption>
         The two dashed boxes are the only places a model is involved. Everything else is
         arithmetic that can be re-run and checked. The numbers on the tools are real call counts
         from the recorded runs — and <code>get_frame_captions</code> is the smallest of them,
-        which is the grounding failure in one figure rather than in a paragraph.
+        which is the grounding failure in one figure rather than in a paragraph. The line beneath
+        them is the sharper version: the agent does not look a little, it looks
+        <em>once</em>. Four steps were available, one was spent, and it went to chat — the one
+        input that cannot explain itself.
       </figcaption>
     </figure>
   </section>
