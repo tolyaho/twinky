@@ -490,3 +490,35 @@ def test_the_opening_shot_does_not_put_a_slur_on_camera():
 
     assert len(shown) > 50, "the shot must still show the guess run"
     assert not [t for t in shown if slur.search(t)]
+
+
+def test_the_filming_guidance_matches_the_fixtures():
+    """The shot list tells the author how long the unfiltered feed can run before live chat shows
+    what live chat shows. That is a measurement, so it has to keep matching the data."""
+    import json
+    import re
+    import sys
+
+    sys.path.insert(0, str(REPO / "src"))
+    from ts.ingest.replay import load_fixture
+    from ts.report.board import windows
+
+    slur = re.compile(r"\bretard\w*|\bn[i1]gg\w*|\bfag\w*|\btrann\w*|\bkys\b|\bcunt\w*", re.I)
+
+    def flagged(name):
+        rows = [json.loads(l) for l in
+                (REPO / f"evals/fixtures/{name}/chat.jsonl").read_text(encoding="utf-8").splitlines()]
+        return rows, [r for r in rows if slur.search(r.get("text") or "")]
+
+    rows, hits = flagged("marlon_2026-08-30T0715")
+    assert len(rows) == 1535 and not hits, "marlon is no longer the clean fixture the list claims"
+
+    index = load_fixture(REPO / "evals/fixtures/stableronaldo_2026-08-30T0723")
+    first_window = windows(index)[0]
+    rows, hits = flagged("stableronaldo_2026-08-30T0723")
+    in_shot = [h for h in hits if first_window[0] <= h["ts_ms"] < first_window[1]]
+    assert not in_shot, "shot 4's window is no longer clean — the list says it is"
+
+    shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
+    assert "clean over all 1535 messages" in shots
+    assert "window 0 is clean" in shots

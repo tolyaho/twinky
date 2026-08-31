@@ -3091,3 +3091,42 @@ against the built product rather than read.
 **19.1 hours to the deadline; the video gate is 11.1 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 37+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 98 — 2026-08-31 — how long the unfiltered feed can run
+
+Attempted: the slur in shot 2 raised the larger question. Shot 4 films the **live chat panel for
+a full minute**, and that panel is genuinely unfiltered — so what else lands on camera?
+
+**Measured across every fixture:**
+
+| fixture | messages | flagged |
+|---|---:|---:|
+| `marlon_2026-08-30T0715` | 1535 | **0** |
+| `marlon_2026-08-30T0701` | 415 | **0** |
+| `yugi_2026-08-30T0723` | 625 | 2 |
+| `stableronaldo_2026-08-30T0723` | 1288 | 6 |
+
+The one shot 4 films is the worst of the four — and it cannot move, because stableronaldo window 0
+holds the **only `matched` row in the entire set**, which is the shot.
+
+**So I checked where those six actually are, and shot 4 is fine.** They sit at **+102s, +119s,
++450s, +454s, +684s and +686s** — windows 1, 2, 7 and 11. **Window 0 is clean**, and the first
+board row lands at ~56 s, so the shot has a comfortable forty seconds of margin. Shot 5's fixture
+is clean across all 1535 messages, so that one can be held indefinitely.
+
+**I did not add a filter to the product, and that was the decision.** The left column is labelled
+*"raw, unfiltered"*, and quietly filtering it to look better on camera would falsify the panel's
+own label — the same class of thing this project has refused throughout. What the author needed
+was never a filter; it was a measurement of how long the feed can run. That is now in the shot
+list, with the numbers.
+
+A test holds the guidance to the fixtures: marlon must still be clean over 1535 messages and
+stableronaldo's window 0 must still be clean, because this is a measurement rather than advice and
+it stops being true the moment either changes.
+
+Result: `make test` 695 → **696 passed**. 1 new test, three rows in DECISIONS.md. No product
+change. Cost: **$0.00**, ledger $0.43.
+
+**19.0 hours to the deadline; the video gate is 11.0 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 38+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

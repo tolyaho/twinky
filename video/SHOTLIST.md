@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 695 passed — this is also shot 14
+make test                             # 696 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -105,6 +105,14 @@ be readable in the frame before anything moves; it is the fastest orientation th
 
 **Say:** *"Two rows out of a hundred and sixty-three messages, and it tells you what it threw
 away."*
+
+> **How long you can let the feed run.** The chat panel is genuinely unfiltered — that is the
+> point of the left column — so it will eventually show what live chat shows. Measured across the
+> fixtures: `marlon_2026-08-30T0715` is **clean over all 1535 messages**, `yugi` has 2 in 625, and
+> `stableronaldo` has 6 in 1288. On stableronaldo, **window 0 is clean and the first one arrives
+> at +102 s** (windows 1, 2, 7 and 11). So shot 4 is safe for its first hundred seconds, which is
+> comfortably past the first board row at ~56 s. **Shot 5's fixture is clean throughout**, so
+> dwell there as long as you like.
 
 ### Shot 5 — the row that is the argument
 Switch the channel chip to **marlon**, window 6.
@@ -241,7 +249,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 695 passed
+make test        # 696 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
