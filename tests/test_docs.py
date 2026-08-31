@@ -841,3 +841,45 @@ def test_the_night_logs_never_ship():
                                             text=True).stdout.splitlines()
                if p.startswith(".nightlogs")]
     assert not tracked, f"session logs are committed: {tracked[:5]}"
+
+
+def test_the_shot_list_warns_about_the_logins_in_the_committed_frames():
+    """`video/twinky-image-bank.zip` ships four real capture frames with Twitch logins burned
+    into the overlay, while README, DATA.md and every meta.json say chatters are pseudonymised.
+    The bank's own MANIFEST.md carries the warning — inside the zip, where an author filming at
+    four in the morning will not read it. Shot 3 also claimed frames are "not in the repo or the
+    archive", which was false.
+    """
+    import zipfile
+
+    bank = REPO / "video/twinky-image-bank.zip"
+    shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
+
+    if not bank.is_file():
+        assert "twinky-image-bank.zip" not in shots, \
+            "the shot list describes an image bank that no longer ships"
+        return
+
+    frames = [n for n in zipfile.ZipFile(bank).namelist()
+              if n.startswith("bank/01-real/") and n.lower().endswith((".jpg", ".jpeg", ".png"))]
+    assert frames, "01-real/ is empty; if the frames were removed, drop the warning too"
+
+    assert "BLUR THE USERNAME" in shots, "the login warning is only inside the zip again"
+    # The correction quotes the sentence it is correcting, which is how RISKS #22 and #37 handle
+    # the same thing — the claim may appear, but only in a line that marks it as former.
+    stale = [l for l in shots.splitlines() if "not in the repo or the archive" in l]
+    assert all("used to say" in l or "Correction" in l for l in stale), \
+        "shot 3 is asserting, not quoting, the claim that these frames do not ship"
+    assert "RISKS.md` #52" in shots or "RISKS.md #52" in shots
+
+
+def test_no_shipped_still_quotes_a_test_count_the_suite_has_left_behind():
+    """`02-product-stills/11_reproducibility.png` reads "530 tests". Cutting it would put a
+    figure on screen that shot 14 contradicts thirty seconds later with `make test` running live,
+    and its generator is not committed, so it cannot be re-rendered from this repository."""
+    shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
+
+    assert "11_reproducibility.png` is stale" in shots, \
+        "the stale still is no longer flagged for the author"
+    assert "build_bank.py" in shots and "not committed" in shots, \
+        "the shot list must say the bank cannot be re-rendered from this repository"
