@@ -137,7 +137,7 @@ with no provable cause, sarcasm, and abstention. Across 12 gold signals: 4 frame
 status is tracked in `evals/REVIEW_ME.md`, and at the time of writing all eleven are still
 `"reviewed": false` — no human has confirmed them.** Saying they were "reviewed by the author"
 would be the easy sentence and it would not be true, so it is not written here; the flag in each
-gold file is the source of truth and `REVIEW_ME.md` is a ten-minute pass built to change it. The labels
+gold file is the source of truth and `evals/REVIEW_ME.md` is a ten-minute pass built to change it. The labels
 are not hand-typed: every id is resolved from the fixture, and `tests/test_frozen_cases.py`
 pushes each gold signal through the real provenance gate, because a gold label that cannot pass
 the gate scores every correct card as a silent miss.

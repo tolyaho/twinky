@@ -12,7 +12,7 @@ The eval is recorded. `make eval` reproduces the committed results table from `c
 **48 hits and 0 misses**, verified with every credential unset — no `.env`, no keys, no network.
 
 An earlier run was discarded rather than reported: the baseline had been handed the agent's
-tool-calling prompt and emitted zero cards across all eleven cases. `report.md` now prints a
+tool-calling prompt and emitted zero cards across all eleven cases. `evidence/report.md` now prints a
 **BROKEN — NOT A RESULT** banner, and `make eval` exits `5`, if any system emits nothing at all.
 
 In `replay` mode a cache miss raises instead of silently calling an API: the command prints the
@@ -55,7 +55,7 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-08-30: **691 passed** in under a second. No network, no keys, no cached model
+Measured 2026-08-30: **692 passed** in under a second. No network, no keys, no cached model
 responses needed — the suite fakes the provider everywhere a model would be called. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 
@@ -100,7 +100,7 @@ Measured 2026-08-30: **79 ms, 48 cache hits, 0 misses, $0.00**, run with every c
 Expected final line: `cache: {'hits': 48, 'misses': 0}  ->  evidence`. Add `--ablation` to
 include the chat-only diagnostic; it is cached too and adds no calls.
 
-`report.md` carries a **NOT A REPORTED RESULT** banner whenever any case ran against a fixture
+`evidence/report.md` carries a **NOT A REPORTED RESULT** banner whenever any case ran against a fixture
 that was not captured from a real broadcast, and lists the provenance of every fixture behind the
 table. Read that banner before reading the numbers.
 

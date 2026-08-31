@@ -2982,3 +2982,34 @@ Cost: **$0.00**, ledger $0.43.
 **19.4 hours to the deadline; the video gate is 11.4 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 34+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 95 — 2026-08-31 — auditing the gap between the tree and the zip
+
+Attempted: yesterday's `.env.example` defect was a *class* — things that differ between the
+working tree and what a judge actually receives. This swept that gap.
+
+**Everything `export-ignore` removes is now accounted for.** Of 698 tracked files, exactly one is
+excluded from the archive: `scripts/farm.sh`, deliberately. `.env`, `.capture_salt`, `.farmlogs/`
+and `STOP_FARM` were never tracked, so they cannot reach it by construction.
+
+**Every path the three entry documents cite resolves in the archive.** `SUBMISSION.md`,
+`README.md` and `docs/REPRODUCTION.md` are what a judge reads first and follows. The sweep found
+two references that did not resolve, and both were bare filenames in prose rather than missing
+files: `` `REVIEW_ME.md` `` (it is `evals/REVIEW_ME.md`) and `` `report.md` `` twice (it is
+`evidence/report.md`). Not broken, but a reader is left with a name and no location. Given their
+paths.
+
+The durable part is the guard: it resolves citations against **`git archive HEAD`, not the working
+tree**, because that distinction is exactly what hid the `.env.example` defect — a file can be
+tracked, un-ignored, and still absent from what ships. Verified in both directions: a planted
+`` `docs/NOT_A_REAL_FILE.md` `` fails it.
+
+This iteration changed three words of prose and added one test. The audit came back essentially
+clean, which after yesterday's finding is the result worth having.
+
+Result: `make test` 691 → **692 passed**. 1 new test, two rows in DECISIONS.md. Cost: **$0.00**,
+ledger $0.43.
+
+**19.3 hours to the deadline; the video gate is 11.3 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 35+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

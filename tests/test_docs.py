@@ -438,3 +438,31 @@ def test_preflight_does_not_block_on_an_untracked_capture():
     assert '"/fixtures/" in l' in source
     assert "correctly not committed" in source
     assert "uncommitted source" in source
+
+
+def test_every_path_the_entry_documents_cite_exists_in_the_archive():
+    """A judge reads `SUBMISSION.md`, `README.md` and `docs/REPRODUCTION.md` first and follows
+    the paths in them. What matters is not whether a file exists in the working tree but whether
+    it is in `git archive HEAD` — `.env.example` was tracked, un-ignored and still absent."""
+    import re
+    import subprocess
+
+    blob = subprocess.run(["git", "archive", "HEAD"], cwd=REPO, capture_output=True, timeout=120)
+    entries = subprocess.run(["tar", "-t"], input=blob.stdout, capture_output=True,
+                             timeout=60).stdout.decode("utf-8", "replace").split()
+    files = {e.rstrip("/") for e in entries}
+
+    missing = []
+    for name in ("SUBMISSION.md", "README.md", "docs/REPRODUCTION.md"):
+        text = (REPO / name).read_text(encoding="utf-8")
+        cited = set(re.findall(r"`([A-Za-z0-9_][\w./-]*\.(?:md|py|json|csv|svg|css|js|toml))`",
+                               text))
+        cited |= set(re.findall(
+            r"`((?:docs|evals|evidence|src|tests|video|trajectories|scripts)/[\w./-]*)`", text))
+        for path in cited:
+            p = path.rstrip("/")
+            if p in files or any(f.startswith(p + "/") for f in files):
+                continue
+            missing.append(f"{name} -> {path}")
+
+    assert not missing, f"cited but not shipped: {sorted(set(missing))}"
