@@ -19,6 +19,14 @@ from a clean clone with `.env` deleted and every credential unset. If a prompt, 
 temperature had been edited without re-recording, it would exit `3` rather than quietly call an
 API.
 
+Three routes, all keyless:
+
+| route | what it is |
+|---|---|
+| `/` | the product — a recorded run replayed at its true cadence, chat on the left, signals on the right |
+| `/method` | the evidence — comparison table, every card in three states, changelog, failure modes |
+| `/philosophy` | the argument, including the result that counts against the product |
+
 See the product end to end on the strongest fixture:
 
 ```bash
@@ -74,6 +82,7 @@ published, is in `docs/IMPROVEMENT_CHANGELOG.md`.
 | Open risks, ordered by severity | `RISKS.md` |
 | Cost ledger — every paid call | `COST_LEDGER.md` |
 | Pre-existing vs competition work | `docs/PRE_EXISTING.md` |
+| Live capture (demo path, needs keys, costs money) | `src/ts/live.py`, `/api/live` |
 | Video | *not recorded* |
 
 ## What is honest about this submission
@@ -106,5 +115,10 @@ published, is in `docs/IMPROVEMENT_CHANGELOG.md`.
    so no component-level claim is made.
 5. **`make capture` needs Python 3.10+ and two API keys.** It is not on the graded path;
    `make setup-record` installs its extras separately.
+6. **Live capture is a demo path, not the graded one.** It needs keys and spends money per
+   window, refuses to start past a $3.00 cap, stops itself after ten minutes, and records into a
+   temporary cache so the committed reproduction cache is never touched. Replay remains the
+   default and the documented route. Exercised once end to end against a live broadcast:
+   113 messages, 3 cards, 104.8 s, ~$0.006.
 
 Cost of every model call ever made in this project: **$0.42**, itemised in `COST_LEDGER.md`.

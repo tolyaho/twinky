@@ -160,37 +160,49 @@ def test_the_project_tree_has_no_committed_secret():
 
 
 # --------------------------------------------------------------- packaging (RISKS #13, #17)
+def _shipped(root):
+    """What would reach a judge: the tracked set in a checkout, the files on disk in an unpacked
+    archive. `git ls-files` raises outside a repository, and these tests run in BOTH — the gate
+    caught exactly that, with two failures inside the extracted zip."""
+    import subprocess
+
+    try:
+        out = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True,
+                             text=True, check=True).stdout.split()
+        return out, "checkout"
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return ([str(p.relative_to(root)) for p in root.rglob("*")
+                 if p.is_file() and ".venv" not in p.parts and ".git" not in p.parts],
+                "archive")
+
+
 def test_no_credential_file_is_tracked_by_git():
     """`.gitignore` does not protect a zip — but `make archive` builds from `git archive HEAD`,
     so an untracked file cannot enter the archive by construction. This asserts the premise that
     argument rests on, rather than trusting it."""
-    import subprocess
     from pathlib import Path
 
     root = Path(scan_secrets.__file__).resolve().parents[1]
-    tracked = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True,
-                             text=True, check=True).stdout.split()
+    shipped, where = _shipped(root)
 
     for name in (".env", ".capture_salt"):
-        assert name not in tracked, f"{name} is tracked and would ship"
-    assert not [p for p in tracked if p.endswith((".wav", ".opus"))], "raw media is tracked"
+        assert name not in shipped, f"{name} would ship ({where})"
+    assert not [p for p in shipped if p.endswith((".wav", ".opus"))], f"raw media ships ({where})"
 
 
 def test_the_fabricating_frontend_is_not_in_the_submission():
     """`legacy/frontend/` was a dashboard shell driven entirely by generated placeholder data.
     A judge opening fabricated data inside a submission that argues "never present generated
     data as real" is the one integrity risk this project cannot absorb. Removed 2026-08-30."""
-    import subprocess
     from pathlib import Path
 
     root = Path(scan_secrets.__file__).resolve().parents[1]
-    tracked = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True,
-                             text=True, check=True).stdout.split()
+    shipped, _ = _shipped(root)
 
-    assert not [p for p in tracked if p.startswith("legacy/frontend/")]
+    assert not [p for p in shipped if p.startswith("legacy/frontend/")]
     assert not (root / "legacy" / "frontend").exists()
     # the rest of legacy/ is still preserved and disclosed
-    assert [p for p in tracked if p.startswith("legacy/")], "all of legacy/ vanished"
+    assert [p for p in shipped if p.startswith("legacy/")], "all of legacy/ vanished"
 
 
 def test_the_packaging_exclusions_are_declared():

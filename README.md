@@ -267,4 +267,10 @@ make setup
 make test
 ```
 
+`make demo` serves three routes, all without keys: `/` replays a recorded run at its true
+cadence, `/method` holds the evidence, `/philosophy` states the argument including the result
+that counts against the product. A live-capture demo path exists behind an explicit click; it
+needs keys, spends money, and is capped and time-limited — replay is the default and the
+documented route.
+
 Full guide, including what currently exits `3` and why: `docs/REPRODUCTION.md`.
