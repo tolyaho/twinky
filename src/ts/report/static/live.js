@@ -45,6 +45,7 @@ const state = {
   codes: {},                    /* gate violation census, for the finding line */
   questionCount: 0,
   view: "board",
+  liveGroups: 0,                /* how many live groups exist; whether they SHOW is the view's call */
 };
 
 /* ------------------------------------------------------------------ chat column */
@@ -443,11 +444,21 @@ function orphanBlock(orphans) {
    deterministic and calls nothing, so a group is drawn from the moment it crosses the threshold
    and its count ticks up as chat arrives: `violet 4 … 11 … 27`. Nothing here is attributed to a
    cause and the header says so; the cause arrives when the window closes. */
+
+/* The live box belongs to the BOARD and to nothing else. It says "this minute so far · no cause
+   assigned yet", which over the agent's gated cards reads as though those cards were pending, and
+   over Questions — grouped across the whole stream, as that panel's own line says — contradicts
+   the panel it is sitting on. It follows the view, and the ticker keeps the page alive elsewhere. */
+function syncLiveBox() {
+  const box = document.getElementById("board-live");
+  if (box) box.hidden = !state.liveGroups || state.view !== "board";
+}
+
 function addTick(event) {
   const groups = event.groups || [];
-  const box = document.getElementById("board-live");
   const list = document.getElementById("live-groups");
-  box.hidden = !groups.length;
+  state.liveGroups = groups.length;
+  syncLiveBox();
   clear(list);
 
   const max = Math.max(...groups.map((g) => g.count), 1);
@@ -588,6 +599,7 @@ function reset() {
   if (railN) railN.textContent = "—";
   const liveBox = document.getElementById("board-live");
   if (liveBox) {
+    state.liveGroups = 0;
     liveBox.hidden = true;
     clear(document.getElementById("live-groups"));
     document.getElementById("nextclose-fill").style.width = "0%";
@@ -781,6 +793,7 @@ function showMiddle(view) {
     tab.classList.toggle("is-active", on);
     tab.setAttribute("aria-pressed", String(on));
   }
+  syncLiveBox();
   document.getElementById("board-h").textContent = VIEWS[view].title;
   document.getElementById("middle-lede").textContent = VIEWS[view].lede;
   document.getElementById("board-n").textContent = String(
