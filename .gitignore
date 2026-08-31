@@ -40,3 +40,8 @@ STOP
 # is not.
 video/clips/
 video/press/
+
+# The submission archive, when it is kept beside the tree instead of in /tmp. `make archive`
+# builds it from HEAD, so committing it would put a copy of the repository inside the repository
+# — and the next archive would contain the last one.
+/twinky.zip
