@@ -2623,3 +2623,46 @@ No colour change; still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **20.3 hours to the deadline; the video gate is 12.3 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 86 — 2026-08-31 — sweeping for the rest of the rot `#rail` implied
+
+Attempted: last iteration found a stylesheet rule written for one page silently governing
+another. That is a category, not an incident, so this iteration swept the whole stylesheet for
+rules that no page renders — the class-level version of the `#rejected-rail` check.
+
+**The sweep found exactly one: `.small`.** A typography utility, styled and consumed by nothing.
+Deleted rather than exempted — DESIGN.md still documents the 15px small-body step, so re-adding
+it is one line, and an exemption list that starts with one entry grows.
+
+**Getting there took two attempts, and the first was badly wrong.** My initial extractor reported
+**17 dead classes; 14 were false positives.** Class names are built four different ways in this
+codebase:
+
+| how | example |
+|---|---|
+| a markup attribute | `class="panel panel-chat"` |
+| a plain `el()` argument | `el("h3", "rblock-t", title)` |
+| a ternary | `m.text ? "cite" : "cite is-missing"` |
+| a template literal | `` el("article", `card is-${event.state}`) `` |
+
+My regex matched only the second form, and even that failed on `el("h3", …)` because the tag
+pattern was `[a-z]+` and would not match a digit. So `rblock-t`, `mod-n`, `cite`, `is-missing`,
+`is-clean`, `is-open`, `is-answered`, `is-grounded`, `is-abstained`, `link-matched` and
+`link-preceding` were all reported dead while being rendered constantly. **Had I acted on that
+list instead of checking each one, I would have deleted the styling for the board row's link
+badges and the citation drawer.**
+
+The guard now treats every string and template literal in the scripts as a possible source, and
+resolves interpolated prefixes — it reads `is-${` and `link-${` out of the source itself, so
+adding a new card state needs no test change.
+
+Verified in both directions, as with the history scanner and the type-scale guard: a planted
+`.orphan-widget` is reported dead, and a planted `.is-newstate` is correctly not, because
+`is-${...}` exists in the source.
+
+Result: `make test` 674 → **675 passed**. 1 new test, three rows in DECISIONS.md. Served page
+re-checked: three routes 200, 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**20.2 hours to the deadline; the video gate is 12.2 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

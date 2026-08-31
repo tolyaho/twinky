@@ -218,3 +218,35 @@ def test_no_stylesheet_rule_targets_an_id_that_exists_nowhere():
     orphans = sorted(styled - live)
 
     assert not orphans, f"styled but never rendered: {orphans}"
+
+
+def test_no_class_is_styled_that_no_page_renders():
+    """`#rejected-rail` was styled for weeks and rendered nowhere; the same rot happens to
+    classes, and dead CSS reads as a feature to whoever edits next.
+
+    Class names are built four ways — a markup attribute, a plain argument to `el()`, a ternary,
+    and a template literal like `card is-${state}`. Guessing which is which produced fourteen
+    false positives on the first attempt, so every string and template literal in the scripts is
+    treated as a possible source, and interpolated prefixes are resolved from the literal itself.
+    """
+    import re
+
+    css = re.sub(r"/\*.*?\*/", " ", (STATIC / "app.css").read_text(encoding="utf-8"), flags=re.S)
+    styled = set(re.findall(r"\.(-?[_a-zA-Z][\w-]*)", css))
+
+    rendered, prefixes = set(), set()
+    for page in ("index.html", "method.html", "philosophy.html"):
+        for attr in re.findall(r'class="([^"]*)"', (STATIC / page).read_text(encoding="utf-8")):
+            rendered |= set(attr.split())
+    for js in ("live.js", "method.js"):
+        src = re.sub(r"/\*.*?\*/", " ", (STATIC / js).read_text(encoding="utf-8"), flags=re.S)
+        for lit in re.findall(r'"([^"\n]*)"', src) + re.findall(r"`([^`]*)`", src):
+            prefixes |= set(re.findall(r"([a-z][\w-]*-)\$\{", lit))
+            for part in re.sub(r"\$\{[^}]*\}", " ", lit).split():
+                if re.fullmatch(r"[a-z][\w-]*", part):
+                    rendered.add(part)
+
+    dead = sorted(c for c in styled - rendered
+                  if not any(c.startswith(p) for p in prefixes))
+
+    assert not dead, f"styled but rendered by nothing: {dead}"

@@ -130,8 +130,6 @@ body {
 .lede { color: var(--body); max-width: 62ch; margin: 0 0 var(--xxl); }
 .note { color: var(--muted); font-size: 14px; letter-spacing: 0; max-width: 80ch; margin: var(--base) 0 0; }
 .meta { color: var(--muted); font-size: 14px; letter-spacing: 0; }
-/* 15/400/1.47/+0.15 — small body */
-.small { font-size: 15px; line-height: 1.47; letter-spacing: .15px; }
 /* Monospace only where the text IS data: ids, trace ids, timestamps. */
 .mono, .evidence li span:first-child, .trigger .label + .mono {
   font-family: var(--mono); font-size: 13px; letter-spacing: 0; color: var(--muted);
