@@ -12,6 +12,38 @@ sys.path.insert(0, str(ROOT))
 STUB_WINDOW = [1756399998000, 1756400010000]
 
 
+# ------------------------------------------------------ what actually reaches the archive
+# Four tests ask what `git archive HEAD` would ship. Inside the extracted archive there is no
+# git, and the honest answer to the question is "cannot tell from here". Each of them used to
+# call `git archive` and treat its failure as an empty listing, which made two fail spuriously,
+# one report every cited path as missing, and one — the check that no local-only file ships —
+# pass by examining nothing at all. A vacuous pass on a secrets check is the worst of the four.
+
+def archived_paths():
+    """Every path `git archive HEAD` would ship, or None when there is no repository here."""
+    import subprocess
+
+    try:
+        blob = subprocess.run(["git", "archive", "HEAD"], cwd=ROOT, capture_output=True,
+                              timeout=120)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if blob.returncode != 0 or not blob.stdout:
+        return None
+    listing = subprocess.run(["tar", "-t"], input=blob.stdout, capture_output=True, timeout=60)
+    return {entry.rstrip("/") for entry in
+            listing.stdout.decode("utf-8", "replace").split()}
+
+
+def archived_or_skip():
+    """The listing, or a skip that says why — never a verdict drawn from nothing."""
+    archived = archived_paths()
+    if archived is None:
+        pytest.skip("not a git checkout, so what `git archive` would ship cannot be determined "
+                    "from here; this check is meaningful in a clone")
+    return archived
+
+
 @pytest.fixture
 def stub_cases(tmp_path, monkeypatch):
     """A case set owned by the tests, pointing at the synthetic `sample` fixture.

@@ -323,7 +323,7 @@ into a temporary directory.
 git apply experiments/h1-group-chat.patch
 TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
   python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
-git checkout -- src/ts/workflow/
+git apply -R experiments/h1-group-chat.patch
 ```
 
 Cost: **$0.0064** — 24 calls, 44,765 input and 4,825 output tokens at `gpt-4.1-nano` list price,

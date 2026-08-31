@@ -87,7 +87,7 @@ TS_LLM_MODE=replay python -m evals.grouping.score_arms
 git apply experiments/h1-group-chat.patch && \
   TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
     python -m evals.run_eval --ablation --out /tmp/h1 && \
-  git checkout -- src/ts/workflow/          # 46 hits, 0 misses
+  git apply -R experiments/h1-group-chat.patch   # 46 hits, 0 misses
 ```
 
 ## Grouping, evaluated rather than asserted

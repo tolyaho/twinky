@@ -445,12 +445,13 @@ def test_every_path_the_entry_documents_cite_exists_in_the_archive():
     the paths in them. What matters is not whether a file exists in the working tree but whether
     it is in `git archive HEAD` — `.env.example` was tracked, un-ignored and still absent."""
     import re
-    import subprocess
 
-    blob = subprocess.run(["git", "archive", "HEAD"], cwd=REPO, capture_output=True, timeout=120)
-    entries = subprocess.run(["tar", "-t"], input=blob.stdout, capture_output=True,
-                             timeout=60).stdout.decode("utf-8", "replace").split()
-    files = {e.rstrip("/") for e in entries}
+    from conftest import archived_or_skip
+
+    # Not `set()` on failure: inside the extracted archive there is no git, and an empty listing
+    # would report every cited path as missing rather than admitting the question is unanswerable
+    # from there.
+    files = archived_or_skip()
 
     missing = []
     for name in ("SUBMISSION.md", "README.md", "docs/REPRODUCTION.md"):
