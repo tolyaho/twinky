@@ -3719,3 +3719,46 @@ Result: `make test` 711 → **713 passed**. 2 new guards. `evidence/` and
 **7.9 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
 video; `git push` (origin/main 61+ commits behind); make the repository public after pushing;
 `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 111 — swept `README.md`, and found the gap next door in `evals/DATA.md`
+
+**Inside the video gate: 7.6 hours left, no video file.** Verification-only.
+
+`README.md` is the first document a judge opens and was the last entry document not swept this
+session. Every backticked path resolves — 18 of 18. Every checkable number holds:
+
+- The **gold-signal census** in §6 — *"across 12 gold signals: 4 frame triggers, 2 speech
+  triggers, 5 `unknown`, 1 abstention"* — resolved each `trigger_event_id` against its fixture:
+  **4 frame, 2 speech, 5 unknown across 11 signals, plus 1 `must_abstain` case**. Exactly right.
+- The **agent parameters** in §10 — `gpt-4.1-nano`, `temperature=0`, `max_tokens=900`,
+  `max_steps=4`, four tools — all four read out of `agent.py` and `providers/base.py`. Correct.
+- **Fixture spans** — §5 says 2–12 minutes; measured 2.0, 10.0, 12.0, 12.0.
+- The baseline's *"fifteen of twenty-one cards name a speech id"*, the results table, the
+  `RISKS.md` #28 citation and the 118 trajectories all check out.
+
+**The gap was next door.** `evals/fixtures/` holds **27 committed directories** while every entry
+document says four broadcasts, and nothing anywhere explained the other 23. A judge browsing the
+evaluation data meets 23 directories that look abandoned.
+
+They are not abandoned and they are not broken. 22 are captures that were never enriched —
+**`meta.json` only, 11 KB in total**, `raw/` gitignored so no audio and no unpseudonymised login
+ships — plus the synthetic `sample` scaffold. Together: **8 channels, 32,958 chat messages, 2.9
+hours** of broadcast. `evals/DATA.md` now says so, with the reason they are kept: `meta.json` is
+the only evidence that the four evaluated fixtures were chosen from a wider set rather than being
+the first thing that worked. Enriching all of them was a cost decision — the four cost $0.28.
+
+A test counts those figures out of the tree rather than quoting them, including the claim that
+costs most if it is wrong: that **nothing but `meta.json` is committed** for any of the 22.
+
+**A correction to my own alarm.** The throwaway script that surveyed fixture spans reported
+`ValueError` on 23 of them, which read as 23 broken deliverables. The error was `max()` on an
+empty timestamp list **in my script**, not in `load_fixture`. `make inspect` on one succeeds and
+reports 0 events — empty, not broken. Checking that before writing anything turned a false alarm
+into a real but much smaller documentation gap.
+
+Result: `make test` 713 → **714 passed**. 1 new guard. `evidence/` and
+`trajectories/product-agent/` byte-identical. Cost **$0.00**, ledger $0.4364.
+
+**7.6 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
+video; `git push` (origin/main 61+ commits behind); make the repository public after pushing;
+`make review`; rotate `.env` and the Telegram credentials.
