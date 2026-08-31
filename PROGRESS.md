@@ -3624,3 +3624,52 @@ Cost **$0.00**, ledger $0.4364.
 exists.** Author-only and unchanged: film and cut the video; `git push` (origin/main 61+ commits
 behind); make the repository public after pushing; `make review`; rotate `.env` and the Telegram
 credentials.
+
+## Iteration 109 — every command the author types on camera, executed as written
+
+Verification-only, aimed at the thing that has to happen next: filming. Extracted all nine bash
+blocks from `video/SHOTLIST.md` and ran each one exactly as printed, rather than reading them.
+
+**Act 5's reproduction line does not run.** Typed as written:
+
+```
+$ TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+command not found: python
+```
+
+`python` is not a command on a stock macOS. `make setup` builds `.venv`, and **no document
+anywhere tells the reader to activate it** — so the failure is not specific to the shot list. The
+same bare interpreter appeared in **sixteen lines across five documents**: `docs/REPRODUCTION.md`
+(7), `docs/IMPROVEMENT_CHANGELOG.md` (4), `SUBMISSION.md` (3), `video/SHOTLIST.md` (1),
+`experiments/README.md` (1). Every one of them fails for a judge who followed the setup
+instructions, which is the same class of defect as the `.env.example` model names that silently
+broke `make eval`.
+
+All sixteen now read `.venv/bin/python -m …`, matching what the Makefile already does
+(`PY := .venv/bin/python`) and needing no activation step. Shot 2's `python3 -c` is deliberately
+left alone — it needs no installed package and `python3` does exist. A guard forbids the `-m`
+form specifically, since that is what requires this project importable.
+
+**Shot 2 overstated its own count.** It says the window holds 79 messages *"of which 70 are
+one-word guesses"*. Running the shot's own command: **69**. The 79 is right; the 70 is not, and
+no looser filter reaches it — every single word in that window is 3–20 characters, so the
+strictest and loosest readings both give 69.
+
+**And the existing guard was pinning that error in place.** `test_the_opening_shot_does_not_put_a
+_slur_on_camera` asserted the literal string `"70 are one-word guesses"` — a number it never
+counted — so it would have defended the mistake indefinitely. It now checks that the reason
+travels with the filter; a new test counts the figure out of the fixture. **A test that asserts a
+literal it never derived is not a guard, it is a second copy of the claim.**
+
+Everything else in the shot list ran and matched: the frames grep returns its one line, the c01
+trajectory file is where shot 6 says, `evals.grouping.score_arms` prints `B · token + prefix
+P 0.926 R 0.257 F1 0.403`, and both repaired eval commands give their documented **46** and
+**70** hits at 0 misses.
+
+Result: `make test` 709 → **711 passed**. 2 new guards, 1 corrected. `evidence/` and
+`trajectories/product-agent/` byte-identical. Cost **$0.00**, ledger $0.4364.
+
+**8.1 hours to the deadline. The 8-hour video gate passes within the hour and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 61+ commits behind);
+make the repository public after pushing; `make review`; rotate `.env` and the Telegram
+credentials.

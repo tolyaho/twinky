@@ -21,7 +21,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 709 passed — this is also shot 14
+make test                             # 711 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -56,7 +56,7 @@ amemetrn, amitturure, amenities…*
 **Say:** *"Nothing in this list means anything."*
 
 > **Why this filters to single words, and say so if asked.** The window holds 79 messages, of
-> which **70 are one-word guesses** — that is the shot. It is not sanitising: the unfiltered feed
+> which **69 are one-word guesses** — that is the shot. It is not sanitising: the unfiltered feed
 > is on screen throughout shot 4, raw and complete. But message **2 of 79** is `@wetnutsock12
 > yeah you're retarded`, and the unfiltered command puts a slur aimed at a named viewer second on
 > screen in the first product shot of the submission. Found by running the command rather than
@@ -269,7 +269,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 709 passed
+make test        # 711 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
@@ -282,7 +282,7 @@ cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.
 Show `docs/IMPROVEMENT_CHANGELOG.md`, **Removed experiment #2**.
 
 ```bash
-TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+TS_LLM_MODE=replay .venv/bin/python -m evals.run_eval --ablation --grounded --out evidence/grounded
 ```
 **Capture:** `70 hits, 0 misses` — the negative result reproduces with no keys — then the table.
 

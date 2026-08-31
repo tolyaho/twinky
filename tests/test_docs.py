@@ -505,7 +505,11 @@ def test_the_opening_shot_does_not_put_a_slur_on_camera():
 
     shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
     assert "re.fullmatch" in shots, "shot 2 is unfiltered again"
-    assert "70 are one-word guesses" in shots, "the reason must travel with the filter"
+    # The count itself is held to the fixture by `test_the_shot_two_count_is_counted_from_the
+    # _fixture`. This guard hardcoded 70, which is wrong by one, so it was pinning the error in
+    # place: a test that asserts a literal it never counted defends the mistake it was meant to
+    # catch. Check that the reason travels with the filter, not what the number is.
+    assert "are one-word guesses" in shots, "the reason must travel with the filter"
 
     slur = re.compile(r"\bretard|\bn[i1]gg|\bfag|\btrann|\bkys\b", re.I)
     shown = []
@@ -609,3 +613,48 @@ def test_the_iteration_prose_and_the_scale_table_agree():
     assert stated, "the disclosure no longer says how many iterations carry a heading"
     assert abs(int(stated.group(1)) - headings) <= 2, \
         f"disclosure says {stated.group(1)} headings; PROGRESS.md has {headings}"
+
+
+def test_no_documented_command_calls_an_interpreter_that_may_not_exist():
+    """`python -m evals.run_eval …` appeared in sixteen places across four entry documents, and
+    `python` is not a command on a stock macOS — `command not found`. `make setup` builds `.venv`
+    and nothing tells the reader to activate it, so every one of those lines failed for anyone
+    who followed the guide, including the author reading the shot list on camera.
+
+    `python3 -c` on stdlib is left alone: it needs no installed package and it does exist. What
+    is forbidden is `-m`, which needs this project importable.
+    """
+    import re
+
+    offenders = []
+    for name in ("README.md", "SUBMISSION.md", "docs/REPRODUCTION.md",
+                 "docs/IMPROVEMENT_CHANGELOG.md", "video/SHOTLIST.md",
+                 "experiments/README.md", "trajectories/h1-arm/README.md"):
+        path = REPO / name
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if re.search(r"(?<![\w./-])python3? -m ", line):
+                offenders.append(f"{name}: {line.strip()}")
+
+    assert not offenders, ("these need `.venv/bin/python -m`, or they die with "
+                           f"`command not found`:\n" + "\n".join(offenders))
+
+
+def test_the_shot_two_count_is_counted_from_the_fixture():
+    """It said 70 one-word guesses out of 79 messages. The command in the shot prints 69, and no
+    looser filter reaches 70 either — every single word in the window is 3-20 characters."""
+    import json
+    import re
+
+    lo, hi = 1788074707878, 1788074767878
+    chat = (REPO / "evals/fixtures/stableronaldo_2026-08-30T0723/chat.jsonl")
+    rows = [json.loads(l) for l in chat.read_text(encoding="utf-8").splitlines() if l.strip()]
+    window = [d for d in rows if lo <= d["ts_ms"] < hi]
+    single = [d for d in window
+              if re.fullmatch(r"[A-Za-z']{3,20}", d["text"].strip())]
+
+    shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
+    assert f"holds {len(window)} messages" in shots
+    assert f"**{len(single)} are one-word guesses**" in shots, \
+        f"the shot list misstates the count; the fixture says {len(single)} of {len(window)}"

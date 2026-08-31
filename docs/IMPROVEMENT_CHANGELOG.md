@@ -199,7 +199,7 @@ experiment, and it is not one to design after seeing this score.
 Reproduce it with no keys and no cost:
 
 ```
-TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence/grounded
+TS_LLM_MODE=replay .venv/bin/python -m evals.run_eval --ablation --grounded --out evidence/grounded
 ```
 
 70 cache hits, 0 misses, $0.00. Recording it cost **$0.0122** (22 calls, 107,546 input and 3,589
@@ -243,8 +243,8 @@ the board, the rail, the questions panel and the live counts at once.
 Reproduce it with no keys and no cost:
 
 ```
-python -m evals.grouping.score_arms                     # arms A and B
-python -m pytest tests/test_arm_embeddings.py           # arm C, from the committed cache
+.venv/bin/python -m evals.grouping.score_arms                     # arms A and B
+.venv/bin/python -m pytest tests/test_arm_embeddings.py           # arm C, from the committed cache
 ```
 
 Recording the embeddings cost **$0.00001** — two calls, 723 tokens. The measurement was never the
@@ -325,7 +325,7 @@ exactly that on each run. To regenerate it:
 ```bash
 git apply experiments/h1-group-chat.patch
 TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
-  python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
+  .venv/bin/python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
 git apply -R experiments/h1-group-chat.patch
 ```
 

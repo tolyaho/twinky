@@ -34,7 +34,7 @@ needs no credential and costs nothing:
 ```bash
 git apply experiments/h1-group-chat.patch
 TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
-  python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
+  .venv/bin/python -m evals.run_eval --ablation --out /tmp/h1     # 46 hits, 0 misses
 git apply -R experiments/h1-group-chat.patch
 ```
 
