@@ -350,6 +350,13 @@ function renderQuestions(q) {
     head.appendChild(el("span", "qn", `${item.count} asked`));
     row.appendChild(head);
     row.appendChild(el("p", "qtext", `“${item.text}”`));
+    /* The other wordings this row folded together. "Grouped so twenty phrasings count once" is
+       the feature, and showing a single phrasing made the grouping invisible — a reader had no
+       way to see that `violet murders?` x14 also covers `IS THAT VIOLET????`. */
+    const others = (item.variants || []).slice(1);
+    if (others.length) {
+      row.appendChild(el("p", "qalso", `also asked as ${others.map((v) => `“${v}”`).join("  ")}`));
+    }
     if (item.answered) {
       /* The line the streamer actually said, so the reader judges the link rather than
          trusting it. Two shared content words is the test, and it is stated on the method page. */

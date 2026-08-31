@@ -2782,3 +2782,43 @@ no new colour — still 16 hexes. Cost: **$0.00**, ledger $0.43.
 **19.9 hours to the deadline; the video gate is 11.9 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 90 — 2026-08-31 — sweeping for evidence the UI throws away
+
+Attempted: last iteration found data in the payload that the browser never drew. That is a
+category, so this iteration swept all of it: 74 distinct fields the stream sends, checked against
+what `live.js` reads. **Thirteen were never referenced.**
+
+Most were correctly undrawn — gate-code *values* rendered dynamically, `signal_id` and `trace_id`
+which belong in debug, `confidence` which is a model's opinion of itself and not evidence. Two
+were real.
+
+**1. Grouped questions hid their own grouping.** `variants` holds the other wordings a question
+row folded together, and the row showed only the first. "Grouped so twenty phrasings count once"
+is the entire feature, and a reader had no way to see that `violet murders?` × 14 also covers
+`IS THAT VIOLET????` and `WTFFF VIOLET??` — the count read as one message repeated. Nine questions
+across two fixtures were hiding phrasings. Now shown, clamped to two lines. Verified served:
+`which coke × 7 — also asked as "Coke???" "coke?"`.
+
+**2. `distribution` is undrawn, and that is correct.** 37 of 68 cards carry one and **every one is
+prose** — `"14 mentions"`, `"multiple"` — not the `{option: count}` tally the field is for. Drawing
+it under a heading that implies a tally would be the quiet misrepresentation. A test now asserts
+it stays undrawn, with the reason recorded rather than merely obeyed.
+
+**That measurement caught two false numbers in RISKS #42.** The entry said *"no card in any
+recorded run carries a `distribution`"* — 37 do — and *"the three verified `audience_answer` cards
+all have `distribution: None`"* — there are **nine**, of which 8 are `None` and 1 is a string.
+Exactly one card anywhere carries a real `dict`: `c09_two_topics`, `{'is that my corn': 1}`, which
+is **rejected** by the gate and degenerate anyway — one option, count of one — so `build_draft`
+correctly returns `None`.
+
+**The conclusion of #42 was right and both of its numbers were wrong.** A risk entry that is right
+for the wrong reason is one nobody can check, so the figures are corrected and the conclusion
+stands unchanged.
+
+Result: `make test` 681 → **683 passed**. 2 new tests, three rows in DECISIONS.md, RISKS #42
+corrected. No new colour, still 16 hexes. Cost: **$0.00**, ledger $0.43.
+
+**19.8 hours to the deadline; the video gate is 11.8 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 33+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

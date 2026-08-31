@@ -1698,3 +1698,25 @@ def test_a_question_time_is_omitted_rather_than_shown_wrong():
     assert "item.ts_ms && state.origin" in block
     assert 'item.answered.ts_ms && state.origin' in block
     assert '? `you said, at' in block and ': "you said"' in block
+
+
+def test_a_grouped_question_shows_the_other_phrasings_it_folded_in():
+    """"Grouped so twenty phrasings count once" is the feature. Showing one phrasing made the
+    grouping invisible — a reader could not see that `violet murders?` x14 also covers
+    `IS THAT VIOLET????` and `WTFFF VIOLET??`, so the count looked like one message repeated."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    block = js.split("function renderQuestions", 1)[1].split("\nfunction ", 1)[0]
+
+    assert "item.variants" in block and "also asked as" in block
+    assert ".slice(1)" in block, "the shown phrasing must not be repeated as a variant"
+
+
+def test_the_free_text_distribution_is_deliberately_not_drawn():
+    """37 of 68 recorded cards carry a `distribution`, and every one is prose — "14 mentions",
+    "multiple" — not the `{option: count}` tally the field is for. Rendering it under a heading
+    that implies a tally would be the quiet misrepresentation."""
+    js = LIVE_JS.read_text(encoding="utf-8")
+    risks = (REPO_ROOT / "RISKS.md").read_text(encoding="utf-8")
+
+    assert "distribution" not in js, "prose is being drawn as if it were a tally"
+    assert "free-text string" in risks, "the reason has to be written down, not just obeyed"
