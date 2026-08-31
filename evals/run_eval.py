@@ -37,6 +37,12 @@ CASES_DIR = Path(__file__).parent / "cases"
 GOLD_DIR = Path(__file__).parent / "gold"
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
+# The one output directory whose `report.md` IS the published result. Everything else is an arm:
+# `evidence/grounded/` and `evidence/h1/` both hold rolled-back experiments whose `agent` row
+# reads 0.000 under a heading byte-identical to the real one. A judge who opens the wrong file
+# reads the product's headline as zero, which is the most damaging misreading in the repository.
+CANONICAL_OUT = Path(__file__).resolve().parents[1] / "evidence"
+
 
 def load_cases(selector: str = "all") -> List[Dict[str, Any]]:
     files = sorted(CASES_DIR.glob("*.json"))
@@ -129,6 +135,18 @@ def write_outputs(scores: List[CaseScore], out: Path,
         lines += [f"> **BROKEN — NOT A RESULT.** {', '.join(mute)} emitted zero cards across "
                   f"every case. A system that returns nothing cannot be compared, so the rows "
                   f"below do not constitute a measured comparison. Diagnose before reporting.",
+                  ""]
+
+    # ...nor an arm for the shipped system. Same principle as the two banners around it.
+    try:
+        is_canonical = out.resolve() == CANONICAL_OUT
+    except OSError:
+        is_canonical = False
+    if not is_canonical:
+        lines += ["> **NOT THE SHIPPED RESULT.** This report was written to "
+                  f"`{out.name}/`, not to `evidence/`, so it is an experimental arm rather than "
+                  "the published comparison. The shipped numbers are in `evidence/report.md`, "
+                  "and `SUBMISSION.md` states which arms were rolled back and why.",
                   ""]
 
     # A judge opening this file must not be able to mistake a pipeline smoke-run for a result.

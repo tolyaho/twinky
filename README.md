@@ -242,9 +242,10 @@ half of this product is memory.
 ## 12. Video and trajectories
 
 - Video: `[TBD]` — not yet recorded. This is the one deliverable below that does not exist.
-- Trajectories: `trajectories/` — **118 real runs** across the agent, the single-prompt
-  baseline and the chat-only ablation, written as each run happened and reproducible from the
-  cache.
+- Trajectories: `trajectories/product-agent/` — **118 real runs** across the agent, the
+  single-prompt baseline and the chat-only ablation, written as each run happened and
+  reproducible from the cache. `trajectories/h1-arm/` holds the rolled-back arm's runs, kept
+  separate so a removed experiment can never be counted as the product's.
 
 ---
 

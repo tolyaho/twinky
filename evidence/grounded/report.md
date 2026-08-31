@@ -1,5 +1,7 @@
 # Evaluation report
 
+> **NOT THE SHIPPED RESULT.** This report was written to `grounded/`, not to `evidence/`, so it is an experimental arm rather than the published comparison. The shipped numbers are in `evidence/report.md`, and `SUBMISSION.md` states which arms were rolled back and why.
+
 | system | cases | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|---:|
 | ablation_chat_only | 11 | 25 | 1.000 | 0.960 | 0.280 | 0.091 |

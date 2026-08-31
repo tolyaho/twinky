@@ -229,3 +229,49 @@ def test_the_changelog_quotes_the_trigger_table_it_measured():
         line = next((l for l in section.splitlines() if l.startswith(f"| {row}")), None)
         assert line, f"the trigger table lost its `{row}` row"
         assert re.findall(r"\d+", line) == [str(b), str(a)], f"`{row}` row no longer measured"
+
+
+def test_an_arm_report_says_it_is_not_the_shipped_result():
+    """`evidence/h1/report.md` opened with `# Evaluation report` and an `agent` row reading
+    trigger accuracy **0.000** — byte-identical framing to the real one, which says 0.500. A
+    judge who opens the wrong file reads the product's headline as zero, and a directory name is
+    thin protection. The banner is written by the runner for any output directory that is not
+    `evidence/`, so it survives regeneration; this holds it there, and holds it OFF the real one.
+    """
+    banner = "NOT THE SHIPPED RESULT"
+
+    assert banner not in (REPO / "evidence/report.md").read_text(encoding="utf-8"), \
+        "the published comparison is disclaiming itself"
+    for arm in ("evidence/h1/report.md", "evidence/grounded/report.md"):
+        text = (REPO / arm).read_text(encoding="utf-8")
+        assert banner in text, f"{arm} can be mistaken for the published result"
+        assert text.index(banner) < text.index("| system |"), \
+            f"{arm} shows its table before it says what it is"
+
+
+def test_the_arm_trajectories_are_kept_apart_from_the_shipped_ones():
+    """Trace ids derive from `(agent, case_id)` and are stable across runs, so an arm written
+    into `product-agent/` overwrites the shipped runs in place. That happened once. The counts
+    published in README and SUBMISSION are the shipped directory alone."""
+    shipped = list((REPO / "trajectories/product-agent").glob("*.json"))
+    arm = REPO / "trajectories/h1-arm"
+
+    assert arm.is_dir() and list(arm.glob("*.json")), "evidence/h1 cites traces that are missing"
+
+    # The filenames DO collide — that is the whole hazard. The directory is the only thing
+    # keeping them apart, so check the content: the shipped run must still carry the old tool
+    # description and the arm the new one. If the arm had been written into `product-agent/`
+    # these two assertions would swap places silently.
+    name = "c01_word_puzzle_amethyst_trc_13ffd83b.json"
+    assert (arm / name).is_file(), "the arm's c01 trace is missing; the pair below proves nothing"
+    shipped_text = (REPO / "trajectories/product-agent" / name).read_text(encoding="utf-8")
+    arm_text = (arm / name).read_text(encoding="utf-8")
+
+    assert "deduplicated into bursts" in shipped_text, \
+        "a shipped trajectory has been overwritten by an arm"
+    assert "deduplicated into bursts" not in arm_text and "what the room is SAYING" in arm_text
+
+    quoted = f"**{len(shipped)} real runs**"
+    for doc in ("README.md", "SUBMISSION.md"):
+        assert quoted in (REPO / doc).read_text(encoding="utf-8"), \
+            f"{doc} no longer states the shipped trajectory count"

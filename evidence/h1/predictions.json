@@ -8,7 +8,7 @@
    1788074767878
   ],
   "trace_id": "trc_13e23152",
-  "trace_path": "/tmp/h1-traj/c01_word_puzzle_amethyst_trc_13e23152.json",
+  "trace_path": "trajectories/h1-arm/c01_word_puzzle_amethyst_trc_13e23152.json",
   "parse_error": null,
   "cards": [
    {
@@ -52,7 +52,7 @@
    1788074767878
   ],
   "trace_id": "trc_6d7054b6",
-  "trace_path": "/tmp/h1-traj/c01_word_puzzle_amethyst_trc_6d7054b6.json",
+  "trace_path": "trajectories/h1-arm/c01_word_puzzle_amethyst_trc_6d7054b6.json",
   "parse_error": null,
   "cards": [
    {
@@ -138,7 +138,7 @@
    1788074767878
   ],
   "trace_id": "trc_13ffd83b",
-  "trace_path": "/tmp/h1-traj/c01_word_puzzle_amethyst_trc_13ffd83b.json",
+  "trace_path": "trajectories/h1-arm/c01_word_puzzle_amethyst_trc_13ffd83b.json",
   "parse_error": null,
   "cards": [
    {
@@ -190,7 +190,7 @@
    1788074977878
   ],
   "trace_id": "trc_05fcff72",
-  "trace_path": "/tmp/h1-traj/c02_word_puzzle_herald_trc_05fcff72.json",
+  "trace_path": "trajectories/h1-arm/c02_word_puzzle_herald_trc_05fcff72.json",
   "parse_error": null,
   "cards": [
    {
@@ -228,7 +228,7 @@
    1788074977878
   ],
   "trace_id": "trc_ea8c2e88",
-  "trace_path": "/tmp/h1-traj/c02_word_puzzle_herald_trc_ea8c2e88.json",
+  "trace_path": "trajectories/h1-arm/c02_word_puzzle_herald_trc_ea8c2e88.json",
   "parse_error": null,
   "cards": [
    {
@@ -267,7 +267,7 @@
    1788074977878
   ],
   "trace_id": "trc_be50fb07",
-  "trace_path": "/tmp/h1-traj/c02_word_puzzle_herald_trc_be50fb07.json",
+  "trace_path": "trajectories/h1-arm/c02_word_puzzle_herald_trc_be50fb07.json",
   "parse_error": null,
   "cards": [
    {
@@ -350,7 +350,7 @@
    1788074314219
   ],
   "trace_id": "trc_22807dd7",
-  "trace_path": "/tmp/h1-traj/c03_failure_laughter_trc_22807dd7.json",
+  "trace_path": "trajectories/h1-arm/c03_failure_laughter_trc_22807dd7.json",
   "parse_error": null,
   "cards": [
    {
@@ -449,7 +449,7 @@
    1788074314219
   ],
   "trace_id": "trc_000835d7",
-  "trace_path": "/tmp/h1-traj/c03_failure_laughter_trc_000835d7.json",
+  "trace_path": "trajectories/h1-arm/c03_failure_laughter_trc_000835d7.json",
   "parse_error": null,
   "cards": [
    {
@@ -550,7 +550,7 @@
    1788074314219
   ],
   "trace_id": "trc_5c4fe123",
-  "trace_path": "/tmp/h1-traj/c03_failure_laughter_trc_5c4fe123.json",
+  "trace_path": "trajectories/h1-arm/c03_failure_laughter_trc_5c4fe123.json",
   "parse_error": null,
   "cards": [
    {
@@ -627,7 +627,7 @@
    1788073383294
   ],
   "trace_id": "trc_b59057a1",
-  "trace_path": "/tmp/h1-traj/c05_warning_no_cause_trc_b59057a1.json",
+  "trace_path": "trajectories/h1-arm/c05_warning_no_cause_trc_b59057a1.json",
   "parse_error": null,
   "cards": [
    {
@@ -666,7 +666,7 @@
    1788073383294
   ],
   "trace_id": "trc_e303b340",
-  "trace_path": "/tmp/h1-traj/c05_warning_no_cause_trc_e303b340.json",
+  "trace_path": "trajectories/h1-arm/c05_warning_no_cause_trc_e303b340.json",
   "parse_error": null,
   "cards": [
    {
@@ -716,7 +716,7 @@
    1788073383294
   ],
   "trace_id": "trc_5445166e",
-  "trace_path": "/tmp/h1-traj/c05_warning_no_cause_trc_5445166e.json",
+  "trace_path": "trajectories/h1-arm/c05_warning_no_cause_trc_5445166e.json",
   "parse_error": null,
   "cards": [
    {
@@ -821,7 +821,7 @@
    1788075143171
   ],
   "trace_id": "trc_fbca54f9",
-  "trace_path": "/tmp/h1-traj/c06_two_speakers_laughter_trc_fbca54f9.json",
+  "trace_path": "trajectories/h1-arm/c06_two_speakers_laughter_trc_fbca54f9.json",
   "parse_error": null,
   "cards": [
    {
@@ -861,7 +861,7 @@
    1788075143171
   ],
   "trace_id": "trc_243f38e7",
-  "trace_path": "/tmp/h1-traj/c06_two_speakers_laughter_trc_243f38e7.json",
+  "trace_path": "trajectories/h1-arm/c06_two_speakers_laughter_trc_243f38e7.json",
   "parse_error": null,
   "cards": [
    {
@@ -947,7 +947,7 @@
    1788075143171
   ],
   "trace_id": "trc_4427301f",
-  "trace_path": "/tmp/h1-traj/c06_two_speakers_laughter_trc_4427301f.json",
+  "trace_path": "trajectories/h1-arm/c06_two_speakers_laughter_trc_4427301f.json",
   "parse_error": null,
   "cards": [
    {
@@ -1056,7 +1056,7 @@
    1788074827878
   ],
   "trace_id": "trc_21369d34",
-  "trace_path": "/tmp/h1-traj/c07_frame_only_dracorex_trc_21369d34.json",
+  "trace_path": "trajectories/h1-arm/c07_frame_only_dracorex_trc_21369d34.json",
   "parse_error": null,
   "cards": [
    {
@@ -1105,7 +1105,7 @@
    1788074827878
   ],
   "trace_id": "trc_ff040d65",
-  "trace_path": "/tmp/h1-traj/c07_frame_only_dracorex_trc_ff040d65.json",
+  "trace_path": "trajectories/h1-arm/c07_frame_only_dracorex_trc_ff040d65.json",
   "parse_error": null,
   "cards": [
    {
@@ -1144,7 +1144,7 @@
    1788074827878
   ],
   "trace_id": "trc_1df0f8b4",
-  "trace_path": "/tmp/h1-traj/c07_frame_only_dracorex_trc_1df0f8b4.json",
+  "trace_path": "trajectories/h1-arm/c07_frame_only_dracorex_trc_1df0f8b4.json",
   "parse_error": null,
   "cards": [
    {
@@ -1220,7 +1220,7 @@
    1788073426308
   ],
   "trace_id": "trc_a9738cc4",
-  "trace_path": "/tmp/h1-traj/c08_pool_jump_reaction_trc_a9738cc4.json",
+  "trace_path": "trajectories/h1-arm/c08_pool_jump_reaction_trc_a9738cc4.json",
   "parse_error": null,
   "cards": [
    {
@@ -1310,7 +1310,7 @@
    1788073426308
   ],
   "trace_id": "trc_7887ff39",
-  "trace_path": "/tmp/h1-traj/c08_pool_jump_reaction_trc_7887ff39.json",
+  "trace_path": "trajectories/h1-arm/c08_pool_jump_reaction_trc_7887ff39.json",
   "parse_error": null,
   "cards": [
    {
@@ -1411,7 +1411,7 @@
    1788073426308
   ],
   "trace_id": "trc_e8f4d74f",
-  "trace_path": "/tmp/h1-traj/c08_pool_jump_reaction_trc_e8f4d74f.json",
+  "trace_path": "trajectories/h1-arm/c08_pool_jump_reaction_trc_e8f4d74f.json",
   "parse_error": null,
   "cards": [
    {
@@ -1521,7 +1521,7 @@
    1788074574681
   ],
   "trace_id": "trc_33c22164",
-  "trace_path": "/tmp/h1-traj/c09_two_topics_trc_33c22164.json",
+  "trace_path": "trajectories/h1-arm/c09_two_topics_trc_33c22164.json",
   "parse_error": null,
   "cards": [
    {
@@ -1567,7 +1567,7 @@
    1788074574681
   ],
   "trace_id": "trc_a16c3ea6",
-  "trace_path": "/tmp/h1-traj/c09_two_topics_trc_a16c3ea6.json",
+  "trace_path": "trajectories/h1-arm/c09_two_topics_trc_a16c3ea6.json",
   "parse_error": null,
   "cards": [
    {
@@ -1653,7 +1653,7 @@
    1788074574681
   ],
   "trace_id": "trc_734174ae",
-  "trace_path": "/tmp/h1-traj/c09_two_topics_trc_734174ae.json",
+  "trace_path": "trajectories/h1-arm/c09_two_topics_trc_734174ae.json",
   "parse_error": null,
   "cards": [
    {
@@ -1757,7 +1757,7 @@
    1788074634681
   ],
   "trace_id": "trc_55429aeb",
-  "trace_path": "/tmp/h1-traj/c10_spam_collapse_trc_55429aeb.json",
+  "trace_path": "trajectories/h1-arm/c10_spam_collapse_trc_55429aeb.json",
   "parse_error": null,
   "cards": [
    {
@@ -1862,7 +1862,7 @@
    1788074634681
   ],
   "trace_id": "trc_5857ea3f",
-  "trace_path": "/tmp/h1-traj/c10_spam_collapse_trc_5857ea3f.json",
+  "trace_path": "trajectories/h1-arm/c10_spam_collapse_trc_5857ea3f.json",
   "parse_error": null,
   "cards": [
    {
@@ -1948,7 +1948,7 @@
    1788074634681
   ],
   "trace_id": "trc_f582b0dc",
-  "trace_path": "/tmp/h1-traj/c10_spam_collapse_trc_f582b0dc.json",
+  "trace_path": "trajectories/h1-arm/c10_spam_collapse_trc_f582b0dc.json",
   "parse_error": null,
   "cards": [
    {
@@ -1994,7 +1994,7 @@
    1788074356000
   ],
   "trace_id": "trc_634972cc",
-  "trace_path": "/tmp/h1-traj/c11_sarcasm_mockery_trc_634972cc.json",
+  "trace_path": "trajectories/h1-arm/c11_sarcasm_mockery_trc_634972cc.json",
   "parse_error": null,
   "cards": [
    {
@@ -2086,7 +2086,7 @@
    1788074356000
   ],
   "trace_id": "trc_9b982b02",
-  "trace_path": "/tmp/h1-traj/c11_sarcasm_mockery_trc_9b982b02.json",
+  "trace_path": "trajectories/h1-arm/c11_sarcasm_mockery_trc_9b982b02.json",
   "parse_error": null,
   "cards": [
    {
@@ -2172,7 +2172,7 @@
    1788074356000
   ],
   "trace_id": "trc_6b4b2523",
-  "trace_path": "/tmp/h1-traj/c11_sarcasm_mockery_trc_6b4b2523.json",
+  "trace_path": "trajectories/h1-arm/c11_sarcasm_mockery_trc_6b4b2523.json",
   "parse_error": null,
   "cards": [
    {
@@ -2279,7 +2279,7 @@
    1788074663171
   ],
   "trace_id": "trc_d3e51701",
-  "trace_path": "/tmp/h1-traj/c12_no_signal_abstain_trc_d3e51701.json",
+  "trace_path": "trajectories/h1-arm/c12_no_signal_abstain_trc_d3e51701.json",
   "parse_error": null,
   "cards": [
    {
@@ -2375,7 +2375,7 @@
    1788074663171
   ],
   "trace_id": "trc_c35c948e",
-  "trace_path": "/tmp/h1-traj/c12_no_signal_abstain_trc_c35c948e.json",
+  "trace_path": "trajectories/h1-arm/c12_no_signal_abstain_trc_c35c948e.json",
   "parse_error": null,
   "cards": [
    {
@@ -2414,7 +2414,7 @@
    1788074663171
   ],
   "trace_id": "trc_6f23b821",
-  "trace_path": "/tmp/h1-traj/c12_no_signal_abstain_trc_6f23b821.json",
+  "trace_path": "trajectories/h1-arm/c12_no_signal_abstain_trc_6f23b821.json",
   "parse_error": null,
   "cards": [
    {
