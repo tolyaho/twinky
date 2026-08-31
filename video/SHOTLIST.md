@@ -20,7 +20,7 @@ product working. Product proof is screen recording, always.
 ```bash
 cd ~/Desktop/personal/micro1/ts
 make setup PYTHON=python3.12          # or: uv venv .venv && uv pip install -r requirements.txt -e .
-make test                             # 696 passed — this is also shot 14
+make test                             # 697 passed — this is also shot 14
 ```
 
 Nothing below needs an API key or a network connection **except shot 10**, which is live chat and
@@ -143,6 +143,18 @@ stand behind. N rejected; E_CIRCULAR_EVIDENCE accounts for M; K abstained"* — 
 **Say this, do not skip it:** *"Most of what the agent produced did not survive its own provenance
 gate. That is the system working, and it is also the result — I will come back to it."*
 
+**Then click the offer in that line** — *"see the baseline on this window"* — and let it land. It
+is not an empty gesture: the agent grounds **nothing** on any recorded fixture and the baseline
+grounds something on all three. Measured from the recorded runs:
+
+| fixture | agent | baseline |
+|---|---:|---:|
+| stableronaldo | 0 grounded · 5 abstained · 19 rejected | **2 grounded** · 13 · 8 |
+| marlon 0715 | 0 grounded · 3 abstained · 20 rejected | **1 grounded** · 3 · 20 |
+| yugi | 0 grounded · 0 abstained · 21 rejected | **6 grounded** · 3 · 26 |
+
+One click turns the honest failure into the honest comparison, on screen, with no editing.
+
 ### Shot 7 — Questions, the thing a chat-only system cannot build
 Click the **Questions** tab. Switch to the **yugi** fixture.
 
@@ -249,7 +261,7 @@ not a disobedient model. That is a missing input."*
 
 ### Shot 14 — reproducibility, the pre-scoring gate
 ```bash
-make test        # 696 passed
+make test        # 697 passed
 ```
 **Proves:** with `make eval`, a judge reproduces every number in the submission from the committed
 cache with no keys. Verified from a clean clone in `/tmp` with `.env` deleted.

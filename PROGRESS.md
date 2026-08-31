@@ -3130,3 +3130,40 @@ change. Cost: **$0.00**, ledger $0.43.
 **19.0 hours to the deadline; the video gate is 11.0 hours away and no video exists.**
 Author-only and unchanged: film and cut the video; `git push` (origin/main 38+ behind); make the
 repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 99 — 2026-08-31 — the interactions the author performs between shots
+
+Attempted: the shot list is verified end to end, so this covered what happens **between** the
+shots — the switching a person does live on camera, which is where P0 1.2 once killed the server.
+
+**Fixture switching survives.** Four fixtures started and abandoned mid-stream in sequence —
+138, 145, 20 and 173 events delivered before each connection was dropped — and afterwards
+`/api/fixtures` and `/` both return 200 with **zero exceptions in the server log**. The threading
+fix and the epoch guard hold under exactly the sequence the author will perform.
+
+**Two things checked and found correct rather than broken.** `marlon_2026-08-30T0701` streams
+fine when requested directly but is not offered by the picker — because the picker offers
+fixtures with a recorded run, and that one has none. Requesting it directly still yields chat,
+ticks and boards, all deterministic, with an empty Signals tab. Coherent, not a gap.
+
+**The finding line's offer leads somewhere, and now the shot list says where.** The line ends
+*"see the baseline on this window"*, which is only worth offering if the baseline shows something
+the agent does not. Measured across the recorded runs:
+
+| fixture | agent | baseline |
+|---|---:|---:|
+| stableronaldo | **0 grounded** · 5 abstained · 19 rejected | **2 grounded** · 13 · 8 |
+| marlon 0715 | **0 grounded** · 3 abstained · 20 rejected | **1 grounded** · 3 · 20 |
+| yugi | **0 grounded** · 0 abstained · 21 rejected | **6 grounded** · 3 · 26 |
+
+The agent grounds nothing anywhere; the baseline grounds cards on all three. So shot 6 now ends by
+clicking that offer: one click turns the honest failure into the honest comparison, on screen,
+with no editing. A test holds the invitation to that fact, because the moment it stops being true
+the line becomes a dead end.
+
+Result: `make test` 696 → **697 passed**. 1 new test, two rows in DECISIONS.md. No product change.
+Cost: **$0.00**, ledger $0.43.
+
+**18.9 hours to the deadline; the video gate is 10.9 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 39+ behind); make the
+repository public after pushing; `make review`; rotate `.env` and the Telegram credentials.

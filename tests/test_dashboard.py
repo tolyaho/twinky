@@ -1786,3 +1786,25 @@ def test_the_site_stays_navigable_when_the_window_narrows():
     narrow = [b for b in css.split("@media (max-width: 900px)")[1:]]
     assert any(".bar .meta { display: none; }" in b and "#debug-toggle { display: none; }" in b
                for b in narrow), "the bar must shed its optional parts, not its nav"
+
+
+def test_the_baseline_offer_in_the_finding_line_is_not_empty():
+    """The finding line invites the reader to "see the baseline on this window". That is only
+    worth offering if the baseline shows something the agent does not — and it does: the agent
+    grounds nothing on any recorded fixture while the baseline grounds cards on all three."""
+    import collections
+
+    for fixture in ("stableronaldo_2026-08-30T0723", "marlon_2026-08-30T0715",
+                    "yugi_2026-08-30T0723"):
+        counts = {}
+        for system in ("agent", "baseline"):
+            state = collections.Counter()
+            for _, event in serve_mod.stream_events(FIXTURES / fixture,
+                                                    Path("evidence/raw-results"), system):
+                if event["kind"] == "card":
+                    state[event["state"]] += 1
+            counts[system] = state
+
+        assert counts["agent"]["grounded"] == 0, f"{fixture}: the agent now grounds something"
+        assert counts["baseline"]["grounded"] > 0, \
+            f"{fixture}: the baseline grounds nothing, so the offer leads nowhere"
