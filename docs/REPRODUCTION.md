@@ -178,10 +178,10 @@ construction. Anything else fails, including a local-only file found outside a g
 which is exactly the case inside an extracted archive. The scan used to fail on every developer
 machine for a perfectly normal `.env`, and a check that always fails is a check nobody reads.
 
-## 12. Two results that are reproduced separately
+## 12. Three results that are reproduced separately
 
-Both are in `docs/IMPROVEMENT_CHANGELOG.md` as experiments that were built, measured and **not
-adopted**. Neither needs a key, and neither touches the headline numbers.
+All three are in `docs/IMPROVEMENT_CHANGELOG.md` as experiments that were built, measured and
+**not adopted**. None needs a key, and none touches the headline numbers.
 
 **The grounded arm** — the window's speech and screen events inlined in the agent's turn, as a
 fourth recorded system beside agent, baseline and ablation:
@@ -193,6 +193,28 @@ TS_LLM_MODE=replay python -m evals.run_eval --ablation --grounded --out evidence
 Expect **70 cache hits, 0 misses**. It writes to `evidence/grounded/`, never to `evidence/`, so
 the published table cannot move. Result: same recall, worse unsupported rate — it stopped
 abstaining entirely once it was handed candidates.
+
+**The H1 arm** — the agent's chat tool pointed at the shipped grouper instead of the exact-match
+reducer. Unlike the grounded arm it is not a fourth system in one run; it changes the agent's own
+prompt, so it ships as a patch and reverses cleanly:
+
+```bash
+git apply experiments/h1-group-chat.patch
+TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
+  python -m evals.run_eval --ablation --out /tmp/h1
+git apply -R experiments/h1-group-chat.patch
+```
+
+Expect **46 cache hits, 0 misses**. `TS_TRACE_DIR` is not optional — trace ids derive from
+`(agent, case_id)` and are stable across runs, so without it this rewrites ten files in
+`trajectories/product-agent/` with the arm's content. The already-generated output is committed
+at `evidence/h1/`, with the arm's own trajectories at `trajectories/h1-arm/`. Result: trigger
+accuracy 0.500 → 0.000 and `E_CIRCULAR_EVIDENCE` 8 → 25 — handed groups it could describe, it
+named a message from the group as the cause of that same group.
+
+Both arm reports open with a **NOT THE SHIPPED RESULT** banner, written by the runner for any
+output directory that is not `evidence/`. The published comparison is `evidence/report.md` and
+carries no banner.
 
 **The grouping arms**, scored on pair-level precision and recall against intent labels frozen in
 a commit that contained no arm code:
