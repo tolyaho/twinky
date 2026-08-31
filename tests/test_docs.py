@@ -523,3 +523,62 @@ def test_the_filming_guidance_matches_the_fixtures():
     shots = (REPO / "video/SHOTLIST.md").read_text(encoding="utf-8")
     assert "clean over all 1535 messages" in shots
     assert "window 0 is clean" in shots
+
+
+def test_the_disclosure_scale_table_is_counted_not_remembered():
+    """Every row of it had drifted. `Tests` said 623 against 702, `Risks tracked` 42 against 51,
+    `Decisions` 303 against 414, `Commits` 129 against 165 — a table headed "for calibration"
+    that miscalibrated by a third. It was the only published figure set with no guard, which is
+    exactly why it was the one that rotted.
+
+    Counted from the artifacts, with a tolerance of zero: these are counts, not estimates, and
+    a disclosure that rounds its own scale is not disclosing.
+    """
+    import re
+    import subprocess
+
+    disclosure = (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8")
+    rows = dict(re.findall(r"^\| ([A-Z][^|]+?) +\| ([\d]+) \|$", disclosure, re.M))
+
+    decisions = len(re.findall(r"^\| 20\d\d-\d\d-\d\d ",
+                               (REPO / "DECISIONS.md").read_text(encoding="utf-8"), re.M))
+    risks = len(set(re.findall(r"^\| ?(\d+) ?\|",
+                               (REPO / "RISKS.md").read_text(encoding="utf-8"), re.M)))
+    progress = (REPO / "PROGRESS.md").read_text(encoding="utf-8")
+    iterations = max(int(n) for n in re.findall(r"^## Iteration (\d+)", progress, re.M))
+
+    # Tolerances allow roughly one iteration of lag and nothing more: a table updated last
+    # iteration is fine, a table updated fifty iterations ago is what this exists to catch. The
+    # drift that prompted it was 30-40% on every row.
+    for label, actual, slack in (("Decisions recorded with rationale", decisions, 8),
+                                 ("Risks tracked", risks, 2),
+                                 ("Iterations logged", iterations, 2)):
+        assert label in rows, f"the scale table lost its `{label}` row"
+        assert abs(int(rows[label]) - actual) <= slack, \
+            f"disclosure says {label} = {rows[label]}; the file says {actual}"
+
+    # Commits are counted from the window open, which is the disclosure's own definition. In an
+    # archive there is no git and the question has no answer from here, so it is skipped rather
+    # than guessed — the same rule as the four archive checks.
+    done = subprocess.run(["git", "log", "--oneline", "--since=2026-08-28T15:00:00Z"],
+                          cwd=REPO, capture_output=True, text=True, timeout=60)
+    if done.returncode != 0:
+        return
+    commits = len([l for l in done.stdout.splitlines() if l.strip()])
+    assert abs(int(rows["Commits in the competition window"]) - commits) <= 1, \
+        f"disclosure says {rows['Commits in the competition window']} commits; git says {commits}"
+
+
+def test_the_iteration_prose_and_the_scale_table_agree():
+    """The prose says how many iterations carry a heading; the table says how many there are.
+    They were written months apart in the same file and both were wrong."""
+    import re
+
+    disclosure = (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8")
+    headings = len(re.findall(r"^## Iteration ",
+                              (REPO / "PROGRESS.md").read_text(encoding="utf-8"), re.M))
+
+    stated = re.search(r"of which (\d+) carry a\s*\n?`## Iteration` heading", disclosure)
+    assert stated, "the disclosure no longer says how many iterations carry a heading"
+    assert abs(int(stated.group(1)) - headings) <= 2, \
+        f"disclosure says {stated.group(1)} headings; PROGRESS.md has {headings}"

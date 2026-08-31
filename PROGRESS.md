@@ -3426,3 +3426,49 @@ Result: `make test` **702 passed**; archive **698 passed, 4 skipped**; `scan_sec
 Author-only and unchanged: film and cut the video; `git push` (**origin/main is 61 commits
 behind**); make the repository public after pushing; `make review`; rotate `.env` and the Telegram
 credentials.
+
+## Iteration 105 — the one published table with no guard was the one that had rotted
+
+Verification-only. Last iteration's disclosure edit needed two figures corrected, which raised the
+obvious question about the rest of that table. All of it was stale:
+
+| row | published | measured |
+|---|---:|---:|
+| Commits in the competition window | 129 | **165** |
+| Iterations logged | 70 | **104** |
+| Decisions recorded with rationale | 303 | **414** |
+| Risks tracked | 42 | **51** |
+| Tests | 623¹ | **704** |
+
+¹ corrected to 702 in the previous iteration, which is what prompted this.
+
+A table headed **"Scale, for calibration"** that miscalibrates by a third is worse than no table.
+The prose above it was wrong too — *"70 iterations are logged, of which 22 carry a `## Iteration`
+heading"* against 104 and 56 — and its list of loop specifications stopped before `AGENT_FIX.md`.
+The cadence sentence claimed 30 minutes shortened to 10; the real sequence was 30, then 10
+overnight, then 30, then 20 for the last stretch.
+
+**This was the only published figure set in the repository with no test behind it**, which is
+almost certainly why it was the one that rotted. Every other number a judge reads — the test
+count, the trajectory count, the cost total, the results table, the shot list's figures — is held
+to its artifact by something that fails when they diverge. Two guards now cover this one:
+
+- `test_the_disclosure_scale_table_is_counted_not_remembered` counts decisions, risks and
+  iterations out of the files and compares. Tolerances are ±8, ±2 and ±2 — one iteration of lag
+  is fine, fifty is what this exists to catch — and they are stated in the test rather than
+  implied. The commit half returns rather than guesses when git is absent, the same rule the four
+  archive checks adopted last iteration.
+- `test_the_iteration_prose_and_the_scale_table_agree` holds the sentence to `PROGRESS.md`.
+
+**Verified by breaking it**: set Risks back to 42, watched the test fail on line 557, restored it
+and watched it pass. A guard nobody has seen fail is a guard nobody knows works.
+
+Checked and found correct, so left alone: **118 trajectories** — `README.md`, `SUBMISSION.md` and
+the disclosure all say 118 and there are 118 files.
+
+Result: `make test` 702 → **704 passed**. 2 new guards. Cost **$0.00**, ledger $0.4364.
+
+**9.5 hours to the deadline. The 8-hour video gate is 1.5 hours away and no video exists.**
+Author-only and unchanged: film and cut the video; `git push` (origin/main 61 commits behind);
+make the repository public after pushing; `make review`; rotate `.env` and the Telegram
+credentials.
