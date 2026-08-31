@@ -3848,3 +3848,45 @@ Result: `make test` 714 → **716 passed**. 2 new guards. `evidence/` and
 **6.9 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
 video; `git push` (origin/main 70 commits behind); make the repository public after pushing;
 `make review`; rotate `.env` and the Telegram credentials.
+
+## Iteration 114 — the last unswept published figures were in the page markup
+
+**Inside the video gate: 6.6 hours left, no video file.** Verification-only, and constrained:
+`src/ts/report/` is off-limits while the author films, so this was a read-and-verify pass over
+the pages with any repair confined to the test suite.
+
+**The pages are almost entirely artifact-driven, which is the finding.** Across `index.html`,
+`method.html` and `philosophy.html` there are exactly **three** numeric literals that mean
+anything — the SVG dimensions, the 28 dB audio experiment, and one pair on the philosophy page.
+Everything else a judge reads comes from the API, which reads `evidence/`. Nothing needed
+changing in the markup.
+
+**But the one pair was guarded by a test that had typed the numbers itself.**
+`philosophy.html` says the chat-only ablation scored **0.280** unsupported *"against the full
+agent's 0.739"* — the page's central admission, and the figure pair a judge is most likely to
+check. The guard read:
+
+```python
+assert "chat-only ablation" in html and "0.280" in html and "0.739" in html
+```
+
+Literals the test never derived. If the eval ever moved, the page and its guard would have gone
+on agreeing with each other while both disagreed with the measurement. Both now come out of
+`evidence/summary.json`, with a check that they are not equal — a comparison between two identical
+numbers proves nothing. Verified by perturbing the ablation's rate to 0.310 and watching it fail.
+
+**Third instance of one anti-pattern, so it was swept rather than patched.** The shot-2 count two
+iterations ago did the same thing. Searched every test for a metric-shaped literal asserted
+against document or page text, and against a bare comparison: **twelve other hits, all
+legitimate** — expected values from constructed input in `test_scorer.py`, `test_score_arms.py`
+and `test_agent_loop.py`, or a stub `summary.json` the test writes itself at
+`test_dashboard.py:212`. Pinning an expectation against a fixture you built is the point of a unit
+test; copying a published figure into one is not.
+
+Result: `make test` **716 passed** — one guard rewritten, none added. `evidence/` and
+`trajectories/product-agent/` byte-identical, `src/ts/report/` untouched. Cost **$0.00**, ledger
+$0.4364.
+
+**6.6 hours to the deadline and no video exists.** Author-only and unchanged: film and cut the
+video; `git push` (origin/main 70 commits behind); make the repository public after pushing;
+`make review`; rotate `.env` and the Telegram credentials.

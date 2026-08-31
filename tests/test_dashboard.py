@@ -963,7 +963,20 @@ def test_the_philosophy_page_keeps_the_uncomfortable_numbers():
     the same voice as everything else, and the open failures are listed rather than implied."""
     html = " ".join((STATIC / "philosophy.html").read_text(encoding="utf-8").split())
 
-    assert "chat-only ablation" in html and "0.280" in html and "0.739" in html
+    # Read from the evaluation, never typed here. This line used to assert the literals
+    # "0.280" and "0.739" — numbers the test never derived — so if the eval ever moved, the page
+    # and the guard would have gone on agreeing with each other and disagreeing with the
+    # measurement. The same anti-pattern was found in the shot-2 count an iteration earlier: a
+    # test that hardcodes a figure is a second copy of the claim, not a check on it.
+    systems = json.loads((REPO / "evidence/summary.json").read_text(
+        encoding="utf-8"))["systems"]
+    ablation = f'{systems["ablation_chat_only"]["unsupported_rate"]:.3f}'
+    agent = f'{systems["agent"]["unsupported_rate"]:.3f}'
+
+    assert "chat-only ablation" in html
+    assert ablation in html, f"the page no longer quotes the ablation's {ablation}"
+    assert agent in html, f"the page no longer quotes the agent's {agent}"
+    assert ablation != agent, "the comparison is vacuous if the two figures are equal"
     assert "It won by abstaining" in html
     assert "grounds <strong>nothing</strong>" in html
     assert '"reviewed": false' in html or "reviewed&quot;: false" in html
