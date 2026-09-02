@@ -1,4 +1,5 @@
-"""`trajectories/` is a graded deliverable, so it must hold real runs and nothing else.
+"""`trajectories/` is published as reproducible, so it must hold real runs, nothing else, and
+the same bytes on every replay.
 
 The suite wrote 55 files into it before `TS_TRACE_DIR` existed, every one with a case id no
 evaluation case has. A reviewer opening that directory would have been reading test output.
@@ -70,3 +71,47 @@ def test_the_coding_agent_disclosure_is_filled_in():
     assert "Claude Code" in disclosure
     assert "2.1.246" in disclosure           # a version, not a bare tool name
     assert "<!-- TODO -->" not in disclosure
+
+
+# ------------------------------------------------------------------ at_ms determinism (RISKS #54)
+def test_a_replay_trace_records_no_wall_clock_timing(tmp_path, monkeypatch):
+    """`perf_counter` resolved a cached lookup as 0 ms on one run and 1 ms on the next, so one
+    frozen-case trajectory changed on every `make eval` — in a directory documented as
+    reproducible. Same defect as the uuid4 trace id, one field over."""
+    monkeypatch.setenv("TS_LLM_MODE", "replay")
+
+    t = Trace("agent", "c01_case", out_dir=tmp_path)
+    t.instructions("sys", "usr")
+    t.tool_call("get_chat_window", {}, {"n": 3})
+    t.result({"cards": []})
+
+    assert [s["at_ms"] for s in t.steps] == [None, None, None]
+
+
+def test_a_recorded_trace_keeps_its_real_latencies(tmp_path, monkeypatch):
+    """Record mode talks to a live provider, so the numbers are real and are the only latency
+    data the project has. 45 committed trajectories carry them."""
+    monkeypatch.setenv("TS_LLM_MODE", "record")
+
+    t = Trace("agent", "c01_case", out_dir=tmp_path)
+    t.instructions("sys", "usr")
+
+    assert all(isinstance(s["at_ms"], int) for s in t.steps)
+
+
+def test_two_replays_of_one_case_write_identical_bytes(tmp_path, monkeypatch):
+    """The property the trajectories directory claims. Asserted end to end rather than inferred
+    from the field, because the trace id and the step payloads have to hold still too."""
+    monkeypatch.setenv("TS_LLM_MODE", "replay")
+
+    written = []
+    for run in ("a", "b"):
+        out = tmp_path / run
+        t = Trace("agent", "c01_case", out_dir=out)
+        t.instructions("sys", "usr")
+        t.tool_call("get_chat_window", {"window_ms": [0, 60000]}, {"n": 3})
+        t.gate("sig_1", True, [])
+        t.result({"cards": []})
+        written.append(t.write().read_bytes())
+
+    assert written[0] == written[1]
