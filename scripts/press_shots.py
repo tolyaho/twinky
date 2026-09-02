@@ -38,7 +38,7 @@ except ImportError:
              "  uv pip install playwright && .venv/bin/playwright install chromium")
 
 BASE = "http://127.0.0.1:8000"
-OUT = Path(__file__).resolve().parents[1] / "video" / "press"
+OUT = Path(__file__).resolve().parents[1] / "media" / "press"
 W, H = 1920, 1080
 SCALE = 2                     # 3840x2160 out — enough for a slide or a full-bleed page
 SETTLE_MS = 900               # rows arrive on a .28s transition; let the frame stop moving

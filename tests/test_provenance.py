@@ -164,3 +164,75 @@ def test_an_honest_card_is_unaffected():
                         "quote": "в лес или на базу?"}}
 
     assert check_card(card, _index_with_frame()).ok
+
+
+# ----------------------------------------------- chat reacting to chat (photo_51 item 9)
+def _viewer_index():
+    """The 4 Jan 2026 case, transcribed: one viewer's line, then the room agreeing with it."""
+    return EventIndex([
+        Event("msg_a", "chat_message", 2000, {"text": "хуй не взял", "author": "u1"}),
+        Event("msg_b", "chat_message", 2400, {"text": "100% ахаахахаха", "author": "u2"}),
+        Event("msg_c", "chat_message", 2600, {"text": "ахахаха", "author": "u3"}),
+        Event("tr_1", "transcript_segment", 1000, {"text": "куда идти - в лес или на базу?"}),
+    ])
+
+
+def test_a_reaction_to_an_earlier_viewer_is_a_valid_reason():
+    """Reacting to another viewer is a correctly-labelled reason in the taxonomy this product was
+    built on, and was hand-validated as correct on 4 Jan 2026. Forbidding it was a rule this build
+    added that the product never had."""
+    card = {"type": "reaction", "window_ms": [0, 5000],
+            "evidence": ["msg_a", "msg_b", "msg_c"],
+            "trigger": {"kind": "chat", "event_id": "msg_a", "quote": "хуй не взял"}}
+
+    assert check_card(card, _viewer_index()).ok
+
+
+def test_a_reaction_whose_only_evidence_is_its_own_trigger_is_still_circular():
+    """The exception must not become a hole. A card offering itself as its own proof looks
+    superficially identical to the case above and is the failure the rule exists to catch."""
+    card = {"type": "reaction", "window_ms": [0, 5000], "evidence": ["msg_a"],
+            "trigger": {"kind": "chat", "event_id": "msg_a", "quote": "хуй не взял"}}
+
+    assert "E_CIRCULAR_EVIDENCE" in check_card(card, _viewer_index()).codes
+
+
+def test_only_a_reaction_card_may_be_triggered_by_a_message_it_cites():
+    """An answer caused by another viewer's message is not a thing the taxonomy describes: a
+    DIRECT_ANSWER answers the streamer. The exception stays scoped to REACTION_OR_COMMENTARY."""
+    card = {"type": "audience_answer", "window_ms": [0, 5000],
+            "evidence": ["msg_a", "msg_b"],
+            "trigger": {"kind": "chat", "event_id": "msg_a", "quote": "хуй не взял"}}
+
+    assert "E_CIRCULAR_EVIDENCE" in check_card(card, _viewer_index()).codes
+
+
+def test_a_reaction_cited_alongside_an_earlier_message_is_not_a_reaction_to_it():
+    """Every other cited message must be strictly later than the trigger. Otherwise the card is
+    restating a group it belongs to, not naming what provoked it."""
+    card = {"type": "reaction", "window_ms": [0, 5000],
+            "evidence": ["msg_a", "msg_b"],
+            "trigger": {"kind": "chat", "event_id": "msg_b", "quote": "100% ахаахахаха"}}
+
+    r = check_card(card, _viewer_index())
+    assert "E_CIRCULAR_EVIDENCE" in r.codes
+
+
+def test_the_exception_does_not_let_a_transcript_segment_through():
+    """The trigger must be a real chat message. A speech segment cited as its own evidence is
+    still the original defect, whatever the card type says."""
+    card = {"type": "reaction", "window_ms": [0, 5000],
+            "evidence": ["tr_1", "msg_b"],
+            "trigger": {"kind": "speech", "event_id": "tr_1", "quote": "в лес или на базу"}}
+
+    codes = check_card(card, _viewer_index()).codes
+    assert "E_CIRCULAR_EVIDENCE" in codes and "E_EVIDENCE_NOT_A_MESSAGE" in codes
+
+
+def test_a_late_chat_trigger_is_still_caught_by_the_ordering_check():
+    """The exception relaxes one rule, not the gate. A trigger after its effect still fails."""
+    card = {"type": "reaction", "window_ms": [0, 5000],
+            "evidence": ["msg_c", "msg_b"],
+            "trigger": {"kind": "chat", "event_id": "msg_c", "quote": "ахахаха"}}
+
+    assert "E_CIRCULAR_EVIDENCE" in check_card(card, _viewer_index()).codes

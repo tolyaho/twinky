@@ -3,7 +3,7 @@
 | system | cases | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|---:|
 | ablation_chat_only | 11 | 25 | 1.000 | 0.960 | 0.280 | 0.091 |
-| agent | 11 | 23 | 0.500 | 0.913 | 0.739 | 0.182 |
+| agent | 11 | 23 | 0.500 | 0.913 | 0.609 | 0.182 |
 | baseline | 11 | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
 
 ## Fixtures behind these numbers

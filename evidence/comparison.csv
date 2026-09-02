@@ -7,10 +7,10 @@ c02_word_puzzle_herald,ablation_chat_only,1,1,0,0,1,0,0,False,,,,,1.0,0.0,0.0
 c02_word_puzzle_herald,agent,3,1,0,0,3,0,0,False,,,,,1.0,0.0,0.0
 c03_failure_laughter,baseline,3,1,0,1,2,2,1,False,,,,0.0,0.6666666666666666,0.6666666666666666,1.0
 c03_failure_laughter,ablation_chat_only,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
-c03_failure_laughter,agent,1,1,0,1,0,1,1,False,,,,0.0,0.0,1.0,1.0
+c03_failure_laughter,agent,1,1,0,1,0,0,1,False,,,,0.0,0.0,0.0,1.0
 c05_warning_no_cause,baseline,1,1,0,0,1,0,0,False,,,,,1.0,0.0,0.0
 c05_warning_no_cause,ablation_chat_only,1,1,0,0,1,1,0,False,,,,,1.0,1.0,0.0
-c05_warning_no_cause,agent,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
+c05_warning_no_cause,agent,3,1,0,0,3,2,0,False,,,,,1.0,0.6666666666666666,0.0
 c06_two_speakers_laughter,baseline,1,1,0,0,1,1,0,False,,,,,1.0,1.0,0.0
 c06_two_speakers_laughter,ablation_chat_only,3,1,0,0,3,0,0,False,,,,,1.0,0.0,0.0
 c06_two_speakers_laughter,agent,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
@@ -25,7 +25,7 @@ c09_two_topics,ablation_chat_only,3,2,0,0,3,0,0,False,,,,,1.0,0.0,0.0
 c09_two_topics,agent,1,2,0,0,1,1,0,False,,,,,1.0,1.0,0.0
 c10_spam_collapse,baseline,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
 c10_spam_collapse,ablation_chat_only,3,1,1,1,2,0,1,False,,,,1.0,0.6666666666666666,0.0,1.0
-c10_spam_collapse,agent,3,1,0,0,3,3,0,False,,,,,1.0,1.0,0.0
+c10_spam_collapse,agent,3,1,0,0,3,2,0,False,,,,,1.0,0.6666666666666666,0.0
 c11_sarcasm_mockery,baseline,3,1,0,0,3,1,0,False,,,,,1.0,0.3333333333333333,0.0
 c11_sarcasm_mockery,ablation_chat_only,3,1,0,0,3,0,0,False,,,,,1.0,0.0,0.0
 c11_sarcasm_mockery,agent,1,1,1,1,0,0,1,False,,,,1.0,0.0,0.0,1.0

@@ -52,24 +52,19 @@
   },
   {
    "kind": "provenance_gate",
+   "signal_id": "lol",
+   "ok": true,
+   "violations": [],
+   "at_ms": 0
+  },
+  {
+   "kind": "provenance_gate",
    "signal_id": "eviction is on the horizon",
    "ok": false,
    "violations": [
     {
      "code": "E_CIRCULAR_EVIDENCE",
      "detail": "90288761-d9b8-4f2b-984d-57cd90f60c97 is cited as evidence for the signal it supposedly caused"
-    }
-   ],
-   "at_ms": 0
-  },
-  {
-   "kind": "provenance_gate",
-   "signal_id": "lol",
-   "ok": false,
-   "violations": [
-    {
-     "code": "E_CIRCULAR_EVIDENCE",
-     "detail": "5f498d6d-7567-40ee-b51e-f4f9b420a0e2 is cited as evidence for the signal it supposedly caused"
     }
    ],
    "at_ms": 0
@@ -89,8 +84,8 @@
   {
    "kind": "result",
    "payload": {
-    "verified": 0,
-    "rejected": 3,
+    "verified": 1,
+    "rejected": 2,
     "steps": 2,
     "cards_dropped_by_cap": 0
    },

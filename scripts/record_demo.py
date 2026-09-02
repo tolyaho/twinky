@@ -15,8 +15,8 @@ mocked. Re-run it after any change and the takes regenerate identically.
     .venv/bin/python scripts/record_demo.py 01 04           # only these
     .venv/bin/python scripts/record_demo.py --list
 
-Clips land in video/clips/<name>.webm. Convert with:
-    for f in video/clips/*.webm; do
+Clips land in media/clips/<name>.webm. Convert with:
+    for f in media/clips/*.webm; do
       ffmpeg -y -i "$f" -c:v libx264 -crf 18 -pix_fmt yuv420p "${f%.webm}.mp4"
     done
 
@@ -38,7 +38,7 @@ except ImportError:
              "  .venv/bin/pip install playwright && .venv/bin/playwright install chromium")
 
 BASE = "http://127.0.0.1:8000"
-OUT = Path(__file__).resolve().parents[1] / "video" / "clips"
+OUT = Path(__file__).resolve().parents[1] / "media" / "clips"
 W, H = 1920, 1080
 
 

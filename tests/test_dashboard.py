@@ -548,20 +548,18 @@ def test_svg_is_served_with_the_right_content_type():
 
 
 def test_the_name_is_treated_identically_everywhere():
-    """One name across the repo, the UI and the submission. `video/HOOK.md` had already logged
-    the mismatch — the hook said Twinky while everything else said Twitch Agent — and a judge who
-    reads one name and hears another is counting two projects."""
+    """One name across the repo and the UI. The rename logged a mismatch once — some surfaces
+    said Twinky while others still said Twitch Agent — and a reader who sees one name in the
+    README and another in the product is counting two projects."""
     pages = [(STATIC / p).read_text(encoding="utf-8")
              for p in ("index.html", "method.html", "philosophy.html")]
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    submission = (REPO_ROOT / "SUBMISSION.md").read_text(encoding="utf-8")
 
     for html in pages:
         assert "<title>Twinky —" in html
         assert '<span class="mark-name">Twinky</span>' in html
     assert readme.startswith("# Twinky")
     assert "Twinky turns an unreadable live chat" in readme
-    assert "Twinky" in submission
 
 
 def test_the_bare_name_never_stands_alone_without_saying_what_it_is():
@@ -579,7 +577,7 @@ def test_the_old_name_survives_only_where_it_is_history():
     import subprocess
 
     shipped = subprocess.run(
-        ["grep", "-rl", "Twitch Agent", "src", "README.md", "SUBMISSION.md"],
+        ["grep", "-rl", "Twitch Agent", "src", "README.md"],
         cwd=REPO_ROOT, capture_output=True, text=True).stdout.split()
     # Bytecode and packaging metadata are build output, not shipped source, and both keep a
     # stale copy of the docstring until something regenerates them.

@@ -7,8 +7,8 @@ a real defect in the grep version:
      credentials. The scan reported on everything except the thing that mattered.
   2. The pattern list lived in the Makefile, so the Makefile matched its own patterns and the
      scan failed permanently. A check that is always red is a check nobody reads.
-  3. `legacy/` was excluded from the scan while still being present in the tree, so a credential
-     committed there was invisible to the gate and would ship in the archive.
+  3. `reference/` (then named `legacy/`) was excluded from the scan while still being present in
+     the tree, so a credential committed there was invisible to the gate and would ship.
 
 It prints `path:line` and the name of the rule that fired. It never prints the matched text.
 """
@@ -46,8 +46,8 @@ RULES: List[Tuple[str, re.Pattern]] = [
     ("aws-key-id", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
     ("private-key-block", re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----")),
     # A database user and host sitting next to a password are part of the same credential, so
-    # they are treated as one: `legacy/README.original.md` holds the whole connection block and
-    # only the password line fired on the first pass.
+    # they are treated as one: `reference/README.original.md` holds the whole connection block
+    # and only the password line fired on the first pass.
     ("assigned-credential", re.compile(
         r"\b[A-Z0-9_]*(?:API_KEY|ACCESS_TOKEN|OAUTH|SECRET|PASSWORD|CLIENT_ID"
         r"|DB_USER|DB_HOST|DB_NAME)"
@@ -72,7 +72,7 @@ def candidate_files(root: Path) -> Iterator[Path]:
                 yield entry
 
 
-# A documentation example is not a credential. `legacy/README.original.md` is six lines of
+# A documentation example is not a credential. `reference/README.original.md` is six lines of
 # `DB_PASSWORD=your_password` inside a "Create `.env`:" block, and it outranked the eight real
 # credentials in `.env` as the project's top finding for a full day (RISKS #16, withdrawn; #35).
 # A scanner that cries wolf on its own README gets switched off, which is the failure mode the

@@ -1,6 +1,6 @@
 # Evaluation report
 
-> **NOT THE SHIPPED RESULT.** This report was written to `h1/`, not to `evidence/`, so it is an experimental arm rather than the published comparison. The shipped numbers are in `evidence/report.md`, and `SUBMISSION.md` states which arms were rolled back and why.
+> **NOT THE SHIPPED RESULT.** This report was written to `h1/`, not to `evidence/`, so it is an experimental arm rather than the published comparison. The shipped numbers are in `evidence/report.md`, and `docs/IMPROVEMENT_CHANGELOG.md` states which arms were rolled back and why.
 
 | system | cases | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|---:|

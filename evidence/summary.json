@@ -15,7 +15,7 @@
    "cards": 23,
    "trigger_accuracy": 0.5,
    "unmatched_rate": 0.9130434782608695,
-   "unsupported_rate": 0.7391304347826086,
+   "unsupported_rate": 0.6086956521739131,
    "signal_recall": 0.18181818181818182,
    "abstention_correct": 0,
    "abstention_cases": 1

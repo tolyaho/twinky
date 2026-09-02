@@ -557,15 +557,10 @@
     ],
     "trace_id": "trc_5c4fe123",
     "gate": {
-     "ok": false,
-     "violations": [
-      {
-       "code": "E_CIRCULAR_EVIDENCE",
-       "detail": "2cf3f99a-c70b-4026-bbd0-ce4089f61105 is cited as evidence for the signal it supposedly caused"
-      }
-     ]
+     "ok": true,
+     "violations": []
     },
-    "status": "rejected"
+    "status": "verified"
    }
   ]
  },
@@ -693,15 +688,10 @@
     ],
     "trace_id": "trc_5445166e",
     "gate": {
-     "ok": false,
-     "violations": [
-      {
-       "code": "E_CIRCULAR_EVIDENCE",
-       "detail": "6f008400-6656-4017-a24a-518bc8f3634f is cited as evidence for the signal it supposedly caused"
-      }
-     ]
+     "ok": true,
+     "violations": []
     },
-    "status": "rejected"
+    "status": "verified"
    },
    {
     "signal_id": "gg",
@@ -1856,15 +1846,10 @@
     ],
     "trace_id": "trc_f582b0dc",
     "gate": {
-     "ok": false,
-     "violations": [
-      {
-       "code": "E_CIRCULAR_EVIDENCE",
-       "detail": "5f498d6d-7567-40ee-b51e-f4f9b420a0e2 is cited as evidence for the signal it supposedly caused"
-      }
-     ]
+     "ok": true,
+     "violations": []
     },
-    "status": "rejected"
+    "status": "verified"
    },
    {
     "signal_id": "uuh",
