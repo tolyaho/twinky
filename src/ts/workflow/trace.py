@@ -49,8 +49,28 @@ class Trace:
         self.steps: List[Dict[str, Any]] = []
         self.meta: Dict[str, Any] = {}
         self._t0 = time.perf_counter()
+        # Same source of truth as the cache, and for the same reason.
+        self._timed = (os.getenv("TS_LLM_MODE") or "replay").lower() != "replay"
 
-    def _elapsed_ms(self) -> int:
+    def _elapsed_ms(self) -> Optional[int]:
+        """Wall-clock elapsed since the run started, or `None` on a replay.
+
+        This is the `make_trace_id` problem one field over. A uuid4 trace id made two replays of
+        the same fixture differ in a file published as reproducible; so did this, because
+        `perf_counter` resolves a cached lookup as 0 ms on one run and 1 ms on the next. One
+        frozen-case trajectory changed on every `make eval`.
+
+        Timing a replay is also meaningless, which `evidence/report.md` already says in as many
+        words: a replay reads cached responses, so it measures disk, not the model. `None` says
+        "not measured in this mode" — `0` would be a fabricated measurement, and the steps are
+        ordered by position in the list anyway, so nothing is lost.
+
+        In `record` mode the numbers are real latencies against a live provider and are kept:
+        45 of the committed trajectories carry them, and they are the only latency data the
+        project has.
+        """
+        if not self._timed:
+            return None
         return int((time.perf_counter() - self._t0) * 1000)
 
     def instructions(self, system: str, user: str) -> None:
