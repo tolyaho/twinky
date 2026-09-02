@@ -17,7 +17,7 @@ Two primary metrics, both legible in five seconds:
 
 An earlier plan proposed a composite requiring four simultaneous conditions for a true positive.
 On 12 cases that yields near-zero, unstable numbers for both systems and is unreadable in a
-five-minute video. Rejected deliberately - see ../notes/03-EVAL_DESIGN.md.
+five-minute video. Rejected deliberately - see notes/03-EVAL_DESIGN.md.
 """
 from __future__ import annotations
 

@@ -39,7 +39,7 @@ def build_vision_request(*, image_sha256: str, model: str = MODEL, prompt: str =
                          max_tokens: int = MAX_TOKENS,
                          temperature: float = 0.0) -> Dict[str, Any]:
     """Canonical request. This dict IS the cache key. Editing FRAME_PROMPT invalidates every
-    cached caption - say so in PROGRESS.md rather than silently re-recording."""
+    cached caption - say so in docs/archive/PROGRESS.md rather than silently re-recording."""
     return {
         "provider": "vision",
         "model": model,

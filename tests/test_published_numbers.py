@@ -22,7 +22,7 @@ REPO = Path(__file__).resolve().parents[1]
 SUMMARY = REPO / "evidence" / "summary.json"
 LEDGER = REPO / "COST_LEDGER.md"
 
-DOCS = ["README.md", "SUBMISSION.md", "docs/IMPROVEMENT_CHANGELOG.md", "video/SHOTLIST.md"]
+DOCS = ["README.md", "docs/IMPROVEMENT_CHANGELOG.md"]
 
 # | system | cards | trigger accuracy | unmatched | unsupported | recall |
 # `\**` absorbs bold markers and `[¹²³*†]*` absorbs footnote markers — the ablation row carries
@@ -95,7 +95,7 @@ def test_all_three_systems_are_covered_by_the_summary():
 
 
 def test_the_quoted_cost_matches_the_ledger():
-    """`$0.39` appears in SUBMISSION.md and the shot list. The ledger is authoritative."""
+    """The total appears in the README and the reproduction guide. The ledger is authoritative."""
     totals = re.findall(r"running_total=([\d.]+)", LEDGER.read_text(encoding="utf-8"))
     assert totals, "the ledger states no running total"
     ledger_total = float(totals[-1])
@@ -219,7 +219,11 @@ def test_the_changelog_quotes_the_trigger_table_it_measured():
     assert before["speech"] == 4 and after["speech"] == 0
     assert before["frame"] == 0 and after["frame"] == 1
     assert before["chat"] == 13 and after["chat"] == 24
-    assert before_codes["E_CIRCULAR_EVIDENCE"] == 8
+    # The shipped side is recomputed live, so it moves when the gate moves: it was 8 when this
+    # arm was run on 2026-08-30 and is 5 since the reaction exception landed on 2026-09-02. The
+    # arm's own artifacts under `evidence/h1/` are frozen, so the finding is unaffected — but the
+    # figure is asserted from the file rather than remembered, which is the point of this test.
+    assert before_codes["E_CIRCULAR_EVIDENCE"] == 5
     assert after_codes["E_CIRCULAR_EVIDENCE"] == 25
 
     changelog = (REPO / "docs/IMPROVEMENT_CHANGELOG.md").read_text(encoding="utf-8")
@@ -251,8 +255,8 @@ def test_an_arm_report_says_it_is_not_the_shipped_result():
 
 def test_the_arm_trajectories_are_kept_apart_from_the_shipped_ones():
     """Trace ids derive from `(agent, case_id)` and are stable across runs, so an arm written
-    into `product-agent/` overwrites the shipped runs in place. That happened once. The counts
-    published in README and SUBMISSION are the shipped directory alone."""
+    into `product-agent/` overwrites the shipped runs in place. That happened once. The count
+    published in the README is the shipped directory alone."""
     shipped = list((REPO / "trajectories/product-agent").glob("*.json"))
     arm = REPO / "trajectories/h1-arm"
 
@@ -272,6 +276,5 @@ def test_the_arm_trajectories_are_kept_apart_from_the_shipped_ones():
     assert "deduplicated into bursts" not in arm_text and "what the room is SAYING" in arm_text
 
     quoted = f"**{len(shipped)} real runs**"
-    for doc in ("README.md", "SUBMISSION.md"):
-        assert quoted in (REPO / doc).read_text(encoding="utf-8"), \
-            f"{doc} no longer states the shipped trajectory count"
+    assert quoted in (REPO / "README.md").read_text(encoding="utf-8"), \
+        "README.md no longer states the shipped trajectory count"

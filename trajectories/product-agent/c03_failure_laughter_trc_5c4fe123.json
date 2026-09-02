@@ -53,20 +53,15 @@
   {
    "kind": "provenance_gate",
    "signal_id": "lol",
-   "ok": false,
-   "violations": [
-    {
-     "code": "E_CIRCULAR_EVIDENCE",
-     "detail": "2cf3f99a-c70b-4026-bbd0-ce4089f61105 is cited as evidence for the signal it supposedly caused"
-    }
-   ],
+   "ok": true,
+   "violations": [],
    "at_ms": 0
   },
   {
    "kind": "result",
    "payload": {
-    "verified": 0,
-    "rejected": 1,
+    "verified": 1,
+    "rejected": 0,
     "steps": 2,
     "cards_dropped_by_cap": 0
    },

@@ -213,7 +213,7 @@ def test_grouped_summary_accounts_for_every_message():
 
 
 def test_the_measured_grouping_figures_reproduce():
-    """The two numbers published in DECISIONS.md and PROGRESS.md, pinned to the fixtures they
+    """The two numbers published in the archived DECISIONS.md and PROGRESS.md, pinned to the fixtures they
     were measured on. If a rule changes, these move, and the documents have to move with them."""
     violet = [g for g in group_chat(_window("marlon_2026-08-30T0715", 6)) if g.label == "violet"]
     assert (violet[0].count, violet[0].rule) == (27, "token")

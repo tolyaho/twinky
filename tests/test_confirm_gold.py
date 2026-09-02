@@ -97,5 +97,4 @@ def test_the_committed_labels_are_still_unconfirmed():
                   if json.loads(Path(f).read_text(encoding="utf-8")).get("reviewed") is False]
 
     assert len(unreviewed) == 11
-    for doc in (ROOT / "README.md", ROOT / "SUBMISSION.md"):
-        assert "reviewed" in doc.read_text(encoding="utf-8")
+    assert "reviewed" in (ROOT / "README.md").read_text(encoding="utf-8")

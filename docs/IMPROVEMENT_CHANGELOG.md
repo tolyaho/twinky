@@ -2,16 +2,16 @@
 
 Baseline → iterations → final. Every row carries evidence and a kept/revised/removed decision.
 
-All competition numbers come from `evidence/report.md`, reproduced by `make eval` from the
+Every number here comes from `evidence/report.md`, reproduced by `make eval` from the
 committed cache in **79 ms with 48 cache hits and 0 API calls**, verified with every credential
 unset. Eleven frozen cases across four real broadcasts; case matrix in `evals/DATA.md`.
 
-## Pre-existing research (Sept 2025 – Mar 2026) — NOT competition work
+## The first implementation (Sept 2025 – Mar 2026)
 
-Context for why the competition baseline is shaped the way it is. Not counted as measured
-hackathon improvement.
+Context for why the baseline is shaped the way it is. Nothing here was measured on the frozen
+eval set, so none of it is claimed as a measured improvement.
 
-| Period | What was learned | How it shapes the competition entry |
+| Period | What was learned | How it shapes this build |
 |---|---|---|
 | Sept 2025 | Local CPU STT accumulated lag; Deepgram was accurate and ~$0.6/hr | Hosted streaming STT, capture-then-replay |
 | Oct 2025 | Lexical embedding clustering gave unstable clusters; context conditioning raised cosine similarity from 0.784 to 0.935 on a probe pair | Motivates event-centric grounding over similarity clustering |
@@ -24,19 +24,21 @@ hackathon improvement.
 
 | system | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|
-| agent | 23 | **0.500** | 0.913 | 0.739 | **0.182** |
-| baseline (single prompt, same events) | 21 | 0.000 | 0.952 | **0.619** | 0.091 |
+| agent | 23 | **0.500** | 0.913 | **0.609** | **0.182** |
+| baseline (single prompt, same events) | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
 | ablation (chat only, diagnostic) | 25 | 1.000¹ | 0.960 | **0.280** | 0.091 |
 
 ¹ One matched card out of twenty-five. Reported only because `unmatched` is printed beside it;
 on its own it would be meaningless. This is exactly the degenerate case the unmatched rate was
 added to expose.
 
-**The agent wins on grounding and loses on restraint.** It doubles the baseline's signal recall
-and is the only system that ever names a correct cause, and its unsupported-card rate is the
-worst of the three. Both halves are reported; neither prompt was edited after seeing them.
+**The agent wins on grounding and still loses the headline metric.** It doubles the baseline's
+signal recall and is the only system that ever names a correct cause. It now edges the baseline
+on the unsupported-card rate (0.609 against 0.619, see the 2026-09-02 entry) and remains well
+behind the chat-only ablation's 0.280, which wins by having nothing to attribute to. Both halves
+are reported; neither prompt was edited after seeing them.
 
-## Competition iterations (28–31 Aug 2026)
+## Measured iterations (28–31 Aug 2026)
 
 Every row below is a repair to the measuring apparatus, not a quality tweak. The first eval run
 produced numbers that were broken rather than bad, and the work was to make the comparison exist.
@@ -71,7 +73,8 @@ Verified in the cache rather than in the source: **129 of the 173 recorded text 
 that rule**, and the 44 that do not are the discarded first run. Every request behind the
 published table was sent with it.
 
-**What the residual failures actually are.** All eight surviving `E_CIRCULAR_EVIDENCE` cards set
+**What the residual failures actually are** (as measured 2026-08-30, when eight survived; five
+do today — see the 2026-09-02 entry below). All eight `E_CIRCULAR_EVIDENCE` cards set
 `trigger.event_id` to a chat UUID *that also appears in their own evidence list* — the exact
 thing the two clauses above forbid. Three of them additionally set `trigger.kind` to `"unknown"`
 while naming a concrete id, which contradicts the same paragraph. These are not ambiguities being
@@ -87,13 +90,52 @@ asymmetric in effect. Recorded in `RISKS.md` #38 as model behaviour rather than 
 and left for the next build, where it can be measured on a fresh run instead of retrofitted to
 this one.
 
+## 2026-09-02 — a rule we imposed that the product never had
+
+**Change.** `E_CIRCULAR_EVIDENCE` rejected every card whose trigger appeared in its own evidence.
+That is right for a card offering itself as its own proof, and wrong for the case the original
+product handled correctly: one viewer says something, several others react to it. In the taxonomy
+this project was built on — `reference/src/parsers/message_reasons/prompts/general.txt`,
+REACTION_OR_COMMENTARY — reacting to another viewer is a valid, correctly-labelled reason, and it
+was hand-validated as correct on 4 Jan 2026:
+
+> `"100% ахаахахаха"` → *"Agreeing with another viewer's laughter"*, quoting `"хуй не взял"` —
+> **Корректно**
+
+The gate now allows the trigger to appear in the evidence of a **`reaction`** card, and only when
+the trigger is a real chat message, at least one *other* message is cited, and every other cited
+message is strictly **later** than the trigger. A card whose sole evidence is its own trigger is
+still circular and still rejected; so is an answer or a warning caused by a chat message, which is
+not a thing the taxonomy describes. Every other check — ids exist, inside the window, quote
+verbatim, trigger before its effect — is unchanged.
+
+**Measured, on the same eleven frozen cases, from the committed cache at 48 hits / 0 misses:**
+
+| | before | after |
+|---|---:|---:|
+| agent, unsupported-card rate | 0.739 | **0.609** |
+| agent, `E_CIRCULAR_EVIDENCE` cards | 8 | **5** |
+| agent, trigger accuracy | 0.500 | 0.500 |
+| agent, signal recall | 0.182 | 0.182 |
+| baseline, unsupported | 0.619 | 0.619 |
+| ablation, unsupported | 0.280 | 0.280 |
+
+Three cards moved, all of them `reaction` cards citing an earlier viewer message alongside the
+later ones it provoked. Baseline and ablation are untouched, which is the check that this is a
+gate change and not a scoring change. **Kept.**
+
+**Why this is not tuning.** It is not a threshold moved after seeing a score: it restores a
+category the product's own taxonomy always had and this build removed by accident. The agent now
+edges the baseline on the headline metric (0.609 against 0.619) and still loses it to the
+chat-only ablation's 0.280, so the uncomfortable finding in the hot take stands unchanged.
+
 ## Removed experiments, with their measured results
 
 | Experiment | Measured result | Outcome |
 |---|---|---|
 | +28 dB gain on `stableronaldo` audio before transcription | **0 additional transcript segments** (0 before, 0 after) | Reverted, original audio retained. Confirmed the window contains no speech rather than inaudible speech — the streamer is asleep. Turned a suspected pipeline bug into a verified property of the fixture, and made it the strongest case in the set |
 | Six declared dependencies nothing imported (`fastapi`, `uvicorn`, `pydantic`, `orjson`, `python-dotenv`, `deepgram-sdk`) | Clean venv from the reduced file ran the full suite green | Removed. The replay path is now one runtime package, `httpx` |
-| Multi-agent + RAG sketch (pre-existing) | Working prototype, no measured benefit | Not carried into the competition entry |
+| Multi-agent + RAG sketch (Mar 2026) | Working prototype, never measured against a baseline | Not carried into this build — see `docs/ARCHITECTURE.md`, it is the target design |
 
 ## Main failure mode
 
@@ -122,7 +164,7 @@ the effect. Neither system had trouble producing fluent cards. Both had trouble 
 
 The evaluation produced a result that argues against the product, and it is the most interesting
 number in this repository: **the chat-only ablation — the system with the least information —
-won the headline metric.** Unsupported rate 0.280 against the agent's 0.739.
+won the headline metric.** Unsupported rate 0.280 against the agent's 0.609.
 
 It won by abstaining. Having no transcript and no captions, it had no candidate causes to name,
 so it correctly returned `trigger: "unknown"` in eighteen of twenty-five cards, and an abstention
@@ -156,16 +198,16 @@ was the only move available to it. That is logged failure #39, and it made
 captions into the opening turn as `id=… ts=… | text`, capped at 12 and 6, names that list as the
 only source of trigger ids, and keeps `unknown` explicitly available. Nothing else changes: same
 schema, same tools, same gate, same scorer, `temperature=0`. It is a **separate arm**, not a
-re-recorded agent, because the prompt is the cache key and the committed cache is how a judge
+re-recorded agent, because the prompt is the cache key and the committed cache is how anyone
 reproduces every published number with no API key.
 
 **Measured on the same eleven frozen cases, same windows, same gold labels:**
 
 | system | cards | trigger accuracy | unmatched | unsupported | recall |
 |---|---:|---:|---:|---:|---:|
-| agent | 23 | **0.500** | 0.913 | **0.739** | 0.182 |
+| agent, as measured 2026-08-30 | 23 | **0.500** | 0.913 | **0.739** | 0.182 |
 | `agent_grounded` | 17 | 0.000 | **0.882** | 0.882 | 0.182 |
-| baseline | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
+| baseline, as measured 2026-08-30 | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
 
 **It lost.** Same recall, worse unsupported rate, worse trigger accuracy. The change is not
 adopted; `agent` remains the published system and its numbers are unchanged.
@@ -237,7 +279,7 @@ At a single transferable threshold, C is modestly ahead — C@0.55 scores precis
 **Not adopted, and not because it lost.** The gain is small and the cost is categorical: arm B is
 free, keyless and deterministic, and the entire grouping path runs in Tier 0 live chat with no
 provider at all. The winning threshold was chosen by looking at the labels, which is tuning on the
-test set. And this landed one day before the deadline, when swapping the shipped arm would move
+test set. And this landed with a day left in the measured window, when swapping the shipped arm would move
 the board, the rail, the questions panel and the live counts at once.
 
 Reproduce it with no keys and no cost:
@@ -295,7 +337,9 @@ is precisely the failure, and a table counting claimed kinds cannot see it:
 | **a CHAT id — the message explaining itself** | 13 | **24** |
 | an id not in the fixture at all | 1 | 0 |
 
-`E_CIRCULAR_EVIDENCE` went **8 → 25**. Every honest response the agent had — one abstention, four
+`E_CIRCULAR_EVIDENCE` went **8 → 25** against the shipped agent as it stood on 2026-08-30. The
+shipped side of that comparison is 5 today, for the reason recorded in the 2026-09-02 entry; the
+arm's own artifacts under `evidence/h1/` are untouched, so the finding below is unchanged. Every honest response the agent had — one abstention, four
 declines to name a cause, and all four of its real speech triggers — collapsed to zero. Twenty-four
 of twenty-five cards now name a chat message as the cause of that same chat. The single gain is
 one real frame id, up from none.

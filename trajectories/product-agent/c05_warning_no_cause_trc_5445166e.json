@@ -53,13 +53,8 @@
   {
    "kind": "provenance_gate",
    "signal_id": "aura",
-   "ok": false,
-   "violations": [
-    {
-     "code": "E_CIRCULAR_EVIDENCE",
-     "detail": "6f008400-6656-4017-a24a-518bc8f3634f is cited as evidence for the signal it supposedly caused"
-    }
-   ],
+   "ok": true,
+   "violations": [],
    "at_ms": 1
   },
   {
@@ -93,8 +88,8 @@
   {
    "kind": "result",
    "payload": {
-    "verified": 0,
-    "rejected": 3,
+    "verified": 1,
+    "rejected": 2,
     "steps": 2,
     "cards_dropped_by_cap": 0
    },

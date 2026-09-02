@@ -1,4 +1,5 @@
-"""The secret scan is part of the qualification gate, so it has to be trustworthy itself.
+"""The secret scan is the last thing standing between a credential and a public repository,
+so it has to be trustworthy itself.
 
 Two of these are regression tests for defects the previous grep-based scan actually had: it
 never reached `.env` at all, and it matched its own pattern list and so failed permanently.
@@ -101,13 +102,13 @@ def test_the_scanner_does_not_match_its_own_pattern_list():
     assert "scan_secrets.py" in scan_secrets.ALLOWLIST
 
 
-def test_the_real_tree_is_scanned_including_legacy():
-    """`legacy/` was excluded by the old scan while still sitting in the tree, so a credential
-    committed there was invisible to the gate."""
+def test_the_real_tree_is_scanned_including_reference():
+    """`reference/` (then named `legacy/`) was excluded by the old scan while still sitting in
+    the tree, so a credential committed there was invisible to the gate."""
     repo = Path(scan_secrets.REPO)
     scanned = {p.relative_to(repo).parts[0] for p in scan_secrets.candidate_files(repo)}
 
-    assert "legacy" in scanned
+    assert "reference" in scanned
     assert ".venv" not in scanned
 
 
@@ -126,7 +127,7 @@ def test_the_real_tree_is_scanned_including_legacy():
     "the row says `DB_PASSWORD=your_password`, which is a placeholder",
 ])
 def test_a_documentation_placeholder_is_not_a_credential(line):
-    """`legacy/README.original.md` is six lines of `DB_PASSWORD=your_password` inside a
+    """`reference/README.original.md` is six lines of `DB_PASSWORD=your_password` inside a
     'Create .env:' block. It outranked the eight real credentials in `.env` as the project's
     top finding for a full day (RISKS #16, withdrawn). A scanner that cries wolf on its own
     README gets switched off — which is exactly what the #18 rewrite already cost once."""
@@ -191,18 +192,19 @@ def test_no_credential_file_is_tracked_by_git():
 
 
 def test_the_fabricating_frontend_is_not_in_the_submission():
-    """`legacy/frontend/` was a dashboard shell driven entirely by generated placeholder data.
-    A judge opening fabricated data inside a submission that argues "never present generated
-    data as real" is the one integrity risk this project cannot absorb. Removed 2026-08-30."""
+    """`reference/frontend/` (then `legacy/frontend/`) was a dashboard shell driven entirely by
+    generated placeholder data. Shipping fabricated data inside a project that argues "never
+    present generated data as real" is the one integrity risk it cannot absorb. Removed
+    2026-08-30, and it stays removed."""
     from pathlib import Path
 
     root = Path(scan_secrets.__file__).resolve().parents[1]
     shipped, _ = _shipped(root)
 
-    assert not [p for p in shipped if p.startswith("legacy/frontend/")]
-    assert not (root / "legacy" / "frontend").exists()
-    # the rest of legacy/ is still preserved and disclosed
-    assert [p for p in shipped if p.startswith("legacy/")], "all of legacy/ vanished"
+    assert not [p for p in shipped if p.startswith("reference/frontend/")]
+    assert not (root / "reference" / "frontend").exists()
+    # the rest of reference/ is still preserved
+    assert [p for p in shipped if p.startswith("reference/")], "all of reference/ vanished"
 
 
 def test_the_packaging_exclusions_are_declared():

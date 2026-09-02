@@ -146,10 +146,10 @@ def write_outputs(scores: List[CaseScore], out: Path,
         lines += ["> **NOT THE SHIPPED RESULT.** This report was written to "
                   f"`{out.name}/`, not to `evidence/`, so it is an experimental arm rather than "
                   "the published comparison. The shipped numbers are in `evidence/report.md`, "
-                  "and `SUBMISSION.md` states which arms were rolled back and why.",
+                  "and `docs/IMPROVEMENT_CHANGELOG.md` states which arms were rolled back and why.",
                   ""]
 
-    # A judge opening this file must not be able to mistake a pipeline smoke-run for a result.
+    # Nobody opening this file must be able to mistake a pipeline smoke-run for a result.
     unreportable = {n: f for n, f in fixtures.items() if f["kind"] != REPORTABLE_KIND}
     if unreportable:
         lines += ["> **NOT A REPORTED RESULT.** "

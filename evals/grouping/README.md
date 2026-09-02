@@ -142,7 +142,7 @@ At comparable-or-better precision, C@0.55 beats B on both axes — a real gain, 
    record time and a network round trip per window.
 2. **The winning threshold was chosen by looking at the labels.** That is tuning on the test set.
    0.55 is defensible only because these labels exist, and they are model-drafted.
-3. **It is one day before the deadline** and swapping the shipped grouping arm would move the
+3. **There was a day left in the measured window** and swapping the shipped grouping arm would move the
    board, the rail, the questions panel and the live counts all at once.
 
 So: **measured, published, not adopted** — and, unusually, that is not because it lost. It is

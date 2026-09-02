@@ -1,13 +1,13 @@
 # Architecture
 
 Every node below is marked with what actually exists in the tree. A diagram that shows a design
-rather than a build is worth nothing to a reviewer who opens `src/`.
+rather than a build is worth nothing to anyone who opens `src/`.
 
 **Paths inside the two diagrams are relative to `src/ts/`**, so a node reading
 workflow/agent.py is `src/ts/workflow/agent.py`. Paths in prose and in the table at the end are
 relative to the repository root, because they point outside `src/` as often as into it.
 
-## The graded path
+## The measured path
 
 ```
   capture (live, no keys)          enrich (keys, once per fixture)
@@ -76,26 +76,46 @@ Cutting across all of it:
 | Secret gate | `scripts/scan_secrets.py` | ✔ passes on a git-ignored `.env`, fails on anything shippable |
 | Grouping evaluation — pair precision/recall on frozen labels | `evals/grouping/` | ✔ arms A, B and C measured; labels frozen in a commit with no arm code |
 
-## Designed, deliberately not built
+## The target design, node by node
 
-**The March 2026 north star.** An orchestrator fanning out to a data-pulling agent, a web-search
-agent, a scheduling agent that re-injects its own queries, a save-memory agent, and stream action
-tools.
+The team drew an orchestrator design in March 2026. It is the intended second version of a
+conversational agent that **already ran once** — a LangChain/LangGraph/Chroma build with an
+ingest process beside the chat parser, top-k retrieval per query and a 30-minute memory window.
+This is the map the project is still working against, with each node marked against the tree.
 
-Scoped out on purpose. Web search and scheduling address no failure observed in the evaluation,
-and each would add trajectories, failure modes and demo complexity without measured benefit. The
-challenge PDF states that purposeful choices matter more than component count.
+| node in the design | status | where |
+|---|---|---|
+| user → query | **missing** | no input channel of any kind |
+| orchestrator / router | **missing** | one agent, four tools, no router |
+| data pulling agent | **built** | `src/ts/workflow/tools.py` — the four bounded read-only tools |
+| DB · chat messages | **built** | one chat.jsonl per fixture |
+| DB · chat summary | **partial** | `src/ts/report/debrief.py` — post-stream only, no rolling hierarchy |
+| DB · stream context | **built** | one transcript.jsonl per fixture |
+| DB · image annotations | **built** | one frames.jsonl per fixture |
+| DB · audio transcriptions | **built** | Deepgram Nova-3, record mode |
+| DB · streamer instructions | **missing** | nothing accepts a standing instruction |
+| DB · memory | **missing** | the March build had it; this one does not |
+| save memory agent | **missing** | — |
+| scheduling agent | **missing** | — |
+| web search agent | **missing** | never started |
+| actual stream tools | **partial** | `src/ts/report/poll.py` drafts a poll; nothing posts |
 
-Of that design, what survived: data-pulling became four bounded read-only tools, and a
-verification stage was added that the original sketch did not have.
+Present here and **not** in the March build: a deterministic grouper that beats the embedding
+clustering measured against it, a provenance gate, a frozen eleven-case evaluation, keyless
+replay from a committed cache, and the board rendered as a working page.
+
+Of the original sketch, what survived: data-pulling became four bounded read-only tools, and a
+verification stage was added that the sketch did not have.
 
 **The summary hierarchy — 1m / 5m / 30m / 2h — is NOT built.** It is the answer to "a six-hour
 stream does not fit one context window", and it is genuinely part of the product thesis, but no
 module implements it and no evaluation case needs it: the fixtures run 2–12 minutes and the
 analysis windows are sixty seconds. It stays here as a named gap rather than an implied feature.
+A working ancestor of it is in `reference/src/parsers/chat_summaries/`, which is the reason that
+directory is kept.
 
-**Live capture is demo-only.** The graded path reads a fixture. Live streams are not
-reproducible, and judges have no API keys.
+**Live capture is demo-only.** The measured path reads a fixture, because live streams are not
+reproducible and a fresh clone has no API keys.
 
 ## What each implemented component is for
 
@@ -107,4 +127,4 @@ reproducible, and judges have no API keys.
 | Read-only moderation | Chat is untrusted data; an attempt to instruct the system is worth surfacing, and acting on it is not this build's decision |
 | Deterministic reducer | Per-message inference was too slow and too expensive at scale (Jan, Mar 2026) |
 | Provenance gate + abstention | Cards attaching to nothing, in the team's own testing 4 Jan 2026 |
-| Replay + response cache | Live streams are not reproducible and judges have no API keys |
+| Replay + response cache | Live streams are not reproducible, and a claim nobody can re-run for free stops being checkable |

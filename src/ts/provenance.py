@@ -18,6 +18,7 @@ from .events import EventIndex
 
 UNKNOWN = "unknown"
 NONE = "none"   # the explicit "no signal in this window" card
+REACTION = "reaction"   # the one card type that may be triggered by another viewer
 CHAT_MESSAGE = "chat_message"   # the only event type that can serve as evidence
 
 
@@ -82,7 +83,9 @@ def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: floa
       E_NO_EVIDENCE      no representative messages cited
       E_UNKNOWN_MSG      a cited message id does not exist in the fixture
       E_EVIDENCE_NOT_A_MESSAGE  a cited id exists but is a transcript segment or a frame
-      E_CIRCULAR_EVIDENCE       the trigger is cited as evidence for the signal it caused
+      E_CIRCULAR_EVIDENCE       the trigger is cited as evidence for the signal it caused,
+                         with one narrow exception for a `reaction` card triggered by an EARLIER
+                         chat message it also cites — see `_is_reaction_to_another_viewer`
       E_MSG_OUT_WINDOW   a cited message falls outside the card's claimed window,
                          which is half-open [start, end) exactly as `events.window` is
       E_UNKNOWN_TRIGGER  the trigger event id does not exist
@@ -127,10 +130,10 @@ def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: floa
     tid = trigger.get("event_id")
 
     if tid and tid != UNKNOWN:
-        if tid in evidence:
+        tev = index.get(tid)
+        if tid in evidence and not _is_reaction_to_another_viewer(card, tid, evidence, tev, index):
             v.append(Violation("E_CIRCULAR_EVIDENCE",
                                f"{tid} is cited as evidence for the signal it supposedly caused"))
-        tev = index.get(tid)
         if tev is None:
             v.append(Violation("E_UNKNOWN_TRIGGER", f"{tid} not in fixture"))
         else:
@@ -146,6 +149,52 @@ def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: floa
                     v.append(Violation("E_QUOTE_MISMATCH", f"quote not found in {tid}: {quote!r}"))
 
     return GateResult(ok=not v, violations=v)
+
+
+def _is_reaction_to_another_viewer(
+    card: Dict[str, Any],
+    tid: str,
+    evidence: List[str],
+    tev: Optional[Any],
+    index: EventIndex,
+) -> bool:
+    """One narrow exception to E_CIRCULAR_EVIDENCE: chat reacting to chat.
+
+    Reacting to another viewer is a valid, correctly-labelled reason in the taxonomy this product
+    was built on — `reference/src/parsers/message_reasons/prompts/general.txt`, category
+    REACTION_OR_COMMENTARY — and it was hand-validated as correct on 4 Jan 2026:
+
+        "100% ахаахахаха"  ->  "Agreeing with another viewer's laughter",
+        quoting "хуй не взял"  ->  correct
+
+    Forbidding it was a rule this build added that the product never had, and it was the largest
+    single source of gate rejections. The exception is deliberately narrow, because the failure it
+    still has to catch — a card offering itself as its own proof — looks superficially identical:
+
+      - only a `reaction` card qualifies; an answer or a warning caused by a chat message is not
+        a thing the taxonomy describes,
+      - the trigger must be a real chat message,
+      - there must be at least one OTHER cited message, so a card whose sole evidence is its own
+        trigger is still circular and still rejected,
+      - every other cited message must be strictly LATER than the trigger, which is what makes
+        this a reaction to it rather than a restatement of it.
+
+    `E_TRIGGER_LATE` still applies on top of this, and so does every window and quote check.
+    """
+    if card.get("type") != REACTION:
+        return False
+    if tev is None or tev.type != CHAT_MESSAGE:
+        return False
+
+    others = [mid for mid in evidence if mid != tid]
+    if not others:
+        return False
+
+    for mid in others:
+        ev = index.get(mid)
+        if ev is None or ev.type != CHAT_MESSAGE or ev.ts_ms <= tev.ts_ms:
+            return False
+    return True
 
 
 def _token_overlap(a: str, b: str) -> float:

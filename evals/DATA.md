@@ -43,8 +43,8 @@ trade a documented limitation for a broken evaluation.
 
 So the honest claim is the narrow one: **authorship is pseudonymised; the public chat text is
 retained verbatim, mentions included**, as evaluation input and not as a redistributable dataset.
-`RISKS.md` #53 carries it, and `video/SHOTLIST.md` already tells the author not to dwell on the
-raw feed on camera for a related reason.
+`RISKS.md` #53 carries it. The same reasoning is why no raw frame is committed anywhere in this
+repository — see #52.
 
 ## Rights
 
@@ -61,14 +61,14 @@ enriched fixture and this covers all three:
   committed** for any evaluated fixture.
 
 **The captions were checked rather than assumed**, because the overlay they describe is the same
-one that carries real logins in `video/twinky-image-bank.zip` (RISKS #52). Across **72 caption
+one that carries real logins in any raw captured frame (RISKS #52). Across **72 caption
 rows and 29,216 characters** there are **zero usernames and zero `@mentions`** — the vision model
 declines the chat pane in its own words: *"The chat is visible but not described."* A test holds
 that, because a re-enrichment with a different model could quietly change it.
 
 ## Case inventory
 
-Case numbers follow the matrix in `../../notes/03-EVAL_DESIGN.md`. `fixture_kind` in each case
+Case numbers follow the matrix in `notes/03-EVAL_DESIGN.md`. `fixture_kind` in each case
 file declares where its numbers come from; only `capture` is reportable, and `make eval` puts a
 "NOT A REPORTED RESULT" banner at the top of `report.md` for anything else.
 

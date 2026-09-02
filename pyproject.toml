@@ -3,7 +3,9 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "twitch-agent"
+# The distribution is `twinky`; the import package stays `ts`. Renaming the package would touch
+# every import and every documented command and buy nothing.
+name = "twinky"
 version = "0.1.0"
 description = "Turns an unreadable live chat into a small number of verified audience signals, each linked to the stream moment that caused it."
 requires-python = ">=3.10"

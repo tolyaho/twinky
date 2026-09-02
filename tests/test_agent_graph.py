@@ -209,22 +209,6 @@ def test_the_img_reserves_the_space_the_svg_actually_needs():
     assert f'viewBox="0 0 {WIDTH} {HEIGHT}"' in svg
 
 
-def test_the_shot_list_points_at_numbers_that_are_on_the_diagram():
-    """Shot 9 tells the author to point at specific figures. If the trajectories grow and the
-    diagram moves, the narration has to move with it — otherwise the video says one number while
-    the screen shows another, which is the one mistake a recording cannot walk back."""
-    shots = (ROOT / "video/SHOTLIST.md").read_text(encoding="utf-8")
-    counts = trajectory_counts(ROOT / "trajectories/product-agent")
-    svg = _committed()
-
-    quoted = [line.strip(" *`") for line in shots.split("Point at `get_frame_captions", 1)[1]
-              .split("**Say:**", 1)[0].split("\n")]
-    for fragment in [f'{counts["steps_used"][1]} of {counts["tool_runs"]} runs',
-                     "and the one step was chat"]:
-        assert any(fragment in q for q in quoted), f"shot 9 no longer quotes {fragment!r}"
-        assert fragment in svg, f"shot 9 quotes {fragment!r} and the diagram does not say it"
-
-
 def test_nothing_in_the_diagram_is_drawn_on_top_of_anything_else():
     """The diagram shipped for weeks with the provenance gate sitting across the tool caption and
     the run count, and the legend's second key printed over the end of the first. Every check

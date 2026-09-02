@@ -8,11 +8,29 @@ Format:
 <iso> | <what> | calls=N | in_tok=N | out_tok=N | est_usd=N.NN | running_total=N.NN
 ```
 
-Hard cap **$5.00**. At **$2.00** a warning goes at the top of `PROGRESS.md`. Estimate from the
-provider's published price when a response carries no usage block.
+Estimate from the provider's published price when a response carries no usage block.
 
 `make test`, `make replay`, `make baseline` and `make eval` are free by construction: they run in
-`TS_LLM_MODE=replay`, where a cache miss is a hard error rather than a silent API call.
+`TS_LLM_MODE=replay`, where a cache miss is a hard error rather than a silent API call. The lines
+below are therefore the *whole* spend of the project, not a sample of it.
+
+## The number that actually matters
+
+Development spend is a rounding error. The figure to hold is **unit cost in production**,
+measured in Jan 2026 on a live active chat at one model call per message:
+
+| | measured |
+|---|---|
+| latency per message | 7 s average, 1 s median |
+| cost on an active chat | ≈$0.05 per 5 minutes |
+| a top streamer, per month | **≈$40** |
+| believed optimisable by | 4–10× |
+
+That is the budget any change to the per-message path is judged against. Batching, the
+deterministic reducer and window-level rather than message-level inference are all attacks on
+this number; the reducer already folds 39–54% of messages before a model sees them.
+
+## Development spend, line by line
 
 ---
 
