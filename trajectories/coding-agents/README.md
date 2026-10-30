@@ -12,8 +12,10 @@ implementation (Sept 2025 – Mar 2026) is preserved under `reference/`.
 | Claude Opus 5 (1M context) | `claude-opus-5[1m]` | The model behind those Claude Code sessions. |
 | Tooling used before 28 Aug 2026 | `[TBD]` | Not known to the in-window sessions. The original project ran Sept 2025 – Mar 2026; the author must fill this in. |
 
-No coding agent was given credentials, network write access, or permission to push. Nothing in
-this repository was committed or published by an agent.
+The original in-window account described a loop without network write or publishing permission.
+That historical account does not describe every later release: on 30 Oct 2026, Codex executed
+an owner-authorized commit and ordinary fast-forward push using the owner's human Git identity.
+Git author metadata is not a claim that implementation was exclusively manual.
 
 ## How the work was actually run
 
@@ -52,7 +54,7 @@ Each iteration:
 
 The loop prompts are the specification the sessions were run against, including the budget
 guardrails. Those guardrails held: **every paid call is itemised in `COST_LEDGER.md`, nine entries
-totalling $0.4364** against a $5.00 hard cap, and `TS_LLM_MODE=replay` — where a cache miss raises
+totalling $0.4364** against a $5.00 operator budget target, and `TS_LLM_MODE=replay` — where a cache miss raises
 rather than calling an API — was the default in every other iteration.
 
 ## Where the evidence is
@@ -134,3 +136,69 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 The local correctness/live-boundary engineering pass is also AI-assisted; see the implementation
 report for its tests and limitations. No AI-agent coauthor trailer is added automatically.
+
+
+## Project phases and attribution (author account)
+
+The original author account described the first two phases below; the October work is separate.
+
+- **First version (Sept 2025 – Mar 2026).** Stream audio and chat capture, frame annotation, the
+  chat parser and message-reason taxonomy that the card types descend from, rolling chat
+  summaries, a first dashboard (later deleted because it displayed fabricated values), and in
+  March 2026 the first conversational agent: LangChain + LangGraph + Chroma, with an ingest
+  process beside the chat parser, top-k retrieval per query and a 30-minute memory window
+  (`PRODUCT_v2.md` §4). That agent was never pushed and is not in this repository. The rest of
+  the first version's code is preserved under `reference/`.
+- **This repository (28 Aug – 2 Sep 2026)** is a rebuild from scratch, done by me with Claude
+  Code. I ran Claude Code (Claude Opus 5) as a scheduled loop, one work item per iteration, under
+  guardrails I set: replay by default, a $5 estimated spend target, and tests after every change. The sessions
+  wrote most of the code, tests and documents.
+  - The record of how it was built is in `docs/archive/PROGRESS.md` and
+    `docs/archive/DECISIONS.md`.
+  - What the coding agent got wrong, and what it found, is disclosed in
+    `trajectories/coding-agents/README.md`.
+
+### Agent and tool disclosure
+
+- **In the product:** one agent, `audience_signal_agent`, `gpt-4.1-nano`, `temperature=0`,
+  `max_tokens=900`, `max_steps=4`, four bounded read-only tools. The baseline and the chat-only
+  ablation use the same model and the same card contract. Vision captions come from
+  `gpt-4.1-mini`; speech from Deepgram Nova-3 (`nova-3-general`). Both are record-mode only.
+  These are the models the committed cache was recorded with, and they are the defaults in code,
+  so a clone with no environment reproduces every number. `nano` over `mini` was a latency
+  decision made in Mar 2026 — 1–3 s against 10–30 s — not a cost one.
+- **In building it:** Claude Code on Claude Opus 5, run as a scheduled loop that took one
+  ladder item per iteration. Full disclosure table, method and the defects the sessions
+  found: `trajectories/coding-agents/README.md`.
+
+Later engineering work is also AI-assisted. The local implementation report records the
+changes, verification and remaining release decisions. AI assistance is disclosed here rather
+than added automatically as commit coauthor attribution.
+
+## Chronology and reconstructed dates
+
+The earlier project ran September 2025–March 2026; the current repository rebuild was prepared
+in August–September 2026. October 2026 work covers correctness/replay repairs, the live backend
+boundary, publication and the product README revision. Fresh October work is not backdated.
+
+The repository was created on 30 August 2026 from a tree that was not previously version-controlled.
+Its older Git history was reconstructed: commit dates were assigned and commits contain final file
+states, not independently established intermediate snapshots. Do not treat those assigned dates as
+independently verified historical evidence. The session record remains in `docs/archive/PROGRESS.md`.
+Removing AI coauthor trailers changes message attribution, not this development-method disclosure.
+
+## Implementation details retained from the longer README
+
+The product agent has four bounded read-only tools: `group_repeated`, `get_chat_window`,
+`get_transcript_window`, and `get_frame_captions`. Agent/baseline defaults, negative results,
+trace preservation and measurement definitions remain in the architecture, reproduction and
+evaluation guides. **118 real runs** are stored under `trajectories/product-agent/`; these
+include failed runs and are not independent evaluation samples.
+
+The summary hierarchy and persistent conversational memory are not implemented. Polls remain
+drafts requiring human approval; model distributions are not verified vote counts. The recorded
+viewer has three zones; Tier 0 chat and the NEEDS A LOOK diagnostic are described in the architecture
+guide. The March retrieval agent was not pushed and is not recoverable from this repository.
+
+[Architecture](../../docs/ARCHITECTURE.md) · [Reproduction](../../docs/REPRODUCTION.md) ·
+[Evaluation](../../docs/EVALUATION.md) · [Session record](../../docs/archive/PROGRESS.md).

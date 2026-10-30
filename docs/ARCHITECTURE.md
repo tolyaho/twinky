@@ -149,3 +149,8 @@ is opt-in, restricted to configured IPs and a backend bearer token. The old unau
 remains an operator experiment. No future public website or deployment is included here.
 Exact API, limits, cancellation, remaining infrastructure requirements and validation status:
 [LIVE_DEMO_INTEGRATION.md](LIVE_DEMO_INTEGRATION.md).
+
+
+The agent's four read-only tools are `group_repeated`, `get_chat_window`,
+`get_transcript_window` and `get_frame_captions`. The controller caps model steps and tool
+windows; these names and contracts are shared with cached evaluation and the live worker.

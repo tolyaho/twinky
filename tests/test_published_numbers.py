@@ -44,6 +44,9 @@ ALIAS = {
     "ablation (chat only)": "ablation_chat_only",
     "ablation (chat only, diagnostic)": "ablation_chat_only",
     "ablation — chat only, diagnostic": "ablation_chat_only",
+    "Tool-calling agent": "agent",
+    "Direct multimodal baseline": "baseline",
+    "Chat-only diagnostic": "ablation_chat_only",
 }
 
 FIELDS = ["cards", "trigger_accuracy", "unmatched_rate", "unsupported_rate", "signal_recall"]
@@ -52,7 +55,15 @@ FIELDS = ["cards", "trigger_accuracy", "unmatched_rate", "unsupported_rate", "si
 def truth():
     if not SUMMARY.exists():
         pytest.skip("no eval has been run; nothing is published yet")
-    return json.loads(SUMMARY.read_text(encoding="utf-8"))["systems"]
+    # Every denominator and printed percentage is checked, not just rounded rates.
+    systems = json.loads(SUMMARY.read_text(encoding="utf-8"))["systems"]
+    gold = sum(len(json.loads(p.read_text()).get("gold_signals", []))
+               for p in (REPO / "evals/gold").glob("*.json"))
+    return {name: dict(row, gold_signals=gold,
+                      matched_gold_signals=round(row["signal_recall"] * gold),
+                      unsupported_cards=round(row["unsupported_rate"] * row["cards"]),
+                      unsupported_percent=row["unsupported_rate"] * 100)
+            for name, row in systems.items()}
 
 
 def claims(doc):
@@ -64,7 +75,17 @@ def claims(doc):
         if system is None:
             continue
         out.append((label, system,
-                    [int(m.group(2))] + [float(m.group(i)) for i in (3, 4, 5, 6)]))
+                    dict(zip(FIELDS, [int(m.group(2))] + [float(m.group(i)) for i in (3, 4, 5, 6)]))))
+    compact = re.compile(
+        r"^\|\s*(Tool-calling agent|Direct multimodal baseline|Chat-only diagnostic)\s*\|"
+        r"\s*(\d+)\s*/\s*(\d+)\s*\|\s*(\d+)\s*/\s*(\d+)\s*\(([\d.]+)%\)\s*\|", re.M)
+    for m in compact.finditer((REPO / doc).read_text(encoding="utf-8")):
+        label, hit, gold, rejected, cards, percent = m.groups()
+        hit, gold, rejected, cards = map(int, (hit, gold, rejected, cards))
+        out.append((label, ALIAS[label], {"cards": cards, "gold_signals": gold,
+                   "matched_gold_signals": hit, "unsupported_cards": rejected,
+                   "signal_recall": hit / gold, "unsupported_rate": rejected / cards,
+                   "unsupported_percent": float(percent)}))
     return out
 
 
@@ -73,9 +94,10 @@ def test_every_published_row_matches_the_evaluation(doc):
     systems = truth()
 
     for label, system, values in claims(doc):
-        expected = [systems[system][f] for f in FIELDS]
-        for field, got, want in zip(FIELDS, values, expected):
-            assert abs(got - want) < 5e-4, (
+        for field, got in values.items():
+            want = systems[system][field]
+            tolerance = 0.05 if field == "unsupported_percent" else 5e-4
+            assert abs(got - want) < tolerance, (
                 f"{doc} claims {label} {field}={got}, evaluation says {want:.3f}")
 
 
@@ -119,9 +141,10 @@ def test_the_report_and_the_summary_agree():
 
     for label, system, values in [(lbl, sysname, vals)
                                   for lbl, sysname, vals in _report_rows(report)]:
-        expected = [systems[system][f] for f in FIELDS]
-        for field, got, want in zip(FIELDS, values, expected):
-            assert abs(got - want) < 5e-4, f"report.md {label} {field}={got}, summary says {want}"
+        for field, got in values.items():
+            want = systems[system][field]
+            tolerance = 0.05 if field == "unsupported_percent" else 5e-4
+            assert abs(got - want) < tolerance, f"report.md {label} {field}={got}, summary says {want}"
 
 
 def _report_rows(report):
@@ -132,7 +155,7 @@ def _report_rows(report):
         name = m.group(1)
         if name in ("agent", "baseline", "ablation_chat_only"):
             rows.append((name, name,
-                         [int(m.group(2))] + [float(m.group(i)) for i in (3, 4, 5, 6)]))
+                         dict(zip(FIELDS, [int(m.group(2))] + [float(m.group(i)) for i in (3, 4, 5, 6)]))))
     return rows
 
 
@@ -276,5 +299,5 @@ def test_the_arm_trajectories_are_kept_apart_from_the_shipped_ones():
     assert "deduplicated into bursts" not in arm_text and "what the room is SAYING" in arm_text
 
     quoted = f"**{len(shipped)} real runs**"
-    assert quoted in (REPO / "README.md").read_text(encoding="utf-8"), \
-        "README.md no longer states the shipped trajectory count"
+    assert quoted in (REPO / "trajectories/coding-agents/README.md").read_text(encoding="utf-8"), \
+        "linked disclosure no longer states the shipped trajectory count"

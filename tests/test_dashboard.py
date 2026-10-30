@@ -569,7 +569,8 @@ def test_the_bare_name_never_stands_alone_without_saying_what_it_is():
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     html = (STATIC / "index.html").read_text(encoding="utf-8")
 
-    assert readme.splitlines()[0].startswith("# Twinky —") and "Twitch" in readme.splitlines()[0]
+    assert readme.splitlines()[0] == "# Twinky"
+    assert "Twitch" in " ".join(readme.splitlines()[:5])
     assert 'aria-label="Twinky — audience signals from Twitch"' in html
 
 

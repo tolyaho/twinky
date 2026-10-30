@@ -1,9 +1,8 @@
 # Evaluation — baseline, protocol and evidence
 
-These sections were moved verbatim from `README.md` to keep the README short. The results table
-itself stays at the top of the README; `evidence/summary.json` is its source, written by
-`make eval`. The main failure mode, the hot take and the rolled-back experiments are still in the
-README.
+The [README](../README.md#evaluation) gives the compact comparison. This document retains the
+metric definitions, failure analysis and negative experiments; `evidence/summary.json` is the
+machine-readable source, reproduced by `make eval`.
 
 ## Baseline
 
@@ -58,13 +57,13 @@ gold label that cannot pass the gate scores every correct card as a silent miss.
 ## Results and evidence
 
 Eleven cases, four broadcasts, one run, no tuning after the fact. The table is
-[at the top of the README](../README.md#results-at-a-glance).
+[in the README evaluation section](../README.md#evaluation).
 
 The agent has double the baseline's recall, and it now edges the baseline on unsupported claims
 as well — 0.609 against 0.619, after the gate stopped rejecting a category the original product
-allowed (see [the gate](../README.md#the-provenance-gate)). The chat-only ablation still wins
+allowed (see [gate versions](GATE_VERSIONS.md)). The chat-only ablation still wins
 the headline metric by having nothing to attribute to, by not attempting concrete causal attribution; it still fails the must-abstain case — see the
-[hot take](../README.md#main-failure-mode-and-hot-take) in the README.
+[failure analysis](#failure-modes-and-rejected-experiments) below.
 
 *Correction.* Earlier versions of `README.md` said the agent "is the only system that names a
 correct cause". `evidence/comparison.csv` and `evidence/predictions.json` do not support that.
@@ -93,3 +92,18 @@ quote, unknown trigger, plausible title or model distribution does not establish
 Dashboard raw results predate this rule change; the viewer now applies the current gate in
 memory and labels the source SHA/version. Existing frozen artifacts and real timing remain intact.
 Two case pairs overlap in time; no labels are human-confirmed, so uncertainty is substantial.
+
+
+## Failure modes and rejected experiments
+
+The agent spends most of its tool budget on chat, rarely inspecting stream context. More tools
+do not help if the controller never supplies the context needed for attribution. An inline-context
+arm also failed (unsupported 0.882, recall 0.182); there is no measured successful fix hidden here.
+
+H1 replaced exact-repeat reduction with broader grouping. Its 25 raw cards are unchanged across
+rescoring: historical `strict-v1` rejects all 25; `reaction-v2` rejects 5. Trigger accuracy remains
+0 and recall 2/11. This is a gate-definition change, not a model improvement. H1 remains rejected.
+[Gate/version audit](GATE_VERSIONS.md) and [discarded experiments](IMPROVEMENT_CHANGELOG.md)
+preserve the negative results. The embeddings grouping arm reached pair F1 0.583 at threshold 0.4,
+with poor precision on one channel; that is not evidence of reliable live causal attribution.
+
