@@ -467,7 +467,7 @@ function renderStage(hero) {
 }
 
 const SEG_LEDE = {
-  grounded: "Each card links a cluster of chat to the moment that caused it.",
+  grounded: "Cards passing citation/time checks. The proposed cause remains a hypothesis.",
   abstained: "Real reactions the system could not tie to any moment. It says so instead of "
            + "naming a plausible one.",
   rejected: "Produced, then thrown away because the evidence did not check out. Shown because a "

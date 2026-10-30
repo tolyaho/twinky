@@ -3072,7 +3072,7 @@ WORD!' and the partial word `ame_______` visible"* — against chat typing *amet
 amendment*. The thesis in one cut, exactly as claimed.
 
 **Shot 2 had a real problem, and only running it showed this.** The window holds 79 messages and
-**message 2 is `@wetnutsock12 yeah you're retarded`** — a slur aimed at a named viewer, second on
+**message 2 is a slur aimed at a named viewer** (quote and login removed from this log on 2026-10-29), second on
 screen in the submission's **first product shot**.
 
 70 of those 79 messages are one-word guesses, which is what the shot is for. The command now
@@ -4084,6 +4084,10 @@ nothing.** Across the four evaluated fixtures — **72 caption rows, 29,216 char
 > The livestream shows three people sleeping in a dimly lit room… A word-guessing game is active
 > on screen with the prompt "GUESS THE WORD!" and the partial word "ba______." **The chat is
 > visible but not described.**
+
+*Correction (2026-10-29): the sweep's pattern missed "a user named …". Four captions in
+`stableronaldo_2026-08-30T0723/frames.jsonl` name the viewer who won a round of the word game,
+read from the overlay. `evals/DATA.md` now states this.*
 
 The transcript is equally clean: 238 segments across three fixtures, no mentions.
 

@@ -38,6 +38,12 @@ on the unsupported-card rate (0.609 against 0.619, see the 2026-09-02 entry) and
 behind the chat-only ablation's 0.280, which wins by having nothing to attribute to. Both halves
 are reported; neither prompt was edited after seeing them.
 
+> **Correction (2026-10-29).** "The only system that ever names a correct cause" is not
+> supported by `evidence/comparison.csv` or `evidence/predictions.json`. The agent's one correct
+> trigger is a correctly returned `unknown` on `c11_sarcasm_mockery`; the chat-only ablation also
+> has one, on `c10_spam_collapse`; and no matched card from any system names the gold speech or
+> frame event. The entry is left as written; see `docs/EVALUATION.md`.
+
 ## Measured iterations (28–31 Aug 2026)
 
 Every row below is a repair to the measuring apparatus, not a quality tweak. The first eval run
@@ -179,6 +185,12 @@ task where the honest answer is often "I cannot show you the cause." The agent i
 here that named a correct cause at all, and it paid for that by being wrong more often. That
 trade is the product, and the next build should be measured on whether it can move recall without
 buying it with unsupported claims.
+
+> **Correction (2026-10-29).** "The only system here that named a correct cause" is not
+> supported by `evidence/comparison.csv` or `evidence/predictions.json`. The agent's one correct
+> trigger is a correctly returned `unknown` on `c11_sarcasm_mockery`; the chat-only ablation also
+> has one, on `c10_spam_collapse`; and no matched card from any system names the gold speech or
+> frame event. The entry is left as written; see `docs/EVALUATION.md`.
 
 ---
 

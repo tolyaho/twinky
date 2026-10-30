@@ -88,4 +88,4 @@ def test_a_page_still_loads_while_a_stream_is_open(server):
 
 def test_the_server_is_threaded():
     serve = (serve_mod.STATIC.parent / "serve.py").read_text(encoding="utf-8")
-    assert "ThreadingHTTPServer((host, port), handler)" in serve
+    assert issubclass(serve_mod.BoundedHTTPServer, serve_mod.ThreadingHTTPServer)

@@ -166,13 +166,14 @@ class AudienceSignalAgent:
     def __init__(self, index: EventIndex, cache: ResponseCache,
                  model: str = DEFAULT_TEXT_MODEL,
                  provider: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None,
-                 *, inline_context: bool = False) -> None:
+                 *, inline_context: bool = False, observer=None) -> None:
         self.index = index
         self.cache = cache
         self.model = model
         # Default False: this changes the prompt, the prompt is the cache key, and the committed
         # cache is the keyless-reproduction mechanism. The recorded `agent` must keep hitting it.
         self.inline_context = inline_context
+        self.observer = observer or (lambda kind, data: None)
         self.tools = Tools(index)
         if provider is None:
             from ..providers.base import DeepSeekProvider
@@ -221,6 +222,7 @@ class AudienceSignalAgent:
         cards: List[Dict[str, Any]] = []
         dropped_cards = 0
         for step in range(max_steps):
+            self.observer("progress", {"phase": "agent", "step": step + 1, "max_steps": max_steps})
             req = build_chat_request(model=self.model, messages=messages,
                                      temperature=0.0, max_tokens=900, json_mode=True)
             before = self.cache.hits
@@ -254,6 +256,8 @@ class AudienceSignalAgent:
                     out = self._dispatch(call)
                     key = f"{call.get('tool')}({call.get('start_ms')},{call.get('end_ms')})"
                     results[key] = out
+                    self.observer("progress", {"phase": "tool", "tool": call.get("tool"),
+                                                "items": len(out) if isinstance(out, list) else 0})
                     n = len(out) if isinstance(out, list) else out
                     trace.tool_call(str(call.get("tool")), call, {"n": n} if isinstance(out, list) else out)
                 messages.append({"role": "user",
@@ -270,8 +274,13 @@ class AudienceSignalAgent:
             c.setdefault("signal_id", f"sig_{case_id}_{i:02d}")
             c["window_ms"] = [start_ms, end_ms]
             c["trace_id"] = trace.trace_id
+        for card in cards:
+            self.observer("candidate_signal", {"card": card, "causal_claim": "hypothesis"})
         out = apply_gate(cards, self.index)
         for c in out["verified"] + out["rejected"]:
+            self.observer("provenance_decision", {"signal_id": c["signal_id"],
+                          "checks_passed": c["gate"]["ok"],
+                          "codes": [v["code"] for v in c["gate"]["violations"]]})
             trace.gate(c["signal_id"], c["gate"]["ok"], c["gate"]["violations"])
 
         # outward actions stay drafts (ground rule 04)

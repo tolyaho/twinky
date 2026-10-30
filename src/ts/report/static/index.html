@@ -16,7 +16,7 @@
 <header class="bar">
  <div class="bar-inner">
   <div class="bar-left">
-    <a class="mark" href="/" aria-label="Twinky — grounded audience signals from Twitch"><svg class="mark-glyph" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1"/><circle cx="21" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="8" r="3.5" fill="currentColor"/></svg><span class="mark-name">Twinky</span></a>
+    <a class="mark" href="/" aria-label="Twinky — audience signals from Twitch"><svg class="mark-glyph" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true" focusable="false"><line x1="7" y1="8" x2="21" y2="8" stroke="currentColor" stroke-width="1"/><circle cx="21" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="7" cy="8" r="3.5" fill="currentColor"/></svg><span class="mark-name">Twinky</span></a>
 
     <form class="picker" id="picker" autocomplete="off">
       <label class="sr-only" for="picker-input">Channel</label>
@@ -45,7 +45,8 @@
 <section class="debug" id="debug" hidden>
   <dl id="debug-body"></dl>
   <p class="note">
-    Every message and every card below is read from a committed fixture and a recorded run.
+    Every message and raw card is read from a committed fixture and a recorded run. Gate decisions
+    are projected with reaction-v2; passing checks does not prove a cause.
     Nothing on this page calls a model, and the cadence is the one the messages actually arrived
     with — so it looks live and is a replay, and the badge says which.
   </p>
@@ -116,19 +117,19 @@
 
     <!-- The middle column shows three different kinds of thing and the tabs replaced the
          sub-line that used to say which. This is the orientation line: what a row here IS. -->
-    <p class="panel-lede" id="middle-lede">what was said or shown &rarr; what the room said back, grouped, with the messages behind it</p>
+    <p class="panel-lede" id="middle-lede">what was said or shown &rarr; what the room said back, grouped; context links are hypotheses</p>
 
     <div class="boardrows" id="boardrows">
-      <p class="empty" id="board-empty">Counting starts with the first message. A row appears here with its cause when this 60-second window closes.</p>
+      <p class="empty" id="board-empty">Counting starts with the first message. A row appears here with its context link when this 60-second window closes.</p>
     </div>
     <p class="board-foot" id="board-foot" hidden></p>
 
     <!-- "Signals", not "Grounded signals": this holds both grounded and abstained cards, and a
          heading may not claim what its contents deny. The split is spelled out in the footer. -->
     <div class="signals" id="signals" hidden>
-      <p class="empty" id="signals-empty">Cards land when the first 60-second window closes. Only what survives the provenance gate appears here; the rest is counted in the rail.</p>
+      <p class="empty" id="signals-empty">Cards land when the first 60-second window closes. Citation/time checks use reaction-v2. Passing cards remain hypotheses; rejects are counted in the rail.</p>
     </div>
-    <p class="board-foot" id="sig-split" hidden>0 grounded · 0 abstained</p>
+    <p class="board-foot" id="sig-split" hidden>0 linked hypotheses · 0 unlinked/none</p>
 
     <!-- Answered or not is decided by reading the transcript AFTER the question, which is the
          one thing a chat-only system cannot do — it has the question and no way to know whether
@@ -154,8 +155,8 @@
 <footer class="ticker">
   <dl class="counters">
     <div class="stat"><dt>messages in</dt><dd id="c-chat">0</dd></div>
-    <div class="stat stat-key"><dt>grounded</dt><dd id="c-grounded">0</dd></div>
-    <div class="stat"><dt>abstained</dt><dd id="c-abstained">0</dd></div>
+    <div class="stat stat-key"><dt>linked hypotheses</dt><dd id="c-grounded">0</dd></div>
+    <div class="stat"><dt>unlinked/none</dt><dd id="c-abstained">0</dd></div>
     <div class="stat"><dt>rejected</dt><dd id="c-rejected">0</dd></div>
   </dl>
   <div class="controls">

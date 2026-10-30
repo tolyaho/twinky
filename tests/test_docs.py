@@ -86,9 +86,9 @@ def test_the_documented_test_count_is_the_real_one(request):
     if len(request.session.items) < 100:
         pytest.skip("documented count needs the full suite; run `make test`")
 
-    documented = re.search(r"\*\*(\d+) passed", REPRODUCTION.read_text(encoding="utf-8"))
+    documented = re.search(r"\*\*(\d+) collected", REPRODUCTION.read_text(encoding="utf-8"))
 
-    assert documented, "REPRODUCTION.md no longer states a measured test count"
+    assert documented, "REPRODUCTION.md no longer states the collected suite size"
     assert int(documented.group(1)) == len(request.session.items)
 
 
@@ -300,7 +300,7 @@ def test_the_critical_path_points_at_risks_that_exist():
 
 
 def test_the_open_author_blockers_are_all_tracked_and_open():
-    """Two live credential sets, the unconfirmed gold labels, and the pseudonymisation limit. If
+    """Credential status, the unconfirmed gold labels, and the pseudonymisation limit. If
     one of these is not open, it is either genuinely done — in which case say so everywhere — or
     it fell off the list. The submission-gate rows that used to sit here (the video, the private
     repository) are closed and were deliberately dropped; these four are the ones that outlive
@@ -309,12 +309,16 @@ def test_the_open_author_blockers_are_all_tracked_and_open():
 
     # Table rows only. The prose summary mentions the same things and is not the record.
     rows = [l for l in text.splitlines() if l.startswith("| ") and not l.startswith("| # ")]
-    for phrase in ("Gold labels are model-drafted", "`.env` holds",
-                   "Credentials pasted in the team Telegram group",
+    for phrase in ("Gold labels are model-drafted",
                    "Pseudonymisation covers the author field"):
         row = next((l for l in rows if phrase in l), None)
         assert row is not None, f"no risk row for: {phrase}"
         assert "OPEN" in row.upper(), f"{phrase} is no longer open — update the documents too"
+    # The owner waived rotation as a publication prerequisite; never claim unverified revocation.
+    for phrase in ("`.env` held", "Credentials pasted in the team Telegram group"):
+        row = next((l for l in rows if phrase in l), None)
+        assert row is not None, f"no risk row for: {phrase}"
+        assert "OPEN" in row and "not verified" in row, f"{phrase} must not claim verified rotation"
 
 
 def _will_ship(path: str) -> bool:
@@ -673,7 +677,11 @@ def test_the_frame_captions_carry_no_chat_identity():
 
     mention = re.compile(r"@([A-Za-z0-9_]{3,25})")
     names = re.compile(r"\b(username|usernames|user names?|login|handle|nickname)\b", re.I)
-    rows = chars = 0
+    # `user names?` cannot see "a user named <login>": the word-game overlay prints the winner's
+    # login and the vision model reads it out. Those are counted and must match what DATA.md
+    # discloses, rather than being asserted absent.
+    named = re.compile(r"\b(user|player|viewer|chatter)s? named\b", re.I)
+    rows = chars = naming = 0
     for d in sorted((REPO / "evals/fixtures").iterdir()):
         frames = d / "frames.jsonl"
         if d.name == "sample" or not frames.is_file():
@@ -686,7 +694,10 @@ def test_the_frame_captions_carry_no_chat_identity():
             chars += len(caption)
             assert not mention.search(caption), f"{d.name}: a caption names a handle"
             assert not names.search(caption), f"{d.name}: a caption transcribes the chat pane"
+            naming += bool(named.search(caption))
 
     data = (REPO / "evals/DATA.md").read_text(encoding="utf-8")
     assert f"{rows} caption" in data and f"{chars:,} characters" in data, \
         f"DATA.md misstates the caption corpus; measured {rows} rows / {chars:,} chars"
+    assert f"**{naming} captions**" in data, \
+        f"DATA.md misstates the captions that name a viewer; measured {naming}"

@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple
 
 from .cache import CacheMiss, ResponseCache
+from .artifacts import write_text
 from .ingest.replay import load_fixture, load_meta
 from .workflow.reduce import compression_ratio, reduce_chat
 
@@ -132,7 +133,7 @@ def _run_over_fixture(args: argparse.Namespace, system: str, make_runner: MakeRu
 
     out_path = Path(args.out) / f"{fixture_id}.{system}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
+    write_text(out_path, json.dumps(doc, ensure_ascii=False, indent=1))
 
     print(json.dumps({k: doc[k] for k in ("system", "fixture_id", "mode", "counts", "cache")},
                      ensure_ascii=False))
@@ -177,7 +178,8 @@ def cmd_debrief(args: argparse.Namespace) -> int:
               "debrief reports verified cards, it does not produce them.", file=sys.stderr)
         return 4
 
-    result = json.loads(result_path.read_text(encoding="utf-8"))
+    from .report.results import load_result
+    result = load_result(result_path, index)
     cards = [c for w in result["windows"] for c in w["verified"]]
 
     document = build(cards, meta, index)
@@ -206,7 +208,7 @@ def main(argv=None) -> int:
     for name, func in (("replay", cmd_replay), ("baseline", cmd_baseline)):
         sp = sub.add_parser(name)
         sp.add_argument("--fixture", required=True, type=Path)
-        sp.add_argument("--out", type=Path, default=Path("evidence/raw-results"))
+        sp.add_argument("--out", type=Path, default=Path(".runtime/replays/reaction-v2"))
         if name == "baseline":
             sp.add_argument("--chat-only", action="store_true")
         sp.set_defaults(func=func)
@@ -227,7 +229,7 @@ def main(argv=None) -> int:
 
     sp = sub.add_parser("debrief")
     sp.add_argument("--fixture", required=True, type=Path)
-    sp.add_argument("--out", type=Path, default=Path("evidence/raw-results"))
+    sp.add_argument("--out", type=Path, default=Path(".runtime/replays/reaction-v2"))
     sp.set_defaults(func=cmd_debrief)
 
     sp = sub.add_parser("serve")

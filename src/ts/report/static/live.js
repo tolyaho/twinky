@@ -151,7 +151,7 @@ function addCard(event) {
     document.getElementById("board-n").textContent = String(shown);
   }
   document.getElementById("sig-split").textContent =
-    `${state.counts.grounded || 0} grounded · ${state.counts.abstained || 0} abstained`;
+    `${state.counts.grounded || 0} linked hypotheses · ${state.counts.abstained || 0} unlinked/none`;
 
   /* Rejected cards are counted and not drawn here: this column is what the run could stand
      behind. They are all present, with their violation codes, on the method page. */
@@ -167,7 +167,7 @@ function addCard(event) {
   head.appendChild(el("span", "pill", (card.type || "signal").replace(/_/g, " ")));
   const badge = el("span", `pill ${event.state}`);
   badge.appendChild(el("span", "dot"));
-  badge.appendChild(document.createTextNode(event.state));
+  badge.appendChild(document.createTextNode(event.state === "grounded" ? "linked hypothesis" : "unlinked/none"));
   head.appendChild(badge);
   box.appendChild(head);
 
@@ -176,7 +176,7 @@ function addCard(event) {
   if (trigger.event_id && trigger.event_id !== UNKNOWN && trigger.quote) {
     box.appendChild(el("p", "quote", `“${trigger.quote}”`));
     const meta = el("p", "trigger");
-    meta.appendChild(el("span", "label", "Cause"));
+    meta.appendChild(el("span", "label", "Proposed trigger"));
     /* `speech · 04:12`, not `speech · 7e828421-74fa-…`. A streamer reads a timestamp; the id is
        what a judge wants, and it stays in the debug panel and the raw JSON. */
     const ts = event.trigger_ts;
@@ -186,7 +186,7 @@ function addCard(event) {
     box.appendChild(meta);
   } else {
     const meta = el("p", "trigger unknown");
-    meta.appendChild(el("span", "label", "Cause"));
+    meta.appendChild(el("span", "label", "Proposed trigger"));
     meta.appendChild(document.createTextNode(
       "No cause established — chat reacted to something the system could not tie to a stream moment."));
     box.appendChild(meta);
@@ -239,7 +239,7 @@ function renderFinding() {
   const worst = Object.entries(state.codes).sort((a, b) => b[1] - a[1])[0];
   const rejected = state.counts.rejected || 0;
   note.appendChild(document.createTextNode(
-    "No card in this run names a cause the gate could stand behind. "
+    "No card yet passes the citation/time checks with a concrete quoted trigger. "
     + `${rejected} rejected`
     + (worst ? `; ${worst[0]} accounts for ${worst[1]}` : "")
     + `; ${state.counts.abstained || 0} abstained. That is the measured result for this system, `
@@ -526,7 +526,7 @@ function renderRail(r) {
   const g = r.gate || {};
   const codes = Object.entries(g.codes || {});
   rail.appendChild(railBlock("gate", [
-    ["verified", g.verified || 0],
+    ["checks passed", g.verified || 0],
     ["abstained", g.abstained || 0],
     ["rejected", g.rejected || 0],
     ...codes.map(([code, n]) => [code, n]),
@@ -587,7 +587,7 @@ function reset() {
   if (rowsEl) {
     clear(rowsEl);
     rowsEl.appendChild(el("p", "empty",
-      "Counting starts with the first message. A row appears here with its cause when this 60-second window closes."));
+      "Counting starts with the first message. A row appears here with its context link when this 60-second window closes."));
   }
   const railEl = document.getElementById("window-rail");
   if (railEl) {
@@ -785,7 +785,7 @@ for (const button of document.querySelectorAll(".speeds .seg")) {
 const VIEWS = {
   board: {
     pane: "boardrows", foot: "board-foot", tab: "tab-board", title: "The board",
-    lede: "what was said or shown → what the room said back, grouped, with the messages behind it",
+    lede: "what was said or shown → what the room said back, grouped; context links are hypotheses",
   },
   signals: {
     pane: "signals", foot: "sig-split", tab: "tab-signals", title: "Signals",
@@ -863,7 +863,7 @@ function goLive() {
     }
     for (const card of w.rejected) addCard({ kind: "card", state: "rejected", card: card });
     spend.textContent = `window ${w.window} · ~$${w.estimated_usd.toFixed(4)} this session `
-      + `· $${w.budget.spent_usd.toFixed(2)} of $${w.budget.cap_usd.toFixed(2)} cap`;
+      + `· $${w.budget.spent_usd.toFixed(2)} of $${w.budget.cap_usd.toFixed(2)} estimated threshold`;
   });
 
   source.addEventListener("stopped", (e) => {

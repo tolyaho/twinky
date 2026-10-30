@@ -125,7 +125,11 @@ def test_replay_produces_the_same_document_with_and_without_credentials(offline,
     cli.main(["replay", "--fixture", "fixture", "--out", "out"])
 
     replayed = (offline / "out" / "sample.agent.json").read_text(encoding="utf-8")
-    assert json.loads(replayed)["windows"] == json.loads(with_keys)["windows"]
+    # A replay trace is a separate artifact; the analysis and trace identity stay identical.
+    def analysis(body):
+        return [{k: v for k, v in w.items() if k != "trace_path"}
+                for w in json.loads(body)["windows"]]
+    assert analysis(replayed) == analysis(with_keys)
 
 
 def test_the_debrief_and_dashboard_payload_need_nothing(offline, monkeypatch, no_network):

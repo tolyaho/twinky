@@ -1,230 +1,195 @@
-# Twinky — grounded audience signals from Twitch
+# Twinky — audience signals from Twitch chat, speech and screen
 
-> «Ну контекст из видео не помешал бы. Чтобы понять, когда вопрос к чату, а когда нет.»
-> — Kamil, 20 Sept 2025, two days after the project started
+A fast Twitch chat tells you what viewers typed. Understanding what they are reacting to also
+requires the stream. Twinky puts chat, speech transcripts and frame captions on one timeline,
+then uses a tool-calling agent to propose answers, reactions, questions and warnings with citations.
+Its gate checks evidence mechanically; causal explanations remain hypotheses for a person to inspect.
 
-Twinky turns an unreadable live chat into a small number of verified audience signals: it
-links each cluster of answers, reactions, questions and warnings to the exact stream moment that
-caused it, and shows the evidence.
+**Today:** a multimodal research prototype with real captured broadcasts, a working replay
+viewer, cached evaluation, and an experimental live pipeline behind a bounded session API.
+**Next:** a public website where a visitor enters any Twitch username. That website is not
+implemented or deployed here. Live network/provider execution has not been revalidated in this
+engineering pass; the API integration is tested offline with the real agent and recorded fixtures.
 
-A chat message is not text. It is a response to something. `10` is meaningless; `10` thirty
-seconds after *"how would you rate this game?"* is a rating. Chat is only interpretable against
-the stimulus that caused it — and the stimulus is in the audio and on the screen, not in the chat.
+`make eval` reproduces the published comparison with **48 cache hits, 0 API calls**.
+The agent **loses the unsupported-card rate** to the chat-only diagnostic (0.609 vs 0.280).
+No matched prediction identifies the correct speech or frame trigger. The gold labels are
+model-drafted and **not yet author-confirmed**. These are exploratory results, not product accuracy.
 
-## Status — read this first
+<p align="center">
+  <img src="docs/assets/dashboard-board.webp" width="100%"
+       alt="Actual Twinky recorded replay: chat, grouped word-puzzle guesses, and window statistics">
+</p>
 
-Four fixtures captured from live broadcasts, eleven frozen evaluation cases, and one measured
-end-to-end comparison. `make eval` reproduces every number below from the committed cache in
-**79 ms, 48 cache hits, 0 API calls**, verified with every credential unset.
+The real replay viewer on the recorded `c07_frame_only_dracorex` window. The deterministic board
+groups 76 guesses across four groups. This screenshot predates the current gate projection;
+its gate ledger is historical. Board links are lexical or temporal suggestions, not demonstrated
+causes. The current viewer labels its gate version and rescoring source; no model is called by replay.
 
-**The result is mixed and reported as such.** The agent doubles the baseline's signal recall and
-is the only system that ever names a correct cause; it still **loses the unsupported-card rate to
-the chat-only ablation**, 0.609 against 0.280, and the ablation wins that metric by having nothing
-to attribute to. Neither prompt was edited after the numbers were seen — see
-`docs/IMPROVEMENT_CHANGELOG.md` for the full account, including the run that was discarded and
-why.
+[Run it](#running-locally) · [Results](#results-at-a-glance) ·
+[Architecture](#how-it-works) · [Live API](docs/LIVE_DEMO_INTEGRATION.md) ·
+[Evaluation](docs/EVALUATION.md) · [Attribution](#my-contribution)
 
-Three experiments were built, measured and **rolled back** — louder audio, inlining the stream
-context into the agent's turn, and embedding clustering as a third grouping arm. Each is in
-`docs/IMPROVEMENT_CHANGELOG.md` with the number that killed it, and the last two reproduce with
-no keys. Chat grouping itself is scored on pair-level precision and recall against labels frozen
-in a commit containing no arm code (`evals/grouping/`).
+## Results at a glance
 
-Nothing in this repository states a number that was not measured. Gold labels are model-drafted
-and not yet author-confirmed (§8), and so are the grouping labels.
-
----
-
-## 1. The thesis
-
-The line at the top of this file was said on day two, before anything was built, and everything
-since is that sentence taken seriously: speech and frames are not enrichment, they are the only
-thing that makes a chat message mean anything.
-
-Two corollaries the team reached the following day and kept: vision repairs speech, because ASR
-mangles game slang — *«если она видит картинку кски то может понять что авик»* — and the slang
-dictionary worth having is the one chat itself types.
-
-## 2. The loop this serves
-
-The goal is not a feature, it is a flywheel, stated in full on 16 Jan 2026:
-
-> «Вот мы сделаем как бы чат более доступным / В чат будет интереснее писать / Значит стрим
-> интереснее будет смотреть / Он будет более живым / Тогда и просмотров больше должно быть»
-
-**Readable chat → worth writing in → livelier stream → more views.** The board is the mechanism;
-the loop is the point. The streamer's half is *«стримеру легче чат читать»*; the viewer's half is
-*«зрители будут видеть, что их сообщение может быть ценным, и не потеряться относительно
-флуда»* — which is why the board is designed to go **on stream**, visible to viewers, not into a
-private operator console.
-
-## 3. What the product does — four things
-
-**A · Every message gets a cause.** *«Я вот беру сообщение в чате. Смотрю на то, что стример
-сказал до этого. И пытаюсь выяснить причину этого сообщения.»* Measured in Jan 2026 at 7 s
-average and 1 s median per message. This is the part *«человек или модер так не сможет»*.
-
-**B · The board — clusters bound to the streamer's own quotes.** Sketched by hand in Jan 2026,
-including the requirement that has been in the product from the first drawing: *«только там
-иногда кластеры не привязываются ни к чему»* — **abstention is a feature, not a failure.**
-
-**C · An agent you talk to.** Query the stream in natural language. Built and working in March
-2026 on top of retrieval over the running transcript; not yet rebuilt on this codebase — see §14.
-
-**D · Polls read out of chat, not created in it.** Native Twitch polls need affiliate status and
-a user access token, so a moderator bot cannot open one. The answer was to stop trying:
-*«А почему бы просто из чата опрос не парсить тогда?»* — don't create a poll, **read the one
-that already happened.** `src/ts/report/poll.py` drafts one; nothing posts it.
-
-## 4. The bottleneck
-
-The intended user is a mid-to-large streamer or their operator: thousands of concurrent viewers,
-tens of chat messages per second, a handful of volunteer moderators. They read perhaps a low
-single-digit percentage of chat during a broadcast. Live, the audience is answering questions the
-streamer asked aloud and nobody can read the answers.
-
-The bottleneck is not volume, it is **grounding**. `10`, `left`, `лес` are meaningless as text.
-They are only interpretable against the stimulus that caused them, and the stimulus is in the
-audio and on the screen. A chat-only tool can cluster messages; it structurally cannot tell you
-what they were a response to, and therefore cannot tell you whether a question was answered.
-
-That is why the system is multimodal. Not sophistication for its own sake: it is the minimum
-required for chat to mean anything at all.
-
-This is a real-time product. *«Как круто, что нам почти ничего хранить не надо … Мы же делаем
-упор на то, что в моменте происходит»* — the post-stream debrief is a by-product of work already
-done in the moment, not the reason the system exists.
-
-## 5. Baseline
-
-One direct prompt receiving **the same raw events** the final system sees — chat, final
-transcript segments, frame captions, ids and timestamps — with the same output schema and the
-same card cap. No tools, no reduction, no rolling state, no verifier, no memory.
-
-A chat-only run exists as a diagnostic ablation (`--chat-only`), never as the headline baseline.
-Comparing a multimodal agent against a chat-only prompt would measure the value of giving the
-system more data, not the value of the agentic workflow.
-
-Baseline results, 11 cases: **21 cards, trigger accuracy 0.000, unmatched 0.952, unsupported
-0.619, recall 0.091.** It attributes to speech readily — fifteen of twenty-one cards name a
-transcript segment — but nine are rejected on `E_TRIGGER_LATE`: seeing the window flat, it picks
-a plausible line without checking that the cause precedes the effect.
-
-## 6. Final agent workflow
-
-```
-capture → reduce → [ agent: tools ⇄ model ] → provenance gate → verified cards → debrief
-```
-
-The agent is a real agent: the model decides which context it needs, calls bounded tools, sees
-the results and decides again, up to four steps. The controller executes the tools, enforces the
-schema and the time windows, and then runs a deterministic provenance gate over whatever the
-model finally produced.
-
-Tools, all time-bounded: `group_repeated`, `get_transcript_window`, `get_frame_captions`,
-`get_chat_window`.
-
-Exactly one outward action exists — approve → draft poll — and it never posts automatically.
-
-## 7. Architecture and purposeful design choices
-
-Full diagram and node status: `docs/ARCHITECTURE.md`. Every choice with its rationale:
-`docs/archive/DECISIONS.md`.
-
-| Component | The failure it fixes | Built |
-|---|---|---|
-| Speech + frame context | Short chat replies are meaningless as text (observed Sept 2025 – Jan 2026) | yes |
-| Event-centric grouping | Embedding clustering gave unstable clusters (Oct 2025; again Mar 2026) | yes |
-| Deterministic reducer | Per-message inference was too slow and too expensive at scale (Jan, Mar 2026) | yes |
-| Provenance gate + abstention | Cards attaching to nothing, noted in the team's own testing 4 Jan 2026 | yes |
-| Replay + response cache | Live streams are not reproducible, and a clone with no keys must still run | yes |
-| Summary hierarchy (1m/5m/30m/2h) | A long stream does not fit one context window | **no** |
-
-The summary hierarchy is a real part of the product thesis and is not implemented. Fixtures run
-2–12 minutes and analysis windows are sixty seconds, so nothing in the evaluation exercises it.
-It is listed as a named gap rather than left out, because leaving it out would make the design
-look smaller than it is and listing it unmarked would claim work that does not exist. A working
-ancestor of it is in `reference/src/parsers/chat_summaries/`.
-
-No LangChain and no LangGraph in the shipping path — they build prompts we do not control, and a
-version bump silently changes their formatting, which changes the cache key, which breaks keyless
-reproduction. The agent loop is about sixty lines.
-
-## 8. Evaluation protocol
-
-Two primary metrics, chosen so a reader understands them in five seconds:
-
-- **Trigger accuracy** — of the cards that *match a gold signal*, the fraction naming the correct
-  causing event, *or correctly returning `unknown`* where the fixture has no supported cause.
-  Needs gold labels. The denominator is matched cards rather than every card emitted, because
-  gold is not exhaustive on eleven cases and a real signal nobody labelled would otherwise score
-  as a wrong trigger. The cost of that choice is that noise cannot lower it, so it is always
-  reported beside **unmatched rate** — the fraction of emitted cards matching no gold signal.
-  Measured on a probe: one correct card plus nine hallucinations still reports trigger accuracy
-  1.0, and unmatched rate 0.9.
-- **Unsupported-card rate** — the fraction of cards whose evidence fails deterministic
-  validation: a cited message id that does not exist, a cited message outside the claimed window,
-  or a quoted trigger absent from the transcript span it claims. **No gold labels needed**, so it
-  runs over every fixture for free.
-
-Both systems receive identical windows and are scored on **every card they emit**, verified and
-rejected alike. Scoring only the cards that survived the gate would force the unsupported rate to
-zero for both systems by construction.
-
-Case matrix and per-case status: `evals/DATA.md`. **Eleven cases are frozen, all against real
-captures from four broadcasts**, including all three the product is designed to win on: warning
-with no provable cause, sarcasm, and abstention. Across 12 gold signals: 4 frame triggers,
-2 speech triggers, 5 `unknown`, 1 abstention.
-
-**Gold labels were drafted with model assistance from the captured fixtures. Per-case review
-status is tracked in `evals/REVIEW_ME.md`, and at the time of writing all eleven are still
-`"reviewed": false` — no human has confirmed them.** Saying they were "reviewed by the author"
-would be the easy sentence and it would not be true, so it is not written here; the flag in each
-gold file is the source of truth and `evals/REVIEW_ME.md` is a ten-minute pass built to change it. The labels
-are not hand-typed: every id is resolved from the fixture, and `tests/test_frozen_cases.py`
-pushes each gold signal through the real provenance gate, because a gold label that cannot pass
-the gate scores every correct card as a silent miss.
-
-## 9. Results and evidence
-
-Eleven cases, four broadcasts, one run, no tuning after the fact.
+Eleven frozen cases from four captured broadcasts, with overlapping windows in two pairs.
+Every emitted card is scored, including rejects. Source: [published summary](evidence/summary.json).
 
 | system | cards | trigger accuracy | unmatched | unsupported | recall |
-|---|---:|---:|---:|---:|---:|
-| **agent** | 23 | **0.500** | 0.913 | **0.609** | **0.182** |
-| baseline — single prompt, same events | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
-| ablation — chat only, diagnostic | 25 | 1.000¹ | 0.960 | **0.280** | 0.091 |
+|---|---:|---:|---:|---:|---:|---:|
+| agent | 23 | 0.500 | 0.913 | 0.609 | 0.182 |
+| baseline | 21 | 0.000 | 0.952 | 0.619 | 0.091 |
+| ablation (chat only, diagnostic) | 25 | 1.000 | 0.960 | 0.280 | 0.091 |
 
-¹ One matched card out of twenty-five. Meaningless alone, which is why `unmatched` sits beside
-it — this is the degenerate case that metric exists to expose.
+Trigger accuracy is conditional on a type/evidence-overlap match to a gold label. The two correct
+trigger matches across the agent and diagnostic are `unknown`, not speech or screen. All three
+systems fail the one must-abstain case. A low unsupported rate measures fewer citation/time
+violations, not semantic precision or successful abstention. See [protocol and evidence](docs/EVALUATION.md).
 
-The agent wins grounding. It is the only system that names a correct cause, at double the
-baseline's recall, and it now edges the baseline on unsupported claims as well — 0.609 against
-0.619, after the gate stopped rejecting a category the original product allowed (§13). The
-chat-only ablation still wins the headline metric by having nothing to attribute to, so it
-abstains — see the hot take in §13.
+### Main failure mode and hot take
 
-| artifact | what it holds |
+The agent spends most of its tool budget on chat, rarely inspecting stream context. More tools
+do not help if the controller never supplies the context needed for attribution. An inline-context
+arm also failed (unsupported 0.882, recall 0.182); there is no measured successful fix hidden here.
+
+H1 replaced exact-repeat reduction with broader grouping. Its 25 raw cards are unchanged across
+rescoring: historical `strict-v1` rejects all 25; `reaction-v2` rejects 5. Trigger accuracy remains
+0 and recall 2/11. This is a gate-definition change, not a model improvement. H1 remains rejected.
+[Gate/version audit](docs/GATE_VERSIONS.md) and [discarded experiments](docs/IMPROVEMENT_CHANGELOG.md)
+preserve the negative results. The embeddings grouping arm reached pair F1 0.583 at threshold 0.4,
+with poor precision on one channel; that is not evidence of reliable live causal attribution.
+
+## How it works
+
+```mermaid
+flowchart LR
+  C[Chat] --> E[Ordered EventIndex]
+  A[Audio / Deepgram] --> E
+  V[Frames / vision captions] --> E
+  E --> T[Four bounded read-only tools]
+  T <--> G[AudienceSignalAgent]
+  G --> P[Versioned citation/time gate]
+  P --> R[Cards, evidence and rejected claims]
+  R --> D[Replay viewer / live session events]
+```
+
+The same Python contracts serve recorded and live processing. The agent chooses among
+`group_repeated`, `get_chat_window`, `get_transcript_window`, and `get_frame_captions`; the
+controller limits it to four model steps and three cards. The baseline sees the same raw
+modalities and card contract in one prompt. Requests and responses are cached by content hash;
+a cache miss in replay raises rather than calling a provider.
+
+### The provenance gate
+
+`reaction-v2` checks cited chat IDs, half-open card windows, trigger existence and ordering,
+quote substring/token overlap, and circular evidence with a narrow earlier-viewer reaction
+exception. `strict-v1` preserves the historical rule rejecting every circular citation.
+
+The gate does not verify causal meaning, trigger-kind correctness, card titles or distributions.
+A short quote can pass without establishing a cause. Legacy JSON uses `verified` for passing
+checks; it is not proof of a real audience insight. Unknown triggers and explicit `none`
+abstention are different. Rejected cards and their violations remain inspectable.
+
+The viewer applies the current gate to historical raw cards in memory and includes a source
+SHA-256. Historical results, cache entries, fixtures and measured traces remain unchanged.
+New replay traces/results go under ignored `.runtime/`; recorded latency is never replaced by
+cache-read timing. [Architecture](docs/ARCHITECTURE.md) describes the modules and boundaries.
+
+## Running locally
+
+Use CPython 3.10+ and a shell with `make`. No credentials are needed for this path:
+
+```bash
+make setup PYTHON=python3.12
+make test
+make eval
+make replay
+make debrief
+make demo
+```
+
+Open [the local replay viewer](http://127.0.0.1:8000). The existing interface has **three zones**:
+chat, a **Board | Signals | Questions** pane, and window statistics. Replay is labelled and runs
+at 1×/4×/8×. The questions panel only sees transcript segments available by the playback cursor.
+The Method page includes the deterministic **NEEDS A LOOK** diagnostic. **Tier 0** chat is an
+operator experiment and provides no speech/screen attribution.
+
+`make demo` reads the frozen recorded outputs and projects current gate verdicts; it does not
+need a preceding replay run. `make replay` writes a derived result under `.runtime/replays/reaction-v2/`.
+For the newly generated result explicitly pass that directory to `ts.cli serve --out`.
+`make eval` keeps the canonical published table byte-identical; use a separate output directory
+for experiments. A changed rerun cannot overwrite an existing frozen evidence file.
+
+[Full reproduction guide](docs/REPRODUCTION.md) covers cache modes, experimental arms and exit codes.
+There are **118 real runs** under `trajectories/product-agent/`, including failures;
+these are recorded workflow trajectories, not independent evaluation samples.
+
+## Live backend integration
+
+The prepared backend accepts a normalized Twitch username, checks existence and live status with
+Twitch Helix, then runs one bounded capture → transcription/vision → agent session in an isolated
+process. It exposes authenticated start, status, SSE events and cancel endpoints. Offline,
+not-found, unavailable, failure, timeout, cancellation and completion are explicit states.
+
+No new frontend is included. The existing replay server hosts this API on loopback; a future
+website should use a server-side adapter. Paid keys and the backend access token stay server-side.
+The initial mode is a restricted/allowlisted beta, with explicit startup credits, one active
+session, two starts/IP/hour, 60-second capture and a 180-second process watchdog. Provider calls,
+requested output tokens, context bytes and capture volume are bounded. These controls are not
+a strict USD billing guarantee; cancellation cannot recall an accepted provider request.
+Evidence text is withheld by default pending rights/privacy review. Analysis still runs.
+
+[Exact startup, schema, limits, infrastructure and examples](docs/LIVE_DEMO_INTEGRATION.md).
+Real Twitch capture/provider availability requires a separate smoke test with newly rotated
+credentials. Old exposed keys have not been tested. The legacy unauthenticated paid HTTP route
+returns a migration response; capture, enrichment and agent execution remain available in the new API.
+
+## Limitations and what is not built yet
+
+The four fixtures contain 3,863 chat messages, 238 transcript segments and 72 frame captions.
+All gold labels remain unreviewed. Windows are fixed; STT/vision errors propagate. One captured
+broadcast contains no transcript segments. Most predictions do not match a gold signal.
+Model-visible stream/chat text is untrusted data; tool and output limits do not eliminate model error.
+
+| capability | implemented |
 |---|---|
-| `evidence/report.md` | the table above plus the provenance of every fixture behind it |
-| `evidence/comparison.csv` | one row per case per system |
-| `evidence/predictions.json` | raw predictions, gate decisions and trace id for every case |
-| `trajectories/product-agent/` | one trajectory per system per case, written as the run happens |
-| `docs/IMPROVEMENT_CHANGELOG.md` | every repair with its measured before/after, and the discarded run |
+| multimodal event timeline, agent, cache, gate, replay and evaluation | yes |
+| bounded backend session boundary | yes; offline integration tested |
+| arbitrary-channel live network/provider validation in this pass | **no** |
+| public website and deployment | **no** |
+| summary hierarchy / persistent conversational memory | **no** |
+| automatic actions posted to Twitch | **no** |
 
-## 10. Engineering log
+The summary hierarchy is not implemented. Polls remain drafts requiring human approval;
+a model-supplied distribution is not a verified vote count. The unpushed March `agent_rag`
+implementation is not recoverable from this repository; historical code is preserved under `reference/`.
 
-`docs/IMPROVEMENT_CHANGELOG.md` — every entry measured on the frozen eval set, including the
-removed experiments and their measured results.
+Chat author columns are pseudonymised, but message text contains real `@mentions`; captions can
+also name viewers. [Data provenance and retention](evals/DATA.md) describes this limitation.
+A deleted media ZIP remains reachable in Git history and `micro1-submission`. Credential rotation,
+viewer privacy and redistribution rights still require owner decisions before a release.
 
-## 11. Reproduction
+## My contribution
 
-`docs/REPRODUCTION.md`. `make test`, `make baseline`, `make replay` and `make eval` run with **no
-API keys**, from the committed content-addressed response cache. Running from a committed cache
-with no credentials is a property worth keeping: it is what makes a measured claim in this repo
-checkable by anyone, months later, for free.
+I designed and built Twinky, in two phases.
 
-## 12. Agent and tool disclosure
+- **First version (Sept 2025 – Mar 2026).** Stream audio and chat capture, frame annotation, the
+  chat parser and message-reason taxonomy that the card types descend from, rolling chat
+  summaries, a first dashboard (later deleted because it displayed fabricated values), and in
+  March 2026 the first conversational agent: LangChain + LangGraph + Chroma, with an ingest
+  process beside the chat parser, top-k retrieval per query and a 30-minute memory window
+  (`PRODUCT_v2.md` §4). That agent was never pushed and is not in this repository. The rest of
+  the first version's code is preserved under `reference/`.
+- **This repository (28 Aug – 2 Sep 2026)** is a rebuild from scratch, done by me with Claude
+  Code. I ran Claude Code (Claude Opus 5) as a scheduled loop, one work item per iteration, under
+  guardrails I set: replay by default, a $5 estimated spend target, and tests after every change. The sessions
+  wrote most of the code, tests and documents.
+  - The record of how it was built is in `docs/archive/PROGRESS.md` and
+    `docs/archive/DECISIONS.md`.
+  - What the coding agent got wrong, and what it found, is disclosed in
+    `trajectories/coding-agents/README.md`.
+
+### Agent and tool disclosure
 
 - **In the product:** one agent, `audience_signal_agent`, `gpt-4.1-nano`, `temperature=0`,
   `max_tokens=900`, `max_steps=4`, four bounded read-only tools. The baseline and the chat-only
@@ -237,130 +202,19 @@ checkable by anyone, months later, for free.
   ladder item per iteration. Full disclosure table, method and the defects the sessions
   found: `trajectories/coding-agents/README.md`.
 
-## 13. Known limitations, main failure mode, hot take
+Later engineering work is also AI-assisted. The local implementation report records the
+changes, verification and remaining release decisions. AI assistance is disclosed here rather
+than added automatically as commit coauthor attribution.
 
-**Limitations.** Windows are fixed 60-second tiles, so a signal spanning a tile boundary can be
-split. Diarization errors propagate into trigger attribution. The reducer collapses on exact and
-near-exact repeats, so a paraphrased flood still costs tokens. Only one language pair has been
-exercised.
+## Project history and licence
 
-The provenance gate has a known soft spot: a very short trigger quote is trivially verbatim. One
-common word lifted from the transcript satisfies the quote check without demonstrating that the
-event caused anything. Enforcing a minimum quote length would fix it, and it is deliberately not
-done here — the frozen metric definition says "does not appear verbatim", and tightening the rule
-after the definition was published would make the reported numbers incomparable to the metric
-they claim to be. It is recorded in `RISKS.md` #28 instead.
+The project began in September 2025; the first version ran until March 2026. The current rebuild
+was prepared in August–September 2026. This repository was created on 30 Aug 2026 from a tree
+that was not previously version-controlled: history was reconstructed, commit dates assigned,
+and final file states do not establish intermediate historical snapshots. Do not use those dates
+as independently verified development evidence. The session record is in `docs/archive/PROGRESS.md`.
 
-**Main failure mode, measured.** The agent offers a card's own trigger as that card's evidence
-— a claim that proves itself. Five of its twenty-three cards are still rejected on
-`E_CIRCULAR_EVIDENCE`, down from eight: the gate used to reject *every* such card, including the
-case the original product handled correctly, where one viewer's message provokes several later
-ones. That exception is now allowed for `reaction` cards, which moved three cards and took the
-agent's unsupported rate from 0.739 to 0.609. A card whose only evidence is its own trigger is
-still rejected, and so is every other check.
-
-The sharpest instance is `c01_word_puzzle_amethyst`: the screen shows `GUESS THE WORD!` with
-`ame_______` and chat answers *amethyst / American / amendment*. The agent called
-`group_repeated` and `get_transcript_window`, found no speech, and returned a `none` card reading
-*"no clear speech or on-screen content detected"* — **without ever calling `get_frame_captions`**.
-It declared the screen empty without looking at it, on the one case where the screen is the only
-possible cause. The trajectory shows this step by step. The fix is obvious and was deliberately
-not applied at the time: changing the prompt after seeing the score is tuning, and it would have
-invalidated this comparison.
-
-The baseline fails differently — nine of twenty-one cards rejected on `E_TRIGGER_LATE`, naming a
-spoken line that occurs *after* the messages it supposedly caused.
-
-**Hot take.** The evaluation produced a result that argues against the product, and it is the
-most interesting number here: **the chat-only ablation — the system with the least information —
-won the headline metric**, 0.280 unsupported against the agent's 0.609. It won by abstaining.
-With no transcript and no captions it had no candidate causes to name, so it correctly returned
-`unknown` eighteen times out of twenty-five, and an abstention is always gate-clean.
-
-So an unsupported-card rate cannot be read alone: it is minimised by saying nothing. That is not
-a flaw in the metric so much as the shape of the problem. Grounding is not summarization with a
-better prompt; it is retrieval and proof, where the honest answer is often *"I cannot show you
-the cause."* The agent is the only system here that named a correct cause at all, and it paid for
-that by being wrong more often. Moving recall without buying it in unsupported claims is the
-whole game, and this run says we have not won it yet.
-
-The standing objection is worth stating: top streamers do not read chat and do not want a tool
-that reads it for them. That is right, and it is not what this is. The pitch is *recover what you
-are structurally unable to see, while it is still happening.*
-
-## 14. What is not built yet
-
-Against the orchestrator design the team drew in March 2026:
-
-| node | today |
-|---|---|
-| user → query, orchestrator | missing — one agent, four tools, no router |
-| data pulling agent | built — `src/ts/workflow/tools.py` |
-| chat messages, chat summary, stream context, image annotations, audio | built |
-| streamer instructions | missing |
-| memory, save memory agent | missing — the March build had it, this one does not |
-| scheduling agent, web search agent | missing |
-| actual stream tools | half — a poll is drafted, nothing posts |
-
-`agent_rag` — the retrieval agent from March 2026, with an ingest process beside the chat parser,
-top-k retrieval per query and a working 30-minute memory window — was never pushed to any remote
-and is not recoverable from this repository. See `docs/archive/DECISIONS.md`.
-
-## 15. Trajectories
-
-`trajectories/product-agent/` — **118 real runs** across the agent, the single-prompt baseline
-and the chat-only ablation, written as each run happened and reproducible from the cache.
-`trajectories/h1-arm/` holds the rolled-back arm's runs, kept separate so a removed experiment
-can never be counted as the product's.
-
----
-
-## Project history
-
-This project began in September 2025 and was developed by three people until March 2026. The
-earlier implementation is preserved under `reference/` — not as dead weight, but because it is
-the working ancestor of the nodes §14 lists as missing.
-
-### Git history disclosure
-
-> This repository was created on 30 Aug 2026 from a tree that was never under version control.
-> Its history is reconstructed: each commit holds the final state of the files it touches, and
-> commit dates are assigned, not observed. The order is real; the dates are not.
-> `docs/archive/PROGRESS.md` timestamps are real.
-
-Concretely: a file first committed on 29 Aug already contains fixes made on 30 Aug, because no
-intermediate snapshot of it exists to commit. Commit timestamps were taken from the session log
-in `docs/archive/PROGRESS.md` so that the history and the written record agree and can be checked
-against each other.
-
-## Quick start (no API keys needed)
-
-```bash
-make setup
-make test
-```
-
-`make demo` serves three routes, all without keys. `/` is the product: three zones — the raw
-chat flood, a board of grouped audience signals under the moment that caused them, and a rail of
-live statistics — with `Board | Signals | Questions` across the middle and counts that update
-every two seconds rather than once a minute. `/method` holds the evidence, a generated agent
-graph and the read-only NEEDS A LOOK panel. `/philosophy` states the argument, including the
-result that counts against the product.
-
-The `Replay | Live` control switches to a real channel's chat over anonymous IRC — **Tier 0: no
-key, no model call, no cost**, and no cause either, because that tier has no audio or screen and
-says so. The full live pipeline is a separate, explicitly paid button; it is capped,
-time-limited, and records into a temporary cache so the committed one is never touched. Replay
-remains the default and the documented route.
-
-Full guide, including what currently exits `3` and why: `docs/REPRODUCTION.md`.
-
-## Licence
-
-MIT — see [`LICENSE`](LICENSE). Chosen deliberately rather than left blank: a public repository
-with no licence carries default all-rights-reserved copyright, which would let someone read this
-code and give them no right to run it.
-
-The Twitch material under `evals/fixtures/` is not the author's to license and is not covered by
-it. Its provenance, retention and the limits of its pseudonymisation are stated in
-[`evals/DATA.md`](evals/DATA.md).
+MIT covers the author's code; see [licence](LICENSE). Twitch material in fixtures and copies
+quoted in cache, traces and evidence are not the author's to license and are not covered by MIT.
+Public availability of footage does not establish unlimited redistribution rights. Preserve
+third-party notices and consult [evals/DATA.md](evals/DATA.md) before redistributing those materials.

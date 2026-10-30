@@ -68,8 +68,8 @@ The cause is a promise made before this window, so no event inside it proves the
 ### `c12_no_signal_abstain` — abstain, no signals at all
 `yugi_2026-08-30T0723`, window `1788074603171 – 1788074663171`
 
-Nineteen messages, nineteen distinct bursts. Viewers reply to each other (`@diddyjr12344 mmmm`,
-`@NBA_H1 he can still get in`), post a link, run `!join`, and ask the streamer unrelated
+Nineteen messages, nineteen distinct bursts. Viewers reply to each other (`@viewer mmmm`,
+`@viewer he can still get in`), post a link, run `!join`, and ask the streamer unrelated
 one-off questions. Nothing is shared, nothing repeats, no wave.
 
 **Correct answer:** one `none` card. There is stream context — the streamer is talking through

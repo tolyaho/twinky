@@ -99,7 +99,8 @@ def questions(events: Iterable[Event]) -> List[Dict[str, Any]]:
 
 
 def answered_by(index, question: Dict[str, Any], *,
-                within_ms: int = ANSWER_WINDOW_MS) -> Optional[Dict[str, Any]]:
+                within_ms: int = ANSWER_WINDOW_MS,
+                as_of_ms: Optional[int] = None) -> Optional[Dict[str, Any]]:
     """Did the streamer say something answering this, and when?
 
     Looked for in the transcript **after** the question was asked — which is exactly why a
@@ -126,7 +127,11 @@ def answered_by(index, question: Dict[str, Any], *,
               for t in _content_tokens(v)}
     if not wanted:
         return None
-    for seg in index.window(asked + 1, asked + within_ms, types=["transcript_segment"]):
+    end = min(asked + within_ms, as_of_ms + 1) if as_of_ms is not None else asked + within_ms
+    for seg in index.window(asked + 1, max(asked + 1, end), types=["transcript_segment"]):
+        # A final segment is only available once its ending timestamp has passed.
+        if as_of_ms is not None and int(seg.payload.get("end_ms", seg.ts_ms)) > as_of_ms:
+            continue
         hit = wanted & set(_content_tokens(seg.text))
         if len(hit) >= MIN_ANSWER_TOKENS:
             return {"event_id": seg.event_id, "ts_ms": seg.ts_ms, "text": seg.text,
@@ -135,7 +140,8 @@ def answered_by(index, question: Dict[str, Any], *,
 
 
 def stream_questions(index, chat: Sequence[Event], *,
-                     limit: int = MAX_QUESTIONS) -> Dict[str, Any]:
+                     limit: int = MAX_QUESTIONS,
+                     as_of_ms: Optional[int] = None) -> Dict[str, Any]:
     """Every question asked so far, grouped across the whole stream and marked answered or not.
 
     Stream-level rather than per-window on purpose: "asked four times" is a fact about the
@@ -144,7 +150,7 @@ def stream_questions(index, chat: Sequence[Event], *,
     """
     ranked = questions(chat)
     for q in ranked:
-        q["answered"] = answered_by(index, q)
+        q["answered"] = answered_by(index, q, as_of_ms=as_of_ms)
     # Unanswered first, then by how many asked: the whole value of the panel is the thing the
     # streamer meant to get to and lost.
     ranked.sort(key=lambda q: (bool(q["answered"]), -q["count"], q["ts_ms"]))

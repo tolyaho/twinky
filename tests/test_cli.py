@@ -135,7 +135,10 @@ def test_recorded_run_replays_with_the_provider_unplugged(workspace, monkeypatch
     assert FakeDeepSeek.calls == calls_after_record  # no provider call in replay mode
     assert replayed["cache"] == {"hits": 1, "misses": 0}
     # the whole analysis is identical, ids included - this is what REPRODUCTION.md claims
-    assert replayed["windows"] == recorded["windows"]
+    # Analysis and stable trace identity agree; the derived replay trace has its own path.
+    def analysis(windows):
+        return [{k: v for k, v in w.items() if k != "trace_path"} for w in windows]
+    assert analysis(replayed["windows"]) == analysis(recorded["windows"])
 
 
 def test_replay_without_a_recording_exits_with_an_actionable_error(workspace, monkeypatch,

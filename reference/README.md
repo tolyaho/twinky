@@ -59,5 +59,5 @@ premise behind the reaction-trigger exception in the gate.
 
 `agent_rag` — the LangChain + LangGraph + Chroma agent from `photo_55` (13 Mar 2026), with an
 ingest process beside the chat parser, top-k retrieval per query and a working 30-minute memory
-window. It was never pushed to any branch of either `twitch_agent` remote and exists only on
-Kamil's machine. See `DECISIONS.md`. It is the most valuable missing code in the project.
+window. It was never pushed to any remote and is not in this repository. See `DECISIONS.md`.
+It is the most valuable missing code in the project.

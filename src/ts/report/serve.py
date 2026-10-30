@@ -1,8 +1,8 @@
 """Local viewer over replay output.
 
-Read-only, bound to loopback, no keys and no upstream calls. It serves what `make replay`
-already wrote to disk and never runs the agent itself, so what appears on screen is exactly the
-file a judge can open and diff.
+Replay routes project current gate verdicts over immutable recorded cards, without model calls.
+The optional authenticated session routes use an isolated real live worker; disabled by default.
+Both are bound to loopback unless an operator explicitly configures a different host.
 
 The dashboard proper is a later step. Until `static/index.html` exists this serves a plainly
 labelled placeholder: the legacy shell fabricated names, emotes and cluster values and rendered
@@ -13,6 +13,8 @@ from __future__ import annotations
 import json
 import re
 import time
+import threading
+from urllib.parse import urlsplit, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -25,6 +27,7 @@ from .labels import attach as attach_labels
 from .labels import label_groups
 from .moderation import needs_a_look
 from .poll import attach_drafts
+from .results import load_result
 
 STATIC = Path(__file__).parent / "static"
 ROUTES = ["/", "/method", "/api/replay", "/api/fixtures",
@@ -89,7 +92,7 @@ def payload(fixture: Path | str, out_dir: Path | str, system: str = "agent") -> 
             f"{path} does not exist. Run `make replay FIXTURE={fixture}` "
             f"(or `make baseline`) before serving."
         )
-    result = json.loads(path.read_text(encoding="utf-8"))
+    result = load_result(path, load_fixture(fixture))
 
     # Built here rather than in the browser: what a streamer approves has to be derived
     # deterministically from verified evidence, and that belongs somewhere testable.
@@ -118,8 +121,7 @@ HERO_FIXTURE = "stableronaldo_2026-08-30T0723"
 
 
 def _grounded(card: Dict[str, Any]) -> bool:
-    """A card that actually shows a cause: gate-clean, not an abstention, naming a real event
-    with a verbatim quote. Anything less is not evidence of the thesis."""
+    """Extra display filter: passing gate, concrete trigger and quote. No semantic proof."""
     trigger = card.get("trigger") or {}
     return bool(
         (card.get("gate") or {}).get("ok")
@@ -158,7 +160,7 @@ def hero(fixtures_root: Path | str, out_dir: Path | str) -> Optional[Dict[str, A
         if not path.exists():
             continue
         try:
-            doc = json.loads(path.read_text(encoding="utf-8"))
+            doc = load_result(path, load_fixture(fixture_dir))
         except (OSError, ValueError):
             continue
         for window in doc.get("windows") or []:
@@ -258,7 +260,7 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
     recorded: List[Dict[str, Any]] = []
     if path.exists():
         try:
-            doc = json.loads(path.read_text(encoding="utf-8"))
+            doc = load_result(path, index)
         except (OSError, ValueError):
             doc = {}
         recorded = list(doc.get("windows") or [])
@@ -308,7 +310,7 @@ def stream_events(fixture: Path | str, out_dir: Path | str, system: str = "agent
             "rail": rail(index, start, end, cards=cards, seen_authors=seen),
             # Cumulative, not per-window: "asked four times" is a fact about the audience, and
             # splitting it across three tiles turns one insistent question into three quiet ones.
-            "questions": stream_questions(index, so_far),
+            "questions": stream_questions(index, so_far, as_of_ms=end),
         }))
         seen.update(e.author for e in chat_in)
 
@@ -385,7 +387,7 @@ def _label_cache():
     global _LABEL_CACHE
     if _LABEL_CACHE is None:
         from ..cache import ResponseCache
-        _LABEL_CACHE = ResponseCache()
+        _LABEL_CACHE = ResponseCache(mode="replay")  # HTTP replay must never inherit a paid mode
     return _LABEL_CACHE
 
 
@@ -585,9 +587,85 @@ class ReplayHandler(BaseHTTPRequestHandler):
                 return
         emit("done", {"ok": True})
 
+    def _sessions(self, method):
+        from ..sessions import AdmissionError
+        manager = self.sessions
+        path = urlsplit(self.path)
+        try:
+            manager.authorize(self.headers.get("Authorization"), self.client_address[0])
+            parts = path.path.strip("/").split("/")
+            if method == "POST" and parts == ["api", "sessions"]:
+                try:
+                    size = int(self.headers.get("Content-Length", "0"))
+                except ValueError:
+                    raise AdmissionError("invalid_content_length", 400)
+                if not 0 < size <= 1024 or self.headers.get("Transfer-Encoding"):
+                    raise AdmissionError("invalid_request_body", 400)
+                try:
+                    body = json.loads(self.rfile.read(size))
+                    if not isinstance(body, dict) or set(body) - {"channel", "duration_seconds"}:
+                        raise ValueError()
+                    job = manager.start(body.get("channel"), self.client_address[0],
+                                        body.get("duration_seconds", 60))
+                except (ValueError, TypeError) as exc:
+                    if isinstance(exc, AdmissionError):
+                        raise
+                    raise AdmissionError("invalid_session_request", 400)
+                self._json(202, manager.snapshot(job))
+                return
+            if len(parts) not in (3, 4) or parts[:2] != ["api", "sessions"]:
+                raise AdmissionError("route_not_found", 404)
+            job = manager.get(parts[2])
+            if method == "DELETE" and len(parts) == 3:
+                job.cancel.set()
+                self._json(202, {"session_id": job.id, "cancellation_requested": True,
+                                 "state": job.state})
+            elif method == "GET" and len(parts) == 3:
+                self._json(200, manager.snapshot(job))
+            elif method == "GET" and len(parts) == 4 and parts[3] == "events":
+                try:
+                    after = int(parse_qs(path.query).get("after", [self.headers.get("Last-Event-ID", "0")])[0])
+                    if after < 0 or after > len(job.events):
+                        raise ValueError()
+                except ValueError:
+                    raise AdmissionError("invalid_event_cursor", 400)
+                self.send_response(200)
+                self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Connection", "close")
+                self.end_headers()
+                deadline = time.monotonic() + 25
+                while time.monotonic() < deadline:
+                    with job.lock:
+                        pending = list(job.events[after:])
+                    for event in pending:
+                        self.wfile.write((f"id: {event['seq']}\nevent: {event['type']}\n"
+                                          f"data: {json.dumps(event, ensure_ascii=False)}\n\n").encode())
+                        after = event["seq"]
+                    self.wfile.flush()
+                    if job.done.is_set() and after == len(job.events):
+                        break
+                    time.sleep(.05)
+            else:
+                raise AdmissionError("route_not_found", 404)
+        except AdmissionError as exc:
+            self._json(exc.status, {"schema_version": 1, "error": str(exc)})
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+
+    def do_POST(self):  # noqa: N802
+        self._sessions("POST")
+
+    def do_DELETE(self):  # noqa: N802
+        self._sessions("DELETE")
+
     def do_GET(self) -> None:  # noqa: N802 - http.server's naming
         route, _, query = self.path.partition("?")
         params = dict(p.split("=", 1) for p in query.split("&") if "=" in p)
+
+        if route.startswith("/api/sessions"):
+            self._sessions("GET")
+            return
 
         if route == "/api/budget":
             from ..live import budget_state
@@ -595,7 +673,8 @@ class ReplayHandler(BaseHTTPRequestHandler):
             return
 
         if route == "/api/live":
-            self._live(params)
+            self._json(410, {"error": "use_authenticated_session_api",
+                             "documentation": "docs/LIVE_DEMO_INTEGRATION.md"})
             return
 
         if route == "/api/live_chat":
@@ -666,14 +745,46 @@ class ReplayHandler(BaseHTTPRequestHandler):
             super().log_message(fmt, *args)
 
 
+class BoundedHTTPServer(ThreadingHTTPServer):
+    """Bound HTTP threads too; a public reverse proxy still needs connection/body limits."""
+    daemon_threads = True
+
+    def __init__(self, *args, **kwargs):
+        self._slots = threading.BoundedSemaphore(16)
+        super().__init__(*args, **kwargs)
+
+    def process_request(self, request, address):
+        request.settimeout(30)
+        if not self._slots.acquire(blocking=False):
+            self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request, address)
+        except Exception:
+            self._slots.release()
+            raise
+
+    def process_request_thread(self, request, address):
+        try:
+            super().process_request_thread(request, address)
+        finally:
+            self._slots.release()
+
+    def server_close(self):
+        self.RequestHandlerClass.sessions.close()
+        super().server_close()
+
+
 def make_server(fixture: Path | str, out_dir: Path | str, port: int,
-                host: str = "127.0.0.1", quiet: bool = False) -> ThreadingHTTPServer:
+                host: str = "127.0.0.1", quiet: bool = False, sessions=None) -> ThreadingHTTPServer:
+    from ..sessions import SessionManager
     handler = type("BoundReplayHandler", (ReplayHandler,),
-                   {"fixture": Path(fixture), "out_dir": Path(out_dir), "quiet": quiet})
+                   {"fixture": Path(fixture), "out_dir": Path(out_dir), "quiet": quiet,
+                    "sessions": sessions or SessionManager()})
     # ThreadingHTTPServer, not HTTPServer: an SSE connection is held open for the length of the
     # playback, and on a single-threaded server that would block every other request — the page
     # itself would never load while a stream was running.
-    return ThreadingHTTPServer((host, port), handler)
+    return BoundedHTTPServer((host, port), handler)
 
 
 def serve(fixture: Path | str, out_dir: Path | str, port: int = 8000,

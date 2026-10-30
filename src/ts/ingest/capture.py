@@ -99,7 +99,7 @@ def parse_privmsg(line: str) -> Optional[Dict[str, Any]]:
     }
 
 
-async def capture_chat(channel: str, out: Path, stop: asyncio.Event, salt: str) -> int:
+async def capture_chat(channel: str, out: Path, stop: asyncio.Event, salt: str, *, max_messages: int = 0) -> int:
     import websockets  # noqa: PLC0415
 
     n = 0
@@ -108,7 +108,7 @@ async def capture_chat(channel: str, out: Path, stop: asyncio.Event, salt: str) 
         while not stop.is_set():
             try:
                 nick = f"justinfan{random.randint(10_000, 99_999)}"
-                async with websockets.connect(TWITCH_WS) as ws:
+                async with websockets.connect(TWITCH_WS, max_size=65536, max_queue=4) as ws:
                     await ws.send("PASS SCHMOOPIIE")
                     await ws.send(f"NICK {nick}")
                     await ws.send("CAP REQ :twitch.tv/tags")
@@ -130,10 +130,12 @@ async def capture_chat(channel: str, out: Path, stop: asyncio.Event, salt: str) 
                             fh.write(json.dumps({
                                 "id": row["id"], "ts_ms": row["ts_ms"],
                                 "author": pseudonym(row["login"], salt),
-                                "text": row["text"], "user_type": row["user_type"],
+                                "text": row["text"][:1024] if max_messages else row["text"], "user_type": row["user_type"],
                             }, ensure_ascii=False) + "\n")
                             fh.flush()
                             n += 1
+                            if max_messages and n >= max_messages:
+                                return n
             except asyncio.TimeoutError:
                 continue
             except Exception as exc:  # noqa: BLE001
@@ -171,7 +173,8 @@ def stamp_frames(frames_dir: Path, start_ms: int, interval: int) -> int:
     return len(sequential)
 
 
-def capture_media(channel: str, root: Path, seconds: int, interval: int = 30) -> Dict[str, Any]:
+def capture_media(channel: str, root: Path, seconds: int, interval: int = 30, *,
+                  max_input_bytes: int = 0, max_frames: int = 0) -> Dict[str, Any]:
     """streamlink -> ffmpeg, producing audio.wav and frames/*.jpg in one pass."""
     frames_dir = root / "raw" / "frames"
     frames_dir.mkdir(parents=True, exist_ok=True)
@@ -195,7 +198,13 @@ def capture_media(channel: str, root: Path, seconds: int, interval: int = 30) ->
         "-map", "0:v:0", "-vf", f"fps=1/{interval},scale=-1:720", "-fps_mode", "vfr",
         str(frames_dir / "%06d.jpg"),
     ]
+    if max_frames:
+        audio_at = cmd.index(str(audio_path))
+        cmd[audio_at:audio_at] = ["-t", str(seconds), "-fs", "2000000"]
+        cmd[-1:-1] = ["-frames:v", str(max_frames)]
+        cmd[cmd.index("-vf") + 1] = f"fps=1/{interval},scale=720:720:force_original_aspect_ratio=decrease"
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    input_bytes = 0
 
     deadline = time.time() + seconds
     try:
@@ -205,6 +214,9 @@ def capture_media(channel: str, root: Path, seconds: int, interval: int = 30) ->
                     chunk = fd.read(8192)
                     if not chunk:
                         break
+                    input_bytes += len(chunk)
+                    if max_input_bytes and input_bytes > max_input_bytes:
+                        raise RuntimeError("capture_input_limit")
                     proc.stdin.write(chunk)
             except BrokenPipeError as exc:
                 proc.poll()
@@ -248,17 +260,32 @@ def capture_media(channel: str, root: Path, seconds: int, interval: int = 30) ->
 
 
 # --------------------------------------------------------------------------- driver
-async def capture(channel: str, minutes: int, out_dir: Path, interval: int = 30) -> Path:
+async def capture(channel: str, minutes: int, out_dir: Path, interval: int = 30, *,
+                  bounded: bool = False) -> Path:
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H%M")
     root = Path(out_dir) / f"{channel}_{stamp}"
     (root / "raw").mkdir(parents=True, exist_ok=True)
-    salt = _salt()
+    salt = secrets.token_hex(16) if bounded else _salt()
 
     stop = asyncio.Event()
-    chat_task = asyncio.create_task(capture_chat(channel, root / "raw" / "chat.jsonl", stop, salt))
-    media = await asyncio.to_thread(capture_media, channel, root, minutes * 60, interval)
-    stop.set()
-    n_chat = await chat_task
+    from ..live_limits import LIMITS
+    chat_kwargs = {"max_messages": LIMITS.max_chat} if bounded else {}
+    media_kwargs = {"max_input_bytes": LIMITS.max_input_bytes,
+                    "max_frames": LIMITS.max_frames} if bounded else {}
+    chat_task = asyncio.create_task(capture_chat(channel, root / "raw" / "chat.jsonl", stop, salt,
+                                                **chat_kwargs))
+    try:
+        media = await asyncio.to_thread(capture_media, channel, root, minutes * 60, interval, **media_kwargs)
+    finally:
+        stop.set()
+        chat_task.cancel()
+        try:
+            n_chat = await chat_task
+        except asyncio.CancelledError:
+            n_chat = 0  # Count persisted rows below; cancellation must not leak the IRC task.
+    chat_path = root / "raw" / "chat.jsonl"
+    if chat_path.exists():
+        n_chat = sum(1 for _ in chat_path.open(encoding="utf-8"))
 
     (root / "meta.json").write_text(json.dumps({
         "fixture_id": root.name, "channel": channel,

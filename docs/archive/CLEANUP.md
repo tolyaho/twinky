@@ -93,13 +93,13 @@ buys nothing; the repo is already `twinky`.
 | `docs/ARCHITECTURE.md` | rewrite against `photo_56`, marking each node built / partial / missing |
 | `CLAUDE.md` | drop the deadline, the rubric, the "never add a second agent" rule — that rule expires with the competition |
 | `RISKS.md` | keep the security and privacy entries (**#53, real logins in message text, is still open**), delete the submission-gate ones |
-| `COST_LEDGER.md` | keep the format, drop the $5 hackathon cap. Real numbers now: Kamil measured ≈$40/month per top streamer at 7s/message, optimisable 4–10× |
+| `COST_LEDGER.md` | keep the format, drop the $5 hackathon cap. Real numbers now: measured ≈$40/month per top streamer at 7s/message, optimisable 4–10× |
 | `PROGRESS.md`, `DECISIONS.md` | **archive, do not delete** — `docs/archive/`. 100 KB of real reasoning, including why embeddings were dropped and why the injected-candidates arm failed |
 
 ## 4 · Rewrite the notes from the chat, not from the rubric
 
 `notes/01-PRODUCT.md` currently leads with "the invariant" and a second thesis about Twitch
-deleting VODs. Replace with `PRODUCT_v2.md` §1–3: the thesis is Kamil's from **20 Sept, L254**,
+deleting VODs. Replace with `PRODUCT_v2.md` §1–3: the thesis from **20 Sept, L254**,
 the goal is the flywheel from **16 Jan, L1590**, and the product is four things — message reason,
 the board, the agent you talk to, and the poll read out of chat.
 
@@ -122,7 +122,7 @@ Do not touch any of this:
 - **`src/ts/ingest/`** — keyless capture, Deepgram, vision. This *is* the product's front door.
 - **`src/ts/workflow/reduce.py`** — the prefix + token grouper. It beats the embedding clustering
   that was measured and abandoned on 5 March (**L1646–1656**, ~100 clusters, poor accuracy).
-- **`src/ts/report/`** — the board, the questions panel, the rail. Kamil's табло from **L1422**,
+- **`src/ts/report/`** — the board, the questions panel, the rail. the табло from **L1422**,
   finally on screen.
 - **`src/ts/provenance.py`** — the gate, minus one rule; see §6.
 - **`tests/`** — 729 of them. They are why the next refactor is survivable.
@@ -134,10 +134,10 @@ Do not touch any of this:
 of all gate rejections** and the main reason the agent scores 0.500 against a trivial ablation's
 1.000.
 
-The product never had that rule. `photo_51` item 9 — Kamil hand-checking output on 4 Jan:
+The product never had that rule. `photo_51` item 9 — output hand-checked on 4 Jan:
 
-> `"100% ахаахахаха"` → *"Agreeing with another viewer's laughter"* + Quote `"хуй не взял"` —
-> **Корректно**
+> a laughing message → *"Agreeing with another viewer's laughter"*, quoting the other viewer's
+> message as the cause — marked **Корректно** (correct)
 
 Reacting to another viewer is a valid reason in the original taxonomy, and
 `reference/src/parsers/message_reasons/prompts/general.txt` is where that taxonomy is written

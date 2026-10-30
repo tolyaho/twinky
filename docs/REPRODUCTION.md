@@ -55,8 +55,8 @@ Both paths were verified to give a green suite. See `RISKS.md` #23. Do **not** c
 make test
 ```
 
-Measured 2026-09-02: **716 passed** in under a second. No network, no keys, no cached model
-responses needed — the suite fakes the provider everywhere a model would be called. The count
+Historical baseline: 716 collected tests. The current suite has **738 collected** tests.
+Measured candidate results and environment-specific skips are recorded in the implementation report. No network or keys are needed. The suite uses fake providers and committed cached responses. The count
 above is itself asserted by a test, so it cannot drift as tests are added.
 
 ## 4. Inspect a fixture
@@ -73,7 +73,7 @@ Prints event counts, span, and the reducer's compression ratio. No model call.
 make baseline FIXTURE=evals/fixtures/[NAME]
 ```
 
-Writes `evidence/raw-results/[NAME].baseline.json`. Runtime **~40 ms** on a 12-minute fixture.
+Writes `.runtime/replays/reaction-v2/[NAME].baseline.json`. Runtime **~40 ms** on a 12-minute fixture.
 Cost **$0.00** — every response comes from the cache.
 
 Add `make ablation FIXTURE=...` for the chat-only diagnostic. It is not the headline baseline.
@@ -84,8 +84,9 @@ Add `make ablation FIXTURE=...` for the chat-only diagnostic. It is not the head
 make replay FIXTURE=evals/fixtures/[NAME]
 ```
 
-Writes `evidence/raw-results/[NAME].agent.json` and a trajectory per window under
-`trajectories/product-agent/`. Runtime **~40 ms** on a 12-minute fixture. Cost **$0.00**.
+Writes `.runtime/replays/reaction-v2/[NAME].agent.json`. New or changed replay trajectories
+are stored separately under `.runtime/traces/replay/`; existing measured traces are preserved.
+No provider calls or measured model latency are claimed for replay.
 
 ## 7. Evaluation
 
@@ -187,30 +188,24 @@ All three are in `docs/IMPROVEMENT_CHANGELOG.md` as experiments that were built,
 fourth recorded system beside agent, baseline and ablation:
 
 ```bash
-TS_LLM_MODE=replay .venv/bin/python -m evals.run_eval --ablation --grounded --out evidence/grounded
+TS_LLM_MODE=replay .venv/bin/python -m evals.run_eval --ablation --grounded --out .runtime/grounded
 ```
 
-Expect **70 cache hits, 0 misses**. It writes to `evidence/grounded/`, never to `evidence/`, so
+Expect **70 cache hits, 0 misses**. It writes to `.runtime/grounded/`, never to `evidence/`, so
 the published table cannot move. Result: same recall, worse unsupported rate — it stopped
 abstaining entirely once it was handed candidates.
 
-**The H1 arm** — the agent's chat tool pointed at the shipped grouper instead of the exact-match
-reducer. Unlike the grounded arm it is not a fourth system in one run; it changes the agent's own
-prompt, so it ships as a patch and reverses cleanly:
+**The H1 arm** replays its historical prompt/grouping proposal without patching the main agent:
 
 ```bash
-git apply experiments/h1-group-chat.patch
-TS_LLM_MODE=replay TS_TRACE_DIR=/tmp/h1-traj \
-  .venv/bin/python -m evals.run_eval --ablation --out /tmp/h1
-git apply -R experiments/h1-group-chat.patch
+TS_LLM_MODE=replay .venv/bin/python -m evals.h1 --ablation --out .runtime/h1-reaction-v2
 ```
 
-Expect **46 cache hits, 0 misses**. `TS_TRACE_DIR` is not optional — trace ids derive from
-`(agent, case_id)` and are stable across runs, so without it this rewrites ten files in
-`trajectories/product-agent/` with the arm's content. The already-generated output is committed
-at `evidence/h1/`, with the arm's own trajectories at `trajectories/h1-arm/`. Result: trigger
-accuracy 0.500 → 0.000 and `E_CIRCULAR_EVIDENCE` 8 → 25 — handed groups it could describe, it
-named a message from the group as the cause of that same group.
+Expect **46 cache hits, 0 misses**. Under the current gate it rejects 5/25 cards (0.200).
+The preserved historical strict-v1 result in `evidence/h1/` rejects 25/25 (1.000). All raw cards
+are unchanged; both have trigger accuracy 0 and recall 2/11. These measurements use different
+gate definitions and must not be compared as model improvements. [Version audit](GATE_VERSIONS.md).
+Existing historical trajectories are never overwritten; changed replay traces use `.runtime/`.
 
 Both arm reports open with a **NOT THE SHIPPED RESULT** banner, written by the runner for any
 output directory that is not `evidence/`. The published comparison is `evidence/report.md` and
@@ -248,3 +243,11 @@ All eleven currently read `reviewed: false` — model-drafted, not human-confirm
 number scored against them inherits that. `evals/REVIEW_ME.md` is the ten-minute review, and
 `scripts/confirm_gold.py` records the outcome one case at a time. There is no way to confirm them
 all at once, on purpose.
+
+
+## Live session API
+
+[Live integration](LIVE_DEMO_INTEGRATION.md) describes the bounded worker, official Twitch status,
+authentication, status/SSE/cancel routes and startup. The offline API test runs the actual cached
+agent and gate on a recorded fixture; it does not validate real Twitch or paid provider egress.
+Frozen evidence and recorded latencies must remain byte-identical after evaluation/replay.

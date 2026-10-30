@@ -43,13 +43,16 @@ trade a documented limitation for a broken evaluation.
 
 So the honest claim is the narrow one: **authorship is pseudonymised; the public chat text is
 retained verbatim, mentions included**, as evaluation input and not as a redistributable dataset.
-`RISKS.md` #53 carries it. The same reasoning is why no raw frame is committed anywhere in this
-repository — see #52.
+`RISKS.md` #53 carries it. The same reasoning is why no raw frame is in the current tree. Four such frames remain in the
+git history, inside the image bank that the `micro1-submission` tag still points to — see #52.
 
 ## Rights
 
-Only self-recorded or explicitly permitted material. Three derived artifacts are committed per
-enriched fixture and this covers all three:
+The sources are **public third-party Twitch broadcasts**. They were not recorded by their
+broadcasters for this project, and no permission from a broadcaster or viewer is on record here.
+An earlier version of this section said "only self-recorded or explicitly permitted material";
+that was wrong (corrected 2026-10-29). What is committed is derived material kept as evaluation
+input, not a redistributable dataset. Three derived artifacts are committed per enriched fixture:
 
 - **`chat.jsonl`** — public chat text, retained verbatim as evaluation input with authorship
   pseudonymised. It is not redistributed as a dataset. The limit on what "pseudonymised" means is
@@ -60,11 +63,23 @@ enriched fixture and this covers all three:
 - **`frames.jsonl`** — model-written descriptions of what was on screen. **No raw image is
   committed** for any evaluated fixture.
 
+The same material is also quoted outside `evals/fixtures/`: the model-call cache (`cache/`) stores
+the prompts and the raw provider responses, including transcription responses, and
+`trajectories/` and `evidence/` quote chat, speech and captions from these fixtures. None of it
+is the author's to license, wherever it sits; the README's licence section says so.
+
 **The captions were checked rather than assumed**, because the overlay they describe is the same
 one that carries real logins in any raw captured frame (RISKS #52). Across **72 caption
-rows and 29,216 characters** there are **zero usernames and zero `@mentions`** — the vision model
-declines the chat pane in its own words: *"The chat is visible but not described."* A test holds
-that, because a re-enrichment with a different model could quietly change it.
+rows and 29,216 characters** there are **zero `@mentions`**, and the vision model declines to
+transcribe the chat pane, in its own words: *"The chat is visible but not described."*
+
+The captions are **not** free of usernames, though. **4 captions** in
+`stableronaldo_2026-08-30T0723/frames.jsonl` name the viewer who won a round of the on-screen word
+game (three distinct logins), read from the game overlay rather than from the chat pane. An
+earlier version of this file said "zero usernames"; that was wrong (corrected 2026-10-29). They
+are left as captured for the same reason as the mentions above: the fixtures are frozen, and
+editing a caption would change the prompts that quote it and with them the cache keys. A test
+holds both counts, because a re-enrichment with a different model could quietly change either.
 
 ## Case inventory
 

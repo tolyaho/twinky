@@ -53,13 +53,13 @@ enrich:
 
 # Everything below runs offline from cached model responses. NO KEYS REQUIRED.
 replay:
-	TS_LLM_MODE=replay $(PY) -m ts.cli replay --fixture $(FIXTURE) --out evidence/raw-results
+	TS_LLM_MODE=replay $(PY) -m ts.cli replay --fixture $(FIXTURE) --out .runtime/replays/reaction-v2
 
 baseline:
-	TS_LLM_MODE=replay $(PY) -m ts.cli baseline --fixture $(FIXTURE) --out evidence/raw-results
+	TS_LLM_MODE=replay $(PY) -m ts.cli baseline --fixture $(FIXTURE) --out .runtime/replays/reaction-v2
 
 ablation:
-	TS_LLM_MODE=replay $(PY) -m ts.cli baseline --fixture $(FIXTURE) --chat-only --out evidence/raw-results
+	TS_LLM_MODE=replay $(PY) -m ts.cli baseline --fixture $(FIXTURE) --chat-only --out .runtime/replays/reaction-v2
 
 # --ablation is included so this command reproduces the COMMITTED evidence/report.md exactly.
 # It was opt-in while recording, because each extra system was 11 more paid calls; on replay it
@@ -75,7 +75,7 @@ graph:
 
 # The post-stream artifact. No model call - it reorganises what `make replay` already verified.
 debrief:
-	$(PY) -m ts.cli debrief --fixture $(FIXTURE) --out evidence/raw-results
+	$(PY) -m ts.cli debrief --fixture $(FIXTURE) --out .runtime/replays/reaction-v2
 
 demo:
 	$(PY) -m ts.cli serve --fixture $(FIXTURE) --port 8000

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import io
 import json
 import sys
 from pathlib import Path
@@ -25,6 +26,7 @@ from typing import Any, Dict, List, Tuple
 from evals.scorer import CaseScore, aggregate, score_case
 from ts.baseline import single_prompt
 from ts.cache import CacheMiss, ResponseCache
+from ts.artifacts import write_text
 from ts.events import EventIndex
 from ts.ingest.replay import load_fixture, load_meta
 from ts.workflow.agent import AudienceSignalAgent
@@ -118,10 +120,11 @@ def write_outputs(scores: List[CaseScore], out: Path,
     out.mkdir(parents=True, exist_ok=True)
     rows = [s.to_row() for s in scores]
     if rows:
-        with (out / "comparison.csv").open("w", newline="", encoding="utf-8") as fh:
-            w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
-            w.writeheader()
-            w.writerows(rows)
+        fh = io.StringIO(newline="")
+        w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
+        w.writeheader()
+        w.writerows(rows)
+        write_text(out / "comparison.csv", fh.getvalue())
 
     systems = sorted({s.system for s in scores})
     lines = ["# Evaluation report", ""]
@@ -180,7 +183,7 @@ def write_outputs(scores: List[CaseScore], out: Path,
               "timing it would measure disk, not the model. Cost is tracked in `COST_LEDGER.md`.",
               "", "Every number above is reproduced by `make eval` from the committed",
               "model-response cache, with no API keys and zero cost.", ""]
-    (out / "report.md").write_text("\n".join(lines), encoding="utf-8")
+    write_text(out / "report.md", "\n".join(lines))
 
     # Machine-readable twin of the table above, for the dashboard. The dashboard must not
     # recompute a rate: `evals/scorer.py` owns every published metric, and a second
@@ -189,15 +192,14 @@ def write_outputs(scores: List[CaseScore], out: Path,
                "fixtures": {n: {"kind": f["kind"], "channel": f["channel"],
                                 "cases": len(f["cases"])} for n, f in sorted(fixtures.items())},
                "reportable": not unreportable}
-    (out / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    write_text(out / "summary.json", json.dumps(summary, indent=1))
 
 
 def write_predictions(predictions: List[Dict[str, Any]], out: Path) -> None:
     """Frozen protocol, item 4: persist raw predictions, gate decisions and the trace id for
     every case, including the failures."""
     out.mkdir(parents=True, exist_ok=True)
-    (out / "predictions.json").write_text(
-        json.dumps(predictions, ensure_ascii=False, indent=1), encoding="utf-8")
+    write_text(out / "predictions.json", json.dumps(predictions, ensure_ascii=False, indent=1))
 
 
 def main(argv=None) -> int:

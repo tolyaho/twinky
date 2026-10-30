@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "arm": "H1",
+  "kind": "rescore_same_frozen_cards",
+  "source_path": "evidence/h1/predictions.json",
+  "source_sha256": "0addddf15cc7da8fdec501f1c752dc317679a681798d3ce68ad2e1da93b48e54",
+  "gate_results": {
+    "strict-v1": {
+      "cards": 25,
+      "rejected": 25
+    },
+    "reaction-v2": {
+      "cards": 25,
+      "rejected": 5
+    }
+  },
+  "changed_decisions": 20,
+  "raw_card_changes": 0,
+  "trigger_accuracy": 0,
+  "gold_recall_hits": 2,
+  "gold_signals": 11,
+  "meaning": "mechanical gate changes, not semantic improvement"
+}

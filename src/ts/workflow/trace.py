@@ -35,7 +35,7 @@ def make_trace_id(agent: str, case_id: str) -> str:
     The trace id is copied onto every card and therefore into the result document that
     REPRODUCTION.md tells a judge to diff. A uuid4 made two replays of the same fixture differ
     in a file we publish as reproducible, and left an orphan trajectory behind on every run.
-    Re-running now overwrites the trajectory it replaces.
+    The identity is stable; writes preserve existing recordings.
     """
     return "trc_" + hashlib.sha256(f"{agent}|{case_id}".encode("utf-8")).hexdigest()[:8]
 
@@ -105,8 +105,23 @@ class Trace:
     def write(self) -> Path:
         self.out_dir.mkdir(parents=True, exist_ok=True)
         path = self.out_dir / f"{self.case_id}_{self.trace_id}.json"
-        path.write_text(json.dumps({
+        body = json.dumps({
             "trace_id": self.trace_id, "agent": self.agent, "case_id": self.case_id,
             "meta": self.meta, "duration_ms": self._elapsed_ms(), "steps": self.steps,
-        }, ensure_ascii=False, indent=1), encoding="utf-8")
+        }, ensure_ascii=False, indent=1)
+        if (not path.exists() and not self._timed and self.out_dir == Path(DEFAULT_TRACE_DIR)):
+            path = Path(".runtime/traces/replay") / path.name
+            path.parent.mkdir(parents=True, exist_ok=True)
+        if path.exists():
+            if path.read_text(encoding="utf-8") == body:
+                return path
+            # Never replace a recorded run (including its measured latencies) with replay.
+            # A content-addressed derived trace is deterministic and cannot collide with it.
+            digest = hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
+            target = Path(".runtime/traces/replay" if not self._timed else ".runtime/traces/record")
+            path = target / f"{self.case_id}_{self.trace_id}_{digest}.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+        if not path.exists():
+            with path.open("x", encoding="utf-8") as fh:
+                fh.write(body)
         return path

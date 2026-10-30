@@ -2,7 +2,7 @@
 
 What was used to build this. The window below opened **28 Aug 2026 15:00 UTC**; it is the
 boundary every measured claim in `docs/IMPROVEMENT_CHANGELOG.md` is anchored to. The earlier
-three-person implementation is preserved under `reference/`.
+implementation (Sept 2025 – Mar 2026) is preserved under `reference/`.
 
 ## Tools
 
@@ -10,7 +10,7 @@ three-person implementation is preserved under `reference/`.
 |---|---|---|
 | Claude Code (CLI) | 2.1.246 | The whole in-window build: implementation, tests, docs, and the review that found the defects listed below. Verified with `claude --version`. |
 | Claude Opus 5 (1M context) | `claude-opus-5[1m]` | The model behind those Claude Code sessions. |
-| Tooling used before 28 Aug 2026 | `[TBD]` | Not known to the in-window sessions. The original three-person project ran Sept 2025 – Mar 2026; the author must fill this in. |
+| Tooling used before 28 Aug 2026 | `[TBD]` | Not known to the in-window sessions. The original project ran Sept 2025 – Mar 2026; the author must fill this in. |
 
 No coding agent was given credentials, network write access, or permission to push. Nothing in
 this repository was committed or published by an agent.
@@ -129,5 +129,8 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 | Iterations logged | 120 |
 | Decisions recorded with rationale | 513 |
 | Risks tracked | 52 |
-| Tests | 716 |
+| Tests | 738 |
 | Total spend on model calls | $0.44 |
+
+The local correctness/live-boundary engineering pass is also AI-assisted; see the implementation
+report for its tests and limitations. No AI-agent coauthor trailer is added automatically.

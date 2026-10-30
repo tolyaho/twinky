@@ -38,7 +38,7 @@
 
   <section>
     <span class="eyebrow">01 — the claim</span>
-    <h2 class="display sub">Grounding is retrieval and proof, not summarization</h2>
+    <h2 class="display sub">Grounding needs inspectable evidence</h2>
     <p class="lede">
       A language model will happily summarise a thousand chat messages. It will also happily tell
       you what caused them, and it has no way to know. The difficulty is not producing a fluent
@@ -50,7 +50,7 @@
       So the unit here is not a summary. It is a card that names a cause, quotes it verbatim, and
       cites the messages it is standing on — and a deterministic gate that throws the card away
       when any of that fails to check out. The gate is not a safety net bolted on afterwards. It
-      is the product.
+      checks citations and time, not semantic causality. Passing cards remain hypotheses.
     </p>
   </section>
 
@@ -72,8 +72,9 @@
       Two things follow, and neither is convenient. An unsupported-card rate <em>cannot be read
       alone</em> — it is minimised by saying nothing, so it belongs beside recall, where the
       ablation's single matched card tells the rest of the story. And the shape of the problem is
-      exactly this trade: the agent is the only system here that ever named a correct cause, and
-      it paid for that by being wrong more often. Moving recall without buying it in unsupported
+      exactly this trade: the agent attempts causes where the ablation abstains and finds more of
+      the gold signals, and it pays for that by being wrong more often. In this run no system named
+      the correct speech or screen cause. Moving recall without buying it in unsupported
       claims is the whole game. This run says we have not won it.
     </p>
   </section>

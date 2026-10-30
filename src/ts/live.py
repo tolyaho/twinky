@@ -5,16 +5,10 @@ because a judge reproduces this submission with no API keys and that property is
 reproducibility claim. Live exists to show the pipeline is not replay-only; it is reached by an
 explicit action and never by loading a page.
 
-Three guards, and they are the reason this file exists rather than a loop inlined in the server:
-
-  1. It refuses to start when `COST_LEDGER.md` is already past the live cap. Money is spent per
-     window, so the check has to happen before the first one, not after.
-  2. It stops itself after ten minutes. An unattended demo that keeps enriching is a bill.
-  3. It reports spend as it goes, so the number on screen is the number in the ledger.
-
-The lag is real and stated: a 60-second window cannot be analysed until it has finished, and
-enrichment plus the agent add to that. Roughly 90-120 seconds behind. Claiming "live" without
-saying that would be the dishonest part.
+Historical operator-only helper. Its ledger and $3 / 600-second checks are estimates, not a
+billing reservation or an absolute deadline. This helper is not reachable through the paid HTTP
+route; the first-class API uses sessions.py/live_worker.py with process isolation and quotas.
+See docs/LIVE_DEMO_INTEGRATION.md for enforced limits and remaining beta infrastructure.
 """
 from __future__ import annotations
 
@@ -33,8 +27,7 @@ from .ingest.replay import load_fixture
 from .provenance import apply_gate
 from .workflow.agent import AudienceSignalAgent
 
-# Spending stops here, well under the project's $5.00 hard cap, so an unattended demo cannot
-# consume the budget the recorded evaluation depends on.
+# Historical estimated spend threshold; does not guarantee provider billing stops here.
 LIVE_COST_CAP_USD = 3.00
 LIVE_MAX_SECONDS = 600
 WINDOW_SECONDS = 60
@@ -62,6 +55,7 @@ def budget_state(ledger: Path | str = Path("COST_LEDGER.md")) -> Dict[str, Any]:
         "cap_usd": LIVE_COST_CAP_USD,
         "remaining_usd": round(max(0.0, LIVE_COST_CAP_USD - spent), 4),
         "allowed": spent < LIVE_COST_CAP_USD,
+        "estimate_only": True, "billing_guarantee": False,
     }
 
 

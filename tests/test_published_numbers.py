@@ -189,8 +189,8 @@ def _agent_trigger_sources(predictions: Path):
     return counts, codes
 
 
-def test_the_h1_arm_reproduces_from_the_committed_cache():
-    """A removed experiment nobody can re-run is an assertion. This one runs with no key."""
+def test_historical_h1_summary_uses_the_strict_v1_gate():
+    """Frozen historical summary. Actual cache reproduction is tested separately."""
     assert (H1 / "summary.json").is_file(), "evidence/h1/ is missing; regenerate it"
     shipped = json.loads(SUMMARY.read_text(encoding="utf-8"))["systems"]["agent"]
     h1 = json.loads((H1 / "summary.json").read_text(encoding="utf-8"))["systems"]["agent"]

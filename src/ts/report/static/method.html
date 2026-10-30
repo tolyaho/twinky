@@ -88,7 +88,7 @@
 
     <div class="segmented" role="tablist" aria-label="Card outcome">
       <button role="tab" class="seg is-active" data-seg="grounded" aria-selected="true">
-        Grounded <span class="seg-n" id="n-grounded">0</span>
+        Citation checks <span class="seg-n" id="n-grounded">0</span>
       </button>
       <button role="tab" class="seg" data-seg="abstained" aria-selected="false">
         Abstained <span class="seg-n" id="n-abstained">0</span>
@@ -129,7 +129,7 @@
     <figure class="graph">
       <img src="/static/agent-graph.svg" alt="One window becomes a card: sources and reduce are
         deterministic, the model picks tools and writes card JSON, and a deterministic provenance
-        gate with eight card checks and two abstention checks decides what is verified and what is
+        gate with eight card checks and two abstention checks checks citations and time; it does not prove causal meaning. Cards are passed or
         rejected." width="980" height="448">
       <figcaption>
         The two dashed boxes are the only places a model is involved. Everything else is
@@ -156,9 +156,10 @@
       <th>unmatched</th><th>unsupported</th><th>recall</th>
     </tr></thead><tbody id="scores-body"></tbody></table>
     <p class="note">
-      The agent wins grounding and loses restraint: it doubles the baseline’s recall and is the
-      only system that names a correct cause, and its unsupported-card rate is the worst of the
-      three. Both halves are reported and neither prompt was edited after the numbers were seen.
+      The agent wins recall and loses restraint: it finds twice the baseline’s gold signals, but
+      no system names a correct speech or screen cause, and its unsupported-card rate only edges
+      the baseline’s while it loses the headline metric to the chat-only ablation. Both halves are
+      reported and neither prompt was edited after the numbers were seen.
       The chat-only ablation’s trigger accuracy rests on a single matched card, which is why
       <em>unmatched</em> is printed beside it.
     </p>

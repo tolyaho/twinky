@@ -162,7 +162,7 @@ def test_the_grounded_arm_reproduces_from_the_committed_cache():
     import subprocess
     import sys
 
-    env = {"PATH": "/usr/bin:/bin", "TS_LLM_MODE": "replay", "HOME": "/tmp"}
+    env = {"PATH": "/usr/bin:/bin", "TS_LLM_MODE": "replay", "HOME": "/tmp", "PYTHONPATH": str(ROOT / "src")}
     done = subprocess.run(
         [sys.executable, "-m", "evals.run_eval", "--ablation", "--grounded",
          "--cases", "c07_frame_only_dracorex", "--out", "/tmp/ts_grounded_check"],

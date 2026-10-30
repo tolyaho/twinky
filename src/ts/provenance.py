@@ -20,6 +20,9 @@ UNKNOWN = "unknown"
 NONE = "none"   # the explicit "no signal in this window" card
 REACTION = "reaction"   # the one card type that may be triggered by another viewer
 CHAT_MESSAGE = "chat_message"   # the only event type that can serve as evidence
+GATE_V1 = "strict-v1"
+GATE_V2 = "reaction-v2"
+CURRENT_GATE = GATE_V2
 
 
 def normalize(text: str) -> str:
@@ -73,7 +76,8 @@ def check_abstention(card: Dict[str, Any]) -> GateResult:
     return GateResult(ok=not v, violations=v)
 
 
-def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: float = 0.6) -> GateResult:
+def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: float = 0.6,
+               version: str = CURRENT_GATE) -> GateResult:
     """Validate one signal card against the event index.
 
     A `none` card takes the abstention path above; it asserts nothing, so the checks below do
@@ -92,6 +96,8 @@ def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: floa
       E_TRIGGER_LATE     the trigger occurs after the messages it supposedly caused
       E_QUOTE_MISMATCH   the quoted trigger text is not present in that event's text
     """
+    if version not in (GATE_V1, GATE_V2):
+        raise ValueError(f"unknown provenance gate: {version}")
     if card.get("type") == NONE:
         return check_abstention(card)
 
@@ -131,7 +137,8 @@ def check_card(card: Dict[str, Any], index: EventIndex, *, min_quote_ratio: floa
 
     if tid and tid != UNKNOWN:
         tev = index.get(tid)
-        if tid in evidence and not _is_reaction_to_another_viewer(card, tid, evidence, tev, index):
+        if tid in evidence and (version == GATE_V1 or not
+                               _is_reaction_to_another_viewer(card, tid, evidence, tev, index)):
             v.append(Violation("E_CIRCULAR_EVIDENCE",
                                f"{tid} is cited as evidence for the signal it supposedly caused"))
         if tev is None:
@@ -204,12 +211,13 @@ def _token_overlap(a: str, b: str) -> float:
     return sum(1 for t in ta if t in tb) / len(ta)
 
 
-def apply_gate(cards: List[Dict[str, Any]], index: EventIndex) -> Dict[str, Any]:
+def apply_gate(cards: List[Dict[str, Any]], index: EventIndex, *,
+               version: str = CURRENT_GATE) -> Dict[str, Any]:
     """Partition cards into verified and rejected. Rejected cards are kept, not deleted -
     they are the evidence behind metric B and belong in the trace."""
     verified, rejected = [], []
     for card in cards:
-        res = check_card(card, index)
+        res = check_card(card, index, version=version)
         record = dict(card)
         record["gate"] = {"ok": res.ok, "violations": [asdict(vv) for vv in res.violations]}
         if res.ok:

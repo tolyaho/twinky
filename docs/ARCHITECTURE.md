@@ -62,7 +62,7 @@ live session with no key at all.
 
    the same grouping, live       ✔ live_chat.py         Tier 0: anonymous IRC, no key, no model,
                                                         no cost — and no cause, and it says so
-   the full pipeline, live       ✔ live.py              paid, capped, time-limited, temp cache
+   the full pipeline, live       ✔ live.py              historical operator helper; estimated thresholds
 ```
 
 Cutting across all of it:
@@ -78,7 +78,7 @@ Cutting across all of it:
 
 ## The target design, node by node
 
-The team drew an orchestrator design in March 2026. It is the intended second version of a
+I drew an orchestrator design in March 2026. It is the intended second version of a
 conversational agent that **already ran once** — a LangChain/LangGraph/Chroma build with an
 ingest process beside the chat parser, top-k retrieval per query and a 30-minute memory window.
 This is the map the project is still working against, with each node marked against the tree.
@@ -128,3 +128,24 @@ reproducible and a fresh clone has no API keys.
 | Deterministic reducer | Per-message inference was too slow and too expensive at scale (Jan, Mar 2026) |
 | Provenance gate + abstention | Cards attaching to nothing, in the team's own testing 4 Jan 2026 |
 | Replay + response cache | Live streams are not reproducible, and a claim nobody can re-run for free stops being checkable |
+
+
+## Current-gate projection and live session boundary
+
+`src/ts/report/results.py` reads frozen cards and projects `reaction-v2` verdicts in memory, including
+source SHA-256. It never edits recorded results or measured traces. `src/ts/workflow/trace.py` keeps
+conflicting replay traces separately under `.runtime/`. `evals/h1.py` reproduces the H1 prompt
+and grouping arm without modifying the shipped agent. See [gate versions](GATE_VERSIONS.md).
+
+`src/ts/sessions.py` adds the authenticated session state machine and bounded process worker;
+`src/ts/twitch.py` resolves usernames and status with official Helix users/streams endpoints.
+`src/ts/live_worker.py` calls the existing capture/enrichment, EventIndex, AudienceSignalAgent and
+provenance gate. `src/ts/live_limits.py` reserves calls/volume before work. These are the same core
+contracts as replay; the worker emits concise progress and tool summaries, not hidden reasoning.
+
+The HTTP server remains local by default, with 16 concurrent handler slots. The new live API
+is opt-in, restricted to configured IPs and a backend bearer token. The old unauthenticated
+`/api/live` returns a migration error rather than bypassing admission controls. Tier 0 chat
+remains an operator experiment. No future public website or deployment is included here.
+Exact API, limits, cancellation, remaining infrastructure requirements and validation status:
+[LIVE_DEMO_INTEGRATION.md](LIVE_DEMO_INTEGRATION.md).

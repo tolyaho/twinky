@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 # every import and every documented command and buy nothing.
 name = "twinky"
 version = "0.1.0"
-description = "Turns an unreadable live chat into a small number of verified audience signals, each linked to the stream moment that caused it."
+description = "Multimodal Twitch audience-signal prototype with cited hypotheses, replay and bounded live sessions."
 requires-python = ">=3.10"
 
 # Runtime dependencies deliberately live in requirements.txt, not here: they are pinned exactly,

@@ -249,7 +249,9 @@ def test_the_editorial_copy_states_the_result_that_counts_against_the_product():
     html = " ".join((METHOD_HTML).read_text(encoding="utf-8").split())
 
     assert "loses restraint" in html
-    assert "unsupported-card rate is the worst of the three" in html
+    # It was "the worst of the three" until the 2 Sep gate change put it at 0.609 against the
+    # baseline's 0.619; the claim that counts against the product is now the ablation's win.
+    assert "loses the headline metric to the chat-only ablation" in html
     assert "single matched card" in html
 
 
@@ -559,7 +561,7 @@ def test_the_name_is_treated_identically_everywhere():
         assert "<title>Twinky —" in html
         assert '<span class="mark-name">Twinky</span>' in html
     assert readme.startswith("# Twinky")
-    assert "Twinky turns an unreadable live chat" in readme
+    assert "Twitch chat" in readme and "hypotheses" in readme
 
 
 def test_the_bare_name_never_stands_alone_without_saying_what_it_is():
@@ -567,8 +569,8 @@ def test_the_bare_name_never_stands_alone_without_saying_what_it_is():
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     html = (STATIC / "index.html").read_text(encoding="utf-8")
 
-    assert readme.splitlines()[0] == "# Twinky — grounded audience signals from Twitch"
-    assert 'aria-label="Twinky — grounded audience signals from Twitch"' in html
+    assert readme.splitlines()[0].startswith("# Twinky —") and "Twitch" in readme.splitlines()[0]
+    assert 'aria-label="Twinky — audience signals from Twitch"' in html
 
 
 def test_the_old_name_survives_only_where_it_is_history():
@@ -732,7 +734,7 @@ def test_the_server_threads_so_a_stream_cannot_block_the_page():
     page itself would never load while one was running."""
     serve = (REPO_ROOT / "src" / "ts" / "report" / "serve.py").read_text(encoding="utf-8")
 
-    assert "ThreadingHTTPServer((host, port), handler)" in serve
+    assert issubclass(serve_mod.BoundedHTTPServer, serve_mod.ThreadingHTTPServer)
     assert "would block every other request" in serve
 
 
@@ -900,7 +902,7 @@ def test_the_signals_header_counts_what_it_shows():
     assert ">Signals " in html and "Grounded signals" not in html
     assert 'id="sig-split"' in html
     assert "(state.counts.grounded || 0) + (state.counts.abstained || 0)" in js
-    assert "grounded · ${state.counts.abstained" in js
+    assert "linked hypotheses · ${state.counts.abstained" in js
 
 
 def test_a_run_that_grounds_nothing_says_so_in_place():
@@ -1807,8 +1809,8 @@ def test_the_site_stays_navigable_when_the_window_narrows():
 
 def test_the_baseline_offer_in_the_finding_line_is_not_empty():
     """The finding line invites the reader to "see the baseline on this window". That is only
-    worth offering if the baseline shows something the agent does not — and it does: the agent
-    grounds nothing on any recorded fixture while the baseline grounds cards on all three."""
+    worth offering when both arms use the current gate. A passing citation check does not prove
+    the title or causal claim correct."""
     import collections
 
     for fixture in ("stableronaldo_2026-08-30T0723", "marlon_2026-08-30T0715",
@@ -1822,7 +1824,9 @@ def test_the_baseline_offer_in_the_finding_line_is_not_empty():
                     state[event["state"]] += 1
             counts[system] = state
 
-        assert counts["agent"]["grounded"] == 0, f"{fixture}: the agent now grounds something"
+        assert counts["agent"]["grounded"] == {"stableronaldo_2026-08-30T0723": 5,
+                                                 "marlon_2026-08-30T0715": 5,
+                                                 "yugi_2026-08-30T0723": 3}[fixture]
         assert counts["baseline"]["grounded"] > 0, \
             f"{fixture}: the baseline grounds nothing, so the offer leads nowhere"
 
