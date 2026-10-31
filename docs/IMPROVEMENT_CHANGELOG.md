@@ -390,3 +390,37 @@ logged in `COST_LEDGER.md`. Cheaper than experiment #2's $0.0122, which is the 0
 showing up on the invoice. Baseline and `ablation_chat_only` were untouched: verified before the
 run with 22 replay hits and 0 misses, and confirmed after by both reproducing their published
 figures — 0.000 and 1.000 trigger accuracy — exactly.
+
+## 2026-10-31 — the grouper, live and public, in the browser (`web/`)
+
+**What changed.** Tier 0 — real chat, `group_chat`, no model — now runs as a public web page. The
+browser opens the anonymous IRC socket itself and runs a TypeScript port of `canonical`,
+`group_chat`, `grouped_summary` and the chat-only half of `rail`. Nothing under `src/ts`, `evals/`
+or the fixtures was modified, and the old `/api/live` path is not part of the page at all.
+
+**Why the port is the same algorithm and not a lookalike.** `web/scripts/gen_parity.py` drives the
+unmodified Python over a Twitch-shaped corpus, fourteen IRC line shapes and the first 500 rows of
+`stableronaldo_2026-08-30T0723`, and `npm test` asserts the TypeScript reproduces every output
+exactly — 105 grouping/canonical vectors plus the parser. The first run disagreed on one group of
+that real slice: the event ids inside `drac…` came out in a different order. The cause was the
+harness, not the port: it had fed `group_chat` file order, while every call site in the product
+feeds it `EventIndex.window` order, and the capture has small timestamp inversions. The vectors
+now use window order.
+
+**A finding about anonymous IRC.** With `CAP REQ :twitch.tv/commands`, Twitch answers a JOIN to a
+channel that exists — live or offline — with `ROOMSTATE` and `366`, and answers a JOIN to an
+invented name with nothing. That gives a credential-free "not found" state. Without it the page
+sat on "Connecting" forever for a typo. Observed on 2026-10-31 against xqc, kaicenat (offline at
+the time) and two invented names, and re-checked through the deployed page by `npm run e2e:live`.
+Live versus offline is still not knowable from IRC; the optional `web/api/twitch-status.ts` reads
+it from Helix when a Twitch app is configured, and the page says "connected / quiet" when not.
+
+**What the page refuses to do.** "Live chat" appears only while messages arrive. The recorded
+replay is labelled on every surface and is never a fallback for a failed connection. Cluster counts
+are the rule's counts; distinct chatters per cluster are counted from the same event ids. When the
+browser's buffer cap evicts messages that are still inside the window, the board says the window
+is sampled instead of reporting a smaller number as if it were whole.
+
+**Kept.** It is the first surface where someone who has never seen the repository can watch the
+grouper work on a channel of their choosing. Network observations here are dated rather than
+reproduced, because whether a channel is busy is not something a command can replay.

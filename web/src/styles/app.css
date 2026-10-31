@@ -557,7 +557,8 @@
 .board-head {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
+  gap: 12px;
   margin-bottom: 14px;
 }
 .board-title {
@@ -735,6 +736,102 @@
   max-width: 38ch;
   margin: 0;
   line-height: 1.5;
+}
+
+/* window selector, people count, sampling note */
+.seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--hairline-on-dark);
+  border-radius: var(--r-pill);
+  flex: none;
+}
+.seg-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted-on-dark);
+  font-size: 12px;
+  font-weight: 500;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+}
+.seg-btn:hover {
+  color: var(--ink-on-dark);
+}
+.seg-on {
+  background: var(--ink-on-dark);
+  color: var(--surface-dark);
+}
+.seg-on:hover {
+  color: var(--surface-dark);
+}
+.cluster-people {
+  font-size: 12px;
+  color: var(--muted-on-dark);
+  margin-left: auto;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.sampled-note {
+  color: #e6bd6e;
+}
+
+/* chat pause */
+.feed-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 0;
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--hairline-on-dark);
+  color: var(--body-on-dark);
+  border-radius: var(--r-pill);
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn-ghost:hover,
+.btn-ghost[aria-pressed="true"] {
+  border-color: var(--muted-on-dark);
+  color: var(--ink-on-dark);
+}
+.feed-behind {
+  font-size: 12px;
+  color: var(--muted-on-dark);
+}
+
+.btn-light {
+  margin-top: 18px;
+  background: var(--ink-on-dark);
+  color: var(--surface-dark);
+  border: none;
+  border-radius: var(--r-pill);
+  height: 38px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-light:hover {
+  background: #fff;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---- pulse ---------------------------------------------------------------------------------- */
@@ -947,5 +1044,36 @@
   }
   .btn-primary {
     width: 100%;
+  }
+}
+
+/* A narrow board (phones, and the two-column tablet layout) must never trade the cluster's label
+   for its metadata: the label takes its own line, chip and people count wrap beneath it. */
+.zone-board {
+  container-type: inline-size;
+}
+@container (max-width: 520px) {
+  .cluster {
+    grid-template-columns: 52px 1fr;
+    gap: 10px;
+    padding: 12px 13px 14px;
+  }
+  .cluster-n {
+    font-size: 28px;
+  }
+  .cluster-label-row {
+    flex-wrap: wrap;
+    row-gap: 3px;
+  }
+  .cluster-label {
+    flex: 1 1 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .cluster-people {
+    margin-left: 0;
+  }
+  .board-title {
+    font-size: 21px;
   }
 }

@@ -42,9 +42,10 @@ npm run dev            # http://localhost:5173 — enter a live channel
 ## Test
 
 ```bash
-npm test               # 160 unit tests: clustering parity, IRC lifecycle, engine, parsing
-npm run e2e            # Playwright: synthetic-stream UI flows + screenshots (deterministic)
-LIVE_CHANNEL=xqc npm run e2e:live   # real-network smoke against an actually-live channel
+npm test               # 169 unit tests: clustering parity, IRC lifecycle, engine, parsing
+npm run e2e            # 8 Playwright flows on a synthetic stream (deterministic, no network)
+LIVE_CHANNEL=xqc npm run e2e:live   # 3 real-network checks: live chat, not-found, no false not-found
+PW_BASE_URL=https://… npm run e2e:live   # same, against a deployed URL
 npm run typecheck      # frontend + serverless function
 npm run gen:parity     # regenerate golden vectors from the untouched Python (needs python3)
 ```
@@ -83,6 +84,11 @@ any Twinky server — the only outbound connection is to Twitch. Message **text*
 - A green "Live chat" badge appears only while messages are actually arriving. Anonymous IRC
   cannot tell a live channel from an offline one, so the UI says **Connected / Quiet**, never
   "the stream is live", unless the optional Helix check confirms it.
+- **Not found needs no credentials.** With the `twitch.tv/commands` capability Twitch answers a
+  JOIN to an existing channel (live or offline) with `ROOMSTATE`; an invented name gets no answer,
+  so after 8 s the page says *Not found* instead of spinning forever.
+- If a very busy chat outruns the 20,000-message buffer while the 5-minute window is selected,
+  the board says the window is **sampled** rather than presenting a partial count as whole.
 - **Replay** (a recorded, pseudonymised capture replaying faster than real time) is always labelled
   REPLAY and is never a silent fallback for a failed live connection — the visitor chooses it.
 - Counts are real: every cluster's count equals its underlying messages; a message joins exactly
@@ -90,8 +96,8 @@ any Twinky server — the only outbound connection is to Twitch. Message **text*
 
 ## Limitations
 
-- Arbitrary-channel chat works without configuration; **authoritative live/offline/not-found**
-  needs the optional Twitch app credentials above.
+- Arbitrary-channel chat and *not found* work without configuration; telling **live from
+  offline** needs the optional Twitch app credentials above.
 - Chat liveness depends on who is broadcasting right now; a quiet or offline channel shows the
   honest quiet/empty states rather than inventing activity.
 - This Tier-0 demo does **not** do speech/vision/causal attribution (the research pipeline does,

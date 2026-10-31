@@ -89,6 +89,10 @@ test("mobile: tabs switch between clusters, chat, pulse", async ({ page }) => {
   await page.getByRole("button", { name: "Watch live" }).click();
   await expect(page.locator(".ws-channel-name")).toHaveText("#xqc");
   await expect(page.getByRole("tab", { name: "Clusters" })).toBeVisible();
+  await expect.poll(async () => page.locator(".cluster").count(), { timeout: 10_000 }).toBeGreaterThan(1);
+  // nothing in the workspace may overflow sideways on a phone
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
   await page.screenshot({ path: "screenshots/mobile-clusters.png", fullPage: false });
   await page.getByRole("tab", { name: "Chat" }).click();
   await expect(page.locator(".zone-chat")).toBeVisible();
@@ -124,4 +128,43 @@ test("landing: desktop screenshot", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".hero-title")).toBeVisible();
   await page.screenshot({ path: "screenshots/desktop-landing.png", fullPage: true });
+});
+
+test("nonexistent channel: no JOIN acknowledgement shows Not found, not an endless spinner", async ({ page }) => {
+  await page.routeWebSocket(/irc-ws\.chat\.twitch\.tv/, (ws) => {
+    ws.onMessage(() => {
+      /* Twitch sends nothing back for a channel that doesn't exist */
+    });
+  });
+  await page.goto("/");
+  await page.getByPlaceholder("enter a twitch channel").fill("zzqqnotarealchannel9871");
+  await page.getByRole("button", { name: "Watch live" }).click();
+  await expect(page.locator(".badge")).toContainText("Not found", { timeout: 15_000 });
+  await expect(page.locator(".board-empty-title")).toHaveText("No such channel");
+  await expect(page.locator(".feed-empty")).toContainText("wasn't found");
+  await expect(page.getByRole("button", { name: /Pause/ })).toHaveCount(0);
+  await page.screenshot({ path: "screenshots/desktop-notfound.png" });
+  await page.getByRole("button", { name: "Try another channel" }).click();
+  await expect(page.getByPlaceholder("channel…")).toBeFocused();
+});
+
+test("window selector recounts and relabels; pause freezes the feed", async ({ page }) => {
+  await scriptTwitch(page);
+  await page.goto("/");
+  await page.getByPlaceholder("enter a twitch channel").fill("xqc");
+  await page.getByRole("button", { name: "Watch live" }).click();
+  await expect.poll(async () => page.locator(".cluster").count(), { timeout: 10_000 }).toBeGreaterThan(0);
+
+  await page.getByRole("radio", { name: "5m" }).click();
+  await expect(page.getByRole("radio", { name: "5m" })).toHaveAttribute("aria-checked", "true");
+  await expect(page.locator(".board-sub")).toContainText("5 minutes");
+  await expect(page.locator(".pulse-sub")).toContainText("5 minutes");
+  await expect(page.locator(".cluster-people").first()).toContainText(/\d+ (person|people)/);
+
+  await page.getByRole("button", { name: /Pause/ }).click();
+  const frozen = await page.locator(".msg").count();
+  await page.waitForTimeout(800);
+  expect(await page.locator(".msg").count()).toBe(frozen);
+  await page.getByRole("button", { name: /Resume/ }).click();
+  await page.screenshot({ path: "screenshots/desktop-5m.png" });
 });

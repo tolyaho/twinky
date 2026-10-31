@@ -1,9 +1,10 @@
 import type { TickSnapshot } from "../engine/session";
 import { Sparkline } from "./Sparkline";
-import { compact, pct, perMinute } from "./format";
+import { compact, pct, perMinute, windowLong, windowShort } from "./format";
 
 interface Props {
   tick: TickSnapshot | null;
+  windowMs: number;
 }
 
 function Stat({ value, label, sub }: { value: string; label: string; sub?: string }) {
@@ -16,7 +17,7 @@ function Stat({ value, label, sub }: { value: string; label: string; sub?: strin
   );
 }
 
-export function Pulse({ tick }: Props) {
+export function Pulse({ tick, windowMs }: Props) {
   const p = tick?.pulse;
   const windowMsgs = p?.composition.messages ?? 0;
   const grouped = p ? p.composition.messages - p.composition.singletons : 0;
@@ -25,14 +26,14 @@ export function Pulse({ tick }: Props) {
   return (
     <section className="pulse" aria-label="Live statistics">
       <h2 className="pulse-title">Live pulse</h2>
-      <p className="pulse-sub">Measured over the last 60 seconds.</p>
+      <p className="pulse-sub">Measured over the last {windowLong(windowMs)}.</p>
 
       <div className="stat-grid">
-        <Stat value={compact(perMinute(windowMsgs, 60_000))} label="msgs / min" />
+        <Stat value={compact(perMinute(windowMsgs, windowMs))} label="msgs / min" />
         <Stat value={p ? String(p.peak_per_second) : "0"} label="peak / sec" />
         <Stat
           value={compact(p?.unique_chatters ?? 0)}
-          label="chatters (60s)"
+          label={`chatters (${windowShort(windowMs)})`}
           sub={p?.new_chatters ? `+${compact(p.new_chatters)} new` : undefined}
         />
         <Stat value={pct(clustered)} label="clustered" sub={`${compact(grouped)} of ${compact(windowMsgs)}`} />

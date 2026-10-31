@@ -25,9 +25,16 @@ export interface SourceInfo {
   attempt?: number;
 }
 
+/** A group plus what the browser can add on top of the Python rules: distinct authors. */
+export interface LiveGroup extends Group {
+  chatters: number;
+}
+
 export interface TickSnapshot {
   windowMs: [number, number];
-  groups: Group[];
+  groups: LiveGroup[];
+  /** True when the count cap evicted messages that were still inside the window. */
+  sampled: boolean;
   pulse: Pulse;
   messagesTotal: number;
   windowMessages: number;
@@ -41,8 +48,8 @@ export interface SessionOptions {
   onState: (s: SourceState, info?: SourceInfo) => void;
   windowMs?: number; // trailing analysis window (default 60s)
   tickMs?: number; // how often clusters recount (default 1500ms)
-  maxBufferMs?: number; // how far back events are retained (default 120s)
-  maxBuffer?: number; // hard cap on retained events (default 8000)
+  maxBufferMs?: number; // how far back events are retained (default 330s: room for a 5m window)
+  maxBuffer?: number; // hard cap on retained events (default 20000)
   pseudonymizer?: Pseudonymizer;
   now?: () => number;
 }
@@ -57,6 +64,7 @@ export class TwinkySession {
   private clockOffset = 0; // serverTs - localNow, so we can advance the window in real time
   private haveOffset = false;
   private messagesTotal = 0;
+  private evictedUntil = -Infinity; // newest ts dropped by the count cap
   private tickTimer?: ReturnType<typeof setInterval>;
   private stopped = false;
 
@@ -68,8 +76,8 @@ export class TwinkySession {
       onState: opts.onState,
       windowMs: opts.windowMs ?? 60_000,
       tickMs: opts.tickMs ?? 1_500,
-      maxBufferMs: opts.maxBufferMs ?? 120_000,
-      maxBuffer: opts.maxBuffer ?? 8_000,
+      maxBufferMs: opts.maxBufferMs ?? 330_000,
+      maxBuffer: opts.maxBuffer ?? 20_000,
       now: opts.now ?? (() => Date.now()),
       pseudonymizer: opts.pseudonymizer ?? new Pseudonymizer(),
     };
@@ -84,6 +92,12 @@ export class TwinkySession {
       },
     );
     this.tickTimer = setInterval(() => this.tick(), this.o.tickMs);
+  }
+
+  /** Change the trailing window and recount immediately. Capped by what the buffer retains. */
+  setWindow(ms: number): void {
+    this.o.windowMs = Math.min(ms, this.o.maxBufferMs);
+    this.tick();
   }
 
   /** Cancellation: after stop() no further chat, tick or state callbacks fire for this session. */
@@ -126,6 +140,7 @@ export class TwinkySession {
     while (drop < this.buffer.length && this.buffer[drop].ts_ms < floor) drop++;
     if (this.buffer.length - drop > this.o.maxBuffer) {
       drop = this.buffer.length - this.o.maxBuffer;
+      this.evictedUntil = Math.max(this.evictedUntil, this.buffer[drop - 1].ts_ms);
     }
     if (drop > 0) {
       for (let i = 0; i < drop; i++) this.ids.delete(this.buffer[i].id);
@@ -141,11 +156,17 @@ export class TwinkySession {
     const seenBefore = [...this.firstSeen.entries()]
       .filter(([, ts]) => ts < start)
       .map(([a]) => a);
-    const groups = groupChat(window);
-    const p = pulse(window, start, end, seenBefore);
+    const authorOf = new Map<string, string>();
+    for (const e of window) authorOf.set(e.id, e.author);
+    const groups: LiveGroup[] = groupChat(window).map((g) => ({
+      ...g,
+      chatters: new Set(g.event_ids.map((id) => authorOf.get(id))).size,
+    }));
+    const p = pulse(window, start, end, seenBefore, groups);
     this.o.onTick({
       windowMs: [start, end],
       groups,
+      sampled: this.evictedUntil >= start,
       pulse: p,
       messagesTotal: this.messagesTotal,
       windowMessages: window.length,

@@ -3,7 +3,7 @@
 // cannot produce). Everything here is arithmetic over the window — no model, no fabrication.
 import { canonical } from "./canonical";
 import { groupChat, groupedSummary, STOPWORDS } from "./group";
-import type { ChatEvent } from "./types";
+import type { ChatEvent, Group } from "./types";
 
 const RATE_BUCKET_MS = 10_000; // the sparkline's resolution, and the unit "peak burst" is in
 const TOP_SHARE = 0.1; // "concentration" is the share of messages from the top 10%
@@ -118,9 +118,10 @@ export function pulse(
   start: number,
   end: number,
   seenAuthors?: Iterable<string>,
+  precomputed?: Group[], // the engine already grouped this exact window; don't do it twice
 ): Pulse {
   const chat = [...events];
-  const groups = groupChat(chat);
+  const groups = precomputed ?? groupChat(chat);
   const summary = groupedSummary(chat, groups);
 
   const authors = new Map<string, number>();

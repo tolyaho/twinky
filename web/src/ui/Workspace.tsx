@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { normalizeChannel } from "../twitch/parse";
 import { clock } from "./format";
 import { ChatFeed } from "./ChatFeed";
@@ -21,6 +21,19 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
   const [value, setValue] = useState("");
   const now = view.tick?.serverNow ?? Date.now();
   const selectedLabel = view.tick?.groups.find((g) => g.key === view.selectedKey)?.label ?? null;
+
+  // Screen readers get the top signal when it changes, at most every 10s — never every message.
+  const [announce, setAnnounce] = useState("");
+  const lastAnnounce = useRef({ label: "", at: 0 });
+  const top = view.groups[0];
+  useEffect(() => {
+    if (!top) return;
+    const now = Date.now();
+    if (top.label !== lastAnnounce.current.label && now - lastAnnounce.current.at > 10_000) {
+      lastAnnounce.current = { label: top.label, at: now };
+      setAnnounce(`Top signal: ${top.label}, ${top.count} messages from ${top.chatters} chatters`);
+    }
+  }, [top]);
 
   const doSwitch = (raw: string) => {
     const c = normalizeChannel(raw);
@@ -109,6 +122,15 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
             now={now}
             highlightIds={view.highlightIds}
             selectedLabel={selectedLabel}
+            emptyText={
+              view.status === "not_found"
+                ? "No chat — this channel wasn't found."
+                : view.status === "offline"
+                  ? "No chat — the channel is offline."
+                  : view.status === "quiet" || view.status === "connected"
+                    ? "Connected. No messages yet."
+                    : "Connecting to chat…"
+            }
           />
         </div>
 
@@ -120,13 +142,20 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
             status={view.status}
             channel={view.channel}
             windowMessages={view.tick?.windowMessages ?? 0}
+            windowMs={view.windowMs}
+            onWindow={view.setWindowMs}
+            sampled={view.tick?.sampled ?? false}
+            onTryAnother={() => setSwitching(true)}
           />
         </div>
 
         <div className="zone zone-pulse">
-          <Pulse tick={view.tick} />
+          <Pulse tick={view.tick} windowMs={view.windowMs} />
         </div>
       </main>
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {announce}
+      </div>
     </div>
   );
 }

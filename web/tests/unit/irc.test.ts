@@ -40,7 +40,7 @@ describe("TwitchChatClient lifecycle", () => {
     const sent = FakeWebSocket.last().sent;
     expect(sent[0]).toBe("PASS SCHMOOPIIE");
     expect(sent[1]).toMatch(/^NICK justinfan\d+$/);
-    expect(sent[2]).toBe("CAP REQ :twitch.tv/tags");
+    expect(sent[2]).toBe("CAP REQ :twitch.tv/tags twitch.tv/commands");
     expect(sent[3]).toBe("JOIN #xqc");
     expect(client.state).toBe("connecting");
   });
@@ -164,5 +164,65 @@ describe("TwitchChatClient lifecycle", () => {
     first.fireClose(); // old socket fires again — must be ignored
     vi.advanceTimersByTime(3000);
     expect(FakeWebSocket.instances.length).toBe(count);
+  });
+
+  it("requests the commands capability so a JOIN is acknowledged", () => {
+    const { client } = makeClient();
+    client.start();
+    FakeWebSocket.last().fireOpen();
+    expect(FakeWebSocket.last().sent).toContain("CAP REQ :twitch.tv/tags twitch.tv/commands");
+  });
+
+  it("treats ROOMSTATE as the join acknowledgement", () => {
+    const { client } = makeClient();
+    client.start();
+    FakeWebSocket.last().fireOpen();
+    FakeWebSocket.last().fireMessage("@emote-only=0;room-id=1 :tmi.twitch.tv ROOMSTATE #xqc");
+    expect(client.state).toBe("connected");
+  });
+
+  it("reports not_found when Twitch never acknowledges the JOIN, and stops", () => {
+    // stall watchdog well beyond the join timeout, as in production (150s vs 8s)
+    const { client } = makeClient({ joinTimeoutMs: 500, stallTimeoutMs: 60_000 });
+    client.start();
+    FakeWebSocket.last().fireOpen();
+    const count = FakeWebSocket.instances.length;
+    vi.advanceTimersByTime(600);
+    expect(client.state).toBe("not_found");
+    vi.advanceTimersByTime(60_000);
+    expect(FakeWebSocket.instances.length).toBe(count); // no reconnect loop
+  });
+
+  it("reconnects instead of not_found when a previously-joined channel stops acking", () => {
+    const { client } = makeClient({ joinTimeoutMs: 500 });
+    client.start();
+    FakeWebSocket.last().fireOpen();
+    FakeWebSocket.last().fireMessage(names366);
+    FakeWebSocket.last().fireClose();
+    vi.advanceTimersByTime(1500);
+    FakeWebSocket.last().fireOpen(); // new socket, never acked
+    vi.advanceTimersByTime(600);
+    expect(client.state).not.toBe("not_found");
+  });
+
+  it("reports a suspended channel as not_found", () => {
+    const { client } = makeClient();
+    client.start();
+    FakeWebSocket.last().fireOpen();
+    FakeWebSocket.last().fireMessage(
+      "@msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE #xqc :This channel has been suspended.",
+    );
+    expect(client.state).toBe("not_found");
+  });
+
+  it("ignores non-chat commands such as USERNOTICE and CLEARCHAT", () => {
+    const { client, rows } = makeClient();
+    client.start();
+    FakeWebSocket.last().fireOpen();
+    FakeWebSocket.last().fireMessage(
+      "@id=sub1;tmi-sent-ts=1700000000000;display-name=Sub :tmi.twitch.tv USERNOTICE #xqc :PRIVMSG-looking text",
+    );
+    FakeWebSocket.last().fireMessage(":tmi.twitch.tv CLEARCHAT #xqc :someone");
+    expect(rows).toHaveLength(0);
   });
 });

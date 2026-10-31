@@ -206,4 +206,41 @@ describe("TwinkySession", () => {
     expect(states).not.toContain("receiving");
     session.stop();
   });
+
+  it("counts distinct chatters per cluster", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source);
+    session.start();
+    // 10 LOLs from only 3 people
+    for (let i = 0; i < 10; i++) s.push(row("LOL", i, `p${i % 3}`));
+    vi.advanceTimersByTime(1000);
+    const g = ticks.at(-1)!.groups.find((x) => x.rule === "reaction")!;
+    expect(g.count).toBe(10);
+    expect(g.chatters).toBe(3);
+  });
+
+  it("setWindow recounts immediately over the new span", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source, { windowMs: 60_000 });
+    session.start();
+    s.push(row("old", 1));
+    vi.advanceTimersByTime(40_000);
+    s.push({ ...row("new", 2), ts_ms: Date.now() });
+    session.setWindow(30_000);
+    expect(ticks.at(-1)!.windowMessages).toBe(1); // only the recent one is inside 30s
+    session.setWindow(300_000);
+    expect(ticks.at(-1)!.windowMessages).toBe(2);
+  });
+
+  it("flags the window as sampled when the count cap evicts in-window messages", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source, { maxBuffer: 10 });
+    session.start();
+    for (let i = 0; i < 5; i++) s.push(row("hi there", i, `u${i}`));
+    vi.advanceTimersByTime(1000);
+    expect(ticks.at(-1)!.sampled).toBe(false);
+    for (let i = 5; i < 30; i++) s.push(row("hi there", i, `u${i}`));
+    vi.advanceTimersByTime(1000);
+    expect(ticks.at(-1)!.sampled).toBe(true);
+  });
 });

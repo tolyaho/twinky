@@ -37,8 +37,23 @@ export function stripPunctuation(text: string): string {
  * Collapse a chat message to its semantic skeleton. Deterministic, no model, no randomness.
  * 'AHAHAHAHA', 'ahahaha' and 'AHAHA AHAHA' all collapse together; 'left' and 'LEFT!!!' do too.
  */
+// The live board recounts the whole window every ~1.5s, and chat repeats itself constantly, so the
+// same strings are canonicalised over and over. `canonical` is pure, so a bounded memo is safe.
+const CACHE_MAX = 20_000;
+const cache = new Map<string, string>();
+
 export function canonical(text: string): string {
-  let t = (text ?? "").normalize("NFKC").toLowerCase();
+  const key = text ?? "";
+  const hit = cache.get(key);
+  if (hit !== undefined) return hit;
+  const out = canonicalUncached(key);
+  if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value as string);
+  cache.set(key, out);
+  return out;
+}
+
+function canonicalUncached(text: string): string {
+  let t = text.normalize("NFKC").toLowerCase();
   t = stripPunctuation(t);
   t = t.replace(WHITESPACE, " ").trim();
   t = t.replace(CHAR_RUN, "$1$1");

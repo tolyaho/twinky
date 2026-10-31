@@ -7,15 +7,25 @@ interface Props {
   now: number;
   highlightIds: Set<string>;
   selectedLabel: string | null;
+  emptyText: string;
 }
 
-export function ChatFeed({ feed, now, highlightIds, selectedLabel }: Props) {
+export function ChatFeed({ feed, now, highlightIds, selectedLabel, emptyText }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [following, setFollowing] = useState(true);
+  // Pause freezes what is on screen so a message can actually be read. Counting never pauses —
+  // the clusters and pulse keep running on the full stream.
+  const [frozen, setFrozen] = useState<ChatEvent[] | null>(null);
+  const shown = frozen ?? feed;
+  const lastShown = shown.length ? shown[shown.length - 1].id : null;
+  // How far the live feed has moved past the frozen view. -1: the last frozen message has already
+  // scrolled out of the bounded feed, so the exact number is unknown.
+  const at = frozen ? feed.findIndex((m) => m.id === lastShown) : 0;
+  const behind = at === -1 ? -1 : feed.length - 1 - at;
 
   useEffect(() => {
     if (following && ref.current) ref.current.scrollTop = ref.current.scrollHeight;
-  }, [feed, following]);
+  }, [shown, following]);
 
   const onScroll = () => {
     const el = ref.current;
@@ -33,6 +43,22 @@ export function ChatFeed({ feed, now, highlightIds, selectedLabel }: Props) {
 
   return (
     <div className="feed-wrap">
+      {(feed.length > 0 || frozen) && (
+      <div className="feed-controls">
+        <button
+          className="btn-ghost"
+          onClick={() => setFrozen(frozen ? null : feed.slice())}
+          aria-pressed={frozen !== null}
+        >
+          {frozen ? "▶ Resume" : "❚❚ Pause"}
+        </button>
+        {frozen && (
+          <span className="feed-behind">
+            {behind === -1 ? `${feed.length}+` : behind} new while paused
+          </span>
+        )}
+      </div>
+      )}
       <div
         className="feed"
         ref={ref}
@@ -41,10 +67,10 @@ export function ChatFeed({ feed, now, highlightIds, selectedLabel }: Props) {
         aria-label="Live chat messages"
         aria-live="off"
       >
-        {feed.length === 0 ? (
-          <div className="feed-empty">Waiting for the first messages…</div>
+        {shown.length === 0 ? (
+          <div className="feed-empty">{emptyText}</div>
         ) : (
-          feed.map((m) => {
+          shown.map((m) => {
             const lit = highlightIds.has(m.id);
             return (
               <div

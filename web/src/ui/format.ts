@@ -26,6 +26,20 @@ export function clock(ms: number): string {
   return `${mm}:${String(ss).padStart(2, "0")}`;
 }
 
+export const WINDOWS = [
+  { ms: 30_000, short: "30s", long: "30 seconds" },
+  { ms: 60_000, short: "1m", long: "60 seconds" },
+  { ms: 300_000, short: "5m", long: "5 minutes" },
+] as const;
+
+export function windowLong(ms: number): string {
+  return WINDOWS.find((w) => w.ms === ms)?.long ?? `${Math.round(ms / 1000)} seconds`;
+}
+
+export function windowShort(ms: number): string {
+  return WINDOWS.find((w) => w.ms === ms)?.short ?? `${Math.round(ms / 1000)}s`;
+}
+
 /** Messages per minute from a count over a window of `windowMs`. */
 export function perMinute(count: number, windowMs: number): number {
   if (windowMs <= 0) return 0;

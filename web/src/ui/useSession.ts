@@ -3,12 +3,13 @@ import {
   TwinkySession,
   liveSource,
   replaySource,
+  type LiveGroup,
   type ReplayRow,
   type SourceInfo,
   type SourceState,
   type TickSnapshot,
 } from "../engine/session";
-import type { ChatEvent, Group } from "../cluster/types";
+import type { ChatEvent } from "../cluster/types";
 
 export type UiStatus = SourceState | "offline" | "not_found";
 
@@ -16,7 +17,7 @@ export type Descriptor =
   | { kind: "live"; channel: string }
   | { kind: "replay"; channel: string; rows: ReplayRow[] };
 
-export interface GroupView extends Group {
+export interface GroupView extends LiveGroup {
   share: number;
   trend: "new" | "up" | "flat" | "down";
 }
@@ -38,6 +39,8 @@ export interface SessionView {
   select: (key: string | null) => void;
   messagesTotal: number;
   elapsedMs: number;
+  windowMs: number;
+  setWindowMs: (ms: number) => void;
 }
 
 export function useSession(descriptor: Descriptor | null): SessionView {
@@ -47,6 +50,8 @@ export function useSession(descriptor: Descriptor | null): SessionView {
   const [feed, setFeed] = useState<ChatEvent[]>([]);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
+  const [windowMs, setWindowState] = useState(60_000);
+  const windowRef = useRef(60_000);
 
   const sessionRef = useRef<TwinkySession | null>(null);
   const feedBuf = useRef<ChatEvent[]>([]);
@@ -84,6 +89,7 @@ export function useSession(descriptor: Descriptor | null): SessionView {
 
     const session = new TwinkySession({
       source,
+      windowMs: windowRef.current,
       onChat: (e) => {
         feedBuf.current.push(e);
         if (feedBuf.current.length > FEED_MAX) {
@@ -185,6 +191,13 @@ export function useSession(descriptor: Descriptor | null): SessionView {
     return new Set(g?.event_ids ?? []);
   }, [selectedKey, tick]);
 
+  const setWindowMs = (ms: number) => {
+    windowRef.current = ms;
+    setWindowState(ms);
+    history.current = new Map(); // trends across a window change would compare different spans
+    sessionRef.current?.setWindow(ms);
+  };
+
   return {
     status,
     statusInfo,
@@ -198,5 +211,7 @@ export function useSession(descriptor: Descriptor | null): SessionView {
     select: setSelectedKey,
     messagesTotal: tick?.messagesTotal ?? 0,
     elapsedMs,
+    windowMs,
+    setWindowMs,
   };
 }

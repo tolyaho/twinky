@@ -7,6 +7,7 @@ import { test, expect } from "@playwright/test";
 const CHANNEL = process.env.LIVE_CHANNEL ?? "jynxzi";
 
 test(`@live real Twitch chat arrives and clusters (#${CHANNEL})`, async ({ page }) => {
+  test.setTimeout(75_000); // a 25s observation window plus a remote deployment's latency
   const errors: string[] = [];
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 
@@ -35,4 +36,19 @@ test(`@live real Twitch chat arrives and clusters (#${CHANNEL})`, async ({ page 
 
   expect(finalMsgs).toBeGreaterThan(0);
   expect(errors, `console errors: ${errors.join(" | ")}`).toEqual([]);
+});
+
+test("@live a nonexistent channel is reported Not found by real Twitch", async ({ page }) => {
+  await page.goto("/");
+  await page.getByPlaceholder("enter a twitch channel").fill("zzqqnotarealchannel9871");
+  await page.getByRole("button", { name: "Watch live" }).click();
+  await expect(page.locator(".badge")).toContainText("Not found", { timeout: 15_000 });
+});
+
+test("@live an existing channel is never reported Not found", async ({ page }) => {
+  await page.goto("/");
+  await page.getByPlaceholder("enter a twitch channel").fill(CHANNEL);
+  await page.getByRole("button", { name: "Watch live" }).click();
+  await page.waitForTimeout(11_000); // past the 8s join timeout
+  await expect(page.locator(".badge")).not.toContainText("Not found");
 });
