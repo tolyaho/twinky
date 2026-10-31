@@ -1,0 +1,680 @@
+{
+ "window": "emiru_2026-10-31T2119",
+ "channel": "emiru",
+ "kind": "5m-quiet",
+ "language": "en",
+ "messages": [
+  {
+   "id": "537851cf-9bb6-432a-8cf0-29f611f71a43",
+   "ts_ms": 1793481561574,
+   "author": "u_164f01d3bc",
+   "bot": false,
+   "text": "-fish ͏"
+  },
+  {
+   "id": "1dbcc115-2565-46d2-8b12-255c4c76eac5",
+   "ts_ms": 1793481563715,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck, but you reeled in 🍂. (34s cooldown) 16 attempts since your last catch."
+  },
+  {
+   "id": "0e4487e3-bbbe-40e0-b779-3afcfdd45f2b",
+   "ts_ms": 1793481579971,
+   "author": "u_8d93991407",
+   "bot": false,
+   "text": "- VietNaMeseManWavingHisGun"
+  },
+  {
+   "id": "b73feb39-33ab-4ed2-8bf1-3903f6f4c565",
+   "ts_ms": 1793481580704,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user your traps came back with a catch! You found 🧦🩲🧊🧦🌿🌿🌿🤿🪸🧦🩲🐌. Your traps were immediately set again for another hour."
+  },
+  {
+   "id": "2d9a41cf-1ab4-43f5-b87b-e7c6a2a220ac",
+   "ts_ms": 1793481580982,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user I will remind you in 59m 59s. | ID 7ea6c3"
+  },
+  {
+   "id": "6711b972-55e9-49eb-863b-f9047f482da7",
+   "ts_ms": 1793481585943,
+   "author": "u_d77fcc6d47",
+   "bot": false,
+   "text": "$fish"
+  },
+  {
+   "id": "e71f1065-68f3-4693-910b-8a95e2cc7716",
+   "ts_ms": 1793481586677,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck, but you reeled in 🍂. (2m cooldown) 34 attempts since your last catch."
+  },
+  {
+   "id": "dc952998-f5ce-46d4-993c-f9200f88db20",
+   "ts_ms": 1793481592037,
+   "author": "u_d77fcc6d47",
+   "bot": false,
+   "text": "-cook"
+  },
+  {
+   "id": "c4877e14-664f-485c-9853-b904fe06e0a0",
+   "ts_ms": 1793481592800,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you prepared beef tacos successfully and earned 1,484 eggs! You now have 77,862 eggs. Cooking"
+  },
+  {
+   "id": "68816ecb-0c5c-4aeb-98c2-180f14472cca",
+   "ts_ms": 1793481598281,
+   "author": "u_d77fcc6d47",
+   "bot": false,
+   "text": "-gift"
+  },
+  {
+   "id": "fe161a70-963e-4058-b794-e07a78fdbe3d",
+   "ts_ms": 1793481598870,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user Anone Here's what's under your tree! 🎄 Snow Shovel 🎀 Weighted blanket 🎊 Belt 🎉"
+  },
+  {
+   "id": "3d6c74af-aca8-4236-b123-1f6373749e21",
+   "ts_ms": 1793481604978,
+   "author": "u_f2786328df",
+   "bot": false,
+   "text": "er"
+  },
+  {
+   "id": "f4b39c37-971c-4863-94d9-ecc30e42579a",
+   "ts_ms": 1793481605105,
+   "author": "u_6304f8769f",
+   "bot": false,
+   "text": "joyous Herald"
+  },
+  {
+   "id": "0fa6b5eb-55d8-4fea-92cd-379bfbae3562",
+   "ts_ms": 1793481608680,
+   "author": "u_f2786328df",
+   "bot": false,
+   "text": "oh no"
+  },
+  {
+   "id": "38612d58-0c3b-4f2f-8f8e-cbabb3750b07",
+   "ts_ms": 1793481608731,
+   "author": "u_391a700fad",
+   "bot": false,
+   "text": "-fish RAH"
+  },
+  {
+   "id": "51dfeb4b-fbea-4c2e-b7e8-0ab6dd3bf50f",
+   "ts_ms": 1793481609447,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "-gift"
+  },
+  {
+   "id": "dfcb3225-afb1-4261-aeb0-d410be77d007",
+   "ts_ms": 1793481609502,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 116 ft away. sadg (35s cooldown) 16 attempts since your last catch."
+  },
+  {
+   "id": "ed9f1b7a-2283-4ce2-a773-df30a7da5663",
+   "ts_ms": 1793481610398,
+   "author": "u_37d8712ba8",
+   "bot": false,
+   "text": "-fish"
+  },
+  {
+   "id": "8aacf432-378f-4639-a0b0-e9edbbbf5e4b",
+   "ts_ms": 1793481610452,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user wowie Are you ready to open these gifts? 🎄 Baseball Glove 🎀 Costco Hot Dog Combo 🌟 Bag of Road Salt 🌟"
+  },
+  {
+   "id": "aee78e73-db76-412f-88c6-cc569aac8cda",
+   "ts_ms": 1793481611181,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 26 ft away. sadg (31s cooldown) 36 attempts since your last catch."
+  },
+  {
+   "id": "cc83e135-f496-4271-ac03-c02a3102b4ac",
+   "ts_ms": 1793481612482,
+   "author": "u_391a700fad",
+   "bot": false,
+   "text": "#lotd"
+  },
+  {
+   "id": "662a31dc-93ba-484a-9b1f-cc19cdc151f9",
+   "ts_ms": 1793481612966,
+   "author": "u_cc11fe7554",
+   "bot": false,
+   "text": "\u0001ACTION ͏🏆 Loser of the day in #emiru is ltl_wackman with 802 messages past 24 hours.\u0001"
+  },
+  {
+   "id": "619b8c90-0a23-454a-8442-3dd690bfceaf",
+   "ts_ms": 1793481615568,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "eda 🌭"
+  },
+  {
+   "id": "59489f92-0282-4a2a-9cf7-d9d4b93f075d",
+   "ts_ms": 1793481615911,
+   "author": "u_391a700fad",
+   "bot": false,
+   "text": "o"
+  },
+  {
+   "id": "f07821f1-661f-44f5-9f10-f424eeb1cf6e",
+   "ts_ms": 1793481617466,
+   "author": "u_37d8712ba8",
+   "bot": false,
+   "text": "-cookie"
+  },
+  {
+   "id": "b09f0e74-09db-489d-928d-c59cedc34544",
+   "ts_ms": 1793481618211,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user @user, your golden cookie: Your physical vitality should be quite strong, and you're encouraged by greater self-confidence. At the same time, however, someone seems to be trying to ruffle your feathers by being selfish and disrespectful of your space. 🥠"
+  },
+  {
+   "id": "1eeaa71c-bc5c-4e1e-ae4e-b44985a0983f",
+   "ts_ms": 1793481620828,
+   "author": "u_f2786328df",
+   "bot": false,
+   "text": "no way"
+  },
+  {
+   "id": "7fb13f14-814a-4b77-841a-3ccabc167c60",
+   "ts_ms": 1793481629687,
+   "author": "u_4ad62fa870",
+   "bot": false,
+   "text": "nonono NA can't win"
+  },
+  {
+   "id": "cb22e469-72f9-4b4f-858c-d8b8850812c6",
+   "ts_ms": 1793481631001,
+   "author": "u_76feec1fc5",
+   "bot": false,
+   "text": "-fish chorm"
+  },
+  {
+   "id": "1cea83d0-590e-4d17-8191-df97751913f8",
+   "ts_ms": 1793481631049,
+   "author": "u_4b8e2a260a",
+   "bot": false,
+   "text": "taliya could just r by it?"
+  },
+  {
+   "id": "a89d7bfd-0f8e-4c5c-8718-ae67cf0a0305",
+   "ts_ms": 1793481631815,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck, but you reeled in 🥽. (35s cooldown) 2 attempts since your last catch. Used chorm ; 366733 eggs left."
+  },
+  {
+   "id": "7decf460-fd75-42e7-8f70-7a147487fdeb",
+   "ts_ms": 1793481633563,
+   "author": "u_f2786328df",
+   "bot": false,
+   "text": "Classic"
+  },
+  {
+   "id": "dfb1e576-1a57-45ac-8eeb-804c625632b0",
+   "ts_ms": 1793481637854,
+   "author": "u_4ad62fa870",
+   "bot": false,
+   "text": "-fish trap reset BRAINSSS"
+  },
+  {
+   "id": "e3b69399-2a1e-4c1c-b7da-ec60280224e8",
+   "ts_ms": 1793481638519,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user your traps came back with a catch! You found 🌿🍂🌿🍂🌿🌿🍂🍂🌿🍂🌿🪼. Your traps were immediately set again for another hour."
+  },
+  {
+   "id": "27e18109-cf55-4918-bf76-d4d3819e89d3",
+   "ts_ms": 1793481639771,
+   "author": "u_76feec1fc5",
+   "bot": false,
+   "text": "-cook"
+  },
+  {
+   "id": "93b03051-3d6d-465c-b68c-9310511913b3",
+   "ts_ms": 1793481640560,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you prepared creme brulee successfully and earned 660 eggs! You now have 367,393 eggs. Cooking"
+  },
+  {
+   "id": "d23c4938-f8ac-4ef4-866a-9927b777e603",
+   "ts_ms": 1793481662000,
+   "author": "u_56a6d09acf",
+   "bot": false,
+   "text": "-fish ͏"
+  },
+  {
+   "id": "1f8283ba-0d57-42ee-b4bc-fa56bfb8e6c1",
+   "ts_ms": 1793481662801,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 463 ft away. sadg (57s cooldown) 2 attempts since your last catch."
+  },
+  {
+   "id": "72dc91a7-51a3-4666-a60e-9967676330a9",
+   "ts_ms": 1793481683644,
+   "author": "u_164f01d3bc",
+   "bot": false,
+   "text": "-fish"
+  },
+  {
+   "id": "30874f82-5ae9-4350-a8b1-19910cf17d59",
+   "ts_ms": 1793481684440,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 89 ft away. sadg (2m cooldown) 17 attempts since your last catch."
+  },
+  {
+   "id": "85ceb86f-3fbe-42c0-a1b3-7f503ac361fc",
+   "ts_ms": 1793481689976,
+   "author": "u_53ae1991fe",
+   "bot": false,
+   "text": "-fish"
+  },
+  {
+   "id": "9a97e1dc-faea-4c26-a0b8-61f090b69e79",
+   "ts_ms": 1793481690794,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you caught a ✨🐊✨! It is 20 ft long. It took 10 attempts. (30m cooldown)"
+  },
+  {
+   "id": "85120e93-bf98-41b4-bb3c-ef2aa8e69b8e",
+   "ts_ms": 1793481695511,
+   "author": "u_53ae1991fe",
+   "bot": false,
+   "text": "emiruYAY"
+  },
+  {
+   "id": "83d2830b-524f-43de-b38d-0ab321928368",
+   "ts_ms": 1793481696926,
+   "author": "u_d8f3a18164",
+   "bot": false,
+   "text": "clappi"
+  },
+  {
+   "id": "f008b65d-8cd2-4f26-af68-110b9c72b783",
+   "ts_ms": 1793481697882,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "clappi"
+  },
+  {
+   "id": "c02fd9bd-faa9-43e2-9c80-3763b4b904bc",
+   "ts_ms": 1793481699425,
+   "author": "u_ad58ab0a21",
+   "bot": false,
+   "text": "clappi"
+  },
+  {
+   "id": "1c34cdcb-6eb6-4e5a-ac19-b78ae0881a87",
+   "ts_ms": 1793481700518,
+   "author": "u_4b8e2a260a",
+   "bot": false,
+   "text": "ew rocks"
+  },
+  {
+   "id": "2d1f87a9-e78c-4754-b0e9-3f68c756e3c4",
+   "ts_ms": 1793481706215,
+   "author": "u_4b8e2a260a",
+   "bot": false,
+   "text": "a renekton Pog"
+  },
+  {
+   "id": "cbca3b0b-e018-4461-a7ec-a02c936d4ea9",
+   "ts_ms": 1793481707651,
+   "author": "u_164f01d3bc",
+   "bot": false,
+   "text": "clappi"
+  },
+  {
+   "id": "5f347ecc-6a12-4111-89d8-fd1e2436d336",
+   "ts_ms": 1793481707963,
+   "author": "u_c0d15985ba",
+   "bot": false,
+   "text": "clappi ͏"
+  },
+  {
+   "id": "22e60a24-0dfe-4f2f-9bbd-55ddc447a2ae",
+   "ts_ms": 1793481709573,
+   "author": "u_d4e5cbe3b7",
+   "bot": false,
+   "text": "elisNom"
+  },
+  {
+   "id": "db114415-11c0-433b-927e-727aa7817507",
+   "ts_ms": 1793481711628,
+   "author": "u_4b8e2a260a",
+   "bot": false,
+   "text": "clappi"
+  },
+  {
+   "id": "8b2c9ef3-e054-4d67-ad9a-9602dedfc22f",
+   "ts_ms": 1793481715409,
+   "author": "u_f2786328df",
+   "bot": false,
+   "text": "clappi"
+  },
+  {
+   "id": "888479ca-8cef-4531-99fc-dfaf63e33574",
+   "ts_ms": 1793481741013,
+   "author": "u_024626a327",
+   "bot": false,
+   "text": "clappi ͏"
+  },
+  {
+   "id": "05a0c611-d511-4c8c-805a-3367da72d67d",
+   "ts_ms": 1793481744373,
+   "author": "u_024626a327",
+   "bot": false,
+   "text": "-fish chorm"
+  },
+  {
+   "id": "7f2c8671-c385-47bc-94bc-707df9fb9e45",
+   "ts_ms": 1793481745437,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 347 ft away. sadg (53s cooldown) 2 attempts since your last catch. Used chorm ; 86714 eggs left."
+  },
+  {
+   "id": "48b7d61f-6d81-4427-bb7f-10afcec6cf8c",
+   "ts_ms": 1793481751687,
+   "author": "u_b7055ad4d1",
+   "bot": false,
+   "text": "-fish trap reset"
+  },
+  {
+   "id": "8fd330d5-c0c4-4f4b-96a3-9a4874fc275d",
+   "ts_ms": 1793481752373,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user your traps came back with a catch! You found 🍂🪸🌿🍂🌿🪸🌿🌿🪿. Your traps were immediately set again for another hour."
+  },
+  {
+   "id": "88a3ffbb-1880-4374-a088-d138742a2883",
+   "ts_ms": 1793481754455,
+   "author": "u_b7055ad4d1",
+   "bot": false,
+   "text": "- YoungMan"
+  },
+  {
+   "id": "9f257b64-bb5a-4563-be7c-4b791d610f6f",
+   "ts_ms": 1793481758511,
+   "author": "u_b7055ad4d1",
+   "bot": false,
+   "text": "-  YoungMan"
+  },
+  {
+   "id": "1c0cfb49-c94b-4bc5-acba-182e5f5b3978",
+   "ts_ms": 1793481759211,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you tried to prepare waffles, but burned it. You earned nothing. COOKING"
+  },
+  {
+   "id": "3cc6a6f4-7286-4f45-b41f-b02d16f9a37c",
+   "ts_ms": 1793481761007,
+   "author": "u_5814d4b1ba",
+   "bot": false,
+   "text": "$$ 🌐"
+  },
+  {
+   "id": "e92253c5-8fb4-4a44-b475-f55fe82516fe",
+   "ts_ms": 1793481761418,
+   "author": "u_b7055ad4d1",
+   "bot": false,
+   "text": "NOOOMYMILJ"
+  },
+  {
+   "id": "afaafa90-20ab-4522-8af5-abe371ca7312",
+   "ts_ms": 1793481761582,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user [🇹🇿 🇧🇩 🇫🇲]"
+  },
+  {
+   "id": "a0398066-14eb-4ee6-a8f4-4110fda7fa34",
+   "ts_ms": 1793481762407,
+   "author": "u_c0537ee9ab",
+   "bot": false,
+   "text": "elisAAAH ͏"
+  },
+  {
+   "id": "aea8c471-185c-4f94-9053-2e68fe573a64",
+   "ts_ms": 1793481763496,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "monkaOMEGA"
+  },
+  {
+   "id": "48a37b62-a0b0-4269-8af4-838cf4bfdfd5",
+   "ts_ms": 1793481766013,
+   "author": "u_5814d4b1ba",
+   "bot": false,
+   "text": "-fish"
+  },
+  {
+   "id": "73de9b72-148b-4a6f-9596-81412af7b5b4",
+   "ts_ms": 1793481766752,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck, but you reeled in 🌿. (2m cooldown) 2 attempts since your last catch."
+  },
+  {
+   "id": "75fde251-2e4e-4db4-8957-c32b6cc8d0a1",
+   "ts_ms": 1793481776252,
+   "author": "u_c0537ee9ab",
+   "bot": false,
+   "text": "elisAAAH ENOUGH"
+  },
+  {
+   "id": "ae52708a-9916-40a7-aae0-7521acd5f116",
+   "ts_ms": 1793481784580,
+   "author": "u_ad58ab0a21",
+   "bot": false,
+   "text": "-fish buzzybee"
+  },
+  {
+   "id": "4c355478-ab50-4753-81f8-2fba61e35690",
+   "ts_ms": 1793481785699,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 114 ft away. sadg (43s cooldown) 1 attempt since your last catch."
+  },
+  {
+   "id": "59a8af0a-3d82-4b9f-ba45-025cd97f79e1",
+   "ts_ms": 1793481800817,
+   "author": "u_7619ad6b8f",
+   "bot": false,
+   "text": "-cook ͏"
+  },
+  {
+   "id": "1f3ad4cc-3867-4bac-ac70-10bac11a8e83",
+   "ts_ms": 1793481801570,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you prepared brownies successfully and earned 473 eggs! You now have 384,891 eggs. Cooking"
+  },
+  {
+   "id": "658e05c7-b4db-4664-aab5-42a0efb7d286",
+   "ts_ms": 1793481803991,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "catAsk goose does 🪿 ping you? SingsMic"
+  },
+  {
+   "id": "713a6057-1af2-4ce7-b487-90bb26012961",
+   "ts_ms": 1793481805127,
+   "author": "u_f2786328df",
+   "bot": false,
+   "text": "alerm"
+  },
+  {
+   "id": "48e7963a-7bde-4cb8-a52e-290cdbf9ac15",
+   "ts_ms": 1793481806216,
+   "author": "u_b7055ad4d1",
+   "bot": false,
+   "text": "elisWaving goose"
+  },
+  {
+   "id": "f3625e86-2940-459e-9f29-66f731b6eb40",
+   "ts_ms": 1793481813577,
+   "author": "u_4c5db3c868",
+   "bot": false,
+   "text": "-fish chorm"
+  },
+  {
+   "id": "5d90f199-5275-464d-8f7c-90ba01285caf",
+   "ts_ms": 1793481814419,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 337 ft away. sadg (54s cooldown) 13 attempts since your last catch. Used chorm ; 599692 eggs left."
+  },
+  {
+   "id": "c3fef432-fb2a-4a93-b837-8328ccb56c15",
+   "ts_ms": 1793481815162,
+   "author": "u_46298a4ea7",
+   "bot": false,
+   "text": "$$  Herby"
+  },
+  {
+   "id": "e9ce5d7a-045e-4ec0-ae1c-9d4e67d99417",
+   "ts_ms": 1793481815907,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you pulled in your traps and found only junk: 🌿🌿🍂💀🌿🌿🩱🌿🥾🥫🩲🪸🌿🌿. Your traps were immediately set again for another hour."
+  },
+  {
+   "id": "5511bf0c-dfa4-429a-b70c-ed93d28832e4",
+   "ts_ms": 1793481816364,
+   "author": "u_c0537ee9ab",
+   "bot": false,
+   "text": "elisAAAH yes milk"
+  },
+  {
+   "id": "3d6aad5d-211f-4d2d-9287-34c042ad4d01",
+   "ts_ms": 1793481820565,
+   "author": "u_c0537ee9ab",
+   "bot": false,
+   "text": "elisAAAH thara"
+  },
+  {
+   "id": "cce3b58c-736d-466f-907e-3d242e874bac",
+   "ts_ms": 1793481821647,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "oopsie"
+  },
+  {
+   "id": "62d1d5d4-3d7a-430f-ab46-1d02ed221df4",
+   "ts_ms": 1793481823149,
+   "author": "u_6304f8769f",
+   "bot": false,
+   "text": "emiruCHEER"
+  },
+  {
+   "id": "003d415b-17f1-4a0a-b025-f5f91688299e",
+   "ts_ms": 1793481832925,
+   "author": "u_6935187cf0",
+   "bot": false,
+   "text": "-fish trap"
+  },
+  {
+   "id": "0213f761-8274-4bfb-a9d6-f4309de1ddf9",
+   "ts_ms": 1793481833582,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user your traps came back with a catch! You found 🍂🌿🌿🧦🔩🌿🌿🍂🌿🥫🧦🩲🧳🧦🦀."
+  },
+  {
+   "id": "56e6a559-4dd0-4cee-b274-78b6a1e01fc9",
+   "ts_ms": 1793481837413,
+   "author": "u_6253258e18",
+   "bot": false,
+   "text": "🪿 Clap"
+  },
+  {
+   "id": "45bff3bb-6e5c-4e70-ad7c-e6ee46991b25",
+   "ts_ms": 1793481838800,
+   "author": "u_6935187cf0",
+   "bot": false,
+   "text": "-fish chorm"
+  },
+  {
+   "id": "583e8ef3-0d90-40f0-a155-e244dba62824",
+   "ts_ms": 1793481839630,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 102 ft away. sadg (50s cooldown) 11 attempts since your last catch. Used chorm ; 34965 eggs left."
+  },
+  {
+   "id": "2a0e9580-fd0a-4745-9802-c601ad4305ff",
+   "ts_ms": 1793481843812,
+   "author": "u_c0537ee9ab",
+   "bot": false,
+   "text": "elisAAAH"
+  },
+  {
+   "id": "08b96e2f-d894-4a26-8c8c-4c3ec0858a93",
+   "ts_ms": 1793481844395,
+   "author": "u_164f01d3bc",
+   "bot": false,
+   "text": "-fish"
+  },
+  {
+   "id": "2d114eb2-de69-48b7-b3c1-59b3830aa7df",
+   "ts_ms": 1793481845168,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 132 ft away. sadg (2m cooldown) 18 attempts since your last catch."
+  },
+  {
+   "id": "5ec4337a-db6c-4b00-ab40-baed486e8fed",
+   "ts_ms": 1793481853708,
+   "author": "u_c0d15985ba",
+   "bot": false,
+   "text": "-fish"
+  },
+  {
+   "id": "9df8c702-7f69-4e40-a4f8-2428f77da9f2",
+   "ts_ms": 1793481854531,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user No luck... your line landed 86 ft away. sadg (2m cooldown) 4 attempts since your last catch."
+  },
+  {
+   "id": "dffeac15-a310-4bce-80b7-6ecee84c8568",
+   "ts_ms": 1793481856825,
+   "author": "u_864d282677",
+   "bot": false,
+   "text": "-cook"
+  },
+  {
+   "id": "1fb6fea1-4db7-4eb2-9195-f458cf124296",
+   "ts_ms": 1793481857593,
+   "author": "u_37dd93e52e",
+   "bot": false,
+   "text": "@user you prepared lasagna successfully and earned 1,415 eggs! You now have 13,444 eggs. Cooking"
+  }
+ ]
+}

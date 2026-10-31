@@ -1,0 +1,108 @@
+# window lirik_2026-10-31T2115 — channel lirik, 106 messages, 60s
+# n | seconds into window | author | text   (BOT = known bot account)
+0 |   0.0 | u_3c373d7c7b | @user multitasking like the famals
+1 |   0.4 | u_9ff5c95da8 | o o
+2 |   0.8 | u_0886339c95 | LMAO
+3 |   1.2 | u_d19b484a34 BOT | New Prediction! PogChamp "Phantom Blade: Chang Hong", outcomes are "Success! (all phases)" or "Fail!"!
+4 |   1.9 | u_b74b068682 | uuh
+5 |   2.0 | u_d05315c4c7 | LULW
+6 |   2.2 | u_06214169f8 | KEKW
+7 |   3.6 | u_be0d1348c4 | KEKW
+8 |   3.9 | u_0886339c95 | OKBRO
+9 |   4.3 | u_3e3124a0a4 | haha
+10 |   4.4 | u_6be092d9f4 | yo
+11 |   4.5 | u_93acd17698 | LMAO
+12 |   4.5 | u_c6890a92fe | o7
+13 |   4.9 | u_009be636c2 | PrideLaugh PrideLaugh PrideLaugh PrideLaugh
+14 |   4.9 | u_d82ae2ed35 | LMAO
+15 |   5.0 | u_d05315c4c7 | this guy LULW
+16 |   5.2 | u_2d1717c168 | KEKYou
+17 |   6.1 | u_f0d5787803 | LUL
+18 |   6.5 | u_8b5c17918a | veiLaugh
+19 |   6.6 | u_505e317f6a | he missed it LMAO
+20 |   7.0 | u_e2eb71dee5 | Lol
+21 |   7.3 | u_fc349f8a7c | KEK
+22 |   7.3 | u_2116969ed9 | lmaoooo
+23 |   7.7 | u_7423b35ea8 | LUL
+24 |   7.7 | u_0886339c95 | SUREMAN
+25 |   7.8 | u_5c3a640999 | LUL
+26 |   7.8 | u_ec5fc7e2a5 | That counts
+27 |   8.0 | u_552efe1a61 | ICANT
+28 |   8.0 | u_55ee49bd5b | KEKW
+29 |   8.1 | u_161a0df570 | KEKW
+30 |   8.4 | u_6be092d9f4 | KEKW
+31 |   8.4 | u_decaf9207a | KEKWQ
+32 |   8.4 | u_4c76e0fb7a | KEKWQ
+33 |   8.7 | u_9026b23f87 | KEKW
+34 |   8.7 | u_3e3124a0a4 | he wont fuckin wait
+35 |   9.1 | u_626eb6be6c | PogT
+36 |   9.2 | u_2dc2daab5b | peepoGiggles
+37 |   9.5 | u_e32a6486c5 | LMAO
+38 |  10.0 | u_fce1964254 | LMFAO
+39 |  10.5 | u_71e102dbde | KEKW
+40 |  10.6 | u_1f8c128982 | KEKW
+41 |  11.4 | u_8b5c17918a | LMAO noob down
+42 |  11.6 | u_26f995ad84 | NotLikeThis
+43 |  11.8 | u_06adb1af30 | wait charge my controler
+44 |  12.4 | u_f0d5787803 | SUREMAN
+45 |  12.6 | u_aa0788d489 | lol
+46 |  13.0 | u_822070cbcf | Thunderblight Ganon
+47 |  13.0 | u_e32a6486c5 | SUREBRO
+48 |  13.1 | u_71a6fba38d | KEKW
+49 |  13.4 | u_0f35033fc3 | skill issue
+50 |  13.5 | u_0886339c95 | SUREMAN the controller
+51 |  13.7 | u_263a8a409e | ClassiC
+52 |  14.0 | u_43c0513f6f | shitbox controller KEKW
+53 |  14.7 | u_433fcb20e7 | likely story
+54 |  15.4 | u_a5843c1380 | LULW
+55 |  15.6 | u_552efe1a61 | !died
+56 |  15.7 | u_d19b484a34 BOT | Lirik died 75 times deadFR
+57 |  16.3 | u_1ae4158418 | Why didn't he wait? WeirdChamp
+58 |  17.6 | u_d553a1b48b | Literal bot LUL
+59 |  17.6 | u_e32a6486c5 | OKBRO
+60 |  18.8 | u_02d8f5041d | I thought he was aura farming LULW
+61 |  19.1 | u_d05315c4c7 | classic larry LULW
+62 |  19.6 | u_6c84d65980 | KEKW
+63 |  19.9 | u_ec5fc7e2a5 | KEKW
+64 |  21.8 | u_2116969ed9 | USB-C sucks
+65 |  21.9 | u_009be636c2 | SUREMAN dizzySmug
+66 |  23.9 | u_004b566737 | ClassiC
+67 |  24.2 | u_12444a2e7c | low battery?
+68 |  24.6 | u_6ef1f266cd | TREU
+69 |  25.1 | u_a997d8f70b | pepePoint pepePoint pepePoint pepePoint
+70 |  25.3 | u_0886339c95 | YEP
+71 |  26.2 | u_db3a0601dc | KEKQ usb c controller
+72 |  26.8 | u_1f8c128982 | i agrre
+73 |  28.1 | u_aad3d5a86c | xbox LUL
+74 |  29.1 | u_0dcf04ce5d | same problem
+75 |  29.3 | u_0cb104e808 | Dead before we can even get to the gamba KEK
+76 |  29.5 | u_d8eb5e39b0 | Xbox KEKW
+77 |  29.7 | u_4a9e09d1ff | YEP4
+78 |  30.2 | u_3c373d7c7b | playing on BT wireless Pffttt
+79 |  31.0 | u_ceee88d66a | idk mine never broke
+80 |  31.4 | u_d19b484a34 BOT | Prediction Locked! 🔒 👀 - the choice with most wagered points is "Fail!" with 2485789 points out of 2585250 points total. Good luck!
+81 |  32.8 | u_0dcf04ce5d | its the port
+82 |  33.6 | u_82daff6133 | thunder mess your controller
+83 |  35.2 | u_2dc2daab5b | YesYes
+84 |  35.8 | u_2116969ed9 | I need to put mine in a certain way or else it doesn't work, it's dumb
+85 |  35.9 | u_be0d1348c4 | KEKW the GAMBA
+86 |  36.2 | u_ec5fc7e2a5 | HOLY
+87 |  38.2 | u_b92b2ef48b | it is so you can spend money on them
+88 |  39.6 | u_505e317f6a | get the steam controller GabeN
+89 |  39.8 | u_0886339c95 | SUREMAN the controller again?
+90 |  43.0 | u_feedc77b27 | "my controller"
+91 |  43.1 | u_6be092d9f4 | dude chill\
+92 |  44.4 | u_0dcf04ce5d | @user same
+93 |  44.5 | u_8c3d41f995 | DSPirk
+94 |  45.4 | u_06adb1af30 | he s fast
+95 |  46.2 | u_6e18dda837 | its over
+96 |  49.4 | u_0886339c95 | LMAO
+97 |  49.6 | u_fc349f8a7c | MONKA
+98 |  51.1 | u_feedc77b27 | @user KEKLEO
+99 |  52.5 | u_ec5fc7e2a5 | HOLY AI is wake
+100 |  53.7 | u_2a7848f683 | PepeBeaten the controller
+101 |  55.4 | u_009be636c2 | D:
+102 |  55.7 | u_3e3124a0a4 | dayum boy
+103 |  56.4 | u_18ad845cab | GEEG
+104 |  57.1 | u_e2eb71dee5 | Tutorial over at last
+105 |  58.2 | u_48ae851672 | he is not No Joke, he is Chang Hong

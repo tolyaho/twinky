@@ -1,0 +1,484 @@
+{
+ "window": "morphe_ya_2026-10-31T2129",
+ "channel": "morphe_ya",
+ "kind": "5m-quiet",
+ "language": "ru",
+ "messages": [
+  {
+   "id": "c37fa9c0-d2fa-4910-be97-df725bdeb4e1",
+   "ts_ms": 1793482156237,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "ну ты )"
+  },
+  {
+   "id": "20634472-0807-42b6-8ea8-929d46f9cb05",
+   "ts_ms": 1793482159216,
+   "author": "u_e0df2283ab",
+   "bot": false,
+   "text": "правильно, уебан тупой"
+  },
+  {
+   "id": "9bf9be2d-38f8-4072-a8dc-24eb9d235c3b",
+   "ts_ms": 1793482161060,
+   "author": "u_e0df2283ab",
+   "bot": false,
+   "text": ")"
+  },
+  {
+   "id": "e0ea00bd-aa82-48db-8ca4-1ff2991c6939",
+   "ts_ms": 1793482165963,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "ебать злой"
+  },
+  {
+   "id": "6488f961-42d0-46f9-80b2-59436144f7bb",
+   "ts_ms": 1793482167842,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "приперся"
+  },
+  {
+   "id": "846a4b48-30c8-4422-b9d6-52c90d01a43b",
+   "ts_ms": 1793482169269,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "+ реп тебе"
+  },
+  {
+   "id": "9e1dac4d-28db-4ee5-a86b-baabd8374cc3",
+   "ts_ms": 1793482174989,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "вечный"
+  },
+  {
+   "id": "7eb6dfd5-51ef-413c-9cfa-178dafa3b1ff",
+   "ts_ms": 1793482177541,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "за смалики"
+  },
+  {
+   "id": "8926dd78-c6a3-46d1-ab76-266129b63364",
+   "ts_ms": 1793482183180,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "Половину смайлов канала сделал"
+  },
+  {
+   "id": "f845dfce-002f-4e15-b2d6-c86a03ab629f",
+   "ts_ms": 1793482191231,
+   "author": "u_e0df2283ab",
+   "bot": false,
+   "text": "сам вахуе кстати"
+  },
+  {
+   "id": "5669a878-1b99-480d-86f1-60327f7c7c35",
+   "ts_ms": 1793482194668,
+   "author": "u_81cd45a3e8",
+   "bot": false,
+   "text": "ну морда ж это баня с бабьём твичовским"
+  },
+  {
+   "id": "62de07da-8e31-43ad-8604-c61e4c44bf15",
+   "ts_ms": 1793482200870,
+   "author": "u_e0df2283ab",
+   "bot": false,
+   "text": "da"
+  },
+  {
+   "id": "e652e154-943a-4bb0-b07c-d842a1a0de2a",
+   "ts_ms": 1793482222416,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "бля автомод скучный на самом деле какой то, одни запретки там (("
+  },
+  {
+   "id": "de37f012-c14a-4234-946a-1975353a6f92",
+   "ts_ms": 1793482222608,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "eh не хотят шумные персоналки аппрувать"
+  },
+  {
+   "id": "1df5c143-0634-42de-a617-b0b0bde48757",
+   "ts_ms": 1793482224852,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "черти"
+  },
+  {
+   "id": "0ff5eee5-8963-4eff-92b5-6dc4ceb5ca06",
+   "ts_ms": 1793482238081,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "@user А ты там онли личную инфу ждал?"
+  },
+  {
+   "id": "2197dd63-7765-45a2-9dfd-730cb13cd70c",
+   "ts_ms": 1793482245873,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "))))"
+  },
+  {
+   "id": "e09ab5ae-b2b6-47ee-8d2c-27241cec478d",
+   "ts_ms": 1793482248034,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "да не, нахуй оно мне надо"
+  },
+  {
+   "id": "7dfbf902-1012-4936-be5a-77ec65474923",
+   "ts_ms": 1793482252029,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "я не про леру вообще"
+  },
+  {
+   "id": "b16a2bd5-0631-4681-8280-3b19f0351914",
+   "ts_ms": 1793482254530,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "я в целом"
+  },
+  {
+   "id": "9fec46cb-adde-4fe4-a05c-5e9ade6faf49",
+   "ts_ms": 1793482258795,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "чо мы не спим бртава"
+  },
+  {
+   "id": "1d88a698-ee3a-4ce6-9b22-10f8fa9f9747",
+   "ts_ms": 1793482262867,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "сидим тут"
+  },
+  {
+   "id": "9d66151b-1bfa-46f8-a415-2cb45028d78d",
+   "ts_ms": 1793482267613,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "не хотим"
+  },
+  {
+   "id": "bfadf984-f62a-4e13-ac7f-79de945f70c6",
+   "ts_ms": 1793482270422,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "Так оно и понятно, шо еще кроме запреток в автомод пихать ?"
+  },
+  {
+   "id": "be1140c8-5a8d-4f04-b27c-8acf9fcf4eeb",
+   "ts_ms": 1793482271449,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "52"
+  },
+  {
+   "id": "79d7b2ad-b4a6-4f71-9107-012e54ae6788",
+   "ts_ms": 1793482274809,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "режим хуевый"
+  },
+  {
+   "id": "b4689eaa-623c-401a-b754-1d04d5eb7082",
+   "ts_ms": 1793482276799,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "Особо нечего больше"
+  },
+  {
+   "id": "3bc6b337-9a82-46da-bff3-784693a474e9",
+   "ts_ms": 1793482279066,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "@user хотим"
+  },
+  {
+   "id": "b23882c9-7990-40ca-8bce-d7b9c5966102",
+   "ts_ms": 1793482287603,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "я сплю через день"
+  },
+  {
+   "id": "8ef59d38-18be-4d8d-8fe0-a530e12a5cd8",
+   "ts_ms": 1793482293029,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "@user ну там еще политика"
+  },
+  {
+   "id": "ec65b401-c67a-483e-b754-bae0dbc934be",
+   "ts_ms": 1793482294291,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "А ведь раньше модеры жили без автомода"
+  },
+  {
+   "id": "8502a6e9-7cec-42f8-bdc3-186a27dac599",
+   "ts_ms": 1793482301688,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "бля мечта встретить лерку аркашу бена и льоню"
+  },
+  {
+   "id": "8d0a764e-d343-48c3-8d0d-d6b3c6aa2a68",
+   "ts_ms": 1793482305536,
+   "author": "u_be3198c3b3",
+   "bot": false,
+   "text": "@user 1984"
+  },
+  {
+   "id": "780a006b-96a9-4156-8c29-93d40a22ec04",
+   "ts_ms": 1793482306180,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "@user ну ясен красен блин"
+  },
+  {
+   "id": "cf622f09-4954-4a94-a8a4-76550691c233",
+   "ts_ms": 1793482306781,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "сфотаться"
+  },
+  {
+   "id": "2326a5a8-7d7f-4638-bc76-6baa5800504b",
+   "ts_ms": 1793482315043,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "Та не надо братан"
+  },
+  {
+   "id": "5a8c7854-355d-4dc7-9ce1-551b7ffc4b24",
+   "ts_ms": 1793482320849,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "надо надо"
+  },
+  {
+   "id": "8e03055d-b5d8-444e-9ec4-03a968c28c4e",
+   "ts_ms": 1793482327895,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "@user БЛЯ Я ТАКОЙ БАН У АРКАШИ В ЧАТЕ ВЧЕРА ВИДЕЛ, ЭТО ПИЗДЕЦ )"
+  },
+  {
+   "id": "e67eb4bd-0aec-4560-bc7e-af3e578298d8",
+   "ts_ms": 1793482328888,
+   "author": "u_fb8afda8f6",
+   "bot": false,
+   "text": "А то будешь как челик которого они встретили в дримворкс"
+  },
+  {
+   "id": "314d0679-eeee-4b46-b497-4d610ae48c35",
+   "ts_ms": 1793482332494,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "причем не в автомоде"
+  },
+  {
+   "id": "da7a06f4-c985-45fa-98ff-ac40750feed1",
+   "ts_ms": 1793482336261,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "не шарю сорри"
+  },
+  {
+   "id": "1fc385da-eb76-4350-86cb-befb4d546f4c",
+   "ts_ms": 1793482337717,
+   "author": "u_be3198c3b3",
+   "bot": false,
+   "text": "@user Поделись"
+  },
+  {
+   "id": "8e99f40e-2e3f-4795-b9b2-0e5ef20ffa20",
+   "ts_ms": 1793482337826,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "@user, я видел"
+  },
+  {
+   "id": "2cbe4bca-0618-4920-b31b-96f962cad1c5",
+   "ts_ms": 1793482343691,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "ты скидывал уже"
+  },
+  {
+   "id": "2ce81407-2dfb-4adf-b0d4-954a6cdb5161",
+   "ts_ms": 1793482344312,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "проебал момент"
+  },
+  {
+   "id": "515290ea-f8db-40c9-ae23-e4d57a2a0106",
+   "ts_ms": 1793482350313,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "я не буду в этот чат кидить пожалуй )"
+  },
+  {
+   "id": "82eb25cb-8684-441e-81d7-aff041b08200",
+   "ts_ms": 1793482353345,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "ahuel"
+  },
+  {
+   "id": "783a66a2-ad79-40b2-b7b9-14dcc41f14a2",
+   "ts_ms": 1793482355963,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "там все таки леры касается"
+  },
+  {
+   "id": "603fee51-0f86-4a1a-8a64-d4c085c4033f",
+   "ts_ms": 1793482360488,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "нахуй надо"
+  },
+  {
+   "id": "d10d5d36-66ef-4dc3-8f9a-53f2dbad2d88",
+   "ts_ms": 1793482367763,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "ну там пиздец"
+  },
+  {
+   "id": "b7b8dcf6-a64c-44a3-8ea1-410c590e01ca",
+   "ts_ms": 1793482374313,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "костя оценил"
+  },
+  {
+   "id": "55f8320e-6058-4468-b8bd-b64b3a2d3af7",
+   "ts_ms": 1793482377182,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": ")"
+  },
+  {
+   "id": "cd9c0258-39ed-4cf9-bbd1-8250f441400f",
+   "ts_ms": 1793482384178,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "hm"
+  },
+  {
+   "id": "dca27715-3c71-46eb-a376-76e2faaa1930",
+   "ts_ms": 1793482390441,
+   "author": "u_a5ae3b3716",
+   "bot": false,
+   "text": "а намёк хоть можно че там"
+  },
+  {
+   "id": "726c2bd9-4904-4083-af1b-79938e4378d4",
+   "ts_ms": 1793482400189,
+   "author": "u_a5ae3b3716",
+   "bot": false,
+   "text": "PlsGod"
+  },
+  {
+   "id": "29e37e29-2539-42c5-acf7-321729682aab",
+   "ts_ms": 1793482411496,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "у меня кстати седня клип хороши по просмотрам"
+  },
+  {
+   "id": "9257971a-ad5c-4879-8890-23eaadbddca1",
+   "ts_ms": 1793482413367,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "https://www.twitch.tv/dangerlyoha/clip/WildAlluringJuiceAllenHuhu-I1xhcMmQpK3ororo"
+  },
+  {
+   "id": "9659e17f-cd1a-450f-ad73-0d5f291372e2",
+   "ts_ms": 1793482420804,
+   "author": "u_81cd45a3e8",
+   "bot": false,
+   "text": "этого недохаккера давно прибанить пора"
+  },
+  {
+   "id": "41c5b33a-bbf4-4230-ad0d-423104e45ea0",
+   "ts_ms": 1793482422848,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "топ )"
+  },
+  {
+   "id": "d1c3f0ca-8b77-471d-b63e-71879b0eb604",
+   "ts_ms": 1793482428608,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "2к вивс"
+  },
+  {
+   "id": "7d5988f7-7d8a-4181-8206-93213e1cc928",
+   "ts_ms": 1793482431805,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "@user та ебать а что я сделал"
+  },
+  {
+   "id": "d98b75f2-d50a-41e0-82ef-b18b0e6dcd92",
+   "ts_ms": 1793482435544,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "@user спс"
+  },
+  {
+   "id": "2e76984a-7665-4a06-87d0-32b5dd0e7e48",
+   "ts_ms": 1793482435665,
+   "author": "u_be3198c3b3",
+   "bot": false,
+   "text": "@user sdr"
+  },
+  {
+   "id": "bdac6378-dfae-4b56-95f2-ea1d24a02b51",
+   "ts_ms": 1793482439624,
+   "author": "u_a5ae3b3716",
+   "bot": false,
+   "text": "@user WTF"
+  },
+  {
+   "id": "4feb43c7-c9a2-44bf-80f2-35fc751ff0be",
+   "ts_ms": 1793482440589,
+   "author": "u_81cd45a3e8",
+   "bot": false,
+   "text": "дак так, за всё хорошее"
+  },
+  {
+   "id": "9167df2e-b433-4177-ad3d-1df533f69063",
+   "ts_ms": 1793482450353,
+   "author": "u_a2b09b944f",
+   "bot": false,
+   "text": "@user AgaSpizdanesh"
+  },
+  {
+   "id": "daa93d14-abfc-4a4f-be11-cd2085e9209d",
+   "ts_ms": 1793482451387,
+   "author": "u_f25c63877a",
+   "bot": false,
+   "text": "тебя уже много за что забанить пора"
+  },
+  {
+   "id": "ba39935c-ec9c-481c-bee7-8dab8df44bae",
+   "ts_ms": 1793482455282,
+   "author": "u_3fe3836827",
+   "bot": false,
+   "text": "апаче злой седня"
+  }
+ ]
+}

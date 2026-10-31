@@ -1,0 +1,750 @@
+{
+ "window": "lirik_2026-10-31T2115",
+ "channel": "lirik",
+ "kind": "60s",
+ "language": "en",
+ "messages": [
+  {
+   "id": "5ba4f663-f0f9-470b-82a8-73a14e81bd89",
+   "ts_ms": 1793481359215,
+   "author": "u_3c373d7c7b",
+   "bot": false,
+   "text": "@user multitasking like the famals"
+  },
+  {
+   "id": "d678de0e-3800-4306-a0da-0f833cd78e49",
+   "ts_ms": 1793481359657,
+   "author": "u_9ff5c95da8",
+   "bot": false,
+   "text": "o o"
+  },
+  {
+   "id": "8d40f56b-8567-46cf-bc7d-3b5a2ddd0db8",
+   "ts_ms": 1793481360021,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "LMAO"
+  },
+  {
+   "id": "3809e4ba-f898-4f6a-b39b-cb1aca823883",
+   "ts_ms": 1793481360456,
+   "author": "u_d19b484a34",
+   "bot": true,
+   "text": "New Prediction! PogChamp \"Phantom Blade: Chang Hong\", outcomes are \"Success! (all phases)\" or \"Fail!\"!"
+  },
+  {
+   "id": "2577d6b9-b502-4672-a077-206f10b0f495",
+   "ts_ms": 1793481361066,
+   "author": "u_b74b068682",
+   "bot": false,
+   "text": "uuh"
+  },
+  {
+   "id": "f0d84c5e-fed4-486b-b275-7b4fcd195997",
+   "ts_ms": 1793481361211,
+   "author": "u_d05315c4c7",
+   "bot": false,
+   "text": "LULW"
+  },
+  {
+   "id": "d7d2d3a7-c946-44db-8bb5-bd088f1a233b",
+   "ts_ms": 1793481361451,
+   "author": "u_06214169f8",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "cad6ed8f-4b06-45cd-9d06-083430bf057f",
+   "ts_ms": 1793481362769,
+   "author": "u_be0d1348c4",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "e27448ac-4a76-4b99-9f97-1ebdaa7f416e",
+   "ts_ms": 1793481363100,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "OKBRO"
+  },
+  {
+   "id": "b6779073-a696-4b27-85b3-f7bf856d914c",
+   "ts_ms": 1793481363550,
+   "author": "u_3e3124a0a4",
+   "bot": false,
+   "text": "haha"
+  },
+  {
+   "id": "c477d1d8-fa06-4330-b2ae-2f536ec708e7",
+   "ts_ms": 1793481363579,
+   "author": "u_6be092d9f4",
+   "bot": false,
+   "text": "yo"
+  },
+  {
+   "id": "25bffabe-6c4a-4e48-81f1-09b2de5922ae",
+   "ts_ms": 1793481363669,
+   "author": "u_93acd17698",
+   "bot": false,
+   "text": "LMAO"
+  },
+  {
+   "id": "9b78aa43-f1b2-4227-8c97-de366d496b2e",
+   "ts_ms": 1793481363757,
+   "author": "u_c6890a92fe",
+   "bot": false,
+   "text": "o7"
+  },
+  {
+   "id": "b8736506-91af-44d9-90c1-09794c737d10",
+   "ts_ms": 1793481364082,
+   "author": "u_009be636c2",
+   "bot": false,
+   "text": "PrideLaugh PrideLaugh PrideLaugh PrideLaugh"
+  },
+  {
+   "id": "3991e549-3b28-40a4-bc7c-baff4a1c7a7c",
+   "ts_ms": 1793481364156,
+   "author": "u_d82ae2ed35",
+   "bot": false,
+   "text": "LMAO"
+  },
+  {
+   "id": "b665f03f-5b8f-4d47-9740-b59e2a149f34",
+   "ts_ms": 1793481364258,
+   "author": "u_d05315c4c7",
+   "bot": false,
+   "text": "this guy LULW"
+  },
+  {
+   "id": "05488b44-b026-4a93-8ef6-cc127f8cb102",
+   "ts_ms": 1793481364414,
+   "author": "u_2d1717c168",
+   "bot": false,
+   "text": "KEKYou"
+  },
+  {
+   "id": "3151de91-fd53-49ca-ba7c-afdc2815d9fc",
+   "ts_ms": 1793481365312,
+   "author": "u_f0d5787803",
+   "bot": false,
+   "text": "LUL"
+  },
+  {
+   "id": "c86a96eb-97ab-4c11-b9cb-f81b6653178f",
+   "ts_ms": 1793481365693,
+   "author": "u_8b5c17918a",
+   "bot": false,
+   "text": "veiLaugh"
+  },
+  {
+   "id": "1f5e3c8a-9a3f-4df2-b00f-28e5eecc2019",
+   "ts_ms": 1793481365859,
+   "author": "u_505e317f6a",
+   "bot": false,
+   "text": "he missed it LMAO"
+  },
+  {
+   "id": "70cf3f0f-dceb-4ded-a2a6-054acb6a3eaa",
+   "ts_ms": 1793481366210,
+   "author": "u_e2eb71dee5",
+   "bot": false,
+   "text": "Lol"
+  },
+  {
+   "id": "cd20b055-1544-4ed1-83c6-7a9f7dc7d0ca",
+   "ts_ms": 1793481366521,
+   "author": "u_fc349f8a7c",
+   "bot": false,
+   "text": "KEK"
+  },
+  {
+   "id": "df35a78c-37f6-4356-a761-9aba4da3458c",
+   "ts_ms": 1793481366545,
+   "author": "u_2116969ed9",
+   "bot": false,
+   "text": "lmaoooo"
+  },
+  {
+   "id": "394c312a-39ef-40a7-ac0c-01d3bb01df69",
+   "ts_ms": 1793481366913,
+   "author": "u_7423b35ea8",
+   "bot": false,
+   "text": "LUL"
+  },
+  {
+   "id": "bd102fe8-102b-4cda-a084-132d0b6be9af",
+   "ts_ms": 1793481366917,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "SUREMAN"
+  },
+  {
+   "id": "371aa7ae-baf9-411c-b678-fbc13e489b78",
+   "ts_ms": 1793481367011,
+   "author": "u_5c3a640999",
+   "bot": false,
+   "text": "LUL"
+  },
+  {
+   "id": "8821cd28-c75e-43a7-bf6b-48a6047120fe",
+   "ts_ms": 1793481367044,
+   "author": "u_ec5fc7e2a5",
+   "bot": false,
+   "text": "That counts"
+  },
+  {
+   "id": "54062021-d5ee-43df-a2be-acb0f0ca4cf8",
+   "ts_ms": 1793481367193,
+   "author": "u_552efe1a61",
+   "bot": false,
+   "text": "ICANT"
+  },
+  {
+   "id": "f8f85b58-152c-4095-98bc-7152150750f7",
+   "ts_ms": 1793481367245,
+   "author": "u_55ee49bd5b",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "ada9de2a-0b33-4bfa-a9f9-44049c9546c7",
+   "ts_ms": 1793481367349,
+   "author": "u_161a0df570",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "b3333aca-556f-451e-b735-696e599ec3fb",
+   "ts_ms": 1793481367583,
+   "author": "u_6be092d9f4",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "e3254308-2615-469a-abd6-2740cfb44176",
+   "ts_ms": 1793481367591,
+   "author": "u_decaf9207a",
+   "bot": false,
+   "text": "KEKWQ"
+  },
+  {
+   "id": "c7abb6dc-2911-421f-a528-4d45a53b89ec",
+   "ts_ms": 1793481367646,
+   "author": "u_4c76e0fb7a",
+   "bot": false,
+   "text": "KEKWQ"
+  },
+  {
+   "id": "4479e8a2-756b-416b-b399-1ce302988bbc",
+   "ts_ms": 1793481367916,
+   "author": "u_9026b23f87",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "34d73db0-acbf-4842-ba56-4ba634d7eb90",
+   "ts_ms": 1793481367964,
+   "author": "u_3e3124a0a4",
+   "bot": false,
+   "text": "he wont fuckin wait"
+  },
+  {
+   "id": "6db03f85-d1bf-4287-8734-4cd94496ed1f",
+   "ts_ms": 1793481368284,
+   "author": "u_626eb6be6c",
+   "bot": false,
+   "text": "PogT"
+  },
+  {
+   "id": "9d4bd693-2189-4912-a54f-bfec6b2bdb0c",
+   "ts_ms": 1793481368426,
+   "author": "u_2dc2daab5b",
+   "bot": false,
+   "text": "peepoGiggles"
+  },
+  {
+   "id": "d5d02566-a375-44a8-a0eb-5b578f65e775",
+   "ts_ms": 1793481368734,
+   "author": "u_e32a6486c5",
+   "bot": false,
+   "text": "LMAO"
+  },
+  {
+   "id": "d9ea630c-81f9-4e71-a9d6-98fc4c23ff9d",
+   "ts_ms": 1793481369206,
+   "author": "u_fce1964254",
+   "bot": false,
+   "text": "LMFAO"
+  },
+  {
+   "id": "10d4c092-a492-46ae-a710-c495c4f85acc",
+   "ts_ms": 1793481369713,
+   "author": "u_71e102dbde",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "5f2dde55-6bb0-466d-b087-a1280d0ec20f",
+   "ts_ms": 1793481369774,
+   "author": "u_1f8c128982",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "65585c15-e89f-43d3-a1e4-0151053b8149",
+   "ts_ms": 1793481370632,
+   "author": "u_8b5c17918a",
+   "bot": false,
+   "text": "LMAO noob down"
+  },
+  {
+   "id": "6c613a16-1149-427e-a590-f8d282d26e38",
+   "ts_ms": 1793481370846,
+   "author": "u_26f995ad84",
+   "bot": false,
+   "text": "NotLikeThis"
+  },
+  {
+   "id": "20a782df-b393-4f0f-8e58-f1184d88c43c",
+   "ts_ms": 1793481371040,
+   "author": "u_06adb1af30",
+   "bot": false,
+   "text": "wait charge my controler"
+  },
+  {
+   "id": "cbdb8a93-3bc1-4024-8334-34908387d2f5",
+   "ts_ms": 1793481371607,
+   "author": "u_f0d5787803",
+   "bot": false,
+   "text": "SUREMAN"
+  },
+  {
+   "id": "9a1428fb-a81e-48d0-b944-ac686f52de15",
+   "ts_ms": 1793481371804,
+   "author": "u_aa0788d489",
+   "bot": false,
+   "text": "lol"
+  },
+  {
+   "id": "05e323a6-7ad3-4005-8779-49514b718566",
+   "ts_ms": 1793481372168,
+   "author": "u_822070cbcf",
+   "bot": false,
+   "text": "Thunderblight Ganon"
+  },
+  {
+   "id": "63eebc96-ff40-47d4-b22f-de2e8068a641",
+   "ts_ms": 1793481372215,
+   "author": "u_e32a6486c5",
+   "bot": false,
+   "text": "SUREBRO"
+  },
+  {
+   "id": "098b394d-9464-4551-9735-ca68c24bb4ff",
+   "ts_ms": 1793481372291,
+   "author": "u_71a6fba38d",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "ffd3eed8-d757-4c4a-a9f4-38f97818198d",
+   "ts_ms": 1793481372566,
+   "author": "u_0f35033fc3",
+   "bot": false,
+   "text": "skill issue"
+  },
+  {
+   "id": "bb250de1-1b61-4514-94e2-edad0067e50a",
+   "ts_ms": 1793481372716,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "SUREMAN the controller"
+  },
+  {
+   "id": "fe212c7c-ae1c-4616-a1c2-98fd10e723ef",
+   "ts_ms": 1793481372916,
+   "author": "u_263a8a409e",
+   "bot": false,
+   "text": "ClassiC"
+  },
+  {
+   "id": "1953022f-f5cf-44cb-9e4b-3739ee34b18f",
+   "ts_ms": 1793481373201,
+   "author": "u_43c0513f6f",
+   "bot": false,
+   "text": "shitbox controller KEKW"
+  },
+  {
+   "id": "3e7c825e-e0ba-4b40-919d-199819d31845",
+   "ts_ms": 1793481373920,
+   "author": "u_433fcb20e7",
+   "bot": false,
+   "text": "likely story"
+  },
+  {
+   "id": "50f8f845-412b-406a-ba61-4aa07541be0c",
+   "ts_ms": 1793481374587,
+   "author": "u_a5843c1380",
+   "bot": false,
+   "text": "LULW"
+  },
+  {
+   "id": "1f2fe7ec-b02a-4060-84a1-d87b53c4a50f",
+   "ts_ms": 1793481374778,
+   "author": "u_552efe1a61",
+   "bot": false,
+   "text": "!died"
+  },
+  {
+   "id": "74217656-2bcb-4cf4-ae72-4a4c4f0299a5",
+   "ts_ms": 1793481374952,
+   "author": "u_d19b484a34",
+   "bot": true,
+   "text": "Lirik died 75 times deadFR"
+  },
+  {
+   "id": "6841436c-2e38-4b19-9dd5-504d97baf05a",
+   "ts_ms": 1793481375559,
+   "author": "u_1ae4158418",
+   "bot": false,
+   "text": "Why didn't he wait? WeirdChamp"
+  },
+  {
+   "id": "a39d7ef0-f46c-4226-b876-5c8a4ab4ad40",
+   "ts_ms": 1793481376781,
+   "author": "u_d553a1b48b",
+   "bot": false,
+   "text": "Literal bot LUL"
+  },
+  {
+   "id": "7bf9040d-c3fa-4481-999e-40cf49bf8ffe",
+   "ts_ms": 1793481376822,
+   "author": "u_e32a6486c5",
+   "bot": false,
+   "text": "OKBRO"
+  },
+  {
+   "id": "268ea770-90bd-4cd3-b799-f90440a648df",
+   "ts_ms": 1793481378021,
+   "author": "u_02d8f5041d",
+   "bot": false,
+   "text": "I thought he was aura farming LULW"
+  },
+  {
+   "id": "121edd77-5c56-43a3-949c-86cb0018285b",
+   "ts_ms": 1793481378270,
+   "author": "u_d05315c4c7",
+   "bot": false,
+   "text": "classic larry LULW"
+  },
+  {
+   "id": "ca61cd37-6b89-46ac-a849-7b09a2a37823",
+   "ts_ms": 1793481378777,
+   "author": "u_6c84d65980",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "b69e1ccd-2b07-4e0f-a786-3430e12d6a6b",
+   "ts_ms": 1793481379092,
+   "author": "u_ec5fc7e2a5",
+   "bot": false,
+   "text": "KEKW"
+  },
+  {
+   "id": "f3487baa-8a66-4415-aa92-75d871e55dc0",
+   "ts_ms": 1793481381001,
+   "author": "u_2116969ed9",
+   "bot": false,
+   "text": "USB-C sucks"
+  },
+  {
+   "id": "81d28645-828d-446f-baa0-426558ae6e17",
+   "ts_ms": 1793481381152,
+   "author": "u_009be636c2",
+   "bot": false,
+   "text": "SUREMAN dizzySmug"
+  },
+  {
+   "id": "62a3636f-6c0b-451c-9cdb-186008a6009a",
+   "ts_ms": 1793481383131,
+   "author": "u_004b566737",
+   "bot": false,
+   "text": "ClassiC"
+  },
+  {
+   "id": "f4d1ef13-06f9-4e9d-b841-468c63a819a0",
+   "ts_ms": 1793481383441,
+   "author": "u_12444a2e7c",
+   "bot": false,
+   "text": "low battery?"
+  },
+  {
+   "id": "4fc1a1c7-e7f8-47b5-bd8f-37a2b80ccd07",
+   "ts_ms": 1793481383796,
+   "author": "u_6ef1f266cd",
+   "bot": false,
+   "text": "TREU"
+  },
+  {
+   "id": "d95b927c-17f8-4663-8ac7-4833b5f70181",
+   "ts_ms": 1793481384325,
+   "author": "u_a997d8f70b",
+   "bot": false,
+   "text": "pepePoint pepePoint pepePoint pepePoint"
+  },
+  {
+   "id": "fb0174d4-e672-4dc0-88ac-aa11485196f9",
+   "ts_ms": 1793481384548,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "YEP"
+  },
+  {
+   "id": "6691ed79-f294-4fba-af0d-59e2d6aac6a0",
+   "ts_ms": 1793481385377,
+   "author": "u_db3a0601dc",
+   "bot": false,
+   "text": "KEKQ usb c controller"
+  },
+  {
+   "id": "76140525-3664-413d-95c0-4041bc8ad3f6",
+   "ts_ms": 1793481386035,
+   "author": "u_1f8c128982",
+   "bot": false,
+   "text": "i agrre"
+  },
+  {
+   "id": "046b2f34-ac7c-44c7-992c-d755eb767699",
+   "ts_ms": 1793481387283,
+   "author": "u_aad3d5a86c",
+   "bot": false,
+   "text": "xbox LUL"
+  },
+  {
+   "id": "6f8dabfc-14de-4f56-981a-94160ccfcd3e",
+   "ts_ms": 1793481388299,
+   "author": "u_0dcf04ce5d",
+   "bot": false,
+   "text": "same problem"
+  },
+  {
+   "id": "d74e0349-f28a-4b1b-baa9-5c4014617497",
+   "ts_ms": 1793481388483,
+   "author": "u_0cb104e808",
+   "bot": false,
+   "text": "Dead before we can even get to the gamba KEK"
+  },
+  {
+   "id": "f1c65036-cfbb-49cb-9a9e-49c36829b876",
+   "ts_ms": 1793481388673,
+   "author": "u_d8eb5e39b0",
+   "bot": false,
+   "text": "Xbox KEKW"
+  },
+  {
+   "id": "f3d23c2e-a9ce-4d7a-a2af-85f0a12bfccd",
+   "ts_ms": 1793481388875,
+   "author": "u_4a9e09d1ff",
+   "bot": false,
+   "text": "YEP4"
+  },
+  {
+   "id": "6b74a25f-a584-459d-a488-508f888b589a",
+   "ts_ms": 1793481389420,
+   "author": "u_3c373d7c7b",
+   "bot": false,
+   "text": "playing on BT wireless Pffttt"
+  },
+  {
+   "id": "0f25a3df-4465-4dbf-8f10-f7281c1d64bf",
+   "ts_ms": 1793481390197,
+   "author": "u_ceee88d66a",
+   "bot": false,
+   "text": "idk mine never broke"
+  },
+  {
+   "id": "b19d0bed-9d83-4bd3-8c89-8b0c06fd8e08",
+   "ts_ms": 1793481390589,
+   "author": "u_d19b484a34",
+   "bot": true,
+   "text": "Prediction Locked! 🔒 👀 - the choice with most wagered points is \"Fail!\" with 2485789 points out of 2585250 points total. Good luck!"
+  },
+  {
+   "id": "e050ea43-e4fe-4620-acaf-42b855669b31",
+   "ts_ms": 1793481391977,
+   "author": "u_0dcf04ce5d",
+   "bot": false,
+   "text": "its the port"
+  },
+  {
+   "id": "40ee0841-4eab-4d8a-9a67-28b31c0af066",
+   "ts_ms": 1793481392849,
+   "author": "u_82daff6133",
+   "bot": false,
+   "text": "thunder mess your controller"
+  },
+  {
+   "id": "e93b7843-bfb1-477f-b33f-9aa98c1eb6cc",
+   "ts_ms": 1793481394366,
+   "author": "u_2dc2daab5b",
+   "bot": false,
+   "text": "YesYes"
+  },
+  {
+   "id": "5cfd6ce8-7862-41e9-a144-915c6d8554a0",
+   "ts_ms": 1793481395014,
+   "author": "u_2116969ed9",
+   "bot": false,
+   "text": "I need to put mine in a certain way or else it doesn't work, it's dumb"
+  },
+  {
+   "id": "18532b2c-64bb-4132-bb44-e9ff7496c689",
+   "ts_ms": 1793481395100,
+   "author": "u_be0d1348c4",
+   "bot": false,
+   "text": "KEKW the GAMBA"
+  },
+  {
+   "id": "3bd79413-abef-4144-aee8-085687f0f878",
+   "ts_ms": 1793481395392,
+   "author": "u_ec5fc7e2a5",
+   "bot": false,
+   "text": "HOLY"
+  },
+  {
+   "id": "cc8faeb8-1ee2-44a5-9302-252fe44c8447",
+   "ts_ms": 1793481397399,
+   "author": "u_b92b2ef48b",
+   "bot": false,
+   "text": "it is so you can spend money on them"
+  },
+  {
+   "id": "161b1871-91e6-4b83-89a5-8e3f4d572f44",
+   "ts_ms": 1793481398858,
+   "author": "u_505e317f6a",
+   "bot": false,
+   "text": "get the steam controller GabeN"
+  },
+  {
+   "id": "b2d7a6c6-34c5-4e41-be37-df85e8d6a2c2",
+   "ts_ms": 1793481399001,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "SUREMAN the controller again?"
+  },
+  {
+   "id": "b145f3b0-9d90-4c75-8a7b-d40c99a4bd9d",
+   "ts_ms": 1793481402222,
+   "author": "u_feedc77b27",
+   "bot": false,
+   "text": "\"my controller\""
+  },
+  {
+   "id": "46b2a9d7-d3bc-470f-902a-aa43e644495a",
+   "ts_ms": 1793481402267,
+   "author": "u_6be092d9f4",
+   "bot": false,
+   "text": "dude chill\\"
+  },
+  {
+   "id": "55330eda-6ca3-4b42-9f8c-b77747d2b9f1",
+   "ts_ms": 1793481403630,
+   "author": "u_0dcf04ce5d",
+   "bot": false,
+   "text": "@user same"
+  },
+  {
+   "id": "a2168b01-2819-4fd0-b314-46a8dac65f49",
+   "ts_ms": 1793481403762,
+   "author": "u_8c3d41f995",
+   "bot": false,
+   "text": "DSPirk"
+  },
+  {
+   "id": "45c74732-f3d9-44de-8bd6-f894540fb30f",
+   "ts_ms": 1793481404633,
+   "author": "u_06adb1af30",
+   "bot": false,
+   "text": "he s fast"
+  },
+  {
+   "id": "d6f43825-acd3-470d-9999-7bb2b8a7f79d",
+   "ts_ms": 1793481405421,
+   "author": "u_6e18dda837",
+   "bot": false,
+   "text": "its over"
+  },
+  {
+   "id": "0a2286c9-47ec-42ed-ac1c-e41b63d9cb6c",
+   "ts_ms": 1793481408583,
+   "author": "u_0886339c95",
+   "bot": false,
+   "text": "LMAO"
+  },
+  {
+   "id": "370bd758-a23a-4fd0-b547-0da8d28dcf9a",
+   "ts_ms": 1793481408825,
+   "author": "u_fc349f8a7c",
+   "bot": false,
+   "text": "MONKA"
+  },
+  {
+   "id": "f2e34e21-aa52-46a8-b5cd-618854aa5f81",
+   "ts_ms": 1793481410312,
+   "author": "u_feedc77b27",
+   "bot": false,
+   "text": "@user KEKLEO"
+  },
+  {
+   "id": "1b67d52e-d82e-420e-b9b9-46659633a9b3",
+   "ts_ms": 1793481411745,
+   "author": "u_ec5fc7e2a5",
+   "bot": false,
+   "text": "HOLY AI is wake"
+  },
+  {
+   "id": "2a72ca1a-1bfc-4136-a2ed-31eb4af45053",
+   "ts_ms": 1793481412872,
+   "author": "u_2a7848f683",
+   "bot": false,
+   "text": "PepeBeaten the controller"
+  },
+  {
+   "id": "297faf1f-f45a-4541-9e3c-d21aa580b4c6",
+   "ts_ms": 1793481414628,
+   "author": "u_009be636c2",
+   "bot": false,
+   "text": "D:"
+  },
+  {
+   "id": "2ed8812d-411d-472d-9472-5f35ae96b09b",
+   "ts_ms": 1793481414956,
+   "author": "u_3e3124a0a4",
+   "bot": false,
+   "text": "dayum boy"
+  },
+  {
+   "id": "8605949e-cbd0-4bbc-8996-7dd41685495d",
+   "ts_ms": 1793481415645,
+   "author": "u_18ad845cab",
+   "bot": false,
+   "text": "GEEG"
+  },
+  {
+   "id": "e360df9a-33cc-474a-ac44-45dc642bf0c4",
+   "ts_ms": 1793481416358,
+   "author": "u_e2eb71dee5",
+   "bot": false,
+   "text": "Tutorial over at last"
+  },
+  {
+   "id": "d13de3ff-8f81-43ac-b5c5-dbac0624f467",
+   "ts_ms": 1793481417432,
+   "author": "u_48ae851672",
+   "bot": false,
+   "text": "he is not No Joke, he is Chang Hong"
+  }
+ ]
+}

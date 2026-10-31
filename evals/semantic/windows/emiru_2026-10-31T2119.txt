@@ -1,0 +1,98 @@
+# window emiru_2026-10-31T2119 — channel emiru, 96 messages, 5m-quiet
+# n | seconds into window | author | text   (BOT = known bot account)
+0 |   0.0 | u_164f01d3bc | -fish ͏
+1 |   2.1 | u_37dd93e52e | @user No luck, but you reeled in 🍂. (34s cooldown) 16 attempts since your last catch.
+2 |  18.4 | u_8d93991407 | - VietNaMeseManWavingHisGun
+3 |  19.1 | u_37dd93e52e | @user your traps came back with a catch! You found 🧦🩲🧊🧦🌿🌿🌿🤿🪸🧦🩲🐌. Your traps were immediately set again for another hour.
+4 |  19.4 | u_37dd93e52e | @user I will remind you in 59m 59s. | ID 7ea6c3
+5 |  24.4 | u_d77fcc6d47 | $fish
+6 |  25.1 | u_37dd93e52e | @user No luck, but you reeled in 🍂. (2m cooldown) 34 attempts since your last catch.
+7 |  30.5 | u_d77fcc6d47 | -cook
+8 |  31.2 | u_37dd93e52e | @user you prepared beef tacos successfully and earned 1,484 eggs! You now have 77,862 eggs. Cooking
+9 |  36.7 | u_d77fcc6d47 | -gift
+10 |  37.3 | u_37dd93e52e | @user Anone Here's what's under your tree! 🎄 Snow Shovel 🎀 Weighted blanket 🎊 Belt 🎉
+11 |  43.4 | u_f2786328df | er
+12 |  43.5 | u_6304f8769f | joyous Herald
+13 |  47.1 | u_f2786328df | oh no
+14 |  47.2 | u_391a700fad | -fish RAH
+15 |  47.9 | u_864d282677 | -gift
+16 |  47.9 | u_37dd93e52e | @user No luck... your line landed 116 ft away. sadg (35s cooldown) 16 attempts since your last catch.
+17 |  48.8 | u_37d8712ba8 | -fish
+18 |  48.9 | u_37dd93e52e | @user wowie Are you ready to open these gifts? 🎄 Baseball Glove 🎀 Costco Hot Dog Combo 🌟 Bag of Road Salt 🌟
+19 |  49.6 | u_37dd93e52e | @user No luck... your line landed 26 ft away. sadg (31s cooldown) 36 attempts since your last catch.
+20 |  50.9 | u_391a700fad | #lotd
+21 |  51.4 | u_cc11fe7554 | ACTION ͏🏆 Loser of the day in #emiru is ltl_wackman with 802 messages past 24 hours.
+22 |  54.0 | u_864d282677 | eda 🌭
+23 |  54.3 | u_391a700fad | o
+24 |  55.9 | u_37d8712ba8 | -cookie
+25 |  56.6 | u_37dd93e52e | @user @user, your golden cookie: Your physical vitality should be quite strong, and you're encouraged by greater self-confidence. At the same time, however, someone seems to be trying to ruffle your feathers by being selfish and disrespectful of your space. 🥠
+26 |  59.3 | u_f2786328df | no way
+27 |  68.1 | u_4ad62fa870 | nonono NA can't win
+28 |  69.4 | u_76feec1fc5 | -fish chorm
+29 |  69.5 | u_4b8e2a260a | taliya could just r by it?
+30 |  70.2 | u_37dd93e52e | @user No luck, but you reeled in 🥽. (35s cooldown) 2 attempts since your last catch. Used chorm ; 366733 eggs left.
+31 |  72.0 | u_f2786328df | Classic
+32 |  76.3 | u_4ad62fa870 | -fish trap reset BRAINSSS
+33 |  76.9 | u_37dd93e52e | @user your traps came back with a catch! You found 🌿🍂🌿🍂🌿🌿🍂🍂🌿🍂🌿🪼. Your traps were immediately set again for another hour.
+34 |  78.2 | u_76feec1fc5 | -cook
+35 |  79.0 | u_37dd93e52e | @user you prepared creme brulee successfully and earned 660 eggs! You now have 367,393 eggs. Cooking
+36 | 100.4 | u_56a6d09acf | -fish ͏
+37 | 101.2 | u_37dd93e52e | @user No luck... your line landed 463 ft away. sadg (57s cooldown) 2 attempts since your last catch.
+38 | 122.1 | u_164f01d3bc | -fish
+39 | 122.9 | u_37dd93e52e | @user No luck... your line landed 89 ft away. sadg (2m cooldown) 17 attempts since your last catch.
+40 | 128.4 | u_53ae1991fe | -fish
+41 | 129.2 | u_37dd93e52e | @user you caught a ✨🐊✨! It is 20 ft long. It took 10 attempts. (30m cooldown)
+42 | 133.9 | u_53ae1991fe | emiruYAY
+43 | 135.4 | u_d8f3a18164 | clappi
+44 | 136.3 | u_864d282677 | clappi
+45 | 137.9 | u_ad58ab0a21 | clappi
+46 | 138.9 | u_4b8e2a260a | ew rocks
+47 | 144.6 | u_4b8e2a260a | a renekton Pog
+48 | 146.1 | u_164f01d3bc | clappi
+49 | 146.4 | u_c0d15985ba | clappi ͏
+50 | 148.0 | u_d4e5cbe3b7 | elisNom
+51 | 150.1 | u_4b8e2a260a | clappi
+52 | 153.8 | u_f2786328df | clappi
+53 | 179.4 | u_024626a327 | clappi ͏
+54 | 182.8 | u_024626a327 | -fish chorm
+55 | 183.9 | u_37dd93e52e | @user No luck... your line landed 347 ft away. sadg (53s cooldown) 2 attempts since your last catch. Used chorm ; 86714 eggs left.
+56 | 190.1 | u_b7055ad4d1 | -fish trap reset
+57 | 190.8 | u_37dd93e52e | @user your traps came back with a catch! You found 🍂🪸🌿🍂🌿🪸🌿🌿🪿. Your traps were immediately set again for another hour.
+58 | 192.9 | u_b7055ad4d1 | - YoungMan
+59 | 196.9 | u_b7055ad4d1 | - YoungMan
+60 | 197.6 | u_37dd93e52e | @user you tried to prepare waffles, but burned it. You earned nothing. COOKING
+61 | 199.4 | u_5814d4b1ba | $$ 🌐
+62 | 199.8 | u_b7055ad4d1 | NOOOMYMILJ
+63 | 200.0 | u_37dd93e52e | @user [🇹🇿 🇧🇩 🇫🇲]
+64 | 200.8 | u_c0537ee9ab | elisAAAH ͏
+65 | 201.9 | u_864d282677 | monkaOMEGA
+66 | 204.4 | u_5814d4b1ba | -fish
+67 | 205.2 | u_37dd93e52e | @user No luck, but you reeled in 🌿. (2m cooldown) 2 attempts since your last catch.
+68 | 214.7 | u_c0537ee9ab | elisAAAH ENOUGH
+69 | 223.0 | u_ad58ab0a21 | -fish buzzybee
+70 | 224.1 | u_37dd93e52e | @user No luck... your line landed 114 ft away. sadg (43s cooldown) 1 attempt since your last catch.
+71 | 239.2 | u_7619ad6b8f | -cook ͏
+72 | 240.0 | u_37dd93e52e | @user you prepared brownies successfully and earned 473 eggs! You now have 384,891 eggs. Cooking
+73 | 242.4 | u_864d282677 | catAsk goose does 🪿 ping you? SingsMic
+74 | 243.6 | u_f2786328df | alerm
+75 | 244.6 | u_b7055ad4d1 | elisWaving goose
+76 | 252.0 | u_4c5db3c868 | -fish chorm
+77 | 252.8 | u_37dd93e52e | @user No luck... your line landed 337 ft away. sadg (54s cooldown) 13 attempts since your last catch. Used chorm ; 599692 eggs left.
+78 | 253.6 | u_46298a4ea7 | $$ Herby
+79 | 254.3 | u_37dd93e52e | @user you pulled in your traps and found only junk: 🌿🌿🍂💀🌿🌿🩱🌿🥾🥫🩲🪸🌿🌿. Your traps were immediately set again for another hour.
+80 | 254.8 | u_c0537ee9ab | elisAAAH yes milk
+81 | 259.0 | u_c0537ee9ab | elisAAAH thara
+82 | 260.1 | u_864d282677 | oopsie
+83 | 261.6 | u_6304f8769f | emiruCHEER
+84 | 271.4 | u_6935187cf0 | -fish trap
+85 | 272.0 | u_37dd93e52e | @user your traps came back with a catch! You found 🍂🌿🌿🧦🔩🌿🌿🍂🌿🥫🧦🩲🧳🧦🦀.
+86 | 275.8 | u_6253258e18 | 🪿 Clap
+87 | 277.2 | u_6935187cf0 | -fish chorm
+88 | 278.1 | u_37dd93e52e | @user No luck... your line landed 102 ft away. sadg (50s cooldown) 11 attempts since your last catch. Used chorm ; 34965 eggs left.
+89 | 282.2 | u_c0537ee9ab | elisAAAH
+90 | 282.8 | u_164f01d3bc | -fish
+91 | 283.6 | u_37dd93e52e | @user No luck... your line landed 132 ft away. sadg (2m cooldown) 18 attempts since your last catch.
+92 | 292.1 | u_c0d15985ba | -fish
+93 | 293.0 | u_37dd93e52e | @user No luck... your line landed 86 ft away. sadg (2m cooldown) 4 attempts since your last catch.
+94 | 295.3 | u_864d282677 | -cook
+95 | 296.0 | u_37dd93e52e | @user you prepared lasagna successfully and earned 1,415 eggs! You now have 13,444 eggs. Cooking

@@ -1,0 +1,127 @@
+{
+  "purpose": "Behaviour checks for semantic grouping: the ten cases the product must get right. Used during development and in unit tests, never for headline numbers.",
+  "provenance": "CONSTRUCTED, NOT REAL CHAT. Written by Claude (the model building the system) to exercise specific behaviours; the intended groups are the author's intent, not an independent judgement. Real-chat windows with independently drafted labels are in evals/semantic/windows/.",
+  "reviewed": false,
+  "rule": "Same as the real windows: a shared cluster id means the same specific meaning; `x` never pairs; `unsure` is excluded.",
+  "channel": "jynxzi",
+  "scenes": [
+    {
+      "name": "same meaning, different words; same word, different meanings",
+      "messages": [
+        ["this game is so boring", "wants_different_game"],
+        ["bro switch games already", "wants_different_game"],
+        ["play fortnite instead", "wants_different_game"],
+        ["we need a different game", "wants_different_game"],
+        ["why is he still playing this", "wants_different_game"],
+        ["what game is this", "asks_which_game"],
+        ["whats this game called", "asks_which_game"],
+        ["game name?", "asks_which_game"],
+        ["this game looks actually fun", "x"],
+        ["game of the year for sure", "x"],
+        ["his mic is muted", "audio_problem"],
+        ["we can't hear him", "audio_problem"],
+        ["audio is broken", "audio_problem"],
+        ["someone tell him to fix sound", "audio_problem"],
+        ["звук пропал", "audio_problem"],
+        ["не слышно стримера", "audio_problem"],
+        ["the music in this game is fire", "x"],
+        ["nice shot", "x"]
+      ]
+    },
+    {
+      "name": "channel points: shared word, different meanings",
+      "messages": [
+        ["how many points do I need", "points_question"],
+        ["how do you get channel points", "points_question"],
+        ["how do i earn points fast", "points_question"],
+        ["I lost my prediction", "lost_prediction"],
+        ["lost all my points on that prediction", "lost_prediction"],
+        ["bro i believed and lost everything", "lost_prediction"],
+        ["1000 channel points", "x"],
+        ["can someone redeem this", "x"],
+        ["points", "x"]
+      ]
+    },
+    {
+      "name": "streamer-name spam and stances",
+      "messages": [
+        ["jynxzi", "x"],
+        ["JYNXZI", "x"],
+        ["@jynxzi", "x"],
+        ["jynxzi is the goat", "praise_streamer"],
+        ["best streamer on twitch fr", "praise_streamer"],
+        ["he is genuinely the goat", "praise_streamer"],
+        ["jynxzi you're trash", "insult_streamer"],
+        ["this guy is so bad lol", "insult_streamer"],
+        ["worst player i've ever seen", "insult_streamer"],
+        ["jynxzi what time is it there", "x"]
+      ]
+    },
+    {
+      "name": "numbers and votes",
+      "messages": [
+        ["1", "vote_1"],
+        ["1", "vote_1"],
+        ["1", "vote_1"],
+        ["2", "vote_2"],
+        ["2", "vote_2"],
+        ["100", "x"],
+        ["100%", "x"],
+        ["69", "x"]
+      ]
+    },
+    {
+      "name": "reactions: laughter is one meaning, other emotes are not laughter",
+      "messages": [
+        ["LUL", "laughing"],
+        ["KEKW", "laughing"],
+        ["lmaooo", "laughing"],
+        ["ахахахах", "laughing"],
+        ["😂😂😂", "laughing"],
+        ["Pog", "hype"],
+        ["PogChamp", "hype"],
+        ["LETS GOOO", "hype"],
+        ["Sadge", "sad"],
+        ["F", "sad"],
+        ["rip bro", "sad"],
+        ["?", "confused"],
+        ["???", "confused"],
+        ["huh", "confused"],
+        ["catJAM", "emote_catjam"],
+        ["catJAM catJAM", "emote_catjam"],
+        ["peepoHey", "x"]
+      ]
+    },
+    {
+      "name": "copypasta and unrelated singles",
+      "messages": [
+        ["I'm not saying he's bad but my grandma with a steering wheel controller would have hit that shot", "pasta_grandma"],
+        ["I'm not saying he's bad but my grandma with a steering wheel controller would have hit that shot", "pasta_grandma"],
+        ["I'm not saying he's bad but my grandma with a steering wheel controller would have hit that shot", "pasta_grandma"],
+        ["what did i miss", "x"],
+        ["just got here from tiktok", "x"],
+        ["is this live or a rerun", "x"],
+        ["my cat is sitting on my keyboard", "x"],
+        ["anyone else watching from germany", "x"],
+        ["first time catching the stream live", "x"],
+        ["!discord", "x"]
+      ]
+    },
+    {
+      "name": "two topics at once, then a transition",
+      "messages": [
+        ["that clutch was insane", "clutch_reaction"],
+        ["HOW DID HE CLUTCH THAT", "clutch_reaction"],
+        ["1v4 clutch no way", "clutch_reaction"],
+        ["what sens do you use", "asks_settings"],
+        ["sensitivity?", "asks_settings"],
+        ["whats your dpi and sens", "asks_settings"],
+        ["clean clutch ngl", "clutch_reaction"],
+        ["he's tilted now", "streamer_tilted"],
+        ["bro is so tilted", "streamer_tilted"],
+        ["tilt incoming", "streamer_tilted"],
+        ["calm down bro its just a game", "streamer_tilted"]
+      ]
+    }
+  ]
+}

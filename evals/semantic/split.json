@@ -1,0 +1,21 @@
+{
+ "rule": "Fixed before any window was labelled: windows grouped into strata (language, then size), ordered within a stratum by sha256 of the channel name, alternately assigned dev, test. One window per channel, so no channel is in both.",
+ "dev": [
+  "sodapoppin_2026-10-31T2120",
+  "jynxzi_2026-10-31T2120",
+  "zackrawrr_2026-10-31T2117",
+  "lirik_2026-10-31T2115",
+  "bratishkinoff_2026-10-31T2119",
+  "5opka_2026-10-31T2133",
+  "summit1g_2026-10-31T2115",
+  "ishowspeed_2026-10-31T2124"
+ ],
+ "test": [
+  "hasanabi_2026-10-31T2125",
+  "extraemily_2026-10-31T2128",
+  "emiru_2026-10-31T2119",
+  "morphe_ya_2026-10-31T2129",
+  "insize_2026-10-31T2127",
+  "xqc_2026-10-31T2124"
+ ]
+}

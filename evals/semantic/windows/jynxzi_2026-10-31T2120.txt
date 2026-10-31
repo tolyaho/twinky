@@ -1,0 +1,164 @@
+# window jynxzi_2026-10-31T2120 — channel jynxzi, 162 messages, 60s
+# n | seconds into window | author | text   (BOT = known bot account)
+0 |   0.0 | u_50fe6bba13 | LO
+1 |   0.2 | u_e2a8ee1c38 | w junko
+2 |   1.1 | u_748925e253 | jynxziRIPBOZO ͏
+3 |   1.1 | u_e93a2bb8b8 | Ooooo
+4 |   1.1 | u_b5eba60583 | Shot
+5 |   1.9 | u_c0d9287e47 | ! Followage
+6 |   2.3 | u_45569215ea | OOOO
+7 |   3.1 | u_c5bb26a412 | jynxi crack me
+8 |   3.2 | u_ccf8a45927 | Slammed
+9 |   4.0 | u_353c8802b0 | shot boy
+10 |   4.2 | u_02f0c587b2 | HES IN ME
+11 |   4.6 | u_c2d6e3df26 | SHOT Jynz
+12 |   5.5 | u_d19a486aef | OOOO
+13 |   5.7 | u_748925e253 | monkaW
+14 |   5.8 | u_a40fc63c59 | 4 champs 1 cameraman
+15 |   6.3 | u_4838c71ff1 | LETS GOOOOO JIDDY
+16 |   7.9 | u_c2d6e3df26 | NICEEEEEEEEEEE
+17 |   8.1 | u_e1b28a6258 | !gamble 100
+18 |   8.3 | u_0cb93f40b4 BOT | ACTION drac4044 lost 100 points in roulette and now has 860 points! FeelsBadMan
+19 |   8.6 | u_57277902d1 | NICE
+20 |   8.9 | u_fabdc61507 | L vape break start the tournament
+21 |   9.1 | u_c8d25ec407 | NICEEEE
+22 |   9.2 | u_1a2b122103 | NICE
+23 |   9.7 | u_c2d6e3df26 | COME ONNNNNN
+24 |   9.8 | u_57277902d1 | WWWWW
+25 |   9.9 | u_2cc895415f | !stack
+26 |  10.1 | u_d19b484a34 BOT | @user Jynxzi JayyGuns Loo Mingo Spoit
+27 |  10.1 | u_2e523f57e3 | !followage
+28 |  10.5 | u_0cb93f40b4 BOT | @user, 59rag has been following jynxzi for 3 years 4 months 23 days 20 hours
+29 |  10.9 | u_d0bd51d7e2 | COME ON
+30 |  11.0 | u_50fe6bba13 | WW
+31 |  11.2 | u_45569215ea | MUGA
+32 |  11.3 | u_ee7b2e78fa | WWWW
+33 |  11.4 | u_e2a8ee1c38 | junko is cracked
+34 |  11.5 | u_748925e253 | jynxzi44
+35 |  11.6 | u_743d59edac | Niceee
+36 |  11.9 | u_c0d9287e47 | !followage
+37 |  12.2 | u_c63184a5b7 | JUNKO HUMBLING PROS
+38 |  12.2 | u_6f6402901d | WW BANG
+39 |  12.3 | u_7789b208aa | OOOO
+40 |  12.4 | u_a40fc63c59 | 4 champs 1 cameraman.
+41 |  12.7 | u_889c06e566 | jayy 5-9
+42 |  12.7 | u_e93a2bb8b8 | Let’s goooo
+43 |  12.8 | u_c54d44903f | !gamble 500
+44 |  13.1 | u_0cb93f40b4 BOT | ACTION GamlngBee lost 500 points in roulette and now has 42395 points! FeelsBadMan
+45 |  13.1 | u_7b6fee72f3 | OOOO
+46 |  13.2 | u_70b72608f5 | 7-5 jynx
+47 |  13.4 | u_b492c0fd71 | ww
+48 |  13.8 | u_033ef4243a | nice
+49 |  13.8 | u_0e60a9d22e | solid
+50 |  14.0 | u_97c918767c | WWW
+51 |  14.4 | u_7853b125bb | Letss gooo
+52 |  14.9 | u_57277902d1 | LETS GO JYNXZIII
+53 |  14.9 | u_6f6402901d | BANG
+54 |  15.2 | u_e2a8ee1c38 | crack me junko
+55 |  16.4 | u_239af9e09b | WWWW
+56 |  16.5 | u_c8d25ec407 | ????
+57 |  16.6 | u_bfde93b0b9 | wwwwwww
+58 |  16.7 | u_08779cdeb7 | SHOOTTT
+59 |  16.9 | u_97c918767c | WW
+60 |  17.0 | u_906f3d7327 | Spoit mutted
+61 |  17.1 | u_7853b125bb | W jiddy
+62 |  17.2 | u_079d554f45 | pussy
+63 |  17.3 | u_6fe7f42d58 | SPOITTTTTTT CARRY
+64 |  17.4 | u_446c5cbac0 | WW Cameraman
+65 |  17.8 | u_c1f11c4738 | Holy Primed up Junky
+66 |  18.0 | u_f8b5c1f6fe | LLETSSS GOO
+67 |  18.1 | u_fb3480e756 | OOOO
+68 |  18.2 | u_57277902d1 | WWWWWWW
+69 |  18.4 | u_e1b28a6258 | !gamble 200
+70 |  18.9 | u_c5bb26a412 | crack me jynxi
+71 |  19.0 | u_8fcb1f50ad | HOLLLLLLLLLLLLLLLD
+72 |  19.0 | u_748925e253 | THANKU
+73 |  19.1 | u_a40fc63c59 | 4 champs 1 cameraman
+74 |  19.5 | u_658add893b | @user retard
+75 |  19.6 | u_57277902d1 | OOOO
+76 |  19.7 | u_d0c90f5665 | 4 champs 1 sex toy
+77 |  19.8 | u_6004c4a837 | LL SCRIPTED
+78 |  20.2 | u_239af9e09b | WW
+79 |  20.2 | u_5b15f65f1b | WWWWW
+80 |  20.7 | u_ee7b2e78fa | WWWWW
+81 |  20.7 | u_a4aefc8b42 | huge
+82 |  22.2 | u_353c8802b0 | spoit ofc top frag
+83 |  22.2 | u_a535a66101 | wheres the toe cam
+84 |  23.0 | u_d992e6054d | So winnable
+85 |  23.3 | u_ae4291eba6 | staaay lockkeeedd
+86 |  24.3 | u_7bbfdece7a | yo
+87 |  24.3 | u_748925e253 | jynxzi44
+88 |  24.8 | u_2b6c4d9759 | Hey Junko, love your content, do you think ending my life is viable ?, been going through some bad times lately
+89 |  25.3 | u_4bee18c6d7 | jynxzi will u play GTA6
+90 |  25.5 | u_a40fc63c59 | 4 champs 1 cameraman.
+91 |  25.7 | u_d88837c2c7 | w
+92 |  26.9 | u_5c4f18ef5f | spoit 11 kills with 100 ping geeg
+93 |  27.0 | u_8f7c139dc7 | spoit AURA
+94 |  27.0 | u_f840ee038b | !gamble 420
+95 |  27.2 | u_92b03101c5 | Lockkeddd
+96 |  28.3 | u_6fe7f42d58 | WWWW
+97 |  28.5 | u_c54d44903f | !gamble 1000
+98 |  28.8 | u_881e6e75c8 | fake sip
+99 |  29.9 | u_992df7af00 | ClapHands
+100 |  30.0 | u_b5eba60583 | Jynxzi pulling his own weight lowk
+101 |  30.7 | u_f4f0fe7e91 | @user are you taking over his setup?
+102 |  30.9 | u_6e0deae65d | im whatever you want me to be
+103 |  31.9 | u_e2a8ee1c38 | win ts
+104 |  31.9 | u_c5bb26a412 | jynxi crack me
+105 |  32.2 | u_658add893b | @user retard..
+106 |  32.8 | u_748925e253 | alo
+107 |  33.0 | u_554dbfd05d | ww
+108 |  33.9 | u_c8d25ec407 | LOUIEEEEE
+109 |  34.1 | u_a40fc63c59 | 4 champs 1 cameraman
+110 |  34.3 | u_e1b28a6258 | !gamble200
+111 |  36.4 | u_880825fcb7 | Jinxzi can u raid my stream
+112 |  36.8 | u_d046f32414 | @user i love the costume w supporting the special needs!!
+113 |  37.0 | u_a5e3e40e8b | @user L chatter sybau
+114 |  37.0 | u_4155373197 | www
+115 |  37.8 | u_fb969bf230 | !drops
+116 |  38.0 | u_d19b484a34 BOT | You can claim your drops here -> https://www.twitch.tv/drops/inventory
+117 |  38.7 | u_292e497276 | have a superb day junks
+118 |  38.7 | u_00251f2c8c | Good round bitch?
+119 |  39.0 | u_6eef26e3f4 | Jynxzi do you vape
+120 |  39.0 | u_a40fc63c59 | 4 champs 1 cameraman.
+121 |  39.2 | u_5d12ec2685 | Why not throw your smoke there
+122 |  39.6 | u_4155373197 | wwwwww
+123 |  40.3 | u_554dbfd05d | w jinxzy
+124 |  40.5 | u_748925e253 | @user STABBY
+125 |  40.8 | u_4155373197 | www
+126 |  40.8 | u_c63184a5b7 | JUNKO HUMBLING PROS MAN
+127 |  41.3 | u_d0c90f5665 | 4 champs 1 fleshlight
+128 |  41.4 | u_4bee18c6d7 | jynxzi will u play gta 65
+129 |  41.8 | u_fdea84018d | SpermHead keeping up with others WW
+130 |  42.3 | u_4155373197 | wwww
+131 |  42.5 | u_079d554f45 | stfu
+132 |  42.7 | u_92b03101c5 | Jidda putting in work
+133 |  42.9 | u_3f60ac5e61 | !stack
+134 |  43.1 | u_d19b484a34 BOT | @user Jynxzi JayyGuns Loo Mingo Spoit
+135 |  43.4 | u_fb969bf230 | !stack
+136 |  43.5 | u_4155373197 | wwwww
+137 |  43.8 | u_9680e57e4c | @user bro dead doesn't talk
+138 |  44.9 | u_4155373197 | www
+139 |  44.9 | u_47ca6e46a2 | looking good
+140 |  46.1 | u_fabdc61507 | Yo jynxzi replace me with you cause you ain’t doing shit
+141 |  46.2 | u_19c8a68c4c | SON
+142 |  46.2 | u_c5bb26a412 | can you crack me jynxi
+143 |  47.0 | u_e7dfc917cb | @user yo dont bro, please
+144 |  47.4 | u_a40fc63c59 | 4 champs 1 cameraman
+145 |  47.5 | u_73856f629f | jynxziSLOWDOWN
+146 |  47.7 | u_8fa596ba3e | its holdings its weight
+147 |  48.1 | u_c0d9287e47 | !followage
+148 |  48.5 | u_906f3d7327 | Jynxzi pulling his weight? ULTRARARE
+149 |  48.5 | u_0cb93f40b4 BOT | @user, pulumieh has been following jynxzi for 14 days 1 hour
+150 |  48.9 | u_1131fdc983 | 4 champs 1 cameraman.
+151 |  51.0 | u_658add893b | @user ye retarded
+152 |  52.2 | u_dfc7891027 | Degloved
+153 |  52.3 | u_bbd6a68e42 | databaseKeking
+154 |  52.3 | u_47ca6e46a2 | wwww chad
+155 |  52.3 | u_4bee18c6d7 | jynxzi will u play GTA 6
+156 |  52.4 | u_a40fc63c59 | 4 champs 1 cameraman.
+157 |  56.0 | u_235a2f451b | L ads
+158 |  58.0 | u_748925e253 | @user STABBY ͏
+159 |  58.1 | u_279bf13316 | are you 1-10 ben for halloween
+160 |  58.5 | u_257c2190d4 | !gamble all
+161 |  58.7 | u_0cb93f40b4 BOT | ACTION PogChamp peterasino went all in and won 860 points PogChamp they now have 1720 points FeelsGoodMan

@@ -1,0 +1,141 @@
+# window extraemily_2026-10-31T2128 — channel extraemily, 139 messages, 30s
+# n | seconds into window | author | text   (BOT = known bot account)
+0 |   0.0 | u_66483240eb | HELP
+1 |   0.1 | u_c96acc8a93 | Erm
+2 |   0.2 | u_aee2bac94a | P LUL LUL LUL
+3 |   0.8 | u_1d827d34a1 | Erm
+4 |   0.8 | u_86bd43ec1e | lol
+5 |   0.8 | u_f3e57bf4b4 | agahi
+6 |   1.1 | u_28892f8951 | o
+7 |   1.4 | u_0e7a064fcd | Wokege
+8 |   1.7 | u_66483240eb | HELP my ears
+9 |   1.7 | u_4923d9e4c5 | agahi Arther
+10 |   1.8 | u_c56e0c8f37 | ICANT
+11 |   1.8 | u_05117d66ea | hii
+12 |   2.0 | u_8a9515fc53 | emily you ever throw eggs or toilet paper lol
+13 |   2.0 | u_6cb3db2717 | hii
+14 |   2.3 | u_843ea914de | Mosterarther DinkDonk
+15 |   2.5 | u_a3875bc756 | emiruWASHERS emiruWASHERS
+16 |   2.6 | u_df5600b0d8 | Wokege
+17 |   2.7 | u_59943c6fc6 | !subs
+18 |   2.8 | u_88ebc8bc88 | hii
+19 |   2.8 | u_6e398ea4a1 | wtf...
+20 |   3.0 | u_26295857f4 | hii Arther
+21 |   3.1 | u_8573272fd9 | Wokege
+22 |   3.1 | u_1094c4324e BOT | ExtraEmily's sub count: 3917
+23 |   3.2 | u_a248993dbe | german engineering
+24 |   3.4 | u_28e88e2e7b | Wokege ͏
+25 |   3.6 | u_3469784553 | Erm
+26 |   4.2 | u_41d600b017 | OOOO
+27 |   4.3 | u_3953d8a016 | What
+28 |   4.4 | u_7506a692f2 | what hole matters
+29 |   5.5 | u_6e398ea4a1 | ARther?
+30 |   5.6 | u_c7683ab32a | hii arther
+31 |   5.7 | u_5a92757a10 | A cat
+32 |   5.8 | u_93d0a1066a | Wokege
+33 |   5.9 | u_b43213bedb | Wokege
+34 |   6.2 | u_c3277aa21d | mhm Arther working
+35 |   6.2 | u_3f5ab99082 | nat looking different today
+36 |   6.3 | u_4923d9e4c5 | Wokege
+37 |   6.3 | u_f54cde7baa | cat
+38 |   6.5 | u_7aa8cdc74d | Erm
+39 |   7.0 | u_6b6ed81d59 | Wokege
+40 |   7.7 | u_fefed340bd | Wokege my ears
+41 |   8.0 | u_df5600b0d8 | AAAA
+42 |   8.6 | u_aee2bac94a | TwitchConHYPE TwitchConHYPE TwitchConHYPE
+43 |   8.7 | u_d9f2fab392 | agahi arther
+44 |   8.9 | u_7a34df0046 | Erm
+45 |   9.1 | u_e057bc8388 | hii Arther
+46 |   9.1 | u_66483240eb | AAAA
+47 |   9.3 | u_6b6ed81d59 | Wokege holy
+48 |   9.3 | u_843ea914de | Wokege
+49 |   9.4 | u_cb3a3ca619 | mraLipbite
+50 |   9.4 | u_e9efc94fa8 | uh’
+51 |   9.4 | u_50263f3090 | Erm that‘s not Nat
+52 |   9.6 | u_86bd43ec1e | Wokege
+53 |  10.0 | u_a4c7d7ab0c | Wrong ingest
+54 |  10.0 | u_67cf113917 | :( my ears
+55 |  10.8 | u_6cb3db2717 | MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER
+56 |  11.3 | u_60b2aec4c8 | DoritosChip <3
+57 |  11.7 | u_21eaf7232c | Stare
+58 |  11.7 | u_b57a89195d | LMAO
+59 |  11.8 | u_ed62d7f973 | bello Arther
+60 |  11.8 | u_380befb48a | Not after you streamed together
+61 |  12.6 | u_2ba06e870a | lol oh
+62 |  13.1 | u_0ea1bdc122 | t10Fight
+63 |  13.1 | u_c969618377 | Bmw of cat towers
+64 |  13.4 | u_66483240eb | Wokege so loud
+65 |  13.6 | u_2a0cc03ae3 | MEN
+66 |  14.1 | u_c313c6ca3a | Wokege
+67 |  14.4 | u_aee2bac94a | What a man
+68 |  14.5 | u_7c339964a2 | Handy andy
+69 |  14.6 | u_7bb009d449 | WW handyman Arther
+70 |  15.0 | u_96f9d36f92 | Nat looks different
+71 |  15.3 | u_f4ee40823a | He buildin
+72 |  15.3 | u_29a4df1dd9 | LUL
+73 |  15.6 | u_5952eb5eeb | mhm
+74 |  15.6 | u_2cec6d5c95 | erm
+75 |  15.7 | u_8fbaf39c6a | mhm
+76 |  15.7 | u_4f8feb5560 | arther Stare
+77 |  16.2 | u_5320e553fa | oh
+78 |  16.4 | u_4923d9e4c5 | DinkDonk MisterArther
+79 |  16.6 | u_c7635dcec2 | HUH
+80 |  16.6 | u_843ea914de | My drilla
+81 |  16.7 | u_35b7bda5bd | nat looks different
+82 |  17.3 | u_66483240eb | LOL
+83 |  17.5 | u_72352b1d96 | LUL
+84 |  17.7 | u_3bd4b854d3 | spying on Arther
+85 |  17.7 | u_cb3a3ca619 | mraUhoh
+86 |  18.0 | u_208a1db070 | mhm
+87 |  18.6 | u_6c15c55ad3 | Classic IKEA commercial I’m just kidding
+88 |  18.9 | u_c50b08d6e0 | hi Arther!
+89 |  19.0 | u_05117d66ea | mhm
+90 |  19.4 | u_df5600b0d8 | mhm
+91 |  19.6 | u_4ac7f6aa75 | afeena aw
+92 |  19.7 | u_66483240eb | Stare hey ARther
+93 |  19.7 | u_3469784553 | Dad's working hard
+94 |  19.8 | u_aee2bac94a | GIGACHAD
+95 |  19.9 | u_0cecafc53c | Nice fences
+96 |  20.4 | u_d3fec45157 | Arturo celinDETECT
+97 |  20.4 | u_f35a6be7f7 | Building s
+98 |  21.0 | u_e91866d12c | nat looks different
+99 |  21.0 | u_6e398ea4a1 | @user WRONG INGEST
+100 |  21.1 | u_d8920a94a0 | This guy always drilling
+101 |  21.4 | u_59943c6fc6 | I see rather working hard 💪
+102 |  21.4 | u_66483240eb | yo arther
+103 |  21.4 | u_f3e57bf4b4 | yo aga
+104 |  21.7 | u_aee2bac94a | mhm
+105 |  21.8 | u_788f0d022c | MEN
+106 |  22.1 | u_1495173164 | ]
+107 |  22.3 | u_f7d9e9ed8a | Lmao
+108 |  23.3 | u_393f6d69e0 | yo
+109 |  23.4 | u_66483240eb | agahi hey ARther
+110 |  24.1 | u_f895a02c50 | what is bro building
+111 |  24.2 | u_88f891e58d | TwitchConHYPE TwitchConHYPE TwitchConHYPE TwitchConHYPE
+112 |  24.4 | u_b94c4ad4aa | LOL
+113 |  24.7 | u_88f0264e2d | Sneak
+114 |  24.7 | u_74be0df643 | yo
+115 |  24.9 | u_f35a6be7f7 | Oooooo
+116 |  24.9 | u_687a5b5ee6 | 💀
+117 |  25.0 | u_259b74c7e9 | aw Kitty watching you
+118 |  25.2 | u_d98c4e72c2 | agahi Arturo
+119 |  25.5 | u_018c223a0d | exemLUL exemLUL exemNod exemNod TwitchConHYPE TwitchConHYPE
+120 |  25.6 | u_d9f2fab392 | y0
+121 |  26.0 | u_66483240eb | hii sup Arther
+122 |  26.2 | u_ed62d7f973 | Yo
+123 |  26.4 | u_2ba08e6e5f | meow
+124 |  27.1 | u_f4ee40823a | mhm orientation
+125 |  27.2 | u_c3277aa21d | D: hey it can be any oriantation it wants
+126 |  27.2 | u_1d827d34a1 | yo
+127 |  27.8 | u_1cb959d8ef | hii
+128 |  28.3 | u_66483240eb | Shiza
+129 |  28.4 | u_5952eb5eeb | yo
+130 |  28.4 | u_f35a6be7f7 | Arthur
+131 |  28.5 | u_8c427e7c23 | hii
+132 |  28.9 | u_2ba06e870a | arther
+133 |  29.2 | u_f3e57bf4b4 | LOL
+134 |  29.3 | u_c153e8051c | Howdy
+135 |  29.4 | u_8a1881b512 | hii arther
+136 |  29.9 | u_7aa3693496 | hii Arther ͏
+137 |  29.9 | u_aee2bac94a | Hi
+138 |  30.0 | u_66483240eb | LOL

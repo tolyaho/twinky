@@ -1,0 +1,981 @@
+{
+ "window": "extraemily_2026-10-31T2128",
+ "channel": "extraemily",
+ "kind": "30s",
+ "language": "en",
+ "messages": [
+  {
+   "id": "f1dfd112-d4e9-4875-8d8f-5fa05fe06810",
+   "ts_ms": 1793482119673,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "HELP"
+  },
+  {
+   "id": "2fa09664-7509-41dc-a7ac-6023cfae00aa",
+   "ts_ms": 1793482119781,
+   "author": "u_c96acc8a93",
+   "bot": false,
+   "text": "Erm"
+  },
+  {
+   "id": "ee195145-fc93-404c-9f05-f78a242bec72",
+   "ts_ms": 1793482119859,
+   "author": "u_aee2bac94a",
+   "bot": false,
+   "text": "P LUL LUL LUL"
+  },
+  {
+   "id": "58c95dea-9d7c-41a6-a5c8-60d1c151efc3",
+   "ts_ms": 1793482120429,
+   "author": "u_1d827d34a1",
+   "bot": false,
+   "text": "Erm"
+  },
+  {
+   "id": "7a9e0fbf-14f3-4896-9247-fb2dde44a623",
+   "ts_ms": 1793482120469,
+   "author": "u_86bd43ec1e",
+   "bot": false,
+   "text": "lol"
+  },
+  {
+   "id": "273c709c-318c-41c4-8411-738db458a46d",
+   "ts_ms": 1793482120472,
+   "author": "u_f3e57bf4b4",
+   "bot": false,
+   "text": "agahi"
+  },
+  {
+   "id": "42daacef-595a-4180-b4e9-081a1322fc0c",
+   "ts_ms": 1793482120823,
+   "author": "u_28892f8951",
+   "bot": false,
+   "text": "o"
+  },
+  {
+   "id": "52ec2bc1-25e7-4d22-b708-bd0071d639ca",
+   "ts_ms": 1793482121070,
+   "author": "u_0e7a064fcd",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "011fab63-11e4-4d64-a37d-1df91f688c36",
+   "ts_ms": 1793482121361,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "HELP my ears"
+  },
+  {
+   "id": "c907a419-c60b-4a1b-9861-eb3060458deb",
+   "ts_ms": 1793482121368,
+   "author": "u_4923d9e4c5",
+   "bot": false,
+   "text": "agahi Arther"
+  },
+  {
+   "id": "0caaafd7-18c4-4dcc-a4cb-9dcb306fccb7",
+   "ts_ms": 1793482121467,
+   "author": "u_c56e0c8f37",
+   "bot": false,
+   "text": "ICANT"
+  },
+  {
+   "id": "dc2dfa4e-4ebc-4d7c-a9df-25e5200ad3bd",
+   "ts_ms": 1793482121508,
+   "author": "u_05117d66ea",
+   "bot": false,
+   "text": "hii"
+  },
+  {
+   "id": "63cf0db6-cfaa-4e3b-a3c2-dc511c77f066",
+   "ts_ms": 1793482121716,
+   "author": "u_8a9515fc53",
+   "bot": false,
+   "text": "emily you ever throw eggs or toilet paper lol"
+  },
+  {
+   "id": "3798949d-50d0-47df-9ebf-79395fb0fe0f",
+   "ts_ms": 1793482121721,
+   "author": "u_6cb3db2717",
+   "bot": false,
+   "text": "hii"
+  },
+  {
+   "id": "6265f4c0-966f-4a62-a961-1ad93c512861",
+   "ts_ms": 1793482122015,
+   "author": "u_843ea914de",
+   "bot": false,
+   "text": "Mosterarther DinkDonk"
+  },
+  {
+   "id": "c9717ea9-6704-4230-ab00-2f09c79dddb6",
+   "ts_ms": 1793482122198,
+   "author": "u_a3875bc756",
+   "bot": false,
+   "text": "emiruWASHERS emiruWASHERS"
+  },
+  {
+   "id": "40152497-2ae4-413f-ae92-b0999e39ed2a",
+   "ts_ms": 1793482122231,
+   "author": "u_df5600b0d8",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "3befad1b-d0ac-498f-ab5f-4c359c977f08",
+   "ts_ms": 1793482122338,
+   "author": "u_59943c6fc6",
+   "bot": false,
+   "text": "!subs"
+  },
+  {
+   "id": "d17717e2-194d-48a4-af9b-d86139ca8ced",
+   "ts_ms": 1793482122433,
+   "author": "u_88ebc8bc88",
+   "bot": false,
+   "text": "hii"
+  },
+  {
+   "id": "5e35160b-201e-4f88-811c-c0c46fa4aec8",
+   "ts_ms": 1793482122492,
+   "author": "u_6e398ea4a1",
+   "bot": false,
+   "text": "wtf..."
+  },
+  {
+   "id": "f79d6b79-15bf-4eb9-a651-4457af6ff9a7",
+   "ts_ms": 1793482122660,
+   "author": "u_26295857f4",
+   "bot": false,
+   "text": "hii Arther"
+  },
+  {
+   "id": "85d3ca65-4adc-4c6a-b581-300d3c8f312a",
+   "ts_ms": 1793482122765,
+   "author": "u_8573272fd9",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "2779a633-4131-43fb-9eb1-6e5416fe613a",
+   "ts_ms": 1793482122801,
+   "author": "u_1094c4324e",
+   "bot": true,
+   "text": "ExtraEmily's sub count: 3917"
+  },
+  {
+   "id": "4d25a522-1bc0-4836-a23b-dfb8b2914f34",
+   "ts_ms": 1793482122846,
+   "author": "u_a248993dbe",
+   "bot": false,
+   "text": "german engineering"
+  },
+  {
+   "id": "d6677fcd-0664-40e6-a787-83a5d9aea0f3",
+   "ts_ms": 1793482123101,
+   "author": "u_28e88e2e7b",
+   "bot": false,
+   "text": "Wokege ͏"
+  },
+  {
+   "id": "2f39c29c-8e40-41fa-b8ea-a85207985170",
+   "ts_ms": 1793482123264,
+   "author": "u_3469784553",
+   "bot": false,
+   "text": "Erm"
+  },
+  {
+   "id": "6939b0e6-8046-472a-a425-94eb6a76047d",
+   "ts_ms": 1793482123915,
+   "author": "u_41d600b017",
+   "bot": false,
+   "text": "OOOO"
+  },
+  {
+   "id": "47e93cfb-78ab-47c0-a75d-d7a470b616d0",
+   "ts_ms": 1793482124023,
+   "author": "u_3953d8a016",
+   "bot": false,
+   "text": "What"
+  },
+  {
+   "id": "ee75a7ae-2d52-4505-b41a-dccfefd8d774",
+   "ts_ms": 1793482124066,
+   "author": "u_7506a692f2",
+   "bot": false,
+   "text": "what hole matters"
+  },
+  {
+   "id": "6fc25c4d-7171-45c3-913f-9dfcb1e80571",
+   "ts_ms": 1793482125158,
+   "author": "u_6e398ea4a1",
+   "bot": false,
+   "text": "ARther?"
+  },
+  {
+   "id": "2e104aeb-2de6-4756-bb00-00d9c73cc4f2",
+   "ts_ms": 1793482125307,
+   "author": "u_c7683ab32a",
+   "bot": false,
+   "text": "hii arther"
+  },
+  {
+   "id": "ca0e47ce-d85b-48e4-b586-48e153451fdb",
+   "ts_ms": 1793482125414,
+   "author": "u_5a92757a10",
+   "bot": false,
+   "text": "A cat"
+  },
+  {
+   "id": "4a0b96f0-216a-47c4-8140-d32c67688cd2",
+   "ts_ms": 1793482125439,
+   "author": "u_93d0a1066a",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "6d6565e9-042f-410e-beb1-573c08972e74",
+   "ts_ms": 1793482125618,
+   "author": "u_b43213bedb",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "4a0ad984-d37b-47bd-a53b-bfbec2293cd6",
+   "ts_ms": 1793482125823,
+   "author": "u_c3277aa21d",
+   "bot": false,
+   "text": "mhm Arther working"
+  },
+  {
+   "id": "1aaadf38-17f0-4b6d-aced-8ee88cecfa30",
+   "ts_ms": 1793482125891,
+   "author": "u_3f5ab99082",
+   "bot": false,
+   "text": "nat looking different today"
+  },
+  {
+   "id": "d87ed10f-5c5e-45bb-ac6b-0218d54aa159",
+   "ts_ms": 1793482125923,
+   "author": "u_4923d9e4c5",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "541ba6a2-cbe4-495c-a09c-7b919594ae54",
+   "ts_ms": 1793482125938,
+   "author": "u_f54cde7baa",
+   "bot": false,
+   "text": "cat"
+  },
+  {
+   "id": "d8c058c0-68de-42ce-9cde-174044eda3bc",
+   "ts_ms": 1793482126146,
+   "author": "u_7aa8cdc74d",
+   "bot": false,
+   "text": "Erm"
+  },
+  {
+   "id": "406f06e0-a62d-47d6-bf5e-e48034b7e607",
+   "ts_ms": 1793482126627,
+   "author": "u_6b6ed81d59",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "e595b596-1be8-4c5d-9814-282c62ab7711",
+   "ts_ms": 1793482127323,
+   "author": "u_fefed340bd",
+   "bot": false,
+   "text": "Wokege my ears"
+  },
+  {
+   "id": "1f04a5bb-7b94-4cde-b517-4254ca5d84df",
+   "ts_ms": 1793482127633,
+   "author": "u_df5600b0d8",
+   "bot": false,
+   "text": "AAAA"
+  },
+  {
+   "id": "ac2673d4-5028-4693-bbf7-304fa7efd843",
+   "ts_ms": 1793482128289,
+   "author": "u_aee2bac94a",
+   "bot": false,
+   "text": "TwitchConHYPE TwitchConHYPE TwitchConHYPE"
+  },
+  {
+   "id": "566ae938-eda9-4715-9dfc-9cca54ec620e",
+   "ts_ms": 1793482128410,
+   "author": "u_d9f2fab392",
+   "bot": false,
+   "text": "agahi arther"
+  },
+  {
+   "id": "d4fb78e0-1a51-485d-8590-83feacfb2b4c",
+   "ts_ms": 1793482128622,
+   "author": "u_7a34df0046",
+   "bot": false,
+   "text": "Erm"
+  },
+  {
+   "id": "a4919065-ea6d-48aa-90a0-f159e65ef7e4",
+   "ts_ms": 1793482128752,
+   "author": "u_e057bc8388",
+   "bot": false,
+   "text": "hii Arther"
+  },
+  {
+   "id": "38ee2c72-103e-40ba-b593-9ca273303ce4",
+   "ts_ms": 1793482128793,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "AAAA"
+  },
+  {
+   "id": "739d7d92-a530-4892-a948-26ccc6905e01",
+   "ts_ms": 1793482128969,
+   "author": "u_6b6ed81d59",
+   "bot": false,
+   "text": "Wokege holy"
+  },
+  {
+   "id": "8f6be424-10d3-4b60-b05e-11c26c053ded",
+   "ts_ms": 1793482128976,
+   "author": "u_843ea914de",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "695b612a-2654-4349-86e2-b3fdc1b53092",
+   "ts_ms": 1793482129024,
+   "author": "u_cb3a3ca619",
+   "bot": false,
+   "text": "mraLipbite"
+  },
+  {
+   "id": "2f39bc87-961c-4453-8f76-c2b983d102f2",
+   "ts_ms": 1793482129113,
+   "author": "u_e9efc94fa8",
+   "bot": false,
+   "text": "uh’"
+  },
+  {
+   "id": "04b09be3-0e58-426f-88c8-6f0fde19686a",
+   "ts_ms": 1793482129121,
+   "author": "u_50263f3090",
+   "bot": false,
+   "text": "Erm that‘s not Nat"
+  },
+  {
+   "id": "833bc1a7-48c0-4d6b-85c0-52db917ff3b3",
+   "ts_ms": 1793482129263,
+   "author": "u_86bd43ec1e",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "aeffb59b-55aa-4f55-ae9e-d7bbc9e13972",
+   "ts_ms": 1793482129690,
+   "author": "u_a4c7d7ab0c",
+   "bot": false,
+   "text": "Wrong ingest"
+  },
+  {
+   "id": "0dd3b34c-182c-4048-bd15-958937435527",
+   "ts_ms": 1793482129702,
+   "author": "u_67cf113917",
+   "bot": false,
+   "text": ":( my ears"
+  },
+  {
+   "id": "7b48edbc-6790-4253-a367-656332fe99da",
+   "ts_ms": 1793482130470,
+   "author": "u_6cb3db2717",
+   "bot": false,
+   "text": "MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER MISTER ARTHER"
+  },
+  {
+   "id": "c485ae02-f80c-4d67-9ef0-b3e613ae6bd8",
+   "ts_ms": 1793482130992,
+   "author": "u_60b2aec4c8",
+   "bot": false,
+   "text": "DoritosChip <3"
+  },
+  {
+   "id": "3286fd88-bb58-4bf2-86d6-2152b501dc37",
+   "ts_ms": 1793482131356,
+   "author": "u_21eaf7232c",
+   "bot": false,
+   "text": "Stare"
+  },
+  {
+   "id": "37a67cad-3b3a-4b0b-822f-88609abd2e88",
+   "ts_ms": 1793482131379,
+   "author": "u_b57a89195d",
+   "bot": false,
+   "text": "LMAO"
+  },
+  {
+   "id": "f8f0ec91-97fb-4ff8-b9e6-cb545c73351b",
+   "ts_ms": 1793482131428,
+   "author": "u_ed62d7f973",
+   "bot": false,
+   "text": "bello Arther"
+  },
+  {
+   "id": "35fb8364-4036-4d35-a108-e2300b77b0c8",
+   "ts_ms": 1793482131505,
+   "author": "u_380befb48a",
+   "bot": false,
+   "text": "Not after you streamed together"
+  },
+  {
+   "id": "f98fba8d-68de-4782-a040-876dcd1e5475",
+   "ts_ms": 1793482132285,
+   "author": "u_2ba06e870a",
+   "bot": false,
+   "text": "lol oh"
+  },
+  {
+   "id": "d16b13b7-f0ad-4a6b-867f-e88f92b776c8",
+   "ts_ms": 1793482132790,
+   "author": "u_0ea1bdc122",
+   "bot": false,
+   "text": "t10Fight"
+  },
+  {
+   "id": "1890cb4c-036d-49a4-b3fd-4240b2525b49",
+   "ts_ms": 1793482132802,
+   "author": "u_c969618377",
+   "bot": false,
+   "text": "Bmw of cat towers"
+  },
+  {
+   "id": "1db77d56-207d-4672-8df3-ae9d10e8fa37",
+   "ts_ms": 1793482133105,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "Wokege so loud"
+  },
+  {
+   "id": "ca1b0e85-9918-4dbb-8b2f-02b6976f7a7d",
+   "ts_ms": 1793482133269,
+   "author": "u_2a0cc03ae3",
+   "bot": false,
+   "text": "MEN"
+  },
+  {
+   "id": "12dfc9ff-a248-495c-8b99-0d13e1e33a6a",
+   "ts_ms": 1793482133793,
+   "author": "u_c313c6ca3a",
+   "bot": false,
+   "text": "Wokege"
+  },
+  {
+   "id": "b491d9be-abb3-4d7a-b49a-4215290ed2ef",
+   "ts_ms": 1793482134105,
+   "author": "u_aee2bac94a",
+   "bot": false,
+   "text": "What a man"
+  },
+  {
+   "id": "171d36a0-97d4-48d7-a992-ca2a874b5d6a",
+   "ts_ms": 1793482134130,
+   "author": "u_7c339964a2",
+   "bot": false,
+   "text": "Handy andy"
+  },
+  {
+   "id": "62085ede-3c08-459d-bd93-369bec0bca60",
+   "ts_ms": 1793482134299,
+   "author": "u_7bb009d449",
+   "bot": false,
+   "text": "WW handyman Arther"
+  },
+  {
+   "id": "930917e6-3c56-4c74-87ce-9896afaaea83",
+   "ts_ms": 1793482134656,
+   "author": "u_96f9d36f92",
+   "bot": false,
+   "text": "Nat looks different"
+  },
+  {
+   "id": "ab004858-4930-4a2e-a21a-027b8af482d4",
+   "ts_ms": 1793482134945,
+   "author": "u_f4ee40823a",
+   "bot": false,
+   "text": "He buildin"
+  },
+  {
+   "id": "93a480f2-74f4-4c6b-bce6-409cec1739a4",
+   "ts_ms": 1793482134955,
+   "author": "u_29a4df1dd9",
+   "bot": false,
+   "text": "LUL"
+  },
+  {
+   "id": "698ec350-c219-46a5-862a-c2f69f546de1",
+   "ts_ms": 1793482135251,
+   "author": "u_5952eb5eeb",
+   "bot": false,
+   "text": "mhm"
+  },
+  {
+   "id": "b8c514cf-3086-4cbe-bc5b-db85837ad2b2",
+   "ts_ms": 1793482135279,
+   "author": "u_2cec6d5c95",
+   "bot": false,
+   "text": "erm"
+  },
+  {
+   "id": "3fd12b9a-36ea-41b5-a02b-59b3c718689f",
+   "ts_ms": 1793482135354,
+   "author": "u_8fbaf39c6a",
+   "bot": false,
+   "text": "mhm"
+  },
+  {
+   "id": "060446ab-32d0-444e-9dd6-1fd6195c8f0a",
+   "ts_ms": 1793482135373,
+   "author": "u_4f8feb5560",
+   "bot": false,
+   "text": "arther Stare"
+  },
+  {
+   "id": "a1c56df1-43db-43ec-8174-f76165bc68f9",
+   "ts_ms": 1793482135844,
+   "author": "u_5320e553fa",
+   "bot": false,
+   "text": "oh"
+  },
+  {
+   "id": "297d9134-0623-4fb5-999b-a7cbe7674822",
+   "ts_ms": 1793482136084,
+   "author": "u_4923d9e4c5",
+   "bot": false,
+   "text": "DinkDonk MisterArther"
+  },
+  {
+   "id": "a48c6df8-96ef-4606-a512-2183bdf36e40",
+   "ts_ms": 1793482136230,
+   "author": "u_c7635dcec2",
+   "bot": false,
+   "text": "HUH"
+  },
+  {
+   "id": "3b12996c-4e46-41f3-b7d0-edde1b0ba540",
+   "ts_ms": 1793482136251,
+   "author": "u_843ea914de",
+   "bot": false,
+   "text": "My drilla"
+  },
+  {
+   "id": "3614aef6-4369-4e8a-93e1-83bd22d25b60",
+   "ts_ms": 1793482136380,
+   "author": "u_35b7bda5bd",
+   "bot": false,
+   "text": "nat looks different"
+  },
+  {
+   "id": "04f9d799-3df8-441e-a0ec-a8576e1c7be5",
+   "ts_ms": 1793482136991,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "LOL"
+  },
+  {
+   "id": "089ae5c5-0f93-4464-8272-4347dba04e9a",
+   "ts_ms": 1793482137171,
+   "author": "u_72352b1d96",
+   "bot": false,
+   "text": "LUL"
+  },
+  {
+   "id": "c9f3f10f-4022-4aee-a360-c53e9e1d7eff",
+   "ts_ms": 1793482137404,
+   "author": "u_3bd4b854d3",
+   "bot": false,
+   "text": "spying on Arther"
+  },
+  {
+   "id": "18066a4e-704f-4554-a2a8-b58497da00c1",
+   "ts_ms": 1793482137414,
+   "author": "u_cb3a3ca619",
+   "bot": false,
+   "text": "mraUhoh"
+  },
+  {
+   "id": "c54739f6-5bc3-4fdb-8241-8434e21ae88c",
+   "ts_ms": 1793482137666,
+   "author": "u_208a1db070",
+   "bot": false,
+   "text": "mhm"
+  },
+  {
+   "id": "15cd5729-7667-4c31-83fa-4022d6b09d31",
+   "ts_ms": 1793482138275,
+   "author": "u_6c15c55ad3",
+   "bot": false,
+   "text": "Classic IKEA commercial I’m just kidding"
+  },
+  {
+   "id": "e308e0ac-ba43-4c4a-8646-f5e8903216f3",
+   "ts_ms": 1793482138600,
+   "author": "u_c50b08d6e0",
+   "bot": false,
+   "text": "hi Arther!"
+  },
+  {
+   "id": "a3ceb271-e38a-4b70-a10c-0606f8e7ddbd",
+   "ts_ms": 1793482138682,
+   "author": "u_05117d66ea",
+   "bot": false,
+   "text": "mhm"
+  },
+  {
+   "id": "bf117ce9-3348-4b57-a353-5ac162c44994",
+   "ts_ms": 1793482139114,
+   "author": "u_df5600b0d8",
+   "bot": false,
+   "text": "mhm"
+  },
+  {
+   "id": "8d4bc37b-9db5-4edc-9a77-8dc373b36ca0",
+   "ts_ms": 1793482139226,
+   "author": "u_4ac7f6aa75",
+   "bot": false,
+   "text": "afeena aw"
+  },
+  {
+   "id": "d8f701a1-10a4-4343-97dd-1bfa4ab1d02c",
+   "ts_ms": 1793482139366,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "Stare hey ARther"
+  },
+  {
+   "id": "902d59aa-9d8c-49b3-bd50-9823750e760d",
+   "ts_ms": 1793482139374,
+   "author": "u_3469784553",
+   "bot": false,
+   "text": "Dad's working hard"
+  },
+  {
+   "id": "4ab7dd3d-6d27-47df-a412-e564e104ec97",
+   "ts_ms": 1793482139473,
+   "author": "u_aee2bac94a",
+   "bot": false,
+   "text": "GIGACHAD"
+  },
+  {
+   "id": "0a37ff2f-966a-4bb4-b53b-66638648be65",
+   "ts_ms": 1793482139599,
+   "author": "u_0cecafc53c",
+   "bot": false,
+   "text": "Nice fences"
+  },
+  {
+   "id": "64370d86-f59d-4089-af68-04851257baff",
+   "ts_ms": 1793482140030,
+   "author": "u_d3fec45157",
+   "bot": false,
+   "text": "Arturo celinDETECT"
+  },
+  {
+   "id": "55dc9a12-a1ff-4f79-b172-32bccdfb0944",
+   "ts_ms": 1793482140031,
+   "author": "u_f35a6be7f7",
+   "bot": false,
+   "text": "Building  s"
+  },
+  {
+   "id": "06c4afbb-0d2a-420d-9af2-4dad5a657a75",
+   "ts_ms": 1793482140655,
+   "author": "u_e91866d12c",
+   "bot": false,
+   "text": "nat looks different"
+  },
+  {
+   "id": "fabe5255-d32e-4769-8b0b-265c33390042",
+   "ts_ms": 1793482140671,
+   "author": "u_6e398ea4a1",
+   "bot": false,
+   "text": "@user WRONG INGEST"
+  },
+  {
+   "id": "24f7b218-598f-41d2-9d2e-2beaf5c91c22",
+   "ts_ms": 1793482140773,
+   "author": "u_d8920a94a0",
+   "bot": false,
+   "text": "This guy always drilling"
+  },
+  {
+   "id": "e97ee384-1b13-4e00-acdf-263a31e4423a",
+   "ts_ms": 1793482141107,
+   "author": "u_59943c6fc6",
+   "bot": false,
+   "text": "I see rather working hard 💪"
+  },
+  {
+   "id": "0c0a454e-11d8-43e0-ab8b-4172a19ba366",
+   "ts_ms": 1793482141113,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "yo arther"
+  },
+  {
+   "id": "bae7252e-832a-4200-a0b9-a9c0abfb19d8",
+   "ts_ms": 1793482141115,
+   "author": "u_f3e57bf4b4",
+   "bot": false,
+   "text": "yo aga"
+  },
+  {
+   "id": "e4071062-5286-404e-b18b-1030e6eb5143",
+   "ts_ms": 1793482141376,
+   "author": "u_aee2bac94a",
+   "bot": false,
+   "text": "mhm"
+  },
+  {
+   "id": "de8aac99-f30c-4c7b-b0b7-142a57325ca5",
+   "ts_ms": 1793482141425,
+   "author": "u_788f0d022c",
+   "bot": false,
+   "text": "MEN"
+  },
+  {
+   "id": "6c3fd6a9-f934-4444-8bc8-c4576f66e871",
+   "ts_ms": 1793482141786,
+   "author": "u_1495173164",
+   "bot": false,
+   "text": "]"
+  },
+  {
+   "id": "1501ba98-21b2-4ed4-9c54-a66ac98bdca9",
+   "ts_ms": 1793482142002,
+   "author": "u_f7d9e9ed8a",
+   "bot": false,
+   "text": "Lmao"
+  },
+  {
+   "id": "0dbbfec0-e265-4aaf-b075-5c77e2badd7a",
+   "ts_ms": 1793482142983,
+   "author": "u_393f6d69e0",
+   "bot": false,
+   "text": "yo"
+  },
+  {
+   "id": "0a5ebca4-e44c-469a-acca-98e40bdef91a",
+   "ts_ms": 1793482143052,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "agahi hey ARther"
+  },
+  {
+   "id": "2727a4c4-04cd-4372-a620-b12912aacc94",
+   "ts_ms": 1793482143771,
+   "author": "u_f895a02c50",
+   "bot": false,
+   "text": "what is bro building"
+  },
+  {
+   "id": "0c1bd8e4-ac2d-4314-a970-d41f69f1476b",
+   "ts_ms": 1793482143858,
+   "author": "u_88f891e58d",
+   "bot": false,
+   "text": "TwitchConHYPE TwitchConHYPE TwitchConHYPE TwitchConHYPE"
+  },
+  {
+   "id": "6e042fa1-a661-4ce4-a782-9353c621ec03",
+   "ts_ms": 1793482144105,
+   "author": "u_b94c4ad4aa",
+   "bot": false,
+   "text": "LOL"
+  },
+  {
+   "id": "8c0ede3a-4cf3-4bf4-9cf1-8ca35f88e9a5",
+   "ts_ms": 1793482144374,
+   "author": "u_88f0264e2d",
+   "bot": false,
+   "text": "Sneak"
+  },
+  {
+   "id": "ec95cefe-ccf2-4eb0-ac84-db699109c44e",
+   "ts_ms": 1793482144377,
+   "author": "u_74be0df643",
+   "bot": false,
+   "text": "yo"
+  },
+  {
+   "id": "ce9ec262-e732-4698-878a-ea0d2a0eb16a",
+   "ts_ms": 1793482144571,
+   "author": "u_f35a6be7f7",
+   "bot": false,
+   "text": "Oooooo"
+  },
+  {
+   "id": "ade4b4fd-9a9f-4594-a269-af5fd9b5a39e",
+   "ts_ms": 1793482144593,
+   "author": "u_687a5b5ee6",
+   "bot": false,
+   "text": "💀"
+  },
+  {
+   "id": "0a6be817-9036-4ada-a602-c0c6d1706ba9",
+   "ts_ms": 1793482144665,
+   "author": "u_259b74c7e9",
+   "bot": false,
+   "text": "aw Kitty watching you"
+  },
+  {
+   "id": "a14339da-556f-47cb-aa91-2b22c9867577",
+   "ts_ms": 1793482144908,
+   "author": "u_d98c4e72c2",
+   "bot": false,
+   "text": "agahi Arturo"
+  },
+  {
+   "id": "3d7fba05-ec84-4323-8466-3ef5a762d6a0",
+   "ts_ms": 1793482145198,
+   "author": "u_018c223a0d",
+   "bot": false,
+   "text": "exemLUL exemLUL exemNod exemNod TwitchConHYPE TwitchConHYPE"
+  },
+  {
+   "id": "940fe43a-3527-45f4-8134-515181ca5ed2",
+   "ts_ms": 1793482145314,
+   "author": "u_d9f2fab392",
+   "bot": false,
+   "text": "y0"
+  },
+  {
+   "id": "5f633fbf-baa5-435e-bdea-5b95cecffdac",
+   "ts_ms": 1793482145668,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "hii sup Arther"
+  },
+  {
+   "id": "993f5bf5-e846-4ec7-8f57-d2c9a04af355",
+   "ts_ms": 1793482145872,
+   "author": "u_ed62d7f973",
+   "bot": false,
+   "text": "Yo"
+  },
+  {
+   "id": "91ef14ee-3f02-474d-8f87-a94e6d13ec4e",
+   "ts_ms": 1793482146091,
+   "author": "u_2ba08e6e5f",
+   "bot": false,
+   "text": "meow"
+  },
+  {
+   "id": "e64d6921-7841-4975-9a94-4a0db7ab8b43",
+   "ts_ms": 1793482146749,
+   "author": "u_f4ee40823a",
+   "bot": false,
+   "text": "mhm orientation"
+  },
+  {
+   "id": "03e3fa3a-77d9-47f8-9249-26a3e4fdbe4e",
+   "ts_ms": 1793482146900,
+   "author": "u_c3277aa21d",
+   "bot": false,
+   "text": "D: hey it can be any oriantation it wants"
+  },
+  {
+   "id": "7177fd7d-7152-49cf-aa4b-3113ce931c4b",
+   "ts_ms": 1793482146903,
+   "author": "u_1d827d34a1",
+   "bot": false,
+   "text": "yo"
+  },
+  {
+   "id": "cbc618b4-74df-4865-9bd6-d2b9fcecfedd",
+   "ts_ms": 1793482147492,
+   "author": "u_1cb959d8ef",
+   "bot": false,
+   "text": "hii"
+  },
+  {
+   "id": "6081f4e0-c264-4d47-b6d5-2e6f5d14ece6",
+   "ts_ms": 1793482147991,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "Shiza"
+  },
+  {
+   "id": "b0043a9d-fed5-45f7-a2d2-8db719d97f09",
+   "ts_ms": 1793482148088,
+   "author": "u_5952eb5eeb",
+   "bot": false,
+   "text": "yo"
+  },
+  {
+   "id": "bfee6fbb-c02a-4889-89d2-dc8e1f992fb9",
+   "ts_ms": 1793482148123,
+   "author": "u_f35a6be7f7",
+   "bot": false,
+   "text": "Arthur"
+  },
+  {
+   "id": "907481b8-f17a-4860-a743-26ef325d0d48",
+   "ts_ms": 1793482148190,
+   "author": "u_8c427e7c23",
+   "bot": false,
+   "text": "hii"
+  },
+  {
+   "id": "ee15bf90-47b2-4570-8774-9d5162f9a277",
+   "ts_ms": 1793482148566,
+   "author": "u_2ba06e870a",
+   "bot": false,
+   "text": "arther"
+  },
+  {
+   "id": "de1cb7f8-ef0c-4c9e-87c7-969c246c51ac",
+   "ts_ms": 1793482148889,
+   "author": "u_f3e57bf4b4",
+   "bot": false,
+   "text": "LOL"
+  },
+  {
+   "id": "02698836-a04b-4761-b8be-f1ee2f108842",
+   "ts_ms": 1793482148941,
+   "author": "u_c153e8051c",
+   "bot": false,
+   "text": "Howdy"
+  },
+  {
+   "id": "0cfddb78-ecd1-4401-a88b-c416f7fda2fb",
+   "ts_ms": 1793482149025,
+   "author": "u_8a1881b512",
+   "bot": false,
+   "text": "hii arther"
+  },
+  {
+   "id": "e5764007-cd57-4731-a0d4-210f234d4819",
+   "ts_ms": 1793482149575,
+   "author": "u_7aa3693496",
+   "bot": false,
+   "text": "hii Arther ͏"
+  },
+  {
+   "id": "2572e525-1d22-407a-88fe-dc6d03e735b8",
+   "ts_ms": 1793482149617,
+   "author": "u_aee2bac94a",
+   "bot": false,
+   "text": "Hi"
+  },
+  {
+   "id": "a741444b-03fd-4006-9edf-702996d2eda9",
+   "ts_ms": 1793482149649,
+   "author": "u_66483240eb",
+   "bot": false,
+   "text": "LOL"
+  }
+ ]
+}

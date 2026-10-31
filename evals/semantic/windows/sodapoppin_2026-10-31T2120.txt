@@ -1,0 +1,201 @@
+# window sodapoppin_2026-10-31T2120 — channel sodapoppin, 199 messages, 60s
+# n | seconds into window | author | text   (BOT = known bot account)
+0 |   0.0 | u_d340acb2e9 | Scared
+1 |   0.3 | u_6a817ea101 | monkaFUCK
+2 |   0.3 | u_7e22b42063 | monkaFUCK
+3 |   0.7 | u_f5b8f42312 | xdd
+4 |   0.7 | u_0c4cb7e7a3 | LO
+5 |   0.7 | u_d19b484a34 BOT | Check out Chance's latest youtube video: Sodapoppin & Pikaboo Return To The Arena - https://youtu.be/GbzoQwr4upM
+6 |   2.0 | u_b2a8c959cc | AAAA
+7 |   2.1 | u_4de610c1d5 | INSANECAT
+8 |   2.2 | u_40cd30b6e8 | Sure
+9 |   2.6 | u_79750973d4 | monkaGIGA
+10 |   2.8 | u_85194d6e83 | AAAA
+11 |   2.8 | u_47ec2f2596 | sodao
+12 |   2.9 | u_5c202f575e | MONKA
+13 |   3.3 | u_d6790b5ef0 | AAAA
+14 |   3.5 | u_6a4289e5d4 | LOL
+15 |   3.6 | u_43da439384 | yeah you went over other sigils LUL
+16 |   3.7 | u_383f0c76aa | gachiBASS
+17 |   4.0 | u_35c3c6325c | KEKW
+18 |   4.7 | u_09fef59e84 | ?
+19 |   4.9 | u_9edc59de82 | LOL ?
+20 |   5.1 | u_a5b9758cc3 | CLASSIC screamers
+21 |   5.2 | u_86f87de39f | HUH
+22 |   5.5 | u_33e8a98953 | SPRING
+23 |   5.6 | u_463ed5710f | wtf
+24 |   5.7 | u_40cd30b6e8 | Scared
+25 |   6.0 | u_ad4b5c7ec4 | AAAA
+26 |   6.0 | u_06f6f2e312 | ????
+27 |   6.2 | u_4d5bff7600 | huh
+28 |   6.4 | u_eadd07d5d6 | BRUHFAINT
+29 |   6.4 | u_7b798cf2cd | aaaauuuuughh
+30 |   6.5 | u_ac8c5ad5c4 | AAAA
+31 |   6.6 | u_f269bebe11 | ???????????
+32 |   6.6 | u_b2a8c959cc | wot
+33 |   6.8 | u_ac671b9027 | A
+34 |   6.8 | u_10567a578c | You actually had it but fumbled
+35 |   6.8 | u_090e878752 | Scared stop
+36 |   6.8 | u_15b49afef2 | monkaFUCK I LOOKED
+37 |   6.9 | u_cbd60c083d | kaiks
+38 |   7.0 | u_13c4978c56 | xdx
+39 |   7.3 | u_fc09371ef8 | OMEGALUL ͏
+40 |   7.4 | u_b06efbbef7 | LOL
+41 |   7.5 | u_eceddb4232 | ???????
+42 |   7.6 | u_204253f600 | wait what did he say
+43 |   7.7 | u_19e1832898 | LOL
+44 |   7.8 | u_228bbaf00f | huh
+45 |   7.8 | u_ebc334a040 | cocks
+46 |   7.9 | u_287a2851da | erm
+47 |   8.0 | u_7e22b42063 | ?
+48 |   8.5 | u_b2a8c959cc | ???
+49 |   8.7 | u_691a21cc64 | HUH
+50 |   8.7 | u_34a2db4bd7 | You can't say that
+51 |   9.1 | u_6b778fda3a | peepoS
+52 |   9.3 | u_dc3afd6e73 | ???
+53 |   9.4 | u_fe275295cc | that was a real dead body image
+54 |   9.5 | u_d38169cfda | CLASSIC
+55 |   9.5 | u_14bf71dae3 | ?
+56 |   9.6 | u_e05cc20c8c | LUL LUL LUL
+57 |   9.7 | u_f67e446ac5 | huh
+58 |   9.8 | u_b2a8c959cc | LO
+59 |   9.8 | u_b06efbbef7 | ahhahaha
+60 |   9.8 | u_bc18434404 | huh
+61 |   9.8 | u_0f0b55a05c | what he say
+62 |   9.9 | u_f46695d92b | HUH
+63 |  10.0 | u_e87b9ac57e | oops
+64 |  10.0 | u_1f03f4dddb | WHAT
+65 |  10.0 | u_42367cd0da | Wait what
+66 |  10.1 | u_c9d2290529 | ??????????????????????
+67 |  10.2 | u_81e42533df | oof
+68 |  10.5 | u_7f5436a363 | monkaLaugh
+69 |  10.5 | u_7ac9dfa983 | ???
+70 |  10.6 | u_ee2cf20007 | ???
+71 |  10.9 | u_7e22b42063 | kite
+72 |  10.9 | u_b2a8c959cc | LOL
+73 |  11.0 | u_43da439384 | sodao I think, I think
+74 |  11.4 | u_4669d1a0fb | monkaFUCK
+75 |  11.5 | u_13c4978c56 | what
+76 |  11.6 | u_717a84d966 | LUL
+77 |  11.6 | u_5decd9a756 | erm
+78 |  12.1 | u_6ad2d643e7 | HUH
+79 |  12.3 | u_8cda5b961e | UHM
+80 |  12.4 | u_be9d4f1de3 | ??
+81 |  12.4 | u_bcd08c2c54 | o7
+82 |  12.5 | u_204253f600 | ummm
+83 |  12.5 | u_9a65f02b8f | o7
+84 |  12.5 | u_2487fc776c | AAAA
+85 |  12.7 | u_b4c5f1e1da | WHAT?? LOL
+86 |  13.0 | u_8375a7b75a | HUH
+87 |  13.2 | u_85194d6e83 | hold me @user GULP
+88 |  13.4 | u_ec98e64719 | huh
+89 |  13.8 | u_1e1a9080a1 | o7
+90 |  13.9 | u_1635ce6295 | sus
+91 |  13.9 | u_a463e4a3e6 | o
+92 |  14.1 | u_deee0375bc | WOAH BAND
+93 |  14.2 | u_fb88b202d8 | banned before wowf launch
+94 |  14.3 | u_51ff5bfe66 | LOL
+95 |  14.4 | u_c63547742d | ???
+96 |  14.4 | u_3bf4969680 | wat
+97 |  14.6 | u_05bab4dbb0 | u cant say that
+98 |  14.9 | u_278944bfb7 | OH BOY
+99 |  15.0 | u_77092ea8a9 | wtf is this
+100 |  15.5 | u_73831f5602 | Did he just say the jew slang word?! LUL
+101 |  16.0 | u_2aff7beefe | Oof , inchident
+102 |  16.1 | u_aea4cf4d4d | huhWhat
+103 |  16.3 | u_6778f1785f | LUL
+104 |  16.3 | u_eb898187d9 | LO nuke the vod
+105 |  16.4 | u_e05cc20c8c | HAHAHA
+106 |  16.6 | u_8c5424b7b4 | o7
+107 |  17.3 | u_c9d2290529 | Incident 2
+108 |  17.4 | u_6ce8a97126 | whoaa
+109 |  17.8 | u_7f5436a363 | BAND
+110 |  18.2 | u_d1e993efc2 | WHAT DID BRO SAY?
+111 |  18.8 | u_eadd07d5d6 | pepeS
+112 |  19.0 | u_204253f600 | well banned o7
+113 |  19.8 | u_ac8c5ad5c4 | SCATTER
+114 |  19.9 | u_3113fa303b | OMEGALUL
+115 |  20.2 | u_06f6f2e312 | crazy insane coms
+116 |  20.4 | u_0c1e1f3642 | Lol
+117 |  20.7 | u_00a8fa16da | guys he's retarded he doesn't even know what that means
+118 |  21.4 | u_104c71f783 | o7
+119 |  21.5 | u_317236e3ee | o7 last strim
+120 |  21.5 | u_b4c5f1e1da | o7 LMAO
+121 |  21.8 | u_ff9e3c9e92 | what did you say?
+122 |  21.9 | u_9c978d2b98 | lmao
+123 |  22.0 | u_d19b484a34 BOT | 3x o7 combo
+124 |  22.2 | u_cc394f3731 | YEEEEE H2LL 6E
+125 |  24.4 | u_19e6a41db4 | its slur sunday already?
+126 |  24.5 | u_178b9c0f1f | WHAT DID HE JUST SAY
+127 |  24.7 | u_deee0375bc | LAST STREAM BAND
+128 |  24.8 | u_204253f600 | incident 2
+129 |  25.6 | u_50092ffc08 | @user, elisScared erm
+130 |  25.8 | u_dc3afd6e73 | last stream
+131 |  25.8 | u_44462c8f72 | cocks HUH
+132 |  26.2 | u_228bbaf00f | o7 enjoy the ban
+133 |  26.4 | u_c63547742d | o7
+134 |  26.6 | u_287a2851da | o7
+135 |  26.9 | u_40cd30b6e8 | o7
+136 |  27.0 | u_e3cb3f9d3d | uuh
+137 |  27.5 | u_6963375926 | LOL did he jsut say a jewish slur
+138 |  27.6 | u_19e1832898 | LMFAO
+139 |  28.2 | u_9e20f7d6b4 | whatd he just say
+140 |  28.5 | u_b2a8c959cc | bogusny vulp3 vulpYAY
+141 |  28.6 | u_eb898187d9 | incident
+142 |  28.9 | u_05bab4dbb0 | o7
+143 |  29.1 | u_278944bfb7 | NUKE THE VOD
+144 |  29.5 | u_8193d73090 | monkaW 👉 🎵
+145 |  29.6 | u_1e1a9080a1 | running in circles LO
+146 |  29.8 | u_e05cc20c8c | insane coms
+147 |  30.2 | u_7e22b42063 | Cheergi
+148 |  30.3 | u_20b1e691c8 | o7
+149 |  30.6 | u_5decd9a756 | yea no way he knows that word
+150 |  31.2 | u_717a84d966 | Why is that word restricted in chat? LUL
+151 |  31.3 | u_6ad2d643e7 | o7 Slurpoppin
+152 |  31.5 | u_2221b191d1 | !incident
+153 |  31.9 | u_6778f1785f | clip it
+154 |  32.2 | u_755f965d15 | I think he meant "kit, guys"
+155 |  32.7 | u_ad20bb0473 | rip soda
+156 |  32.7 | u_f146a11082 | o7 Another incident
+157 |  32.9 | u_d35ca093f8 | just run around the table, classic dbd strat
+158 |  33.0 | u_f269bebe11 | Banned right before wow forever
+159 |  33.2 | u_00ab19145d | THAT'S GOING ON FOX NEWS
+160 |  33.6 | u_cc394f3731 | DAS WAT IM TALMBOUT
+161 |  34.1 | u_0a99203c1c | I dont think he knows what that means
+162 |  34.6 | u_a8d803d028 | łot the hell im scared
+163 |  35.4 | u_6249a2c91c | yeah the jews gonna get you for that one bud
+164 |  35.8 | u_204253f600 | he said the hard K
+165 |  36.0 | u_1de59e97f1 | @user I give him the pass it's okay
+166 |  36.2 | u_383f0c76aa | plink
+167 |  37.5 | u_13c4978c56 | INCIDENT
+168 |  37.7 | u_bcd08c2c54 | he meant to say yikes and kite xdd
+169 |  39.1 | u_db98c113a3 | chat outing themselves LUL
+170 |  39.1 | u_ad20bb0473 | o7
+171 |  39.7 | u_6963375926 | DELETE THE VOD
+172 |  40.3 | u_94c4599f57 | WHAT DID YOU SAY
+173 |  40.5 | u_eadd07d5d6 | NAILSING
+174 |  40.9 | u_79750973d4 | SAVED
+175 |  41.0 | u_7e22b42063 | OOOO
+176 |  42.2 | u_5decd9a756 | @user, Stare
+177 |  42.4 | u_fed8c6af11 | geeg
+178 |  42.4 | u_40cd30b6e8 | SAVED
+179 |  42.8 | u_fdd2776542 | SAVED
+180 |  44.0 | u_33e8a98953 | EZ
+181 |  46.9 | u_deee0375bc | ALERT
+182 |  47.0 | u_43da439384 | someone else carried
+183 |  47.1 | u_e08a5facde | SAVED
+184 |  48.0 | u_b2a8c959cc | SAVED
+185 |  48.3 | u_204253f600 | vod, channel o7
+186 |  49.4 | u_205b58dd2d | combined cock and kite in the WORST possible way
+187 |  49.5 | u_00ab19145d | FOX NEWS IS COMING FOR YOU monkaOMEGA
+188 |  50.1 | u_a17eeb628d | ass11
+189 |  50.8 | u_c43ebd3e27 | NETANYAHU PISSED
+190 |  50.8 | u_ac8c5ad5c4 | he was saying kite chat sus what are you guys hearing?
+191 |  53.0 | u_ebb787b08a | freud slip LuL
+192 |  53.3 | u_b2a8c959cc | @user vulpYAY
+193 |  57.5 | u_6963375926 | you unlocked the jewish slur
+194 |  59.3 | u_717a84d966 | @user Ok sorry i googled it. MONKA
+195 |  59.7 | u_de548284f5 | Book
+196 |  59.7 | u_99514951e1 | You said the K word
+197 |  59.8 | u_e08a5facde | vulpYAY soapy soap
+198 |  59.9 | u_6249a2c91c | netanyahu is calling
