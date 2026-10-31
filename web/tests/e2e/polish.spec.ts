@@ -447,3 +447,31 @@ test("a group pushed off the board fades out where it stood, then is gone", asyn
   await expect(page.locator(".cluster")).toHaveCount(6);
   await expect(page.locator(".board-foot")).toContainText("+1 more");
 });
+
+test("landing -> workspace: one view transition, no added wait; none under reduced motion", async ({ page }) => {
+  await mockTwitch(page);
+  const count = () =>
+    page.evaluate(() => {
+      const w = window as unknown as { __vt: number };
+      const d = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+      if (w.__vt === undefined && d.startViewTransition) {
+        w.__vt = 0;
+        const real = d.startViewTransition.bind(document);
+        d.startViewTransition = (cb: () => void) => (w.__vt++, real(cb));
+      }
+      return w.__vt ?? -1;
+    });
+  await page.goto("/");
+  expect(await count()).toBe(0); // installs the counter (Chromium supports the API)
+  const t0 = Date.now();
+  await enter(page, "transit");
+  expect(Date.now() - t0).toBeLessThan(1_500);
+  expect(await count()).toBe(1);
+  await page.locator(".ws-brand").click(); // and back: another page change
+  await expect(page.locator(".hero-title")).toBeVisible();
+  expect(await count()).toBe(2);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await enter(page, "transit");
+  expect(await count()).toBe(2); // swapped instantly instead
+});

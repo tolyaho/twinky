@@ -46,11 +46,11 @@ A channel can be linked directly: `/?channel=xqc`. `/?replay` opens the recorded
 ```bash
 npm test               # 210 unit tests: clustering parity, IRC lifecycle, network loss, engine,
                        #   stable ordering, broadcast status (endpoint and client)
-npm run e2e            # 32 Playwright flows on a synthetic stream (deterministic, no network):
+npm run e2e            # 33 Playwright flows on a synthetic stream (deterministic, no network):
                        #   layout, evidence, keyboard, reduced motion, reconnect without
                        #   duplicates, rapid switching, network loss, deep links, off air /
                        #   on air / stale status replies (mocked endpoint), hidden tab,
-                       #   ranking stability, a calibrated ~400 msg/s burst
+                       #   ranking stability, view transition, a calibrated ~400 msg/s burst
 LIVE_CHANNEL=xqc npm run e2e:live   # 3 real-network checks: live chat, not-found, no false not-found
 PW_BASE_URL=https://… npm run e2e:live   # same, against a deployed URL
 npm run typecheck      # frontend + serverless function

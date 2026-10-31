@@ -540,7 +540,7 @@ is; the row is now the anchor.
 one (one and two frames at 60 Hz), median socket to screen 114–158 ms (seven probes per run, and
 the feed flushes every 200 ms by design), and the calibration block of 150 ms read as 133–150 ms
 each time. Real `jynxzi` chat: 66 messages and five groups in the smoke window. `npm test` 210 tests,
-`npm run e2e` 32 flows. One process note: Playwright serves the built `dist/`, so the first run of
+`npm run e2e` 33 flows. One process note: Playwright serves the built `dist/`, so the first run of
 this pass tested the previous build and passed; every number above is from a rebuilt one.
 
 **The branch history.** The four `live-demo` commits carried `Co-Authored-By: Claude` trailers.
