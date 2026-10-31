@@ -10,9 +10,20 @@ export interface ChatEvent {
   author: string;
   /** Verbatim message text. */
   text: string;
+  /** A known bot account (decided from the login before it is pseudonymised). Browser only. */
+  bot?: boolean;
 }
 
 export type GroupRule = "reaction" | "prefix" | "token";
+
+/**
+ * What the live board can show: the ported rules above, plus the browser's grouping by meaning
+ * (src/semantic) — a repeated phrase, a topic (different words, one meaning) or a shared question.
+ */
+export type BoardRule = GroupRule | "phrase" | "topic" | "question";
+
+/** The part of a group that counting needs, whichever engine produced it. */
+export type Counted = Pick<Group, "count" | "event_ids"> & { rule: BoardRule };
 
 /** One audience signal: a set of messages saying the same thing. Mirrors `reduce.Group`. */
 export interface Group {

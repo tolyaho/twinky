@@ -1,4 +1,4 @@
-import { test, expect, type Page, type WebSocketRoute } from "@playwright/test";
+import { test, expect, type Page, type WebSocketRoute } from "./fixtures";
 
 // Deterministic browser tests for the unglamorous paths: reconnects, rapid switching, bursts,
 // network loss, keyboard use, reduced motion and deep links. Every Twitch socket here is a
@@ -73,7 +73,8 @@ test("reconnect after a dropped socket: resumes, and replayed ids are not shown 
 test("rapid channel switching: only the last channel's chat and clusters survive", async ({ page }) => {
   await mockTwitch(page, (ws, ch) => {
     let i = 0;
-    const timer = setInterval(() => ws.send(line(ch, `from ${ch} ${i++}`)), 60);
+    // every third message is one the room repeats, so each channel has a group of its own to leak
+    const timer = setInterval(() => ws.send(line(ch, i++ % 3 ? `from ${ch} ${i}` : `go team${ch}`)), 60);
     ws.onClose(() => clearInterval(timer));
   });
   await page.goto("/");
@@ -86,9 +87,10 @@ test("rapid channel switching: only the last channel's chat and clusters survive
   await page.waitForTimeout(1_500); // let any stale socket try to leak
   const texts = await feedTexts(page);
   expect(texts.length).toBeGreaterThan(0);
-  expect(texts.every((t) => t.startsWith("from charlie"))).toBe(true);
+  expect(texts.every((t) => t.includes("charlie"))).toBe(true);
   const labels = await page.locator(".cluster-label").allTextContents();
   expect(labels.some((l) => /alpha|bravo/.test(l))).toBe(false);
+  expect(labels).toContain("go teamcharlie");
   await expect(page).toHaveURL(/\?channel=charlie$/);
 });
 

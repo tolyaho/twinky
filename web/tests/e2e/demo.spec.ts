@@ -1,5 +1,5 @@
-import { test, expect, type Page } from "@playwright/test";
-import type { WebSocketRoute } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
+import type { WebSocketRoute } from "./fixtures";
 
 // A deterministic synthetic Twitch chat, injected by mocking the WebSocket server. This is a TEST
 // FIXTURE ONLY — it never ships in the app, and it drives the exact same client code path a real

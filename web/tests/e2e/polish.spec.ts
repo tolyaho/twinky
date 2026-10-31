@@ -1,4 +1,4 @@
-import { test, expect, type Page, type WebSocketRoute } from "@playwright/test";
+import { test, expect, type Page, type WebSocketRoute } from "./fixtures";
 
 // The broadcast-status path and the motion/feedback layer. Twitch chat is a Playwright-mocked
 // socket and `/api/twitch-status` a mocked route (TEST FIXTURES ONLY): the deployed endpoint has
@@ -286,7 +286,7 @@ test("ranking holds still on near-ties and moves only on a clear overtake", asyn
   say("dracula", 4);
   await expect.poll(async () => (await labels()).length, { timeout: 5_000 }).toBe(2);
   const [lead, chaser] = await labels();
-  expect(lead).toBe("reaction wave"); // the six LMAOs
+  expect(lead).toBe("Chat is laughing"); // the six LMAOs
 
   // the chaser draws level, then edges one ahead: not a clear overtake, so nothing moves
   say("dracula", 3);

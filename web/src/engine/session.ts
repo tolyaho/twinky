@@ -6,7 +6,9 @@
 import { canonical } from "../cluster/canonical";
 import { groupChat } from "../cluster/group";
 import { pulse, type Pulse } from "../cluster/pulse";
-import type { ChatEvent, Group } from "../cluster/types";
+import type { BoardRule, ChatEvent, Group } from "../cluster/types";
+import { isBotLogin } from "../semantic/prep";
+import type { SemanticInfo } from "../semantic/live";
 import { TwitchChatClient, type IrcState, type NetworkEvents } from "../twitch/irc";
 import type { ChatRow } from "../twitch/parse";
 import { Pseudonymizer } from "./pseudonym";
@@ -36,7 +38,8 @@ export interface SourceInfo {
 export const MIN_CHATTERS = 2;
 
 /** A group plus what the browser can add on top of the Python rules. */
-export interface LiveGroup extends Group {
+export interface LiveGroup extends Omit<Group, "rule"> {
+  rule: BoardRule;
   /** Distinct (pseudonymised) authors behind the group's messages. */
   chatters: number;
   /**
@@ -66,7 +69,34 @@ export interface TickSnapshot {
   warm: boolean;
   /** Messages that formed a group from a single chatter only, left ungrouped by `MIN_CHATTERS`. */
   soloMessages: number;
+  /** Present when the board groups by meaning: how far the model has got with this window. */
+  semantic?: SemanticInfo;
 }
+
+/** How a window of chat becomes groups. The ported word rules unless something better is given. */
+export interface Grouper {
+  group(window: readonly ChatEvent[]): { groups: LiveGroup[]; soloMessages: number; semantic?: SemanticInfo };
+  stop?(): void;
+}
+
+/** The ported rules (`groupChat`) with the live-only chatter floor: the baseline and fallback. */
+export const lexicalGrouper: Grouper = {
+  group(window) {
+    const byId = new Map<string, ChatEvent>();
+    for (const e of window) byId.set(e.id, e);
+    const groups: LiveGroup[] = [];
+    let soloMessages = 0;
+    for (const g of groupChat(window)) {
+      const chatters = new Set(g.event_ids.map((id) => byId.get(id)?.author)).size;
+      if (chatters < MIN_CHATTERS) {
+        soloMessages += g.count;
+        continue;
+      }
+      groups.push({ ...g, chatters, display: g.rule === "prefix" ? representative(g, byId) : g.label });
+    }
+    return { groups, soloMessages };
+  },
+};
 
 /** The most common canonical form among a group's messages; ties go to the lexicographic first. */
 function representative(g: Group, byId: ReadonlyMap<string, ChatEvent>): string {
@@ -97,11 +127,13 @@ export interface SessionOptions {
   maxBuffer?: number; // hard cap on retained events (default 20000)
   pseudonymizer?: Pseudonymizer;
   now?: () => number;
+  grouper?: Grouper;
 }
 
 export class TwinkySession {
-  private readonly o: Required<Omit<SessionOptions, "pseudonymizer">> & {
+  private readonly o: Required<Omit<SessionOptions, "pseudonymizer" | "grouper">> & {
     pseudonymizer: Pseudonymizer;
+    grouper: Grouper;
   };
   private readonly buffer: ChatEvent[] = [];
   private readonly firstSeen = new Map<string, number>(); // author -> first ts in session
@@ -126,6 +158,7 @@ export class TwinkySession {
       maxBuffer: opts.maxBuffer ?? 20_000,
       now: opts.now ?? (() => Date.now()),
       pseudonymizer: opts.pseudonymizer ?? new Pseudonymizer(),
+      grouper: opts.grouper ?? lexicalGrouper,
     };
   }
 
@@ -153,6 +186,7 @@ export class TwinkySession {
     if (this.tickTimer !== undefined) clearInterval(this.tickTimer);
     this.tickTimer = undefined;
     this.o.source.stop();
+    this.o.grouper.stop?.();
   }
 
   private serverNow(): number {
@@ -172,6 +206,7 @@ export class TwinkySession {
       ts_ms: row.ts_ms,
       author: this.o.pseudonymizer.label(row.login),
       text: row.text,
+      ...(isBotLogin(row.login) ? { bot: true } : {}),
     };
     if (!this.firstSeen.has(event.author)) this.firstSeen.set(event.author, event.ts_ms);
     this.buffer.push(event);
@@ -205,16 +240,7 @@ export class TwinkySession {
       .map(([a]) => a);
     const byId = new Map<string, ChatEvent>();
     for (const e of window) byId.set(e.id, e);
-    const groups: LiveGroup[] = [];
-    let soloMessages = 0;
-    for (const g of groupChat(window)) {
-      const chatters = new Set(g.event_ids.map((id) => byId.get(id)?.author)).size;
-      if (chatters < MIN_CHATTERS) {
-        soloMessages += g.count;
-        continue;
-      }
-      groups.push({ ...g, chatters, display: g.rule === "prefix" ? representative(g, byId) : g.label });
-    }
+    const { groups, soloMessages, semantic } = this.o.grouper.group(window);
     // The pulse sees the same filtered groups, so "clustered", "active groups" and the board agree.
     const p = pulse(window, start, end, seenBefore, groups);
     // Listening began at start(); in server time that is the local start shifted by the offset.
@@ -231,6 +257,7 @@ export class TwinkySession {
       observedMs: Math.max(0, Math.min(this.o.windowMs, end - since)),
       warm: since <= start,
       soloMessages,
+      ...(semantic ? { semantic } : {}),
     });
   }
 }

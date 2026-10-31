@@ -14,7 +14,11 @@ export default defineConfig({
     baseURL: externalBase ?? `http://localhost:${PORT}`,
     trace: "off",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    // Safari's engine runs the topic model differently (no cross-origin isolation, so no threads)
+    { name: "webkit", use: { ...devices["Desktop Safari"] }, testMatch: /semantic\.spec\.ts/ },
+  ],
   webServer: externalBase
     ? undefined
     : {

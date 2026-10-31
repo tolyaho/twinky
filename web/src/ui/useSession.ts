@@ -10,6 +10,7 @@ import {
   type TickSnapshot,
 } from "../engine/session";
 import type { ChatEvent } from "../cluster/types";
+import { makeGrouper } from "../semantic/enable";
 import { useBroadcast, type Broadcast } from "./broadcast";
 import { effectiveStatus } from "./derive";
 import { stableOrder } from "./order";
@@ -107,6 +108,8 @@ export function useSession(descriptor: Descriptor | null): SessionView {
 
     const session = new TwinkySession({
       source,
+      // grouping by meaning when the browser can run it; the word rules otherwise
+      grouper: makeGrouper(descriptor.channel),
       windowMs: windowRef.current,
       onChat: (e) => {
         feedBuf.current.push(e);

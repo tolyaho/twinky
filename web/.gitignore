@@ -10,3 +10,7 @@ test-results
 screenshots
 .vite
 .env*
+
+# downloaded embedding models for the semantic evaluation
+eval/.models/
+eval/.cache/

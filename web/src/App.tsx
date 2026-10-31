@@ -19,8 +19,13 @@ function routeFromUrl(): Route {
 }
 
 function urlFor(route: Route): string {
-  if (!route) return window.location.pathname;
-  return route.kind === "replay" ? "?replay" : `?channel=${route.channel}`;
+  // `topics=off` (the word-rules board, src/semantic/enable.ts) is the visitor's choice for the
+  // whole visit, so it survives navigation
+  const off = new URLSearchParams(window.location.search).get("topics") === "off";
+  const q = [!route ? "" : route.kind === "replay" ? "replay" : `channel=${route.channel}`, off ? "topics=off" : ""]
+    .filter(Boolean)
+    .join("&");
+  return q ? `?${q}` : window.location.pathname;
 }
 
 async function loadReplay(): Promise<ReplayRow[]> {

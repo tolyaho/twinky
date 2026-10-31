@@ -1,0 +1,458 @@
+{
+ "rule": "max dev B-cubed F1 s.t. dev false-merge share <= 10%",
+ "models": {
+  "minilm-l6": {
+   "mb": 23,
+   "B": {
+    "config": {
+     "method": "single",
+     "threshold": 0.7,
+     "minMessages": 2,
+     "minAuthors": 2,
+     "refine": 2,
+     "mergeCenters": false
+    },
+    "dev": {
+     "pairs": {
+      "tp": 1273,
+      "pred": 1637,
+      "gold": 5953,
+      "p": 0.7776420281001832,
+      "r": 0.21384176045691247,
+      "f1": 0.3354413702239789
+     },
+     "bcubed": {
+      "p": 0.944707875964789,
+      "r": 0.5716222660135518,
+      "f1": 0.7122671268346463
+     },
+     "shown": 98,
+     "falseMerges": 9,
+     "falseMergeShare": 0.09183673469387756,
+     "goldGroups": 92,
+     "fragmentation": 1.7346101086841825,
+     "goldCovered": 0.603368102438284,
+     "noiseKept": 0.9325521913309561
+    },
+    "test": {
+     "pairs": {
+      "tp": 1041,
+      "pred": 1934,
+      "gold": 3254,
+      "p": 0.5382626680455016,
+      "r": 0.3199139520590043,
+      "f1": 0.40131071703932153
+     },
+     "bcubed": {
+      "p": 0.8681630551464198,
+      "r": 0.662278184597304,
+      "f1": 0.7513721365651379
+     },
+     "shown": 57,
+     "falseMerges": 13,
+     "falseMergeShare": 0.22807017543859648,
+     "goldGroups": 66,
+     "fragmentation": 1.4649505013936501,
+     "goldCovered": 0.671686077748761,
+     "noiseKept": 0.8709237691676758
+    }
+   },
+   "C": [
+    {
+     "method": "single",
+     "config": {
+      "method": "single",
+      "threshold": 0.65,
+      "minMessages": 2,
+      "minAuthors": 2,
+      "refine": 2,
+      "lowinfoMin": 3,
+      "script": "latin",
+      "mergeCenters": false
+     },
+     "dev": {
+      "pairs": {
+       "tp": 3070,
+       "pred": 3619,
+       "gold": 5953,
+       "p": 0.848300635534678,
+       "r": 0.51570636653788,
+       "f1": 0.6414542415378186
+      },
+      "bcubed": {
+       "p": 0.9496354785831214,
+       "r": 0.6920425580216567,
+       "f1": 0.8006297838350099
+      },
+      "shown": 82,
+      "falseMerges": 8,
+      "falseMergeShare": 0.0975609756097561,
+      "goldGroups": 92,
+      "fragmentation": 1.4998392392727902,
+      "goldCovered": 0.6858029637421453,
+      "noiseKept": 0.9594079305847525
+     },
+     "test": {
+      "pairs": {
+       "tp": 1042,
+       "pred": 1365,
+       "gold": 3254,
+       "p": 0.7633699633699633,
+       "r": 0.32022126613398894,
+       "f1": 0.45117990907122757
+      },
+      "bcubed": {
+       "p": 0.9267201700146306,
+       "r": 0.6802003377739917,
+       "f1": 0.7845507846973611
+      },
+      "shown": 43,
+      "falseMerges": 8,
+      "falseMergeShare": 0.18604651162790697,
+      "goldGroups": 66,
+      "fragmentation": 1.2731413994169096,
+      "goldCovered": 0.5742234931838484,
+      "noiseKept": 0.9158512591692315
+     }
+    },
+    {
+     "method": "average",
+     "config": {
+      "method": "average",
+      "threshold": 0.65,
+      "minMessages": 2,
+      "minAuthors": 2,
+      "refine": 2,
+      "lowinfoMin": 3,
+      "script": "latin",
+      "mergeCenters": false
+     },
+     "dev": {
+      "pairs": {
+       "tp": 2894,
+       "pred": 3108,
+       "gold": 5953,
+       "p": 0.9311454311454311,
+       "r": 0.48614144129010584,
+       "f1": 0.6387815914358239
+      },
+      "bcubed": {
+       "p": 0.9655712472179453,
+       "r": 0.6748528873529293,
+       "f1": 0.7944513012184609
+      },
+      "shown": 87,
+      "falseMerges": 8,
+      "falseMergeShare": 0.09195402298850575,
+      "goldGroups": 92,
+      "fragmentation": 1.5530951095221246,
+      "goldCovered": 0.667686524090263,
+      "noiseKept": 0.9686935695000211
+     },
+     "test": {
+      "pairs": {
+       "tp": 891,
+       "pred": 991,
+       "gold": 3254,
+       "p": 0.8990918264379415,
+       "r": 0.27381684081130914,
+       "f1": 0.41978798586572436
+      },
+      "bcubed": {
+       "p": 0.9532738398627612,
+       "r": 0.648770848685123,
+       "f1": 0.7720836784867307
+      },
+      "shown": 51,
+      "falseMerges": 9,
+      "falseMergeShare": 0.17647058823529413,
+      "goldGroups": 66,
+      "fragmentation": 1.3667638483965012,
+      "goldCovered": 0.5529433421867503,
+      "noiseKept": 0.9223875142242489
+     }
+    },
+    {
+     "method": "center",
+     "config": {
+      "method": "center",
+      "threshold": 0.65,
+      "minMessages": 2,
+      "minAuthors": 2,
+      "refine": 2,
+      "lowinfoMin": 3,
+      "script": "latin",
+      "mergeCenters": false
+     },
+     "dev": {
+      "pairs": {
+       "tp": 3063,
+       "pred": 3511,
+       "gold": 5953,
+       "p": 0.8724010253489034,
+       "r": 0.5145304888291617,
+       "f1": 0.6472950126796281
+      },
+      "bcubed": {
+       "p": 0.953351320895455,
+       "r": 0.6907424178326276,
+       "f1": 0.8010737842097808
+      },
+      "shown": 83,
+      "falseMerges": 7,
+      "falseMergeShare": 0.08433734939759036,
+      "goldGroups": 92,
+      "fragmentation": 1.511446287916876,
+      "goldCovered": 0.6846090958816108,
+      "noiseKept": 0.9594079305847525
+     },
+     "test": {
+      "pairs": {
+       "tp": 1017,
+       "pred": 1274,
+       "gold": 3254,
+       "p": 0.7982731554160125,
+       "r": 0.31253841425937307,
+       "f1": 0.44920494699646646
+      },
+      "bcubed": {
+       "p": 0.9309418958107004,
+       "r": 0.6731546623609693,
+       "f1": 0.7813343584084506
+      },
+      "shown": 45,
+      "falseMerges": 7,
+      "falseMergeShare": 0.15555555555555556,
+      "goldGroups": 66,
+      "fragmentation": 1.3338374635568513,
+      "goldCovered": 0.5762669764788685,
+      "noiseKept": 0.910509747244441
+     }
+    }
+   ]
+  }
+ },
+ "shipped": {
+  "model": "minilm-l6",
+  "config": {
+   "method": "center",
+   "threshold": 0.65,
+   "minMessages": 2,
+   "minAuthors": 2,
+   "refine": 2,
+   "lowinfoMin": 3,
+   "script": "latin",
+   "mergeCenters": false
+  },
+  "dev": {
+   "pairs": {
+    "tp": 3063,
+    "pred": 3511,
+    "gold": 5953,
+    "p": 0.8724010253489034,
+    "r": 0.5145304888291617,
+    "f1": 0.6472950126796281
+   },
+   "bcubed": {
+    "p": 0.953351320895455,
+    "r": 0.6907424178326276,
+    "f1": 0.8010737842097808
+   },
+   "shown": 83,
+   "falseMerges": 7,
+   "falseMergeShare": 0.08433734939759036,
+   "goldGroups": 92,
+   "fragmentation": 1.511446287916876,
+   "goldCovered": 0.6846090958816108,
+   "noiseKept": 0.9594079305847525
+  },
+  "test": {
+   "pairs": {
+    "tp": 1017,
+    "pred": 1274,
+    "gold": 3254,
+    "p": 0.7982731554160125,
+    "r": 0.31253841425937307,
+    "f1": 0.44920494699646646
+   },
+   "bcubed": {
+    "p": 0.9309418958107004,
+    "r": 0.6731546623609693,
+    "f1": 0.7813343584084506
+   },
+   "shown": 45,
+   "falseMerges": 7,
+   "falseMergeShare": 0.15555555555555556,
+   "goldGroups": 66,
+   "fragmentation": 1.3338374635568513,
+   "goldCovered": 0.5762669764788685,
+   "noiseKept": 0.910509747244441
+  },
+  "testTextOnly": {
+   "pairs": {
+    "tp": 576,
+    "pred": 808,
+    "gold": 1773,
+    "p": 0.7128712871287128,
+    "r": 0.3248730964467005,
+    "f1": 0.44633862843858974
+   },
+   "bcubed": {
+    "p": 0.9221639561292843,
+    "r": 0.6723100799909388,
+    "f1": 0.7776609829516136
+   },
+   "shown": 32,
+   "falseMerges": 7,
+   "falseMergeShare": 0.21875,
+   "goldGroups": 58,
+   "fragmentation": 1.2525267249757046,
+   "goldCovered": 0.5178116366634116,
+   "noiseKept": 0.9054950180336507
+  }
+ },
+ "lexical": {
+  "dev": {
+   "pairs": {
+    "tp": 1292,
+    "pred": 2590,
+    "gold": 5953,
+    "p": 0.4988416988416988,
+    "r": 0.21703342852343357,
+    "f1": 0.30246985836357254
+   },
+   "bcubed": {
+    "p": 0.8256578119950172,
+    "r": 0.5818637831546328,
+    "f1": 0.6826472570426434
+   },
+   "shown": 73,
+   "falseMerges": 27,
+   "falseMergeShare": 0.3698630136986301,
+   "goldGroups": 92,
+   "fragmentation": 1.5185456518789853,
+   "goldCovered": 0.5516143658925542,
+   "noiseKept": 0.7511583325500613
+  },
+  "test": {
+   "pairs": {
+    "tp": 782,
+    "pred": 1836,
+    "gold": 3254,
+    "p": 0.42592592592592593,
+    "r": 0.24031960663798402,
+    "f1": 0.30726915520628684
+   },
+   "bcubed": {
+    "p": 0.7840782147684233,
+    "r": 0.6371282810242382,
+    "f1": 0.7030060820054669
+   },
+   "shown": 48,
+   "falseMerges": 15,
+   "falseMergeShare": 0.3125,
+   "goldGroups": 66,
+   "fragmentation": 1.6919712940121103,
+   "goldCovered": 0.6437906389752877,
+   "noiseKept": 0.6891325259078944
+  },
+  "testTextOnly": {
+   "pairs": {
+    "tp": 591,
+    "pred": 1546,
+    "gold": 1773,
+    "p": 0.38227684346701163,
+    "r": 0.3333333333333333,
+    "f1": 0.35613136486893643
+   },
+   "bcubed": {
+    "p": 0.7635908582328331,
+    "r": 0.6686976012281415,
+    "f1": 0.7130007532312257
+   },
+   "shown": 40,
+   "falseMerges": 15,
+   "falseMergeShare": 0.375,
+   "goldGroups": 58,
+   "fragmentation": 1.588608611146322,
+   "goldCovered": 0.6416745593203184,
+   "noiseKept": 0.682530019799274
+  }
+ },
+ "fastPath": {
+  "dev": {
+   "pairs": {
+    "tp": 2473,
+    "pred": 2553,
+    "gold": 5953,
+    "p": 0.9686643164904034,
+    "r": 0.41542079623719136,
+    "f1": 0.5814719021866918
+   },
+   "bcubed": {
+    "p": 0.987809297233773,
+    "r": 0.62713159809263,
+    "f1": 0.7671939263879581
+   },
+   "shown": 50,
+   "falseMerges": 2,
+   "falseMergeShare": 0.04,
+   "goldGroups": 92,
+   "fragmentation": 1.3968423551756886,
+   "goldCovered": 0.5043278024403852,
+   "noiseKept": 0.9881885090218424
+  },
+  "test": {
+   "pairs": {
+    "tp": 785,
+    "pred": 811,
+    "gold": 3254,
+    "p": 0.967940813810111,
+    "r": 0.24124154886293792,
+    "f1": 0.3862238622386224
+   },
+   "bcubed": {
+    "p": 0.9872782708059676,
+    "r": 0.6202147645973526,
+    "f1": 0.7618379014206705
+   },
+   "shown": 36,
+   "falseMerges": 1,
+   "falseMergeShare": 0.027777777777777776,
+   "goldGroups": 66,
+   "fragmentation": 1.2662779397473274,
+   "goldCovered": 0.4434494777065541,
+   "noiseKept": 0.9738549797799303
+  },
+  "testTextOnly": {
+   "pairs": {
+    "tp": 344,
+    "pred": 345,
+    "gold": 1773,
+    "p": 0.9971014492753624,
+    "r": 0.19402143260011281,
+    "f1": 0.3248347497639283
+   },
+   "bcubed": {
+    "p": 0.9975587481119815,
+    "r": 0.6026947306578617,
+    "f1": 0.7514102096761828
+   },
+   "shown": 23,
+   "falseMerges": 1,
+   "falseMergeShare": 0.043478260869565216,
+   "goldGroups": 58,
+   "fragmentation": 1.1781757600999583,
+   "goldCovered": 0.3502906177707957,
+   "noiseKept": 0.981579644844951
+  }
+ },
+ "reproduction": {
+  "tp": 883,
+  "pred": 1666,
+  "gold": 1361,
+  "p": 0.5300120048019208,
+  "r": 0.6487876561351947,
+  "f1": 0.5834159233564586
+ }
+}

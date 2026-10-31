@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import type { ChatEvent } from "../cluster/types";
 import { MIN_CHATTERS, type SourceInfo } from "../engine/session";
+import type { SemanticInfo } from "../semantic/live";
 import { BoardState, type BoardActions } from "./BoardState";
 import type { Broadcast } from "./broadcast";
 import type { OffAir } from "./derive";
@@ -26,11 +27,28 @@ interface Props extends BoardActions {
   onWindow: (ms: number) => void;
   sampled: boolean;
   soloMessages: number;
+  /** Present when the board groups by meaning; absent on the word-rules board. */
+  semantic?: SemanticInfo;
+  /** This visit groups by meaning (src/semantic/enable.ts), known before the first recount. */
+  topics?: boolean;
   maxRows?: number;
 }
 
 const RULE_CHIP: Record<GroupView["rule"], { chip: string; hint: (g: GroupView) => string }> = {
-  reaction: { chip: "reactions", hint: () => "Laughter and emote-only messages, counted as one wave" },
+  reaction: {
+    chip: "reaction",
+    // the word rules count every reaction as one wave; grouping by meaning keeps kinds apart
+    hint: (g) =>
+      g.key.startsWith("r:")
+        ? `${g.chatters} chatters reacting the same way, recognised from the emotes and words they used`
+        : "Laughter and emote-only messages, counted as one wave",
+  },
+  phrase: { chip: "repeated", hint: (g) => `The same message from ${g.chatters} different chatters` },
+  topic: {
+    chip: "topic",
+    hint: () => "Different words, one meaning: grouped by a small language model running in your browser",
+  },
+  question: { chip: "question", hint: () => "Chatters asking the same thing, in their own words" },
   prefix: {
     chip: "variants",
     hint: (g) => `One-word messages starting with “${g.label.replace(/…$/, "")}”`,
@@ -145,6 +163,67 @@ function Evidence({
       </div>
     </div>
   );
+}
+
+function HowItWorksSemantic() {
+  return (
+    <details className="how-grouping">
+      <summary>How grouping works</summary>
+      <ul>
+        <li>
+          <strong>Topics</strong> and <strong>questions</strong> — messages that mean the same thing
+          in different words (“his mic is muted”, “we can’t hear him”). A small language model running
+          in your browser compares what messages say; nothing is sent anywhere. A message joins a
+          topic only if it is close to the topic’s centre, so unrelated chat stays ungrouped. The
+          model reads English: messages mostly in another script group only when they are identical.
+        </li>
+        <li>
+          <strong>Reactions</strong> — recognised from emotes and words, kept apart by kind:
+          laughing, hype, shock, confusion… An emote nobody knows the meaning of groups only with
+          itself.
+        </li>
+        <li>
+          <strong>Repeated</strong> — the same message from several chatters (copypasta, a command, a
+          vote), or one word in several spellings. A bare number or the streamer’s name counts only when several people send exactly it.
+        </li>
+        <li>
+          Every message is counted once, in one group. A group needs at least {MIN_CHATTERS}{" "}
+          different chatters: one person repeating themselves isn't the room.
+        </li>
+        <li>
+          Groups say what chat is saying, not why: what caused a topic is not something chat alone
+          can tell.
+        </li>
+        <li>
+          Rows change places only when one group clearly overtakes another, so the board doesn't
+          flicker between near-ties. Counts are always exact for what has been read.
+        </li>
+      </ul>
+    </details>
+  );
+}
+
+/** The model's progress, said plainly; nothing when it is caught up. */
+function TopicStatus({ s }: { s: SemanticInfo }) {
+  if (s.state === "loading")
+    return (
+      <span className="topic-status" title="Loading a small language model in your browser (first visit only); reactions and repeats are grouped meanwhile">
+        Finding topics…
+      </span>
+    );
+  if (s.state === "failed")
+    return (
+      <span className="topic-status topic-status-off" title={s.reason ? `The topic model could not run: ${s.reason}` : undefined}>
+        Topics unavailable — grouped by shared words
+      </span>
+    );
+  if (s.pending > 0)
+    return (
+      <span className="topic-status" title="Messages the model has not read yet are in no topic. When chat is very fast it reads the most repeated and the newest first, and some messages leave the window unread.">
+        {compact(s.pending)} new message{s.pending === 1 ? "" : "s"} not read yet
+      </span>
+    );
+  return null;
 }
 
 function HowItWorks() {
@@ -341,6 +420,11 @@ export function ClusterBoard(props: Props) {
           </p>
         </div>
         <WindowSelect value={windowMs} onChange={onWindow} />
+        {(props.topics || props.semantic) && (
+          // a full-width line of its own, kept when empty: the header never changes height as the
+          // model loads, falls behind and catches up
+          <p className="topic-line">{props.semantic && <TopicStatus s={props.semantic} />}</p>
+        )}
       </header>
 
       {!showBoard ? (
@@ -440,7 +524,7 @@ export function ClusterBoard(props: Props) {
               </span>
             )}
           </div>
-          <HowItWorks />
+          {props.semantic && props.semantic.state !== "failed" ? <HowItWorksSemantic /> : <HowItWorks />}
         </footer>
       )}
     </section>

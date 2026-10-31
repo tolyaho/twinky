@@ -1,0 +1,189 @@
+{
+ "windowMs": 60000,
+ "tickMs": 1500,
+ "sources": {
+  "replay (stableronaldo)": {
+   "lexical": {
+    "carried": 13310,
+    "moved": 41,
+    "dropped": 127,
+    "pairs": 1827,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 279
+   },
+   "hybrid": {
+    "carried": 15176,
+    "moved": 47,
+    "dropped": 93,
+    "pairs": 3662,
+    "relabelled": 30,
+    "topics": 688,
+    "faithful": 688,
+    "recounts": 279
+   },
+   "split": "replay"
+  },
+  "bratishkinoff_2026-10-31T2119": {
+   "lexical": {
+    "carried": 325,
+    "moved": 8,
+    "dropped": 6,
+    "pairs": 85,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 176
+   },
+   "hybrid": {
+    "carried": 599,
+    "moved": 4,
+    "dropped": 5,
+    "pairs": 158,
+    "relabelled": 0,
+    "topics": 35,
+    "faithful": 35,
+    "recounts": 176
+   },
+   "split": "dev"
+  },
+  "summit1g_2026-10-31T2115": {
+   "lexical": {
+    "carried": 181,
+    "moved": 0,
+    "dropped": 4,
+    "pairs": 48,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 197
+   },
+   "hybrid": {
+    "carried": 88,
+    "moved": 0,
+    "dropped": 1,
+    "pairs": 39,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 197
+   },
+   "split": "dev"
+  },
+  "ishowspeed_2026-10-31T2124": {
+   "lexical": {
+    "carried": 385,
+    "moved": 0,
+    "dropped": 5,
+    "pairs": 92,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 190
+   },
+   "hybrid": {
+    "carried": 62,
+    "moved": 0,
+    "dropped": 1,
+    "pairs": 29,
+    "relabelled": 0,
+    "topics": 9,
+    "faithful": 9,
+    "recounts": 190
+   },
+   "split": "dev"
+  },
+  "emiru_2026-10-31T2119": {
+   "lexical": {
+    "carried": 632,
+    "moved": 6,
+    "dropped": 14,
+    "pairs": 154,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 198
+   },
+   "hybrid": {
+    "carried": 891,
+    "moved": 6,
+    "dropped": 6,
+    "pairs": 282,
+    "relabelled": 3,
+    "topics": 159,
+    "faithful": 159,
+    "recounts": 198
+   },
+   "split": "test"
+  },
+  "morphe_ya_2026-10-31T2129": {
+   "lexical": {
+    "carried": 373,
+    "moved": 0,
+    "dropped": 8,
+    "pairs": 93,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 200
+   },
+   "hybrid": {
+    "carried": 0,
+    "moved": 0,
+    "dropped": 0,
+    "pairs": 0,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 200
+   },
+   "split": "test"
+  },
+  "insize_2026-10-31T2127": {
+   "lexical": {
+    "carried": 1530,
+    "moved": 0,
+    "dropped": 15,
+    "pairs": 371,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 199
+   },
+   "hybrid": {
+    "carried": 1586,
+    "moved": 0,
+    "dropped": 7,
+    "pairs": 331,
+    "relabelled": 0,
+    "topics": 0,
+    "faithful": 0,
+    "recounts": 199
+   },
+   "split": "test"
+  }
+ },
+ "all": {
+  "lexical": {
+   "carried": 16736,
+   "moved": 55,
+   "dropped": 179,
+   "pairs": 2670,
+   "relabelled": 0,
+   "topics": 0,
+   "faithful": 0,
+   "recounts": 1439
+  },
+  "hybrid": {
+   "carried": 18402,
+   "moved": 57,
+   "dropped": 113,
+   "pairs": 4501,
+   "relabelled": 33,
+   "topics": 891,
+   "faithful": 891,
+   "recounts": 1439
+  }
+ }
+}

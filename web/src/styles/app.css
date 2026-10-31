@@ -722,10 +722,15 @@
 }
 .board-head {
   display: flex;
+  flex-wrap: wrap; /* the topic line takes a row of its own */
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
+  gap: 0 12px;
   margin-bottom: 14px;
+}
+.board-head > :first-child {
+  flex: 1 1 0; /* the title shares its row with the window selector, as before the topic line */
+  min-width: 0;
 }
 .board-title {
   font-size: 24px;
@@ -741,6 +746,25 @@
 .board-sub strong {
   color: var(--body-on-dark);
   font-weight: 500;
+}
+/* the topic model's progress: one quiet line under the subtitle, never an alert, never wrapping */
+.topic-line {
+  flex: 1 0 100%;
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--muted-on-dark);
+  line-height: 1.45;
+  min-height: 1.45em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topic-status {
+  color: var(--body-on-dark);
+}
+.topic-status-off {
+  color: var(--muted-on-dark);
+  font-style: italic;
 }
 .cluster-list {
   position: relative; /* rows are measured against it, and leaving rows are placed in it */

@@ -2,7 +2,7 @@
 // `grouped_summary`, `is_reaction`, `_tokens`, `_pick`. Three deterministic rules applied in a
 // fixed order; a message lands in exactly one group, so counts sum and nothing is double-counted.
 import { canonical } from "./canonical";
-import type { ChatEvent, Group, GroupRule, GroupedSummary } from "./types";
+import type { ChatEvent, Counted, Group, GroupRule, GroupedSummary } from "./types";
 
 export const EMPTY_KEY = "∅";
 export const REACTION_KEY = "∎reaction";
@@ -198,7 +198,7 @@ export function groupChat(events: Iterable<ChatEvent>, maxSamples = 3): Group[] 
 }
 
 /** `N messages -> M rows -> K singletons`, the footer line the board owes the reader. */
-export function groupedSummary(events: Iterable<ChatEvent>, groups: Group[]): GroupedSummary {
+export function groupedSummary(events: Iterable<ChatEvent>, groups: readonly Counted[]): GroupedSummary {
   const messages = [...events].length;
   const grouped = groups.reduce((s, g) => s + g.count, 0);
   return { messages, groups: groups.length, grouped, ungrouped: messages - grouped };

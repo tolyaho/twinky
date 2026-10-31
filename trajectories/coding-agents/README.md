@@ -19,6 +19,12 @@ Git author metadata is not a claim that implementation was exclusively manual.
 
 On 31 Oct 2026, Claude Code (Opus 4.8, then Opus 5.5) built `web/` — the public live-chat demo — on branch `live-demo`, pushed it and deployed it to a Vercel project, each step authorized by the owner in the session; the same day it made the demo's final polish and off-air pass. The first four of those commits carried a `Co-Authored-By: Claude` trailer. At the owner's request the trailer was removed from their messages, with authors, dates and trees unchanged (old and new hashes are in `docs/IMPROVEMENT_CHANGELOG.md`), and later commits do not add one. This paragraph, not a trailer, is the record that Claude Code did that work.
 
+On 1 Nov 2026, Claude Code (Opus 5.5) added grouping by meaning to `web/` on branch
+`semantic-clustering` and deployed it as a Vercel preview only. Production stays on the build the
+owner approved. The evaluation labels for that work were drafted by ten Claude subagents (Opus 5.5
+and Sonnet 5.5); `evals/semantic/labels/PROVENANCE.md` records how, and that no person has reviewed
+them. No paid API was called. The embedding models ran locally from the Hugging Face hub.
+
 ## How the work was actually run
 
 An unattended loop, one bounded unit of work per iteration. The cadence moved with the work —
@@ -129,10 +135,10 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 | | |
 |---|---:|
-| Commits in the measured window | 198 |
+| Commits in the measured window | 201 |
 | Iterations logged | 120 |
-| Decisions recorded with rationale | 520 |
-| Risks tracked | 54 |
+| Decisions recorded with rationale | 526 |
+| Risks tracked | 59 |
 | Tests | 738 |
 | Total spend on model calls | $0.44 |
 

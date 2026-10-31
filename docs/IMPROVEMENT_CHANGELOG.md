@@ -558,3 +558,73 @@ Old and new hashes, with the tree each one shares:
 
 The production deployment was built from `02390ab8a4`; `b8a8f1d` has the same tree. The old
 commits stay reachable through the owner's local `refs/original/` backup until it is deleted.
+
+## 2026-11-01 — topics: grouping by meaning on the live board (`web/`)
+
+**What changed.** The board now groups messages that say the same thing in different words. A
+sentence-embedding model (`all-MiniLM-L6-v2`, 8-bit, 23 MB, pinned revision) runs in a Web Worker
+in the visitor's browser. A deterministic fast path in front of it groups reactions by kind,
+commands and exact repeats with no model. The word rules the board shipped with are unchanged and
+still reachable: `?topics=off`, and automatically when the model cannot load. The Python pipeline
+and every committed result outside `evals/semantic/` are untouched (`make eval`: 48 hits, 0 misses).
+
+**Measured, on held-out real chat** (`evals/semantic/README.md`; 14 windows from 14 channels,
+captured 2026-10-31, model-drafted labels frozen in 23f66ec before any method was scored; every
+parameter chosen on dev by a rule fixed in advance, test scored once):
+
+| test, 686 messages | pair precision | pair recall | B³ F1 | shown groups that are false merges |
+|---|---:|---:|---:|---:|
+| word rules (what shipped) | 0.426 | 0.240 | 0.703 | 15 / 48 (31 %) |
+| fast path alone, no model | 0.968 | 0.241 | 0.762 | 1 / 36 (3 %) |
+| **hybrid (now shipped)** | **0.798** | **0.313** | **0.781** | 7 / 45 (16 %) |
+| the two labellers against each other | 0.806 | 0.651 | 0.877 | 9 / 67 (13 %) |
+
+Kept, because it is better than the word rules in every test window. Not oversold:
+
+- most of the gain is the fast path;
+- recall is half the labellers' agreement;
+- false merges on test (16 %) exceed the 10 % cap the dev choice respected;
+- Russian chat gets the fast path and exact repeats only, because the model reads English.
+
+This does not reverse removed experiment #3. That measured a different design on two windows,
+with a threshold chosen on the labels, through a paid API. The table in the evaluation README
+answers each of its objections.
+
+**Stability** (`web/eval/stability.ts`, 1,439 recounts of real chat): 0.3 % of grouped messages
+move group between recounts (word rules: 0.3 %), 0.6 % fall out (1.1 %), labels change in 0.7 % of
+consecutive recounts. Every topic label quotes one of its own messages: 891 / 891.
+
+**Real time.** The model never holds up a recount: the page uses the worker's latest answer, and
+the worker drops any request overtaken before it starts. A channel switch is a new epoch, and
+stale answers are discarded. Unread messages are counted and shown (*"N new messages not read
+yet"*), never grouped. In the 400 msg/s burst the longest frame gap was 17 ms in Chromium and
+177 ms (237 ms under a parallel run) in WebKit, with catch-up 3.9–4.0 s after the burst.
+
+**Defects found on the way, by the new tests:**
+
+- *A channel switch mid-embedding killed topics for the rest of the visit.* `reset` cleared the
+  pending request while the model ran, the next line read it, the error became a reported model
+  failure, and the board fell back to the word rules. `tests/unit/semantic-worker.test.ts` fails
+  without the fix.
+- *`?topics=off` was dropped at the first navigation.* The URL is rebuilt from the route, so the
+  baseline switch lasted until the visitor opened a channel. It is now kept for the visit.
+- *Exact repeats waited for the model.* "clip it" from five chatters showed nothing during the
+  10 s first load. Repeats need no model and now appear at once. Once the model has read
+  everything, the board is exactly the evaluated `hybridGroups` (a parity unit test).
+- *One request was not pinned.* Transformers.js fetched `config.json` from `main` despite the
+  pinned revision; `env.remotePathTemplate` now pins every file.
+- *27 MB of dead weight in the deployment.* Vite copied ONNX Runtime's wasm into `dist/`, but the
+  worker loads it from jsDelivr. It is now left out.
+- *The board header changed height as the model caught up.* The status first sat at the end of
+  the subtitle and wrapped it onto a second line, so the header shrank by 19 px each time the
+  status cleared. The existing "shell holds still" test caught it, intermittently. The status now
+  has a full-width line of its own, kept when empty; `semantic.spec.ts` checks the height directly.
+
+**Cost.** Inference costs the project nothing; there is no embedding endpoint and no key. A
+visitor downloads about 30 MB once, the first time they open a channel; the landing page loads
+no model (an E2E test checks). For scale: a hosted API would cost ≈ $0.006 per channel-hour on
+the busiest captured chat at $0.02 per million tokens. The reason not to use one is the public
+key-holding endpoint it would need.
+
+**Tests.** `npm test` 266 (was 210), `npm run e2e` 47 (was 33: 7 new topic flows in each of
+Chromium and WebKit), Python 738, `make scan` clean.

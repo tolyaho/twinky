@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { normalizeChannel } from "../twitch/parse";
+import { topicsEnabled } from "../semantic/enable";
 import { clock } from "./format";
 import { ChatFeed } from "./ChatFeed";
 import { ClusterBoard } from "./ClusterBoard";
@@ -45,6 +46,7 @@ function feedEmpty(status: UiStatus, offAir: boolean, channel: string): [string,
 }
 
 export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: Props) {
+  const [topics] = useState(topicsEnabled); // fixed for the visit, as the session's grouper is
   const [tab, setTab] = useState<Tab>("clusters");
   const [switching, setSwitching] = useState(false);
   const [value, setValue] = useState("");
@@ -213,6 +215,8 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
             onWindow={view.setWindowMs}
             sampled={view.tick?.sampled ?? false}
             soloMessages={view.tick?.soloMessages ?? 0}
+            semantic={view.tick?.semantic}
+            topics={topics}
             onTryAnother={tryAnother}
             onReplay={onReplay}
             onBack={onBack}
