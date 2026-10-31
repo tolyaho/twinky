@@ -19,8 +19,16 @@ export type IrcState =
   | "quiet" // connected, but silent for a while (often offline)
   | "reconnecting"
   | "not_found" // Twitch never acknowledged the JOIN, or reported the channel suspended
+  | "no_network" // the browser reports it is offline; we resume the moment it is back
   | "error"
   | "closed";
+
+/** The slice of `window` the client watches for connectivity changes. Injectable for tests. */
+export interface NetworkEvents {
+  addEventListener(type: "online" | "offline", fn: () => void): void;
+  removeEventListener(type: "online" | "offline", fn: () => void): void;
+  readonly navigator?: { readonly onLine?: boolean };
+}
 
 /** The IRC command of a line: tags and prefix stripped. `@a=b :x!y@z PRIVMSG #c :hi` -> PRIVMSG */
 export function ircCommand(line: string): string {
@@ -58,14 +66,22 @@ export interface IrcOptions {
    * (offline) and two invented names.
    */
   joinTimeoutMs?: number;
+  /** Where `online`/`offline` events come from; defaults to `window` in a browser. */
+  net?: NetworkEvents | null;
+  /** After the network returns, how long a surviving socket has to answer a PING. */
+  probeTimeoutMs?: number;
 }
 
 type TimerId = ReturnType<typeof setTimeout>;
 
+const defaultNet = (): NetworkEvents | null =>
+  typeof window !== "undefined" ? (window as unknown as NetworkEvents) : null;
+
 export class TwitchChatClient {
   private readonly o: Required<
-    Omit<IrcOptions, "channel" | "onRow" | "onState">
-  > & Pick<IrcOptions, "channel" | "onRow" | "onState">;
+    Omit<IrcOptions, "channel" | "onRow" | "onState" | "net">
+  > &
+    Pick<IrcOptions, "channel" | "onRow" | "onState"> & { net: NetworkEvents | null };
   private ws: WebSocket | null = null;
   private stopped = false;
   private _state: IrcState = "idle";
@@ -73,10 +89,12 @@ export class TwitchChatClient {
   private sawMessage = false;
   private everJoined = false;
   private joinedThisSocket = false;
+  private netDown = false;
   private lastTrafficAt = 0;
   private reconnectTimer?: TimerId;
   private quietTimer?: TimerId;
   private joinTimer?: TimerId;
+  private probeTimer?: TimerId;
   private pingTimer?: ReturnType<typeof setInterval>;
   private readonly seen = new Set<string>();
   private readonly seenQueue: string[] = [];
@@ -87,12 +105,16 @@ export class TwitchChatClient {
       now: opts.now ?? (() => Date.now()),
       url: opts.url ?? TWITCH_WS,
       quietAfterMs: opts.quietAfterMs ?? 12_000,
-      pingIntervalMs: opts.pingIntervalMs ?? 60_000,
-      stallTimeoutMs: opts.stallTimeoutMs ?? 150_000,
+      // A silent dead socket (laptop sleep, dropped Wi-Fi) is noticed within ~70s: we PING every
+      // 30s and Twitch answers each one, so two unanswered PINGs means the socket is gone.
+      pingIntervalMs: opts.pingIntervalMs ?? 30_000,
+      stallTimeoutMs: opts.stallTimeoutMs ?? 70_000,
       baseBackoffMs: opts.baseBackoffMs ?? 1_000,
       maxBackoffMs: opts.maxBackoffMs ?? 30_000,
       dedupeMax: opts.dedupeMax ?? 5_000,
       joinTimeoutMs: opts.joinTimeoutMs ?? 8_000,
+      probeTimeoutMs: opts.probeTimeoutMs ?? 5_000,
+      net: opts.net === undefined ? defaultNet() : opts.net,
       channel: opts.channel,
       onRow: opts.onRow,
       onState: opts.onState,
@@ -104,25 +126,73 @@ export class TwitchChatClient {
   }
 
   private setState(s: IrcState, info?: IrcStateInfo): void {
+    // While the browser says it is offline, every "trying" state is really "no network" — say so,
+    // instead of counting reconnect attempts that cannot succeed.
+    if (this.netDown && (s === "connecting" || s === "reconnecting" || s === "error" || s === "quiet")) {
+      s = "no_network";
+      info = { message: "Your device is offline. Twinky reconnects as soon as the network is back." };
+    }
+    if (s === this._state && s === "no_network") return;
     this._state = s;
     this.o.onState(s, info);
   }
 
   start(): void {
     this.stopped = false;
+    this.netDown = this.o.net?.navigator?.onLine === false;
+    this.o.net?.addEventListener("offline", this.onOffline);
+    this.o.net?.addEventListener("online", this.onOnline);
     this.open();
   }
 
   /** Intentional shutdown: no reconnect, socket closed, state -> "closed". */
   stop(): void {
     this.stopped = true;
+    this.unlistenNet();
     this.clearTimers();
     this.teardownSocket();
     this.setState("closed");
   }
 
+  private readonly onOffline = (): void => {
+    if (this.stopped) return;
+    this.netDown = true;
+    this.clearReconnect(); // attempts made offline only inflate the backoff
+    this.setState("no_network");
+  };
+
+  private readonly onOnline = (): void => {
+    if (this.stopped || !this.netDown) return;
+    this.netDown = false;
+    if (this.ws && this.joinedThisSocket) {
+      // The socket may have survived the outage, or may be a corpse that has not noticed yet.
+      // Ask: any reply within the probe window proves it alive (see onData); silence means
+      // reconnect now rather than after the stall watchdog's ~70s.
+      this.setState("reconnecting", { message: "Network is back — checking the connection…" });
+      this.clearProbe();
+      this.send("PING :twinky");
+      this.probeTimer = setTimeout(() => {
+        this.probeTimer = undefined;
+        if (this.stopped) return;
+        this.teardownSocket();
+        this.scheduleReconnect(0);
+      }, this.o.probeTimeoutMs);
+    } else {
+      // No usable socket: start over immediately with a fresh backoff.
+      this.teardownSocket();
+      this.attempt = 0;
+      this.open();
+    }
+  };
+
+  private unlistenNet(): void {
+    this.o.net?.removeEventListener("offline", this.onOffline);
+    this.o.net?.removeEventListener("online", this.onOnline);
+  }
+
   private open(): void {
     this.clearReconnect();
+    this.clearProbe();
     this.setState(this.attempt === 0 ? "connecting" : "reconnecting", { attempt: this.attempt });
     let ws: WebSocket;
     try {
@@ -168,6 +238,14 @@ export class TwitchChatClient {
 
   private onData(ev: MessageEvent): void {
     this.lastTrafficAt = this.o.now();
+    // Bytes arriving prove the network works, whatever the browser's online flag says.
+    this.netDown = false;
+    if (this.probeTimer !== undefined) {
+      this.clearProbe();
+      // Alive after the outage. "Connected" until a message proves chat is flowing again.
+      this.setState("connected");
+      this.armQuiet();
+    }
     const raw = typeof ev.data === "string" ? ev.data : String(ev.data);
     for (const line of raw.split("\r\n")) {
       if (!line) continue;
@@ -212,8 +290,11 @@ export class TwitchChatClient {
 
   private onClose(): void {
     if (this.stopped) return;
+    this.ws = null; // closed: nothing left to probe or send on
+    this.joinedThisSocket = false;
     this.clearQuiet();
     this.clearJoin();
+    this.clearProbe();
     this.stopPing();
     this.scheduleReconnect();
   }
@@ -221,6 +302,7 @@ export class TwitchChatClient {
   /** Terminal failure: stop for good (no reconnect loop against a channel that is not there). */
   private fail(state: IrcState, message: string): void {
     this.stopped = true;
+    this.unlistenNet();
     this.clearTimers();
     this.teardownSocket();
     this.setState(state, { message });
@@ -232,6 +314,12 @@ export class TwitchChatClient {
     this.clearJoin();
     this.joinTimer = setTimeout(() => {
       if (this.stopped || this.joinedThisSocket) return;
+      if (this.netDown) {
+        // No answer because there is no network, not because there is no channel. Drop the
+        // socket; the "online" handler opens a fresh one.
+        this.teardownSocket();
+        return;
+      }
       if (this.everJoined) {
         // It existed a minute ago; this is a bad edge, not a missing channel.
         this.teardownSocket();
@@ -297,6 +385,13 @@ export class TwitchChatClient {
   private scheduleReconnect(delayOverride?: number): void {
     if (this.stopped) return;
     this.clearReconnect();
+    if (this.netDown) {
+      // The "online" event reconnects immediately. Keep one slow retry in case the browser's
+      // offline flag is wrong (it can stick after VPN or adapter changes) and never clears.
+      this.setState("no_network");
+      this.reconnectTimer = setTimeout(() => this.open(), this.o.maxBackoffMs);
+      return;
+    }
     this.attempt += 1;
     const base = Math.min(
       this.o.maxBackoffMs,
@@ -311,6 +406,7 @@ export class TwitchChatClient {
   private teardownSocket(): void {
     const ws = this.ws;
     this.ws = null;
+    this.joinedThisSocket = false;
     this.stopPing();
     if (ws) {
       ws.onopen = ws.onmessage = ws.onclose = ws.onerror = null;
@@ -332,6 +428,11 @@ export class TwitchChatClient {
     this.quietTimer = undefined;
   }
 
+  private clearProbe(): void {
+    if (this.probeTimer !== undefined) clearTimeout(this.probeTimer);
+    this.probeTimer = undefined;
+  }
+
   private stopPing(): void {
     if (this.pingTimer !== undefined) clearInterval(this.pingTimer);
     this.pingTimer = undefined;
@@ -341,6 +442,7 @@ export class TwitchChatClient {
     this.clearReconnect();
     this.clearQuiet();
     this.clearJoin();
+    this.clearProbe();
     this.stopPing();
   }
 }

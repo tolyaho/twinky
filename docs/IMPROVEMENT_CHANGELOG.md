@@ -424,3 +424,63 @@ is sampled instead of reporting a smaller number as if it were whole.
 **Kept.** It is the first surface where someone who has never seen the repository can watch the
 grouper work on a channel of their choosing. Network observations here are dated rather than
 reproduced, because whether a channel is busy is not something a command can replay.
+
+## 2026-10-31, later — the live board checked against its own claims (`web/`)
+
+**The page showed the oldest chat, not the newest.** On a desktop the workspace had a minimum
+height and no maximum, so the 160-message feed grew the page instead of scrolling inside its
+column. The part of the feed on screen was the oldest third; the newest messages were below the
+fold. It surfaced in a screenshot of real `jynxzi` chat whose top line was 24 s old. The
+workspace is now exactly one screen, each zone scrolls on its own, and an end-to-end check asserts
+that the page does not scroll and that the newest message is in view. The same pass found the
+pulse hidden outright between 721 and 1080 px wide, with no tab to reach it; it now sits under
+the board there.
+
+**The first minute's numbers were wrong by construction.** Messages per minute divided the
+window's count by the whole window even when the session had been listening for twenty seconds,
+understating the rate threefold. "New chatters" counted everyone, because everyone is new to a
+session that has just begun. The engine now reports how much of the window it actually observed.
+Rates divide by that, "new" is withheld until the session predates the window, and the sparkline
+no longer draws the time before connecting as zero traffic. On real `jynxzi` chat, 75 messages
+in the first 26 s now read 176 a minute, where the old arithmetic would have shown 75.
+
+**One chatter is not the room.** The Python rules count messages, and the reaction rule keeps a
+group of one, so a single "LOL" showed as "reaction wave · 1 person" on real chat, and one account
+repeating a word could form a group by itself. The live engine now drops any group with fewer
+than two distinct chatters after `group_chat` runs. Those messages count as ungrouped and the
+footer says how many there were. The ported rules and their parity vectors are untouched; this is
+a live-board policy, recorded in `docs/archive/DECISIONS.md`, not a change to the evaluated
+algorithm.
+
+**Evidence that does not depend on the chat column.** Opening a group used to highlight its
+messages in the feed, and nothing else. On a phone the feed is another tab, and in a five-minute
+window most of a group's messages have already scrolled out of the 160-message feed. An open group
+now lists its own messages, newest first, with time and pseudonym, eight at a time up to 200.
+Prefix groups show their most common member ("dracula") instead of the bare stem ("drac…"),
+which read as a truncated label; the stem stays in the chip's hint and the Python label is
+unchanged. Identical questions, which the ported rule leaves apart because a shared word needs
+three messages, are merged on screen with their counts summed.
+
+**Network loss is its own state.** When the browser reports it is offline, the page says "No
+network" instead of counting reconnect attempts that cannot succeed. When the network returns it
+reconnects at once, or, if the old socket survived, sends a PING and replaces the socket if
+nothing answers within 5 s. A JOIN left unanswered because the network dropped is no longer read
+as "not found". A silent dead socket is detected in about 70 s instead of 150 s (PING every 30 s).
+Writing the test for this found that a closed socket stayed referenced after its close event, so
+a returning network would have probed a corpse instead of reconnecting; fixed.
+
+**Measured, and the instrument checked.** In headless Chromium, a synthetic stream of about 400
+messages per second for 8 s kept the feed at 160 DOM rows, the longest gap between frames at
+17 ms, and the median time from socket to screen at about 150 ms (seven probes). A first version
+counted `longtask` entries and reported none. Its own calibration block did not register, so that
+zero was not evidence, and the frame-gap probe replaced it. The same test now blocks the main
+thread for 150 ms on purpose and requires the probe to see it, which it does at about 133 ms.
+
+**Also.** `?channel=xqc` links open a channel directly, the browser's back button returns to the
+start, and the tab title names the channel. Escape closes an open group. The keyboard focus ring,
+near-black from the light design system, was invisible on the dark canvas; it is lavender there
+now, and a test checks its computed colour.
+
+**Kept.** All of it. The test suites cover each item: unit tests for the engine and the
+connection, and Playwright for the layout, keyboard, reduced motion, reconnect without
+duplicates, rapid switching, network loss and the burst.

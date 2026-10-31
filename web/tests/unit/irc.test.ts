@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TwitchChatClient, type IrcOptions, type IrcState } from "../../src/twitch/irc";
+import {
+  TwitchChatClient,
+  type IrcOptions,
+  type IrcState,
+  type NetworkEvents,
+} from "../../src/twitch/irc";
 import type { ChatRow } from "../../src/twitch/parse";
 import { FakeWebSocket, privmsgLine } from "./_fakews";
 
@@ -19,9 +24,26 @@ function makeClient(over: Partial<IrcOptions> = {}) {
     stallTimeoutMs: 200,
     baseBackoffMs: 1000,
     maxBackoffMs: 30000,
+    net: null,
     ...over,
   });
   return { client, rows, states };
+}
+
+/** A stand-in for `window`'s online/offline events. */
+function fakeNet(onLine = true) {
+  const fns: Record<string, (() => void)[]> = { online: [], offline: [] };
+  const net: NetworkEvents & { fire: (t: "online" | "offline") => void; listeners: () => number } = {
+    navigator: { onLine },
+    addEventListener: (t, fn) => void fns[t].push(fn),
+    removeEventListener: (t, fn) => void (fns[t] = fns[t].filter((f) => f !== fn)),
+    fire: (t) => {
+      (net.navigator as { onLine: boolean }).onLine = t === "online";
+      [...fns[t]].forEach((f) => f());
+    },
+    listeners: () => fns.online.length + fns.offline.length,
+  };
+  return net;
 }
 
 beforeEach(() => {
@@ -224,5 +246,109 @@ describe("TwitchChatClient lifecycle", () => {
     );
     FakeWebSocket.last().fireMessage(":tmi.twitch.tv CLEARCHAT #xqc :someone");
     expect(rows).toHaveLength(0);
+  });
+  describe("network loss", () => {
+    it("says 'no network' while the browser is offline, not 'reconnecting · N'", () => {
+      const net = fakeNet();
+      const { client, states } = makeClient({ net, stallTimeoutMs: 60_000 });
+      client.start();
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      net.fire("offline");
+      expect(client.state).toBe("no_network");
+      FakeWebSocket.last().fireClose(); // the socket dies while offline
+      expect(client.state).toBe("no_network");
+      vi.advanceTimersByTime(10_000);
+      // no backoff ladder is climbed while there is no network to climb it on
+      expect(states.filter((s) => s.state === "reconnecting")).toHaveLength(0);
+    });
+
+    it("reconnects the moment the network returns", () => {
+      const net = fakeNet();
+      const { client } = makeClient({ net, stallTimeoutMs: 60_000 });
+      client.start();
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      net.fire("offline");
+      FakeWebSocket.last().fireClose();
+      const count = FakeWebSocket.instances.length;
+      net.fire("online");
+      expect(FakeWebSocket.instances.length).toBe(count + 1); // immediately, no backoff wait
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      expect(client.state).toBe("connected");
+    });
+
+    it("probes a socket that survived the outage and replaces it if it is dead", () => {
+      const net = fakeNet();
+      const { client } = makeClient({ net, stallTimeoutMs: 60_000, pingIntervalMs: 30_000, probeTimeoutMs: 1_000 });
+      client.start();
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      net.fire("offline");
+      const sock = FakeWebSocket.last();
+      sock.sent.length = 0;
+      net.fire("online");
+      expect(sock.sent).toContain("PING :twinky");
+      expect(client.state).toBe("reconnecting"); // not "live" until something proves it
+      vi.advanceTimersByTime(1_100); // no PONG
+      expect(FakeWebSocket.last()).not.toBe(sock);
+    });
+
+    it("keeps a surviving socket that answers the probe", () => {
+      const net = fakeNet();
+      const { client } = makeClient({ net, stallTimeoutMs: 60_000, pingIntervalMs: 30_000, probeTimeoutMs: 1_000 });
+      client.start();
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      net.fire("offline");
+      const sock = FakeWebSocket.last();
+      net.fire("online");
+      sock.fireMessage(":tmi.twitch.tv PONG tmi.twitch.tv :twinky");
+      expect(client.state).toBe("connected");
+      vi.advanceTimersByTime(5_000);
+      expect(FakeWebSocket.last()).toBe(sock);
+    });
+
+    it("never reports not_found because the network was down during the JOIN", () => {
+      const net = fakeNet();
+      const { client } = makeClient({ net, joinTimeoutMs: 500, stallTimeoutMs: 60_000 });
+      client.start();
+      FakeWebSocket.last().fireOpen();
+      net.fire("offline"); // JOIN sent, then the network went away before Twitch answered
+      vi.advanceTimersByTime(600);
+      expect(client.state).toBe("no_network");
+      net.fire("online");
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      expect(client.state).toBe("connected");
+    });
+
+    it("starts in 'no network' when the browser is already offline", () => {
+      const net = fakeNet(false);
+      const { client } = makeClient({ net });
+      client.start();
+      expect(client.state).toBe("no_network");
+    });
+
+    it("traffic clears a stale offline flag", () => {
+      const net = fakeNet();
+      const { client } = makeClient({ net, stallTimeoutMs: 60_000 });
+      client.start();
+      FakeWebSocket.last().fireOpen();
+      FakeWebSocket.last().fireMessage(names366);
+      net.fire("offline"); // e.g. a VPN flap that never fires "online"
+      FakeWebSocket.last().fireMessage(privmsgLine("still here", { id: "s1" }));
+      expect(client.state).toBe("receiving");
+    });
+
+    it("removes its listeners on stop", () => {
+      const net = fakeNet();
+      const { client } = makeClient({ net });
+      client.start();
+      expect(net.listeners()).toBe(2);
+      client.stop();
+      expect(net.listeners()).toBe(0);
+    });
   });
 });

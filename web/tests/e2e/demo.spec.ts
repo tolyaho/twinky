@@ -54,12 +54,26 @@ test("live flow: enter channel, cluster, inspect, switch", async ({ page }) => {
     .poll(async () => page.locator(".cluster").count(), { timeout: 10_000 })
     .toBeGreaterThanOrEqual(2);
 
+  // the workspace is one screen: the page never scrolls, and the newest message is in view
+  const docOverflow = await page.evaluate(
+    () => document.documentElement.scrollHeight - window.innerHeight,
+  );
+  expect(docOverflow).toBeLessThanOrEqual(0);
+  await expect(page.locator(".msg").last()).toBeInViewport();
+
   await page.screenshot({ path: "screenshots/desktop-live.png", fullPage: false });
 
-  // inspect a cluster -> feed highlights
+  // inspect a cluster -> its messages listed as evidence, and highlighted in the feed
   await page.locator(".cluster").first().click();
   await expect(page.locator(".cluster-sel")).toHaveCount(1);
   await expect(page.locator(".msg-lit").first()).toBeVisible({ timeout: 5_000 });
+  const count = Number(await page.locator(".cluster-sel .cluster-n").textContent());
+  await expect(page.locator(".evidence .ev")).toHaveCount(Math.min(count, 8));
+  await page.getByRole("button", { name: "Close" }).click();
+  await expect(page.locator(".evidence")).toHaveCount(0);
+  await page.locator(".cluster").first().click();
+  expect(await page.evaluate(() => window.scrollY)).toBe(0); // opening a group never scrolls the page
+  await page.waitForTimeout(450); // let the open/reorder motion settle before the screenshot
   await page.screenshot({ path: "screenshots/desktop-selected.png", fullPage: false });
 
   // switch channel cleanly
@@ -99,6 +113,28 @@ test("mobile: tabs switch between clusters, chat, pulse", async ({ page }) => {
   await page.screenshot({ path: "screenshots/mobile-chat.png", fullPage: false });
   await page.getByRole("tab", { name: "Pulse" }).click();
   await expect(page.locator(".zone-pulse")).toBeVisible();
+  // the evidence is readable on a phone too, without the chat tab
+  await page.getByRole("tab", { name: "Clusters" }).click();
+  await page.locator(".cluster").first().click();
+  await expect(page.locator(".evidence .ev").first()).toBeVisible();
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth),
+  ).toBeLessThanOrEqual(0);
+  await page.waitForTimeout(450);
+  await page.screenshot({ path: "screenshots/mobile-evidence.png", fullPage: false });
+});
+
+test("tablet: two columns, the pulse stays reachable under the board", async ({ page }) => {
+  await page.setViewportSize({ width: 900, height: 1100 });
+  await scriptTwitch(page);
+  await page.goto("/");
+  await page.getByPlaceholder("enter a twitch channel").fill("xqc");
+  await page.getByRole("button", { name: "Watch live" }).click();
+  await expect.poll(async () => page.locator(".cluster").count(), { timeout: 10_000 }).toBeGreaterThan(1);
+  await expect(page.locator(".zone-pulse")).toBeInViewport();
+  await expect(page.locator(".zone-chat")).toBeInViewport();
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: "screenshots/tablet-live.png", fullPage: false });
 });
 
 test("quiet channel: connected but silent shows an honest state", async ({ page }) => {
@@ -143,6 +179,9 @@ test("nonexistent channel: no JOIN acknowledgement shows Not found, not an endle
   await expect(page.locator(".board-empty-title")).toHaveText("No such channel");
   await expect(page.locator(".feed-empty")).toContainText("wasn't found");
   await expect(page.getByRole("button", { name: /Pause/ })).toHaveCount(0);
+  // nothing is invented to fill the silence
+  await expect(page.locator(".msg")).toHaveCount(0);
+  await expect(page.locator(".cluster")).toHaveCount(0);
   await page.screenshot({ path: "screenshots/desktop-notfound.png" });
   await page.getByRole("button", { name: "Try another channel" }).click();
   await expect(page.getByPlaceholder("channel…")).toBeFocused();

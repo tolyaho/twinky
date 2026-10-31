@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  MIN_CHATTERS,
   TwinkySession,
   liveSource,
   replaySource,
@@ -180,7 +181,9 @@ describe("TwinkySession", () => {
     FakeWebSocket.last().fireOpen();
     FakeWebSocket.last().fireMessage(":tmi.twitch.tv 366 justinfan1 #xqc :End of /NAMES list");
     for (let i = 0; i < 5; i++) {
-      FakeWebSocket.last().fireMessage(privmsgLine("LMAO", { id: `L${i}`, ts: BASE + i }));
+      FakeWebSocket.last().fireMessage(
+        privmsgLine("LMAO", { id: `L${i}`, ts: BASE + i, name: `Viewer${i}` }),
+      );
     }
     vi.advanceTimersByTime(1000);
     expect(chats).toHaveLength(5);
@@ -242,5 +245,68 @@ describe("TwinkySession", () => {
     for (let i = 5; i < 30; i++) s.push(row("hi there", i, `u${i}`));
     vi.advanceTimersByTime(1000);
     expect(ticks.at(-1)!.sampled).toBe(true);
+  });
+  it("does not show one chatter's repeats as an audience signal", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source);
+    session.start();
+    // one spammer: 6x LOL and 5x the same word — groups by the Python rules, but one person
+    for (let i = 0; i < 6; i++) s.push(row("LOL", i, "spammer"));
+    for (let i = 6; i < 11; i++) s.push(row("giveaway", i, "spammer"));
+    // two real people laughing
+    s.push(row("LMAO", 11, "alice"));
+    s.push(row("KEKW", 12, "bob"));
+    vi.advanceTimersByTime(1000);
+    const t = ticks.at(-1)!;
+    expect(MIN_CHATTERS).toBe(2);
+    // the reaction wave survives (3 chatters), the one-person "giveaway" prefix group does not
+    const reaction = t.groups.find((g) => g.rule === "reaction")!;
+    expect(reaction.count).toBe(8);
+    expect(reaction.chatters).toBe(3);
+    expect(t.groups.some((g) => g.label.startsWith("give"))).toBe(false);
+    expect(t.soloMessages).toBe(5);
+    // the pulse agrees with the board: the dropped messages are ungrouped, not lost
+    expect(t.pulse.active_groups).toBe(t.groups.length);
+    expect(t.pulse.composition.singletons).toBe(t.windowMessages - 8);
+  });
+
+  it("labels a prefix group by its most common member, not a bare stem", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source);
+    session.start();
+    ["dracula", "dracula", "Dracula!!", "draconic", "dracarys"].forEach((t, i) =>
+      s.push(row(t, i, `u${i}`)),
+    );
+    vi.advanceTimersByTime(1000);
+    const g = ticks.at(-1)!.groups.find((x) => x.rule === "prefix")!;
+    expect(g.label).toBe("drac…"); // the Python label is untouched
+    expect(g.display).toBe("dracula");
+  });
+
+  it("exposes every grouped message as evidence", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source);
+    session.start();
+    for (let i = 0; i < 7; i++) s.push(row("LOL", i, `u${i}`));
+    vi.advanceTimersByTime(1000);
+    const t = ticks.at(-1)!;
+    for (const g of t.groups) {
+      for (const id of g.event_ids) expect(t.events.get(id)?.id).toBe(id);
+    }
+  });
+
+  it("divides rates by the time actually observed while the window warms up", () => {
+    const s = stub();
+    const { session, ticks } = harness(s.source, { windowMs: 60_000, maxBufferMs: 120_000 });
+    session.start();
+    vi.advanceTimersByTime(20_000);
+    let t = ticks.at(-1)!;
+    expect(t.warm).toBe(false);
+    expect(t.observedMs).toBeGreaterThanOrEqual(19_000);
+    expect(t.observedMs).toBeLessThanOrEqual(21_000);
+    vi.advanceTimersByTime(60_000);
+    t = ticks.at(-1)!;
+    expect(t.warm).toBe(true);
+    expect(t.observedMs).toBe(60_000);
   });
 });

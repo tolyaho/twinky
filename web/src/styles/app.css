@@ -283,9 +283,12 @@
 }
 
 /* ---- Workspace shell ------------------------------------------------------------------------ */
+/* Exactly one screen tall: each zone scrolls on its own, so the newest chat is never below the
+   fold and opening a group never scrolls the page. (Phones switch back to a flowing page below.) */
 .workspace {
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   background: var(--surface-dark);
   color: var(--ink-on-dark);
   display: flex;
@@ -438,6 +441,7 @@
   flex: 1;
   display: grid;
   grid-template-columns: minmax(260px, 24%) minmax(340px, 1fr) minmax(280px, 30%);
+  grid-template-rows: minmax(0, 1fr);
   gap: 14px;
   padding: 14px 20px 20px;
   min-height: 0;
@@ -675,18 +679,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.cluster-detail {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--body-on-dark);
-}
-.cluster-detail-hint {
-  color: var(--lavender);
-  flex: none;
 }
 .cluster-bar {
   position: absolute;
@@ -953,11 +945,20 @@
 
 /* ---- responsive ----------------------------------------------------------------------------- */
 @media (max-width: 1080px) {
+  /* two columns: chat on the left, the board above a compact pulse on the right */
   .ws-grid {
-    grid-template-columns: minmax(240px, 30%) 1fr;
+    grid-template-columns: minmax(240px, 32%) 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .zone-chat {
+    grid-row: 1 / span 2;
   }
   .zone-pulse {
-    display: none;
+    grid-column: 2;
+    max-height: 38vh;
+  }
+  .zone-pulse .stat-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -1003,12 +1004,27 @@
     color: var(--surface-dark);
     border-color: var(--ink-on-dark);
   }
+  .workspace {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
   .ws-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
     padding: 12px 14px 16px;
   }
   .ws-grid .zone {
     display: none;
+  }
+  .zone-chat,
+  .zone-pulse {
+    grid-row: auto;
+    grid-column: auto;
+    max-height: none;
+  }
+  .zone-pulse .stat-grid {
+    grid-template-columns: 1fr 1fr;
   }
   .ws-grid[data-tab="clusters"] .zone-board,
   .ws-grid[data-tab="chat"] .zone-chat,
@@ -1076,4 +1092,182 @@
   .board-title {
     font-size: 21px;
   }
+}
+
+/* Keyboard focus must be visible on the dark canvas: the editorial ring is near-black. */
+.workspace {
+  --focus-ring: var(--lavender);
+}
+
+/* ---- evidence: the messages behind an open group -------------------------------------------- */
+.cluster-item {
+  list-style: none;
+}
+.cluster-sel {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.evidence {
+  border: 1px solid var(--lavender);
+  border-top: none;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  background: rgba(200, 184, 224, 0.045);
+  padding: 10px 15px 12px;
+  animation: evidenceIn 0.22s ease;
+}
+@keyframes evidenceIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.evidence-meta {
+  margin: 0 0 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted-on-dark);
+}
+.evidence-meta strong {
+  color: var(--body-on-dark);
+  font-weight: 500;
+}
+.evidence-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 264px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  border-top: 1px solid var(--hairline-on-dark);
+}
+.ev {
+  display: grid;
+  grid-template-columns: 34px 98px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--hairline-on-dark-soft);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.ev-time {
+  font-size: 10.5px;
+  color: #6f665c;
+  font-variant-numeric: tabular-nums;
+}
+.ev-author {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-on-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ev-text {
+  color: var(--ink-on-dark);
+  overflow-wrap: anywhere;
+}
+.evidence-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted-on-dark);
+}
+.evidence-hint {
+  margin-left: auto;
+  color: var(--lavender);
+}
+.evidence-all {
+  color: var(--muted-on-dark);
+}
+@container (max-width: 520px) {
+  /* narrow: the message leads, who and when sit quietly beneath / beside it */
+  .ev {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "text time" "author author";
+    row-gap: 1px;
+  }
+  .ev-text {
+    grid-area: text;
+  }
+  .ev-time {
+    grid-area: time;
+  }
+  .ev-author {
+    grid-area: author;
+    font-size: 10.5px;
+  }
+  .evidence-hint {
+    display: none;
+  }
+  .evidence-foot .btn-ghost:last-child {
+    margin-left: auto;
+  }
+}
+
+/* ---- board footer: summary line + how grouping works ---------------------------------------- */
+.board-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.link-inline {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--body-on-dark);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--hairline-on-dark);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.link-inline:hover {
+  color: var(--ink-on-dark);
+  text-decoration-color: var(--muted-on-dark);
+}
+.how-grouping summary {
+  cursor: pointer;
+  color: var(--muted-on-dark);
+  font-size: 12px;
+  width: max-content;
+  list-style: none;
+}
+.how-grouping summary::-webkit-details-marker {
+  display: none;
+}
+.how-grouping summary::before {
+  content: "+";
+  display: inline-block;
+  width: 1em;
+  color: var(--muted-soft);
+}
+.how-grouping[open] summary::before {
+  content: "–";
+}
+.how-grouping summary:hover {
+  color: var(--body-on-dark);
+}
+.how-grouping ul {
+  margin: 8px 0 2px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted-on-dark);
+  max-width: 68ch;
+}
+.how-grouping li + li {
+  margin-top: 3px;
+}
+.how-grouping strong {
+  color: var(--body-on-dark);
+  font-weight: 500;
+}
+
+/* the part of the sparkline before we connected: unknown, drawn as a faint dotted baseline */
+.spark-unknown {
+  stroke: var(--hairline-on-dark);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 4;
+  vector-effect: non-scaling-stroke;
 }

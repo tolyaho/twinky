@@ -45,3 +45,24 @@ export function perMinute(count: number, windowMs: number): number {
   if (windowMs <= 0) return 0;
   return Math.round((count / windowMs) * 60_000);
 }
+
+/** "just now" / "12s ago" / "3m ago" — `ago` as a phrase that reads in a sentence. */
+export function agoPhrase(ms: number): string {
+  const a = ago(ms);
+  return a === "now" ? "just now" : `${a} ago`;
+}
+
+/** A duration for prose: "8 seconds", "1 minute", "4 minutes". */
+export function spanLong(ms: number): string {
+  const s = Math.max(1, Math.round(ms / 1000));
+  if (s < 90) return `${s} second${s === 1 ? "" : "s"}`;
+  const m = Math.round(s / 60);
+  return `${m} minute${m === 1 ? "" : "s"}`;
+}
+
+/** A compact duration: "8s", "1m 05s". */
+export function spanShort(ms: number): string {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 60) return `${s}s`;
+  return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
+}

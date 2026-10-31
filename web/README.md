@@ -39,11 +39,16 @@ npm install
 npm run dev            # http://localhost:5173 — enter a live channel
 ```
 
+A channel can be linked directly: `/?channel=xqc`. `/?replay` opens the recorded example.
+
 ## Test
 
 ```bash
-npm test               # 169 unit tests: clustering parity, IRC lifecycle, engine, parsing
-npm run e2e            # 8 Playwright flows on a synthetic stream (deterministic, no network)
+npm test               # 183 unit tests: clustering parity, IRC lifecycle, network loss, engine
+npm run e2e            # 16 Playwright flows on a synthetic stream (deterministic, no network):
+                       #   layout, evidence, keyboard, reduced motion, reconnect without
+                       #   duplicates, rapid switching, network loss, deep links, a measured
+                       #   ~400 msg/s burst
 LIVE_CHANNEL=xqc npm run e2e:live   # 3 real-network checks: live chat, not-found, no false not-found
 PW_BASE_URL=https://… npm run e2e:live   # same, against a deployed URL
 npm run typecheck      # frontend + serverless function
@@ -89,10 +94,19 @@ any Twinky server — the only outbound connection is to Twitch. Message **text*
   so after 8 s the page says *Not found* instead of spinning forever.
 - If a very busy chat outruns the 20,000-message buffer while the 5-minute window is selected,
   the board says the window is **sampled** rather than presenting a partial count as whole.
+- **One chatter is not the room.** A group is shown only if at least two different chatters wrote
+  it; a single account's repeats stay ungrouped and the footer counts them. This is applied after
+  the ported `group_chat`, which itself stays byte-identical to the Python.
+- **Rates divide by time actually observed.** For the first minute after connecting the window is
+  partly time nobody was listening; msgs/min uses the observed span, "new chatters" is withheld
+  until the session predates the window, and the sparkline does not draw that time as zero.
+- **Network loss is said plainly** ("No network"), and the page reconnects the moment the browser
+  is back online — it never reads a dropped network as a missing channel.
 - **Replay** (a recorded, pseudonymised capture replaying faster than real time) is always labelled
   REPLAY and is never a silent fallback for a failed live connection — the visitor chooses it.
 - Counts are real: every cluster's count equals its underlying messages; a message joins exactly
-  one group, so nothing is double-counted (enforced by the parity tests).
+  one group, so nothing is double-counted (enforced by the parity tests). Opening a group lists
+  those messages, newest first.
 
 ## Limitations
 

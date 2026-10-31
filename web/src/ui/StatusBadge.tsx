@@ -18,6 +18,7 @@ const MAP: Record<UiStatus, { label: string; tone: "live" | "warn" | "idle" | "b
   closed: { label: "Disconnected", tone: "idle" },
   offline: { label: "Offline", tone: "idle" },
   not_found: { label: "Not found", tone: "bad" },
+  no_network: { label: "No network", tone: "bad" },
   replay: { label: "Replay", tone: "replay" },
   ended: { label: "Replay ended", tone: "idle" },
 };

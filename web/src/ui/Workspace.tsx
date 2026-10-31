@@ -20,7 +20,31 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
   const [switching, setSwitching] = useState(false);
   const [value, setValue] = useState("");
   const now = view.tick?.serverNow ?? Date.now();
-  const selectedLabel = view.tick?.groups.find((g) => g.key === view.selectedKey)?.label ?? null;
+  const selectedLabel = view.groups.find((g) => g.key === view.selectedKey)?.display ?? null;
+  const { select, selectedKey } = view;
+
+  // Escape backs out one level: the channel switcher first, then an open group.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (switching) {
+        setSwitching(false);
+        setValue("");
+      } else if (selectedKey) {
+        select(null);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [switching, selectedKey, select]);
+
+  useEffect(() => {
+    const prev = document.title;
+    document.title = `${view.source === "replay" ? "Replay · " : ""}#${view.channel} · Twinky`;
+    return () => {
+      document.title = prev;
+    };
+  }, [view.channel, view.source]);
 
   // Screen readers get the top signal when it changes, at most every 10s — never every message.
   const [announce, setAnnounce] = useState("");
@@ -29,9 +53,9 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
   useEffect(() => {
     if (!top) return;
     const now = Date.now();
-    if (top.label !== lastAnnounce.current.label && now - lastAnnounce.current.at > 10_000) {
-      lastAnnounce.current = { label: top.label, at: now };
-      setAnnounce(`Top signal: ${top.label}, ${top.count} messages from ${top.chatters} chatters`);
+    if (top.display !== lastAnnounce.current.label && now - lastAnnounce.current.at > 10_000) {
+      lastAnnounce.current = { label: top.display, at: now };
+      setAnnounce(`Top signal: ${top.display}, ${top.count} messages from ${top.chatters} chatters`);
     }
   }, [top]);
 
@@ -127,9 +151,11 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
                 ? "No chat — this channel wasn't found."
                 : view.status === "offline"
                   ? "No chat — the channel is offline."
-                  : view.status === "quiet" || view.status === "connected"
-                    ? "Connected. No messages yet."
-                    : "Connecting to chat…"
+                  : view.status === "no_network"
+                    ? "Waiting for the network to come back…"
+                    : view.status === "quiet" || view.status === "connected"
+                      ? "Connected. No messages yet."
+                      : "Connecting to chat…"
             }
           />
         </div>
@@ -137,6 +163,8 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
         <div className="zone zone-board">
           <ClusterBoard
             groups={view.groups}
+            events={view.tick?.events ?? null}
+            now={now}
             selectedKey={view.selectedKey}
             onSelect={view.select}
             status={view.status}
@@ -145,6 +173,7 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
             windowMs={view.windowMs}
             onWindow={view.setWindowMs}
             sampled={view.tick?.sampled ?? false}
+            soloMessages={view.tick?.soloMessages ?? 0}
             onTryAnother={() => setSwitching(true)}
           />
         </div>
