@@ -3,6 +3,7 @@ import type { QuestionRow } from "../cluster/pulse";
 import type { TickSnapshot } from "../engine/session";
 import { Sparkline } from "./Sparkline";
 import { compact, pct, perMinute, spanLong, windowLong } from "./format";
+import { Num } from "./motion";
 
 interface Props {
   tick: TickSnapshot | null;
@@ -14,18 +15,23 @@ const MIN_RATE_SPAN_MS = 5_000; // below this a per-minute rate is mostly noise
 
 function Stat({
   value,
+  n,
   label,
   sub,
   title,
 }: {
   value: string;
+  /** The number behind `value`, so the change rolls in the right direction. */
+  n?: number;
   label: string;
   sub?: string;
   title?: string;
 }) {
   return (
     <div className="stat" title={title}>
-      <div className="stat-value">{value}</div>
+      <div className="stat-value">
+        <Num value={n ?? value} text={value} />
+      </div>
       <div className="stat-label">{label}</div>
       {sub && <div className="stat-sub">{sub}</div>}
     </div>
@@ -59,7 +65,8 @@ export function Pulse({ tick, windowMs }: Props) {
   // "new" simply because we just arrived.
   const observed = tick?.observedMs ?? 0;
   const warm = tick?.warm ?? false;
-  const rate = observed >= MIN_RATE_SPAN_MS ? compact(perMinute(windowMsgs, observed)) : "—";
+  const perMin = observed >= MIN_RATE_SPAN_MS ? perMinute(windowMsgs, observed) : null;
+  const rate = perMin === null ? "—" : compact(perMin);
   const rateFrom =
     tick && !warm
       ? Math.max(0, Math.floor((tick.windowMs[1] - observed - tick.windowMs[0]) / RATE_BUCKET_MS))
@@ -76,27 +83,35 @@ export function Pulse({ tick, windowMs }: Props) {
       </p>
 
       <div className="stat-grid">
-        <Stat value={rate} label="msgs / min" title="Messages in the window ÷ time observed" />
+        <Stat value={rate} n={perMin ?? undefined} label="msgs / min" title="Messages in the window ÷ time observed" />
         <Stat
           value={p ? String(p.peak_per_second) : "0"}
+          n={p?.peak_per_second ?? 0}
           label="peak / sec"
           title="Busiest 10-second stretch, per second"
         />
         <Stat
           value={compact(p?.unique_chatters ?? 0)}
+          n={p?.unique_chatters ?? 0}
           label="chatters"
           sub={warm && p?.new_chatters ? `+${compact(p.new_chatters)} new` : undefined}
           title="Distinct chatters who wrote in the window. Not viewers: most viewers never type."
         />
         <Stat
           value={pct(clustered)}
+          n={clustered}
           label="clustered"
           sub={`${compact(grouped)} of ${compact(windowMsgs)}`}
           title="Share of the window's messages that landed in a group"
         />
-        <Stat value={compact(p?.active_groups ?? 0)} label="active groups" />
+        <Stat
+          value={compact(p?.active_groups ?? 0)}
+          n={p?.active_groups ?? 0}
+          label="active groups"
+        />
         <Stat
           value={p?.reaction_wave ? compact(p.reaction_wave) : "—"}
+          n={p?.reaction_wave || undefined}
           label="reaction wave"
           sub={p?.reaction_wave ? "laughs & emotes" : undefined}
         />

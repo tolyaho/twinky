@@ -4,6 +4,8 @@ import { normalizeChannel } from "../twitch/parse";
 interface Props {
   onWatch: (channel: string) => void;
   onReplay: () => void;
+  /** The recording is being fetched; the replay link shows that instead of looking dead. */
+  replayPending: boolean;
 }
 
 const EXAMPLES = ["xqc", "hasanabi", "jynxzi", "stableronaldo", "caseoh_"];
@@ -33,7 +35,7 @@ function SignalMotif() {
   );
 }
 
-export function Landing({ onWatch, onReplay }: Props) {
+export function Landing({ onWatch, onReplay, replayPending }: Props) {
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -53,8 +55,20 @@ export function Landing({ onWatch, onReplay }: Props) {
         <div className="wordmark">
           Twinky<span className="wordmark-dot">.</span>
         </div>
-        <button className="link-btn" onClick={onReplay}>
-          Watch a recorded example →
+        <button
+          className="link-btn"
+          onClick={onReplay}
+          disabled={replayPending}
+          aria-busy={replayPending || undefined}
+        >
+          {replayPending ? (
+            <>
+              <span className="spinner" aria-hidden="true" />
+              Loading the recording…
+            </>
+          ) : (
+            "Watch a recorded example →"
+          )}
         </button>
       </nav>
 

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Landing } from "./ui/Landing";
 import { Workspace } from "./ui/Workspace";
+import { motionAllowed } from "./ui/motion";
 import { useSession, type Descriptor } from "./ui/useSession";
 import type { ReplayRow } from "./engine/session";
 import { normalizeChannel } from "./twitch/parse";
@@ -26,30 +28,62 @@ async function loadReplay(): Promise<ReplayRow[]> {
   return (Array.isArray(mod) ? mod : mod.default) as ReplayRow[];
 }
 
+/**
+ * Cross-fade between the landing page and the workspace where the browser supports view
+ * transitions. The swap itself is synchronous and immediate — the transition animates it, it
+ * never delays it.
+ */
+function crossFade(update: () => void) {
+  const d = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+  if (typeof d.startViewTransition !== "function" || !motionAllowed() || document.hidden) {
+    update();
+    return;
+  }
+  d.startViewTransition(() => flushSync(update));
+}
+
 export default function App() {
   const [descriptor, setDescriptor] = useState<Descriptor | null>(() => {
     const r = routeFromUrl();
     return r?.kind === "live" ? r : null;
   });
+  const [replayPending, setReplayPending] = useState(false);
   const view = useSession(descriptor);
   const nav = useRef(0); // the latest navigation wins, even over a slower replay import
+  const current = useRef(descriptor);
+  current.current = descriptor;
 
-  const go = useCallback(async (route: Route, history: "push" | "replace" | "none") => {
-    const id = ++nav.current;
-    const url = urlFor(route);
-    const here = window.location.pathname + window.location.search;
-    if (history === "push" && url !== here && url !== window.location.search) {
-      window.history.pushState(null, "", url);
-    } else if (history === "replace") {
-      window.history.replaceState(null, "", url);
-    }
-    if (!route) setDescriptor(null);
-    else if (route.kind === "live") setDescriptor({ kind: "live", channel: route.channel });
-    else {
-      const rows = await loadReplay();
-      if (id === nav.current) setDescriptor({ kind: "replay", channel: "stableronaldo", rows });
-    }
+  const show = useCallback((next: Descriptor | null) => {
+    // only the landing <-> workspace change is a page change worth animating
+    if ((current.current === null) !== (next === null)) crossFade(() => setDescriptor(next));
+    else setDescriptor(next);
   }, []);
+
+  const go = useCallback(
+    async (route: Route, history: "push" | "replace" | "none") => {
+      const id = ++nav.current;
+      const url = urlFor(route);
+      const here = window.location.pathname + window.location.search;
+      if (history === "push" && url !== here && url !== window.location.search) {
+        window.history.pushState(null, "", url);
+      } else if (history === "replace") {
+        window.history.replaceState(null, "", url);
+      }
+      setReplayPending(false);
+      if (!route) show(null);
+      else if (route.kind === "live") show({ kind: "live", channel: route.channel });
+      else {
+        setReplayPending(true);
+        try {
+          const rows = await loadReplay();
+          if (id === nav.current) show({ kind: "replay", channel: "stableronaldo", rows });
+        } finally {
+          if (id === nav.current) setReplayPending(false);
+        }
+      }
+    },
+    [show],
+  );
 
   useEffect(() => {
     const initial = routeFromUrl();
@@ -65,6 +99,14 @@ export default function App() {
   const replay = useCallback(() => void go({ kind: "replay" }, "push"), [go]);
   const back = useCallback(() => void go(null, "push"), [go]);
 
-  if (!descriptor) return <Landing onWatch={watch} onReplay={replay} />;
-  return <Workspace view={view} onSwitch={watch} onBack={back} />;
+  if (!descriptor) return <Landing onWatch={watch} onReplay={replay} replayPending={replayPending} />;
+  return (
+    <Workspace
+      view={view}
+      onSwitch={watch}
+      onBack={back}
+      onReplay={replay}
+      replayPending={replayPending}
+    />
+  );
 }

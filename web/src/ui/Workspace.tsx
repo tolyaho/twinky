@@ -3,25 +3,58 @@ import { normalizeChannel } from "../twitch/parse";
 import { clock } from "./format";
 import { ChatFeed } from "./ChatFeed";
 import { ClusterBoard } from "./ClusterBoard";
+import { offAirMode } from "./derive";
 import { Pulse } from "./Pulse";
-import { StatusBadge } from "./StatusBadge";
-import type { SessionView } from "./useSession";
+import { BroadcastPill, StatusBadge } from "./StatusBadge";
+import { REPLAY_SPEED, type SessionView, type UiStatus } from "./useSession";
 
 interface Props {
   view: SessionView;
   onSwitch: (channel: string) => void;
   onBack: () => void;
+  onReplay: () => void;
+  /** The recording is being fetched (a dynamic import); its buttons show progress meanwhile. */
+  replayPending: boolean;
 }
 
 type Tab = "clusters" | "chat" | "pulse";
 
-export function Workspace({ view, onSwitch, onBack }: Props) {
+/** What the chat column says while it has nothing to show, and whether that is still in progress. */
+function feedEmpty(status: UiStatus, offAir: boolean, channel: string): [string, boolean] {
+  if (status === "not_found") return [`No chat — Twitch has no channel called #${channel}.`, false];
+  if (offAir) return ["No messages. Still listening, in case anyone writes.", false];
+  switch (status) {
+    case "no_network":
+      return ["Waiting for the network to come back…", true];
+    case "error":
+      return ["Retrying the connection…", true];
+    case "closed":
+      return ["Disconnected.", false];
+    case "ended":
+      return ["The replay has finished.", false];
+    case "quiet":
+      return ["Connected. Nobody has written for a while.", false];
+    case "connected":
+      return ["Joined. Waiting for the first message…", true];
+    case "receiving":
+    case "replay":
+      return ["Waiting for messages…", true];
+    default:
+      return ["Connecting to chat…", true];
+  }
+}
+
+export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: Props) {
   const [tab, setTab] = useState<Tab>("clusters");
   const [switching, setSwitching] = useState(false);
   const [value, setValue] = useState("");
   const now = view.tick?.serverNow ?? Date.now();
   const selectedLabel = view.groups.find((g) => g.key === view.selectedKey)?.display ?? null;
   const { select, selectedKey } = view;
+  const windowMessages = view.tick?.windowMessages ?? 0;
+  const offAir = offAirMode(view.status, view.broadcast, windowMessages);
+  const [emptyText, waiting] = feedEmpty(view.status, offAir !== "none", view.channel);
+  const target = normalizeChannel(value);
 
   // Escape backs out one level: the channel switcher first, then an open group.
   useEffect(() => {
@@ -59,13 +92,16 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
     }
   }, [top]);
 
-  const doSwitch = (raw: string) => {
-    const c = normalizeChannel(raw);
-    if (c) {
-      onSwitch(c);
-      setSwitching(false);
-      setValue("");
-    }
+  const doSwitch = () => {
+    if (!target) return;
+    onSwitch(target);
+    setSwitching(false);
+    setValue("");
+  };
+
+  const tryAnother = () => {
+    setSwitching(true);
+    setTab("clusters");
   };
 
   return (
@@ -79,6 +115,9 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
           {view.source === "replay" && <span className="src-badge src-replay">REPLAY</span>}
           <span className="ws-channel-name">#{view.channel}</span>
           <StatusBadge status={view.status} info={view.statusInfo} />
+          {view.source === "live" && (
+            <BroadcastPill b={view.broadcast} now={Date.now()} channel={view.channel} />
+          )}
         </div>
 
         <div className="ws-tools">
@@ -90,7 +129,7 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
               className="switch-form"
               onSubmit={(e) => {
                 e.preventDefault();
-                doSwitch(value);
+                doSwitch();
               }}
             >
               <input
@@ -105,7 +144,7 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
                 spellCheck={false}
                 aria-label="Switch to channel"
               />
-              <button className="btn-mini" type="submit">
+              <button className="btn-mini" type="submit" disabled={!target}>
                 Go
               </button>
             </form>
@@ -119,8 +158,14 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
 
       {view.source === "replay" && (
         <div className="replay-bar" role="note">
-          <strong>Replay.</strong> A recorded, pseudonymized capture replaying in real time — not a
+          <strong>Replay.</strong> A recorded, pseudonymized capture played back at {REPLAY_SPEED}× speed — not a
           live stream. Enter a channel to watch live chat instead.
+        </div>
+      )}
+      {offAir === "banner" && (
+        <div className="offair-bar" role="note">
+          <strong>#{view.channel} is off air.</strong> Twitch reports no broadcast right now, but
+          the chat is still active — what you see below is real, counted as usual.
         </div>
       )}
 
@@ -146,17 +191,8 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
             now={now}
             highlightIds={view.highlightIds}
             selectedLabel={selectedLabel}
-            emptyText={
-              view.status === "not_found"
-                ? "No chat — this channel wasn't found."
-                : view.status === "offline"
-                  ? "No chat — the channel is offline."
-                  : view.status === "no_network"
-                    ? "Waiting for the network to come back…"
-                    : view.status === "quiet" || view.status === "connected"
-                      ? "Connected. No messages yet."
-                      : "Connecting to chat…"
-            }
+            emptyText={emptyText}
+            waiting={waiting}
           />
         </div>
 
@@ -168,13 +204,19 @@ export function Workspace({ view, onSwitch, onBack }: Props) {
             selectedKey={view.selectedKey}
             onSelect={view.select}
             status={view.status}
+            statusInfo={view.statusInfo}
+            broadcast={view.broadcast}
+            offAir={offAir}
             channel={view.channel}
-            windowMessages={view.tick?.windowMessages ?? 0}
+            windowMessages={windowMessages}
             windowMs={view.windowMs}
             onWindow={view.setWindowMs}
             sampled={view.tick?.sampled ?? false}
             soloMessages={view.tick?.soloMessages ?? 0}
-            onTryAnother={() => setSwitching(true)}
+            onTryAnother={tryAnother}
+            onReplay={onReplay}
+            onBack={onBack}
+            replayPending={replayPending}
           />
         </div>
 

@@ -44,11 +44,13 @@ A channel can be linked directly: `/?channel=xqc`. `/?replay` opens the recorded
 ## Test
 
 ```bash
-npm test               # 183 unit tests: clustering parity, IRC lifecycle, network loss, engine
-npm run e2e            # 16 Playwright flows on a synthetic stream (deterministic, no network):
+npm test               # 210 unit tests: clustering parity, IRC lifecycle, network loss, engine,
+                       #   stable ordering, broadcast status (endpoint and client)
+npm run e2e            # 32 Playwright flows on a synthetic stream (deterministic, no network):
                        #   layout, evidence, keyboard, reduced motion, reconnect without
-                       #   duplicates, rapid switching, network loss, deep links, a measured
-                       #   ~400 msg/s burst
+                       #   duplicates, rapid switching, network loss, deep links, off air /
+                       #   on air / stale status replies (mocked endpoint), hidden tab,
+                       #   ranking stability, a calibrated ~400 msg/s burst
 LIVE_CHANNEL=xqc npm run e2e:live   # 3 real-network checks: live chat, not-found, no false not-found
 PW_BASE_URL=https://… npm run e2e:live   # same, against a deployed URL
 npm run typecheck      # frontend + serverless function
@@ -77,6 +79,18 @@ With these set, `/api/twitch-status` returns authoritative `live` / `offline` / 
 **Without them the demo still works** — it simply uses the IRC-only states (connected / quiet).
 Secrets stay server-side; they are never sent to the browser.
 
+How the endpoint behaves:
+
+| situation | answer | caching | the page |
+|---|---|---|---|
+| no credentials | `unknown`, `reason: "unconfigured"` | 30 s | no broadcast pill; asked once, never polled |
+| Helix: user has a stream | `live` + `startedAt` | 30 s (`s-maxage`, then stale-while-revalidate 30 s) | "On air · 1h 12m"; rechecked every 60 s |
+| Helix: user, no stream | `offline` | 30 s | "Off air"; a silent chat gets the off-air screen |
+| Helix: no such user | `not_found` | 30 s | "No such channel" at once, without the 8 s IRC wait |
+| timeout (4 s), 5xx, bad body, token failure | `unknown`, `reason: "twitch_unavailable"` | `no-store` | keeps the last real answer for up to 3 min, then shows none |
+
+A 401 is retried once with a fresh app token. Nothing is ever inferred from chat silence.
+
 ## Privacy
 
 Chatter logins are **pseudonymised in the browser** with a per-session salt that is never stored
@@ -102,6 +116,15 @@ any Twinky server — the only outbound connection is to Twitch. Message **text*
   until the session predates the window, and the sparkline does not draw that time as zero.
 - **Network loss is said plainly** ("No network"), and the page reconnects the moment the browser
   is back online — it never reads a dropped network as a missing channel.
+- **Off air is Twitch's word, never a guess.** The broadcast pill and the off-air screen appear
+  only when Helix says so. Off air with an active chat keeps showing that chat, under a note.
+  A status reply for a previous channel is discarded, however late it arrives.
+- **Rows move only on a clear overtake** (two messages, or 10% of a big group), so near-ties do
+  not swap every recount. Counts are never held back: the number on a row is its current count.
+- **Motion never shows an unmeasured value.** Counts roll from one real value to the next rather
+  than tweening through numbers nobody counted. With reduced motion requested, nothing slides,
+  rolls or pulses, including the script-driven motion the CSS rule cannot reach. In a hidden tab
+  nothing renders; counting continues.
 - **Replay** (a recorded, pseudonymised capture replaying faster than real time) is always labelled
   REPLAY and is never a silent fallback for a failed live connection — the visitor chooses it.
 - Counts are real: every cluster's count equals its underlying messages; a message joins exactly
@@ -111,7 +134,9 @@ any Twinky server — the only outbound connection is to Twitch. Message **text*
 ## Limitations
 
 - Arbitrary-channel chat and *not found* work without configuration; telling **live from
-  offline** needs the optional Twitch app credentials above.
+  offline** needs the optional Twitch app credentials above. The deployed project has none, so
+  on the public URL the off-air states are never shown — they are tested against a mocked
+  endpoint (`tests/e2e/polish.spec.ts`).
 - Chat liveness depends on who is broadcasting right now; a quiet or offline channel shows the
   honest quiet/empty states rather than inventing activity.
 - This Tier-0 demo does **not** do speech/vision/causal attribution (the research pipeline does,

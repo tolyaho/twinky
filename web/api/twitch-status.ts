@@ -5,14 +5,40 @@
 // live / offline / not_found via Helix. No visitor ever needs credentials; secrets stay server-side.
 //
 // It is a plain request/response function (not a long-lived socket), so it fits Vercel's model
-// cleanly. If unconfigured it returns {state:"unknown"} and the client simply keeps its IRC-only
-// states.
+// cleanly. If unconfigured it returns {state:"unknown", configured:false} and the client keeps its
+// IRC-only states. Every answer carries `checkedAt` (when Twitch was asked) and `recheckAfterMs`
+// (when asking again is worthwhile), so a cached answer is never mistaken for a fresh one.
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const CHANNEL_RE = /^[a-z0-9_]{1,25}$/;
+const TWITCH_TIMEOUT_MS = 4_000; // a hung upstream must not hold the function open
+const CACHE_S = 30; // CDN freshness; matches the client's recheck cadence below
+const RECHECK_MS = 60_000;
+
+export type BroadcastState = "live" | "offline" | "not_found" | "unknown";
+
+export interface StatusBody {
+  state: BroadcastState | "invalid";
+  configured?: boolean;
+  /** Why the answer is "unknown", when it is. Never carries provider error text. */
+  reason?: "unconfigured" | "twitch_unavailable";
+  /** Epoch ms at which Twitch was actually asked. */
+  checkedAt?: number;
+  /** Epoch ms the broadcast started, when live. */
+  startedAt?: number;
+  recheckAfterMs?: number;
+}
 
 // Warm-instance cache for the app access token (client credentials grant).
 let tokenCache: { token: string; expiresAt: number } | null = null;
+
+/** Test seam: forget the cached token. */
+export function _resetTokenCache(): void {
+  tokenCache = null;
+}
+
+const timed = (url: string, init: RequestInit = {}) =>
+  fetch(url, { ...init, signal: AbortSignal.timeout(TWITCH_TIMEOUT_MS) });
 
 async function appToken(id: string, secret: string): Promise<string | null> {
   if (tokenCache && tokenCache.expiresAt > Date.now() + 60_000) return tokenCache.token;
@@ -21,7 +47,7 @@ async function appToken(id: string, secret: string): Promise<string | null> {
     client_secret: secret,
     grant_type: "client_credentials",
   });
-  const r = await fetch("https://id.twitch.tv/oauth2/token", { method: "POST", body });
+  const r = await timed("https://id.twitch.tv/oauth2/token", { method: "POST", body });
   if (!r.ok) return null;
   const j = (await r.json()) as { access_token?: string; expires_in?: number };
   if (!j.access_token) return null;
@@ -32,48 +58,82 @@ async function appToken(id: string, secret: string): Promise<string | null> {
   return j.access_token;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader("Cache-Control", "public, max-age=15, s-maxage=15");
-
-  const raw = Array.isArray(req.query.login) ? req.query.login[0] : req.query.login;
-  const login = (raw ?? "").toLowerCase();
-  if (!CHANNEL_RE.test(login)) {
-    return res.status(400).json({ state: "invalid" });
-  }
-
-  const id = process.env.TWITCH_CLIENT_ID;
-  const secret = process.env.TWITCH_CLIENT_SECRET;
-  if (!id || !secret) {
-    // Not configured — the client falls back to IRC-only states. This is a valid 200, not an error.
-    return res.status(200).json({ state: "unknown", configured: false });
-  }
-
-  try {
+/** GET a Helix endpoint; on 401 (token revoked or expired early) refresh the token once. */
+async function helix(path: string, id: string, secret: string): Promise<Response | null> {
+  for (let attempt = 0; attempt < 2; attempt++) {
     const token = await appToken(id, secret);
-    if (!token) return res.status(200).json({ state: "unknown", configured: true });
-
-    const headers = { "Client-Id": id, Authorization: `Bearer ${token}` };
-    const users = await fetch(
-      `https://api.twitch.tv/helix/users?login=${encodeURIComponent(login)}`,
-      { headers },
-    );
-    if (!users.ok) return res.status(200).json({ state: "unknown", configured: true });
-    const uj = (await users.json()) as { data?: { id: string }[] };
-    if (!uj.data || uj.data.length === 0) {
-      return res.status(200).json({ state: "not_found" });
-    }
-
-    const userId = uj.data[0].id;
-    const streams = await fetch(
-      `https://api.twitch.tv/helix/streams?user_id=${encodeURIComponent(userId)}`,
-      { headers },
-    );
-    if (!streams.ok) return res.status(200).json({ state: "unknown", configured: true });
-    const sj = (await streams.json()) as { data?: { type: string }[] };
-    const live = Array.isArray(sj.data) && sj.data.length > 0 && sj.data[0].type === "live";
-    return res.status(200).json({ state: live ? "live" : "offline" });
-  } catch {
-    // Never leak provider errors; the client treats "unknown" as "keep the IRC-only states".
-    return res.status(200).json({ state: "unknown", configured: true });
+    if (!token) return null;
+    const r = await timed(`https://api.twitch.tv/helix/${path}`, {
+      headers: { "Client-Id": id, Authorization: `Bearer ${token}` },
+    });
+    if (r.status !== 401) return r;
+    tokenCache = null;
   }
+  return null;
+}
+
+/** The whole lookup, separated from the HTTP plumbing so it can be tested directly. */
+export async function lookup(
+  login: string,
+  env: { id?: string; secret?: string },
+  now: () => number = Date.now,
+): Promise<StatusBody> {
+  if (!CHANNEL_RE.test(login)) return { state: "invalid" };
+  if (!env.id || !env.secret) {
+    return { state: "unknown", configured: false, reason: "unconfigured" };
+  }
+  const unavailable: StatusBody = {
+    state: "unknown",
+    configured: true,
+    reason: "twitch_unavailable",
+    checkedAt: now(),
+    recheckAfterMs: RECHECK_MS,
+  };
+  try {
+    const users = await helix(`users?login=${encodeURIComponent(login)}`, env.id, env.secret);
+    if (!users?.ok) return unavailable;
+    const uj = (await users.json()) as { data?: { id: string }[] };
+    if (!Array.isArray(uj.data)) return unavailable;
+    const checkedAt = now();
+    if (uj.data.length === 0) {
+      return { state: "not_found", configured: true, checkedAt, recheckAfterMs: RECHECK_MS };
+    }
+    const streams = await helix(
+      `streams?user_id=${encodeURIComponent(uj.data[0].id)}`,
+      env.id,
+      env.secret,
+    );
+    if (!streams?.ok) return unavailable;
+    const sj = (await streams.json()) as { data?: { type: string; started_at?: string }[] };
+    if (!Array.isArray(sj.data)) return unavailable;
+    const live = sj.data.find((s) => s.type === "live");
+    const startedAt = live?.started_at ? Date.parse(live.started_at) : NaN;
+    return {
+      state: live ? "live" : "offline",
+      configured: true,
+      checkedAt,
+      ...(Number.isFinite(startedAt) ? { startedAt } : {}),
+      recheckAfterMs: RECHECK_MS,
+    };
+  } catch {
+    // Timeouts and network errors are "we could not ask", never "offline" or "not found".
+    return unavailable;
+  }
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const raw = Array.isArray(req.query.login) ? req.query.login[0] : req.query.login;
+  const body = await lookup((raw ?? "").toLowerCase(), {
+    id: process.env.TWITCH_CLIENT_ID,
+    secret: process.env.TWITCH_CLIENT_SECRET,
+  });
+  if (body.state === "invalid") return res.status(400).json(body);
+  // Cache real answers briefly at the edge; never cache "we could not ask".
+  res.setHeader(
+    "Cache-Control",
+    body.reason === "twitch_unavailable"
+      ? "no-store"
+      : `public, max-age=0, s-maxage=${CACHE_S}, stale-while-revalidate=${CACHE_S}`,
+  );
+  return res.status(200).json(body);
 }

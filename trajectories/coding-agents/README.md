@@ -17,7 +17,7 @@ That historical account does not describe every later release: on 30 Oct 2026, C
 an owner-authorized commit and ordinary fast-forward push using the owner's human Git identity.
 Git author metadata is not a claim that implementation was exclusively manual.
 
-On 31 Oct 2026, Claude Code (Opus 4.8, then Opus 5.5) built `web/` — the public live-chat demo — on branch `live-demo`, pushed it and deployed it to a Vercel project, each step authorized by the owner in the session. Those commits carry a `Co-Authored-By: Claude` trailer.
+On 31 Oct 2026, Claude Code (Opus 4.8, then Opus 5.5) built `web/` — the public live-chat demo — on branch `live-demo`, pushed it and deployed it to a Vercel project, each step authorized by the owner in the session; the same day it made the demo's final polish and off-air pass. The first four of those commits carried a `Co-Authored-By: Claude` trailer. At the owner's request the trailer was removed from their messages, with authors, dates and trees unchanged (old and new hashes are in `docs/IMPROVEMENT_CHANGELOG.md`), and later commits do not add one. This paragraph, not a trailer, is the record that Claude Code did that work.
 
 ## How the work was actually run
 
@@ -129,15 +129,15 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 
 | | |
 |---|---:|
-| Commits in the measured window | 196 |
+| Commits in the measured window | 198 |
 | Iterations logged | 120 |
-| Decisions recorded with rationale | 517 |
+| Decisions recorded with rationale | 520 |
 | Risks tracked | 54 |
 | Tests | 738 |
 | Total spend on model calls | $0.44 |
 
 The local correctness/live-boundary engineering pass is also AI-assisted; see the implementation
-report for its tests and limitations. No AI-agent coauthor trailer is added automatically; the `live-demo` commits add one explicitly.
+report for its tests and limitations. No AI-agent coauthor trailer is used in the commit history; the `live-demo` commits carried one until the owner had it removed on 31 Oct 2026. The assistance is disclosed on this page instead.
 
 
 ## Project phases and attribution (author account)

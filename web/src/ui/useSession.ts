@@ -10,8 +10,12 @@ import {
   type TickSnapshot,
 } from "../engine/session";
 import type { ChatEvent } from "../cluster/types";
+import { useBroadcast, type Broadcast } from "./broadcast";
+import { effectiveStatus } from "./derive";
+import { stableOrder } from "./order";
 
-export type UiStatus = SourceState | "offline" | "not_found";
+/** The chat connection's state. Whether the broadcast is on air is `broadcast`, separately. */
+export type UiStatus = SourceState;
 
 export type Descriptor =
   | { kind: "live"; channel: string }
@@ -20,6 +24,8 @@ export type Descriptor =
 export interface GroupView extends LiveGroup {
   share: number;
   trend: "new" | "up" | "flat" | "down";
+  /** Grew sharply since the previous recount — the board gives it a brief emphasis. */
+  surge: boolean;
 }
 
 const FEED_MAX = 160; // bounded feed: a busy chat never grows the DOM without limit
@@ -29,6 +35,7 @@ const HISTORY = 5; // ticks of per-cluster count history for the trend arrow
 export interface SessionView {
   status: UiStatus;
   statusInfo: SourceInfo | null;
+  broadcast: Broadcast;
   source: "live" | "replay";
   channel: string;
   feed: ChatEvent[];
@@ -43,8 +50,17 @@ export interface SessionView {
   setWindowMs: (ms: number) => void;
 }
 
+/** The recorded example plays faster than it happened, so a short visit sees it move. */
+export const REPLAY_SPEED = 3;
+
+/** A sharp rise: at least three more messages, and at least a quarter more than last time. */
+export function isSurge(prev: number | undefined, now: number): boolean {
+  if (prev === undefined) return false;
+  return now - prev >= Math.max(3, Math.ceil(prev * 0.25));
+}
+
 export function useSession(descriptor: Descriptor | null): SessionView {
-  const [status, setStatus] = useState<UiStatus>("idle");
+  const [ircStatus, setStatus] = useState<UiStatus>("idle");
   const [statusInfo, setStatusInfo] = useState<SourceInfo | null>(null);
   const [tick, setTick] = useState<TickSnapshot | null>(null);
   const [feed, setFeed] = useState<ChatEvent[]>([]);
@@ -56,9 +72,10 @@ export function useSession(descriptor: Descriptor | null): SessionView {
   const sessionRef = useRef<TwinkySession | null>(null);
   const feedBuf = useRef<ChatEvent[]>([]);
   const dirty = useRef(false);
+  const latestTick = useRef<TickSnapshot | null>(null);
   const history = useRef(new Map<string, number[]>());
+  const order = useRef<string[]>([]);
   const startedAt = useRef(0);
-  const statusApi = useRef<UiStatus | null>(null); // authoritative override, when available
 
   const key = descriptor
     ? descriptor.kind === "live"
@@ -70,14 +87,15 @@ export function useSession(descriptor: Descriptor | null): SessionView {
     if (!descriptor) return;
     // reset for a fresh session — nothing from the previous channel leaks in
     feedBuf.current = [];
+    latestTick.current = null;
     history.current = new Map();
-    statusApi.current = null;
+    order.current = [];
     startedAt.current = Date.now();
     setFeed([]);
     setTick(null);
     setSelectedKey(null);
     setStatus(descriptor.kind === "replay" ? "replay" : "connecting");
-    setStatusInfo(null);
+    setStatusInfo(descriptor.kind === "live" ? { phase: "opening" } : null);
     setElapsedMs(0);
 
     const source =
@@ -85,7 +103,7 @@ export function useSession(descriptor: Descriptor | null): SessionView {
         ? liveSource(descriptor.channel)
         : // A recorded 7-minute capture, compressed so the audience waves form within seconds.
           // Same messages, same order — only the playback clock is faster. Clearly labelled REPLAY.
-          replaySource(descriptor.rows, { loop: true, speed: 3 });
+          replaySource(descriptor.rows, { loop: true, speed: REPLAY_SPEED });
 
     const session = new TwinkySession({
       source,
@@ -98,81 +116,61 @@ export function useSession(descriptor: Descriptor | null): SessionView {
         dirty.current = true;
       },
       onTick: (snap) => {
-        // roll per-cluster count history for the trend arrow
+        // roll per-cluster count history for the trend arrow — even while hidden, so trends stay true
         const next = new Map<string, number[]>();
         for (const g of snap.groups) {
           const prev = history.current.get(g.key) ?? [];
           next.set(g.key, [...prev, g.count].slice(-HISTORY));
         }
         history.current = next;
-        setTick(snap);
+        latestTick.current = snap;
+        // A hidden tab paints nothing; skip the render and catch up when it is visible again.
+        if (!document.hidden) setTick(snap);
       },
       onState: (s, info) => {
-        // an authoritative offline/not_found from the status API wins over IRC's "quiet"
-        if (statusApi.current && (s === "quiet" || s === "connected")) {
-          setStatus(statusApi.current);
-        } else {
-          setStatus(s as UiStatus);
-        }
+        setStatus(s);
         setStatusInfo(info ?? null);
       },
     });
     sessionRef.current = session;
     session.start();
 
-    const flush = setInterval(() => {
+    const flush = () => {
       if (dirty.current) {
         dirty.current = false;
         setFeed(feedBuf.current.slice());
       }
       setElapsedMs(Date.now() - startedAt.current);
+    };
+    const timer = setInterval(() => {
+      if (!document.hidden) flush();
     }, FLUSH_MS);
+    const onVisible = () => {
+      if (document.hidden) return;
+      flush();
+      if (latestTick.current) setTick(latestTick.current);
+    };
+    document.addEventListener("visibilitychange", onVisible);
 
     return () => {
-      clearInterval(flush);
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
       session.stop();
       sessionRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
-  // Optional authoritative channel status (serverless Helix check). Degrades silently when the
-  // endpoint is absent/unconfigured — the IRC-only states remain correct on their own.
-  useEffect(() => {
-    if (!descriptor || descriptor.kind !== "live") return;
-    let cancelled = false;
-    const ac = new AbortController();
-    fetch(`/api/twitch-status?login=${encodeURIComponent(descriptor.channel)}`, {
-      signal: ac.signal,
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: { state?: string } | null) => {
-        if (cancelled || !data) return;
-        if (data.state === "offline" || data.state === "not_found") {
-          statusApi.current = data.state;
-          setStatus((cur) =>
-            cur === "quiet" || cur === "connected" || cur === "connecting"
-              ? (data.state as UiStatus)
-              : cur,
-          );
-        } else if (data.state === "live") {
-          statusApi.current = null; // authoritative live — let IRC states (receiving/quiet) show
-        }
-      })
-      .catch(() => {
-        /* no status endpoint configured — fine, IRC states stand on their own */
-      });
-    return () => {
-      cancelled = true;
-      ac.abort();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  // Optional authoritative broadcast status; "unknown" whenever it cannot be established.
+  const broadcast = useBroadcast(
+    descriptor?.kind === "live" ? descriptor.channel : null,
+    descriptor?.kind === "live",
+  );
 
   const groups: GroupView[] = useMemo(() => {
     if (!tick) return [];
     const wm = tick.windowMessages || 0;
-    return tick.groups.map((g) => {
+    const views = tick.groups.map((g) => {
       const hist = history.current.get(g.key) ?? [g.count];
       let trend: GroupView["trend"] = "flat";
       if (hist.length <= 2) trend = "new";
@@ -181,8 +179,16 @@ export function useSession(descriptor: Descriptor | null): SessionView {
         if (g.count > older * 1.15) trend = "up";
         else if (g.count < older * 0.85) trend = "down";
       }
-      return { ...g, share: wm ? g.count / wm : 0, trend };
+      return {
+        ...g,
+        share: wm ? g.count / wm : 0,
+        trend,
+        surge: isSurge(hist.length >= 2 ? hist[hist.length - 2] : undefined, g.count),
+      };
     });
+    const stable = stableOrder(views, order.current);
+    order.current = stable.map((g) => g.key);
+    return stable;
   }, [tick]);
 
   const highlightIds = useMemo(() => {
@@ -195,12 +201,14 @@ export function useSession(descriptor: Descriptor | null): SessionView {
     windowRef.current = ms;
     setWindowState(ms);
     history.current = new Map(); // trends across a window change would compare different spans
+    order.current = []; // a different window is a different ranking; start from true rank
     sessionRef.current?.setWindow(ms);
   };
 
   return {
-    status,
+    status: effectiveStatus(ircStatus, broadcast),
     statusInfo,
+    broadcast,
     source: descriptor?.kind === "replay" ? "replay" : "live",
     channel: descriptor?.channel ?? "",
     feed,

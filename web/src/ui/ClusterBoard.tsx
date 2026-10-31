@@ -1,10 +1,15 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import type { ChatEvent } from "../cluster/types";
-import { MIN_CHATTERS } from "../engine/session";
-import type { GroupView, UiStatus } from "./useSession";
+import { MIN_CHATTERS, type SourceInfo } from "../engine/session";
+import { BoardState, type BoardActions } from "./BoardState";
+import type { Broadcast } from "./broadcast";
+import type { OffAir } from "./derive";
 import { WINDOWS, ago, agoPhrase, compact, pct, spanShort, windowLong } from "./format";
+import { EASE_OUT, Num, motionAllowed } from "./motion";
+import { overtakeMargin } from "./order";
+import type { GroupView, UiStatus } from "./useSession";
 
-interface Props {
+interface Props extends BoardActions {
   groups: GroupView[];
   /** The window's messages by id — the evidence behind each group. */
   events: ReadonlyMap<string, ChatEvent> | null;
@@ -12,13 +17,15 @@ interface Props {
   selectedKey: string | null;
   onSelect: (key: string | null) => void;
   status: UiStatus;
+  statusInfo: SourceInfo | null;
+  broadcast: Broadcast;
+  offAir: OffAir;
   channel: string;
   windowMessages: number;
   windowMs: number;
   onWindow: (ms: number) => void;
   sampled: boolean;
   soloMessages: number;
-  onTryAnother: () => void;
   maxRows?: number;
 }
 
@@ -42,60 +49,6 @@ const EVIDENCE_FIRST = 8; // messages listed when a group opens
 const EVIDENCE_MAX = 200; // never render more than this, however big the group
 const MAX_ROWS_ALL = 24; // "show all" still has a ceiling
 
-function EmptyState({
-  status,
-  channel,
-  onTryAnother,
-}: {
-  status: UiStatus;
-  channel: string;
-  onTryAnother: () => void;
-}) {
-  let title = "Listening to the room…";
-  let body = "Groups appear when several people say the same thing within the window.";
-  if (status === "connecting") {
-    title = `Connecting to #${channel}`;
-    body = "Opening an anonymous connection to Twitch chat.";
-  } else if (status === "reconnecting") {
-    title = "Reconnecting…";
-    body = "The connection to Twitch dropped. Twinky is reconnecting; nothing you have seen is lost.";
-  } else if (status === "quiet") {
-    title = `#${channel} is quiet`;
-    body =
-      "No messages for a while. The channel may be offline, or chat is just slow. Try a channel you know is live right now.";
-  } else if (status === "offline") {
-    title = `#${channel} is offline`;
-    body = "There is no live chat to read. Try another channel that is broadcasting.";
-  } else if (status === "not_found") {
-    title = "No such channel";
-    body = `Twitch didn't recognise “${channel}” — it doesn't exist or has been suspended. Check the spelling and try another.`;
-  } else if (status === "no_network") {
-    title = "You're offline";
-    body = "Your device lost its network connection. Twinky will reconnect by itself as soon as it's back.";
-  } else if (status === "error") {
-    title = "Connection trouble";
-    body = "The connection to Twitch failed. Retrying with a short backoff…";
-  } else if (status === "closed") {
-    title = "Disconnected";
-    body = "This session has ended. Pick a channel to start again.";
-  } else if (status === "receiving") {
-    title = "Chat is flowing";
-    body =
-      "Nothing has formed a clear group yet — the room is saying lots of different things. Watch this space.";
-  }
-  return (
-    <div className="board-empty">
-      <div className="board-empty-title">{title}</div>
-      <p className="board-empty-body">{body}</p>
-      {(status === "not_found" || status === "offline" || status === "quiet" || status === "closed") && (
-        <button className="btn-light" onClick={onTryAnother}>
-          Try another channel
-        </button>
-      )}
-    </div>
-  );
-}
-
 function Evidence({
   g,
   events,
@@ -110,24 +63,55 @@ function Evidence({
   id: string;
 }) {
   const [limit, setLimit] = useState(EVIDENCE_FIRST);
+  const ref = useRef<HTMLDivElement>(null);
   const take = Math.min(limit, EVIDENCE_MAX, g.event_ids.length);
   // newest first: the freshest proof is the most relevant
   const shown = g.event_ids.slice(-take).reverse();
   const more = Math.min(g.event_ids.length, EVIDENCE_MAX) - take;
   const tr = TREND[g.trend];
+  const span = g.last_ts_ms - g.first_ts_ms;
+
+  // Unfold, then bring the group into view. The row stays the anchor: the whole group (row and
+  // panel) is scrolled fully into view when it fits, and otherwise its row is put at the top —
+  // never the bottom of the panel with the group's own label scrolled away.
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reveal = () => {
+      const item = el.parentElement;
+      const list = item?.parentElement;
+      if (!item || !list) return;
+      const top = item.offsetTop; // the list is the rows' offset parent
+      const bottom = top + item.offsetHeight;
+      const view = list.clientHeight;
+      let to = list.scrollTop;
+      if (item.offsetHeight > view || top < to) to = top;
+      else if (bottom > to + view) to = bottom - view;
+      if (to !== list.scrollTop) list.scrollTo?.({ top: to, behavior: motionAllowed() ? "smooth" : "auto" });
+    };
+    if (!motionAllowed() || typeof el.animate !== "function") return reveal();
+    const h = el.offsetHeight;
+    const a = el.animate(
+      [
+        { height: "0px", opacity: 0 },
+        { height: `${h}px`, opacity: 1 },
+      ],
+      { duration: 240, easing: EASE_OUT },
+    );
+    a.onfinish = reveal;
+    return () => a.cancel();
+  }, []);
 
   return (
-    <div className="evidence" id={id} role="region" aria-label={`Messages behind “${g.display}”`}>
+    <div className="evidence" id={id} ref={ref} role="region" aria-label={`Messages behind “${g.display}”`}>
       <p className="evidence-meta">
         <strong>
           {g.count} message{g.count === 1 ? "" : "s"} from {g.chatters} chatter
           {g.chatters === 1 ? "" : "s"}
         </strong>{" "}
         · {pct(g.share)} of the window ·{" "}
-        {g.last_ts_ms - g.first_ts_ms < 1_000
-          ? "all within a second"
-          : `spanning ${spanShort(g.last_ts_ms - g.first_ts_ms)}`}
-        , latest {agoPhrase(now - g.last_ts_ms)} · {tr.word}
+        {span < 1_000 ? "all within a second" : `spanning ${spanShort(span)}`}, latest{" "}
+        {agoPhrase(now - g.last_ts_ms)} · {tr.word}
       </p>
       <ol className="evidence-list">
         {shown.map((eid) => {
@@ -184,41 +168,149 @@ function HowItWorks() {
           Every message is counted once, in one group. A group needs at least {MIN_CHATTERS}{" "}
           different chatters: one person repeating themselves isn't the room.
         </li>
+        <li>
+          Rows change places only when one group clearly overtakes another (by{" "}
+          {overtakeMargin(0)}+ messages, or 10% for big groups), so the board doesn't flicker
+          between near-ties. Counts are always exact.
+        </li>
         <li>No AI and no guesses: fixed rules, recounted every ~1.5s over the selected window.</li>
       </ul>
     </details>
   );
 }
 
+/** The 30s / 1m / 5m selector: a radio group with a sliding thumb and arrow-key support. */
+function WindowSelect({ value, onChange }: { value: number; onChange: (ms: number) => void }) {
+  const idx = Math.max(0, WINDOWS.findIndex((w) => w.ms === value));
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
+  const onKey = (e: KeyboardEvent) => {
+    const d = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const n = (idx + d + WINDOWS.length) % WINDOWS.length;
+    onChange(WINDOWS[n].ms);
+    refs.current[n]?.focus();
+  };
+  return (
+    <div
+      className="seg"
+      role="radiogroup"
+      aria-label="Time window"
+      onKeyDown={onKey}
+      style={{ "--seg-i": idx } as CSSProperties}
+    >
+      <span className="seg-thumb" aria-hidden="true" />
+      {WINDOWS.map((w, i) => (
+        <button
+          key={w.ms}
+          ref={(el) => (refs.current[i] = el)}
+          role="radio"
+          aria-checked={i === idx}
+          tabIndex={i === idx ? 0 : -1}
+          className={`seg-btn${i === idx ? " seg-on" : ""}`}
+          onClick={() => onChange(w.ms)}
+        >
+          {w.short}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+interface Ghost {
+  g: GroupView;
+  top: number;
+  height: number;
+  id: number;
+}
+let ghostSeq = 0;
+
 /**
- * Slide rows to their new place when the ranking changes (or a group opens above them) instead of
- * jumping. Runs after every render; measuring six rows is cheap.
+ * Motion for the list: rows slide to their new place when the ranking changes or a group above
+ * them closes (FLIP), and a row that leaves the window fades out where it stood instead of
+ * vanishing. Opening a group is animated by the panel itself, so it is skipped here.
  */
-function useReorderMotion() {
+function useBoardMotion(rows: GroupView[], selectedKey: string | null) {
   const items = useRef(new Map<string, HTMLLIElement>());
-  const tops = useRef(new Map<string, number>());
+  const boxes = useRef(new Map<string, { top: number; height: number }>());
+  const prevOrder = useRef("");
+  const prevSel = useRef<string | null>(null);
+  const prevRows = useRef<GroupView[]>([]);
+  const [ghosts, setGhosts] = useState<Ghost[]>([]);
+
   useLayoutEffect(() => {
-    const still =
-      typeof window === "undefined" ||
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    const next = new Map<string, number>();
+    const order = rows.map((r) => r.key).join("|");
+    const closing = prevSel.current !== null && selectedKey === null;
+    const allowed = motionAllowed();
+    const slide = allowed && (order !== prevOrder.current || closing);
+    const next = new Map<string, { top: number; height: number }>();
     items.current.forEach((el, key) => {
-      const top = el.offsetTop;
-      next.set(key, top);
-      const prev = tops.current.get(key);
-      if (!still && prev !== undefined && prev !== top && typeof el.animate === "function") {
+      const box = { top: el.offsetTop, height: el.offsetHeight };
+      next.set(key, box);
+      const prev = boxes.current.get(key);
+      if (slide && prev && Math.abs(prev.top - box.top) > 1 && typeof el.animate === "function") {
         el.animate(
-          [{ transform: `translateY(${prev - top}px)` }, { transform: "translateY(0)" }],
-          { duration: 320, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" },
+          [{ transform: `translateY(${prev.top - box.top}px)` }, { transform: "translateY(0)" }],
+          { duration: 360, easing: EASE_OUT },
         );
       }
     });
-    tops.current = next;
+    if (allowed && rows.length > 0) {
+      const keys = new Set(rows.map((r) => r.key));
+      const born: Ghost[] = [];
+      for (const r of prevRows.current) {
+        const box = boxes.current.get(r.key);
+        if (!keys.has(r.key) && box) born.push({ g: r, ...box, id: ++ghostSeq });
+      }
+      if (born.length) {
+        setGhosts((gs) => [...gs, ...born]);
+        window.setTimeout(() => setGhosts((gs) => gs.filter((x) => !born.includes(x))), 340);
+      }
+    }
+    boxes.current = next;
+    prevOrder.current = order;
+    prevSel.current = selectedKey;
+    prevRows.current = rows;
   });
-  return (key: string) => (el: HTMLLIElement | null) => {
+
+  const itemRef = (key: string) => (el: HTMLLIElement | null) => {
     if (el) items.current.set(key, el);
     else items.current.delete(key);
   };
+  return { itemRef, ghosts };
+}
+
+function RowBody({ g }: { g: GroupView }) {
+  const rule = RULE_CHIP[g.rule];
+  const tr = TREND[g.trend];
+  return (
+    <>
+      <div className="cluster-count">
+        <Num value={g.count} text={compact(g.count)} className="cluster-n" emphasis={g.surge} />
+        <span className={`cluster-trend ${tr.cls}`} title={tr.word}>
+          {tr.mark}
+          <span className="sr-only"> {tr.word}</span>
+        </span>
+      </div>
+      <div className="cluster-main">
+        <div className="cluster-label-row">
+          <span className="cluster-label">{g.display}</span>
+          <span className="cluster-chip" title={rule.hint(g)}>
+            {rule.chip}
+          </span>
+          <span className="cluster-people" title="distinct chatters in this group">
+            {compact(g.chatters)} {g.chatters === 1 ? "person" : "people"}
+          </span>
+        </div>
+        <div className="cluster-samples">
+          <span className="cluster-sample">“{g.samples[0]}”</span>
+        </div>
+      </div>
+      <div className="cluster-bar" aria-hidden="true">
+        <span style={{ transform: `scaleX(${Math.max(0.04, Math.min(1, g.share))})` }} />
+      </div>
+    </>
+  );
 }
 
 export function ClusterBoard(props: Props) {
@@ -229,8 +321,9 @@ export function ClusterBoard(props: Props) {
   const rows = groups.slice(0, maxRows);
   const grouped = groups.reduce((s, g) => s + g.count, 0);
   const singletons = Math.max(0, windowMessages - grouped);
-  const itemRef = useReorderMotion();
+  const { itemRef, ghosts } = useBoardMotion(rows, selectedKey);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const showBoard = rows.length > 0 && props.offAir !== "screen";
 
   const close = (key: string) => {
     onSelect(null);
@@ -243,33 +336,31 @@ export function ClusterBoard(props: Props) {
         <div>
           <h2 className="board-title">What the room is saying</h2>
           <p className="board-sub">
-            Grouped from the last <strong>{windowLong(windowMs)}</strong> of chat, recounted every
-            ~1.5s.
+            Grouped from the last <strong>{windowLong(windowMs)}</strong> of chat
+            <span className="board-sub-extra">, recounted every ~1.5s</span>.
           </p>
         </div>
-        <div className="seg" role="radiogroup" aria-label="Time window">
-          {WINDOWS.map((w) => (
-            <button
-              key={w.ms}
-              role="radio"
-              aria-checked={w.ms === windowMs}
-              className={`seg-btn${w.ms === windowMs ? " seg-on" : ""}`}
-              onClick={() => onWindow(w.ms)}
-            >
-              {w.short}
-            </button>
-          ))}
-        </div>
+        <WindowSelect value={windowMs} onChange={onWindow} />
       </header>
 
-      {rows.length === 0 ? (
-        <EmptyState status={status} channel={channel} onTryAnother={props.onTryAnother} />
+      {!showBoard ? (
+        <BoardState
+          status={status}
+          info={props.statusInfo}
+          broadcast={props.broadcast}
+          offAir={props.offAir}
+          channel={channel}
+          windowMessages={windowMessages}
+          windowMs={windowMs}
+          onTryAnother={props.onTryAnother}
+          onReplay={props.onReplay}
+          onBack={props.onBack}
+          replayPending={props.replayPending}
+        />
       ) : (
         <ol className="cluster-list">
           {rows.map((g) => {
             const selected = g.key === selectedKey;
-            const rule = RULE_CHIP[g.rule];
-            const tr = TREND[g.trend];
             const evId = `evidence-${g.key.replace(/[^a-z0-9]/gi, "_")}`;
             return (
               <li key={g.key} ref={itemRef(g.key)} className="cluster-item">
@@ -279,34 +370,12 @@ export function ClusterBoard(props: Props) {
                     else buttons.current.delete(g.key);
                   }}
                   className={`cluster${selected ? " cluster-sel" : ""}`}
+                  data-trend={g.trend}
                   onClick={() => onSelect(selected ? null : g.key)}
                   aria-expanded={selected}
                   aria-controls={selected ? evId : undefined}
                 >
-                  <div className="cluster-count">
-                    <span className="cluster-n">{compact(g.count)}</span>
-                    <span className={`cluster-trend ${tr.cls}`} title={tr.word}>
-                      {tr.mark}
-                      <span className="sr-only"> {tr.word}</span>
-                    </span>
-                  </div>
-                  <div className="cluster-main">
-                    <div className="cluster-label-row">
-                      <span className="cluster-label">{g.display}</span>
-                      <span className="cluster-chip" title={rule.hint(g)}>
-                        {rule.chip}
-                      </span>
-                      <span className="cluster-people" title="distinct chatters in this group">
-                        {compact(g.chatters)} {g.chatters === 1 ? "person" : "people"}
-                      </span>
-                    </div>
-                    <div className="cluster-samples">
-                      <span className="cluster-sample">“{g.samples[0]}”</span>
-                    </div>
-                  </div>
-                  <div className="cluster-bar" aria-hidden="true">
-                    <span style={{ width: `${Math.max(4, Math.round(g.share * 100))}%` }} />
-                  </div>
+                  <RowBody g={g} />
                 </button>
                 {selected && (
                   <Evidence
@@ -321,13 +390,25 @@ export function ClusterBoard(props: Props) {
               </li>
             );
           })}
+          {ghosts.map((x) => (
+            <li
+              key={`ghost-${x.id}`}
+              className="cluster-item cluster-ghost"
+              style={{ top: x.top, height: x.height }}
+              aria-hidden="true"
+            >
+              <div className="cluster">
+                <RowBody g={x.g} />
+              </div>
+            </li>
+          ))}
         </ol>
       )}
 
-      {windowMessages > 0 && (
+      {windowMessages > 0 && showBoard && (
         <footer className="board-foot">
           <div>
-            <strong>{compact(windowMessages)}</strong> messages →{" "}
+            <Num value={windowMessages} text={compact(windowMessages)} className="foot-n" /> messages →{" "}
             <strong>{rows.length}</strong> signal{rows.length === 1 ? "" : "s"} ·{" "}
             {compact(singletons)} ungrouped
             {props.soloMessages > 0 && (

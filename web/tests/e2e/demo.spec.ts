@@ -124,7 +124,7 @@ test("mobile: tabs switch between clusters, chat, pulse", async ({ page }) => {
   await page.screenshot({ path: "screenshots/mobile-evidence.png", fullPage: false });
 });
 
-test("tablet: two columns, the pulse stays reachable under the board", async ({ page }) => {
+test("tablet: two columns, the board keeps the full height; chat and pulse stay reachable", async ({ page }) => {
   await page.setViewportSize({ width: 900, height: 1100 });
   await scriptTwitch(page);
   await page.goto("/");
@@ -177,7 +177,10 @@ test("nonexistent channel: no JOIN acknowledgement shows Not found, not an endle
   await page.getByRole("button", { name: "Watch live" }).click();
   await expect(page.locator(".badge")).toContainText("Not found", { timeout: 15_000 });
   await expect(page.locator(".board-empty-title")).toHaveText("No such channel");
-  await expect(page.locator(".feed-empty")).toContainText("wasn't found");
+  await expect(page.locator(".feed-empty")).toContainText("no channel called #zzqqnotarealchannel9871");
+  // a terminal state: nothing spins
+  await expect(page.locator(".listening")).toHaveCount(0);
+  await expect(page.locator(".dot-pulse")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Pause/ })).toHaveCount(0);
   // nothing is invented to fill the silence
   await expect(page.locator(".msg")).toHaveCount(0);

@@ -484,3 +484,77 @@ now, and a test checks its computed colour.
 **Kept.** All of it. The test suites cover each item: unit tests for the engine and the
 connection, and Playwright for the layout, keyboard, reduced motion, reconnect without
 duplicates, rapid switching, network loss and the burst.
+
+## 2026-10-31, last — off air versus quiet, motion that only reports change, and the branch history (`web/`)
+
+**Off air and quiet are two facts, and the page now keeps them apart.** Whether the chat socket
+is working and whether the broadcaster is on air were one status, and the only way to say
+"offline" was to guess it from silence. They are now separate: the badge is the chat connection,
+and a second pill appears only when Twitch's own API has answered — "On air · 2h 14m" or "Off
+air", with the time of the check in its tooltip. When the answer is unknown there is no pill.
+Off air with a silent chat gets its own screen (try another channel, the recorded demo — labelled
+Replay — or back to the start); off air with an active chat keeps counting under a one-line note,
+because the messages are real either way. Silence, timeouts and network failures never produce
+"offline": `web/api/twitch-status.ts` reports them as `twitch_unavailable`, the page treats that
+as unknown, and a failed recheck keeps the last real answer only until it is three minutes old.
+
+**The endpoint, and what it costs.** Helix is called only when `TWITCH_CLIENT_ID` and
+`TWITCH_CLIENT_SECRET` are set, with a 4 s timeout, one retry with a fresh token on a 401, and
+`s-maxage=30` so a popular channel costs one lookup per 30 s however many people watch it.
+Unconfigured is a permanent answer and is asked once, not polled. The deployed project has no
+credentials today, so on the public URL the pill never appears and the board still says "quiet"
+with its honest caveat; the off-air screens are exercised against a mocked endpoint. Ten unit
+tests cover the endpoint, including a malformed Helix body and a token failure.
+
+**A slow answer for the last channel cannot land on this one.** Each channel's status request
+lives in that channel's own effect, is aborted on switch, and its result is dropped if the
+channel has changed meanwhile. Tested with a status reply delayed past a switch, and with four
+switches while every request was still in flight.
+
+**The board stopped reshuffling near-ties.** Groups were re-sorted by count on every recount,
+so two groups within a message of each other could swap places every 1.5 s. Rows now keep their
+place until one clearly overtakes another — by two messages, or 10% for large groups — and a test
+holds a one-message lead still and a three-message lead moving. Counts are unaffected; only the
+order waits.
+
+**Motion reports change and nothing else.** Counts roll to their new value instead of tweening
+through numbers that were never measured; a surge (a quarter more, and at least three) tints the
+new value briefly. Rows slide when the ranking changes, and a group that leaves the top six fades
+where it stood. An opened group unfolds and is scrolled into view. The connecting state is a
+three-step list driven by the socket's own events — socket open, JOIN sent, JOIN acknowledged —
+not a timer. Script-driven motion asks `prefers-reduced-motion` itself, since the global CSS rule
+cannot reach it, and a test samples every running animation while chat, counts and an opened
+group all change and requires none. That test found that the reduced-motion rule left the
+staggered entrance's delay in place, so rows sat invisible for up to 160 ms and then appeared; the
+rule now zeroes delays too. While the tab is hidden nothing re-renders; counting continues and the
+page catches up when it is shown.
+
+**Two layout faults found by measuring, not by looking.** At 1024 × 700 the board's list was 152
+px tall and an open group 292 px, so opening one scrolled its own row out of sight. Between 721
+and 1080 px the board now takes the full height of the right column, with the chat above the pulse
+on the left; the same list measures 432 px and the whole group fits. On a 375 px phone, opening a
+group brought the bottom of its message list into view and hid the row that says what the group
+is; the row is now the anchor.
+
+**Measured.** Four runs of the 400 msg/s burst: longest frame gap 17 ms in three and 33 ms in
+one (one and two frames at 60 Hz), median socket to screen 114–158 ms (seven probes per run, and
+the feed flushes every 200 ms by design), and the calibration block of 150 ms read as 133–150 ms
+each time. Real `jynxzi` chat: 66 messages and five groups in the smoke window. `npm test` 210 tests,
+`npm run e2e` 32 flows. One process note: Playwright serves the built `dist/`, so the first run of
+this pass tested the previous build and passed; every number above is from a rebuilt one.
+
+**The branch history.** The four `live-demo` commits carried `Co-Authored-By: Claude` trailers.
+At the owner's request the trailers were removed from those commit messages and nothing else:
+authors, author and committer dates, and every tree are unchanged, and `main` and the tags were
+not touched. Claude Code's part in this work is stated in `trajectories/coding-agents/README.md`.
+Old and new hashes, with the tree each one shares:
+
+| old | new | tree (unchanged) | commit |
+|---|---|---|---|
+| `6a3ff3b43e` | `bc7f5f3c88` | `a3bb582802` | Add web/: live Twitch chat clustering demo (Tier 0, client-side) |
+| `083d029f02` | `b1e5dd56a5` | `cead1c60ff` | web: ignore .env*/screenshots, allow Playwright to target a deployed URL |
+| `0dbf4bfa2a` | `2a7446857c` | `5f0a54c6a8` | web: credential-free "not found", per-cluster chatters, window + pause; repair make test |
+| `02390ab8a4` | `b8a8f1d072` | `0254afa979` | web: show the newest chat, honest first-minute rates, evidence lists, network-loss state |
+
+The production deployment was built from `02390ab8a4`; `b8a8f1d` has the same tree. The old
+commits stay reachable through the owner's local `refs/original/` backup until it is deleted.

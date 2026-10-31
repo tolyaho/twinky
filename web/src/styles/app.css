@@ -2,6 +2,47 @@
    Twinky web — component styles. Light editorial frame + dark product canvas (see DESIGN.md).
    ============================================================================================ */
 
+.btn-primary,
+.btn-outline,
+.btn-mini,
+.btn-ghost,
+.btn-light,
+.chip,
+.tab,
+.seg-btn,
+.link-btn,
+.link-inline,
+.follow-live,
+.ws-brand {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    text-decoration-color var(--dur) var(--ease-out),
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+/* pressing gives way slightly; a disabled control does neither */
+.btn-primary:active,
+.btn-outline:active,
+.btn-mini:active,
+.btn-ghost:active,
+.btn-light:active,
+.chip:active,
+.tab:active,
+.follow-live:active {
+  transform: scale(0.97);
+}
+:is(.btn-primary, .btn-outline, .btn-mini, .btn-ghost, .btn-light, .link-btn):disabled {
+  cursor: default;
+  opacity: 0.45;
+  transform: none;
+}
+:is(.btn-ghost, .link-btn)[aria-busy="true"]:disabled {
+  opacity: 0.8; /* busy is not unavailable: keep it readable */
+}
+
 .btn-primary {
   background: var(--primary);
   color: #fff;
@@ -14,13 +55,9 @@
   letter-spacing: 0;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.16s ease, transform 0.16s ease;
 }
 .btn-primary:hover {
   background: var(--primary-active);
-}
-.btn-primary:active {
-  transform: translateY(1px);
 }
 .btn-outline {
   background: transparent;
@@ -31,34 +68,62 @@
   height: 36px;
   font-size: 14px;
   cursor: pointer;
-  transition: border-color 0.16s ease, background 0.16s ease;
 }
 .btn-outline:hover {
   border-color: var(--primary);
 }
 .btn-mini {
-  background: var(--primary);
-  color: #fff;
+  background: var(--ink-on-dark);
+  color: var(--surface-dark);
   border: none;
   border-radius: var(--r-pill);
-  height: 32px;
-  padding: 0 14px;
+  height: 34px;
+  padding: 0 15px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
 }
+.btn-mini:hover:not(:disabled) {
+  background: #fff;
+}
 .link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: none;
   border: none;
   color: var(--body-strong);
   font-size: 14px;
   cursor: pointer;
-  padding: 6px 2px;
+  padding: 10px 2px;
   letter-spacing: 0.16px;
-}
-.link-btn:hover {
-  color: var(--ink);
   text-decoration: underline;
+  text-decoration-color: transparent;
   text-underline-offset: 3px;
+}
+.link-btn:hover:not(:disabled) {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+/* a small ring for work in progress; it fades in late, so a fast load never flashes it */
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  animation:
+    spin 0.8s linear infinite,
+    spinnerIn var(--dur) var(--ease-out) 120ms both;
+}
+@keyframes spin {
+  to { transform: rotate(1turn); }
+}
+@keyframes spinnerIn {
+  from { opacity: 0; }
 }
 
 /* ---- Landing -------------------------------------------------------------------------------- */
@@ -179,7 +244,6 @@
   font-size: 13px;
   color: var(--body-strong);
   cursor: pointer;
-  transition: background 0.16s ease, border-color 0.16s ease;
 }
 .chip:hover {
   background: var(--surface-card);
@@ -314,7 +378,16 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 4px 0;
+}
+.ws-brand:hover {
+  color: #fff;
+}
+.ws-brand:hover .wordmark-dot {
+  color: var(--lavender);
+}
+.wordmark-dot {
+  transition: color var(--dur) var(--ease-out);
 }
 .ws-channel {
   display: flex;
@@ -367,6 +440,7 @@
 .switch-form {
   display: flex;
   gap: 6px;
+  animation: fadeIn var(--dur) var(--ease-out);
 }
 .switch-input {
   background: var(--surface-dark-elev);
@@ -379,8 +453,11 @@
   font-family: inherit;
   outline: none;
 }
+.switch-input {
+  transition: border-color var(--dur) var(--ease-out);
+}
 .switch-input:focus {
-  border-color: var(--muted-on-dark);
+  border-color: var(--lavender);
 }
 
 .replay-bar {
@@ -392,6 +469,19 @@
 }
 .replay-bar strong {
   color: var(--lavender);
+}
+/* off air, but chat is still talking: a calm note, not a warning */
+.offair-bar {
+  background: var(--surface-dark-elev);
+  border-bottom: 1px solid var(--hairline-on-dark);
+  color: var(--body-on-dark);
+  font-size: 13.5px;
+  padding: 9px 20px;
+  animation: fadeIn var(--dur-slow) var(--ease-out);
+}
+.offair-bar strong {
+  color: var(--ink-on-dark);
+  font-weight: 500;
 }
 
 /* status badge */
@@ -430,6 +520,58 @@
 .badge-replay .dot { background: var(--lavender); }
 .badge-replay { color: var(--lavender); }
 .badge-idle { color: var(--muted-on-dark); }
+.badge {
+  transition: color var(--dur-slow) var(--ease-out), border-color var(--dur-slow) var(--ease-out);
+}
+.badge .dot {
+  transition: background-color var(--dur-slow) var(--ease-out);
+}
+.badge-label {
+  animation: fadeIn var(--dur-slow) var(--ease-out);
+}
+
+/* the broadcast itself, as Twitch reports it — shown only when Twitch has actually said */
+.bc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  animation: fadeIn var(--dur-slow) var(--ease-out);
+}
+.bc-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.bc-live {
+  background: rgba(232, 184, 196, 0.12);
+  color: var(--live);
+}
+.bc-off {
+  border: 1px solid var(--hairline-on-dark);
+  color: var(--muted-on-dark);
+}
+.bc-off::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.bc-dur {
+  color: var(--body-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(6px); }
+}
 
 /* ---- tabs (mobile only) --------------------------------------------------------------------- */
 .tabbar {
@@ -467,6 +609,15 @@
 .zone-board {
   background: var(--surface-dark-elev);
 }
+.zone {
+  animation: riseIn var(--dur-slow) var(--ease-out) both;
+}
+.zone-board {
+  animation-delay: 50ms;
+}
+.zone-pulse {
+  animation-delay: 100ms;
+}
 
 /* ---- chat feed ------------------------------------------------------------------------------ */
 .feed-wrap {
@@ -481,8 +632,14 @@
   overflow-y: auto;
   padding: 8px 12px 12px;
   scrollbar-width: thin;
+  /* older messages fade out at the top edge instead of being sliced by it */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 18px);
 }
 .feed-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: var(--muted-on-dark);
   font-size: 13.5px;
   padding: 16px 4px;
@@ -493,12 +650,7 @@
   padding: 2px 6px;
   border-radius: var(--r-sm);
   margin: 1px 0;
-  animation: msgIn 0.26s ease;
-  transition: background 0.2s ease, opacity 0.2s ease;
-}
-@keyframes msgIn {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: none; }
+  transition: background-color var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out);
 }
 .msg-author {
   font-family: var(--font-mono);
@@ -539,6 +691,16 @@
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  animation: followIn var(--dur) var(--ease-out);
+}
+.follow-live:hover {
+  background: #fff;
+}
+.follow-live:active {
+  transform: translateX(-50%) scale(0.97);
+}
+@keyframes followIn {
+  from { opacity: 0; transform: translate(-50%, 6px); }
 }
 .feed-filter-note {
   font-size: 12px;
@@ -581,6 +743,7 @@
   font-weight: 500;
 }
 .cluster-list {
+  position: relative; /* rows are measured against it, and leaving rows are placed in it */
   list-style: none;
   margin: 0;
   padding: 0;
@@ -605,19 +768,52 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
-  animation: clusterIn 0.3s ease;
+  color: inherit;
+  font: inherit;
+  transition:
+    border-color var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out),
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+  animation: riseIn var(--dur-slow) var(--ease-out) both;
 }
-@keyframes clusterIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: none; }
-}
+.cluster-item:nth-child(2) .cluster { animation-delay: 40ms; }
+.cluster-item:nth-child(3) .cluster { animation-delay: 80ms; }
+.cluster-item:nth-child(4) .cluster { animation-delay: 120ms; }
+.cluster-item:nth-child(n + 5) .cluster { animation-delay: 160ms; }
 .cluster:hover {
   border-color: var(--muted-on-dark);
+  background-color: #2b2824;
 }
-.cluster-sel {
+.cluster:active {
+  transform: scale(0.995);
+}
+.cluster:focus-visible {
+  outline-offset: 1px;
+}
+/* a fading group steps back a little; it is still counted and still readable */
+.cluster[data-trend="down"]:not(.cluster-sel):not(:hover) {
+  opacity: 0.8;
+}
+/* a group that has left the window fades where it stood instead of vanishing */
+.cluster-ghost {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  animation: ghostOut var(--dur-slow) var(--ease-out) forwards;
+}
+.cluster-ghost .cluster {
+  animation: none;
+  height: 100%;
+}
+@keyframes ghostOut {
+  to { opacity: 0; transform: scale(0.98); }
+}
+.cluster-sel,
+.cluster-sel:hover {
   border-color: var(--lavender);
-  background: rgba(200, 184, 224, 0.07);
+  background-color: #2a2730;
 }
 .cluster-count {
   display: flex;
@@ -691,9 +887,11 @@
 .cluster-bar span {
   display: block;
   height: 100%;
+  width: 100%;
+  transform-origin: left;
   background: linear-gradient(90deg, var(--lavender), var(--sky));
   opacity: 0.7;
-  transition: width 0.5s ease;
+  transition: transform 0.5s var(--ease-out);
 }
 .board-foot {
   font-size: 12.5px;
@@ -732,20 +930,35 @@
 
 /* window selector, people count, sampling note */
 .seg {
-  display: inline-flex;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 2px;
   padding: 3px;
   border: 1px solid var(--hairline-on-dark);
   border-radius: var(--r-pill);
   flex: none;
 }
+.seg-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 10px) / 3);
+  border-radius: var(--r-pill);
+  background: var(--ink-on-dark);
+  transform: translateX(calc(var(--seg-i, 0) * (100% + 2px)));
+  transition: transform 260ms var(--ease-out);
+}
 .seg-btn {
+  position: relative; /* above the thumb */
   background: transparent;
   border: none;
   color: var(--muted-on-dark);
   font-size: 12px;
   font-weight: 500;
   height: 26px;
+  min-width: 38px;
   padding: 0 11px;
   border-radius: var(--r-pill);
   cursor: pointer;
@@ -753,10 +966,7 @@
 .seg-btn:hover {
   color: var(--ink-on-dark);
 }
-.seg-on {
-  background: var(--ink-on-dark);
-  color: var(--surface-dark);
-}
+.seg-on,
 .seg-on:hover {
   color: var(--surface-dark);
 }
@@ -779,6 +989,10 @@
   padding: 8px 12px 0;
 }
 .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   background: transparent;
   border: 1px solid var(--hairline-on-dark);
   color: var(--body-on-dark);
@@ -787,11 +1001,24 @@
   padding: 0 12px;
   font-size: 12px;
   cursor: pointer;
+  white-space: nowrap;
 }
-.btn-ghost:hover,
-.btn-ghost[aria-pressed="true"] {
+.btn-ghost:hover:not(:disabled) {
   border-color: var(--muted-on-dark);
   color: var(--ink-on-dark);
+  background-color: rgba(250, 249, 247, 0.04);
+}
+.btn-ghost[aria-pressed="true"] {
+  border-color: var(--lavender);
+  color: var(--ink-on-dark);
+  background-color: rgba(200, 184, 224, 0.1);
+}
+.btn-icon {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  fill: currentColor;
+  opacity: 0.85;
 }
 .feed-behind {
   font-size: 12px;
@@ -799,7 +1026,6 @@
 }
 
 .btn-light {
-  margin-top: 18px;
   background: var(--ink-on-dark);
   color: var(--surface-dark);
   border: none;
@@ -810,7 +1036,7 @@
   font-weight: 500;
   cursor: pointer;
 }
-.btn-light:hover {
+.btn-light:hover:not(:disabled) {
   background: #fff;
 }
 
@@ -904,6 +1130,14 @@
 .spark-dot {
   fill: var(--sky);
 }
+/* the line eases to the next recount; where the browser can't animate a path it simply redraws */
+.spark-line,
+.spark-area {
+  transition: d 0.4s var(--ease-out);
+}
+.spark-dot {
+  transition: cx 0.4s var(--ease-out), cy 0.4s var(--ease-out);
+}
 .questions {
   margin-top: 20px;
   border-top: 1px solid var(--hairline-on-dark-soft);
@@ -945,20 +1179,37 @@
 
 /* ---- responsive ----------------------------------------------------------------------------- */
 @media (max-width: 1080px) {
-  /* two columns: chat on the left, the board above a compact pulse on the right */
+  /* two columns: the board keeps the full height on the right — an open group needs the room —
+     and the chat sits above a compact pulse on the left */
   .ws-grid {
-    grid-template-columns: minmax(240px, 32%) 1fr;
+    grid-template-columns: minmax(250px, 34%) 1fr;
     grid-template-rows: minmax(0, 1fr) auto;
   }
-  .zone-chat {
+  .zone-board {
+    grid-column: 2;
     grid-row: 1 / span 2;
   }
-  .zone-pulse {
-    grid-column: 2;
-    max-height: 38vh;
+  .zone-chat {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 180px;
   }
-  .zone-pulse .stat-grid {
-    grid-template-columns: repeat(3, 1fr);
+  .zone-pulse {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: 46vh;
+    container-type: inline-size;
+  }
+  @container (min-width: 380px) {
+    .stat-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .stat {
+      padding: 10px 11px;
+    }
+    .stat-value {
+      font-size: 22px;
+    }
   }
 }
 
@@ -999,6 +1250,10 @@
     font-weight: 500;
     cursor: pointer;
   }
+  .tab:hover:not(.tab-on) {
+    color: var(--ink-on-dark);
+    border-color: var(--muted-on-dark);
+  }
   .tab-on {
     background: var(--ink-on-dark);
     color: var(--surface-dark);
@@ -1018,27 +1273,36 @@
     display: none;
   }
   .zone-chat,
-  .zone-pulse {
+  .zone-pulse,
+  .zone-board {
     grid-row: auto;
     grid-column: auto;
     max-height: none;
-  }
-  .zone-pulse .stat-grid {
-    grid-template-columns: 1fr 1fr;
+    min-height: 0;
   }
   .ws-grid[data-tab="clusters"] .zone-board,
   .ws-grid[data-tab="chat"] .zone-chat,
   .ws-grid[data-tab="pulse"] .zone-pulse {
     display: flex;
   }
+  /* two rows: brand and tools, then the channel with its status */
   .ws-head {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px 10px;
     padding: 10px 14px;
   }
   .ws-tools {
-    width: 100%;
+    order: 2;
+    gap: 10px;
+  }
+  .ws-channel {
     order: 3;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .switch-input {
+    width: 9.5em;
   }
   .zone-chat,
   .zone-pulse,
@@ -1092,6 +1356,9 @@
   .board-title {
     font-size: 21px;
   }
+  .board-sub-extra {
+    display: none; /* also said in "How grouping works" */
+  }
 }
 
 /* Keyboard focus must be visible on the dark canvas: the editorial ring is near-black. */
@@ -1113,11 +1380,7 @@
   border-radius: 0 0 var(--r-md) var(--r-md);
   background: rgba(200, 184, 224, 0.045);
   padding: 10px 15px 12px;
-  animation: evidenceIn 0.22s ease;
-}
-@keyframes evidenceIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: none; }
+  overflow: hidden; /* clips the content while the panel unfolds */
 }
 .evidence-meta {
   margin: 0 0 8px;
@@ -1212,6 +1475,7 @@
   gap: 6px;
 }
 .link-inline {
+  display: inline;
   background: none;
   border: none;
   padding: 0;
@@ -1270,4 +1534,207 @@
   stroke-width: 1.2;
   stroke-dasharray: 2 4;
   vector-effect: non-scaling-stroke;
+}
+
+/* ---- numbers that roll to their new value (see motion.tsx) ---------------------------------- */
+.num {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+.num-in {
+  display: inline-block;
+  animation: numUp 260ms var(--ease-out);
+}
+.num-down {
+  animation-name: numDown;
+}
+.num-emph {
+  animation:
+    numUp 260ms var(--ease-out),
+    numEmph 1.4s var(--ease-out);
+}
+@keyframes numUp {
+  from { opacity: 0; transform: translateY(0.28em); }
+}
+@keyframes numDown {
+  from { opacity: 0; transform: translateY(-0.28em); }
+}
+@keyframes numEmph {
+  from { color: var(--mint); }
+}
+
+/* ---- board states: connecting, off air, quiet, not found ------------------------------------ */
+.board-empty-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+  animation: riseIn var(--dur-slow) var(--ease-out);
+}
+.board-empty-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.board-empty-hint {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: #6f665c;
+}
+.board-empty-bad .board-empty-title {
+  color: #f3c2c2;
+}
+.listening {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: #e0a93f;
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+.state-glyph {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
+  color: var(--muted-on-dark);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.state-glyph circle {
+  fill: currentColor;
+  stroke: none;
+}
+.state-glyph .faint {
+  opacity: 0.3;
+}
+.state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+/* the way out is always there, but quieter than the two real choices */
+.state-actions .link-inline {
+  flex-basis: 100%;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted-on-dark);
+}
+.state-actions .link-inline:hover {
+  color: var(--ink-on-dark);
+}
+.btn-ghost-lg {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 13.5px;
+}
+.tag-replay {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--lavender);
+  background: rgba(200, 184, 224, 0.14);
+  border-radius: var(--r-pill);
+  padding: 2px 7px;
+}
+
+/* connection progress, driven by the socket's real events — never by a timer */
+.steps {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 14px;
+  color: #6f665c;
+  transition: color var(--dur-slow) var(--ease-out);
+}
+.step-mark {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--hairline-on-dark);
+  transition:
+    background-color var(--dur-slow) var(--ease-out),
+    border-color var(--dur-slow) var(--ease-out);
+}
+.step-active {
+  color: var(--ink-on-dark);
+}
+.step-active .step-mark {
+  border-color: #e0a93f;
+}
+.step-active .step-mark::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #e0a93f;
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+.step-done {
+  color: var(--body-on-dark);
+}
+.step-done .step-mark {
+  background: #27c56a;
+  border-color: #27c56a;
+}
+.step-done .step-mark::after {
+  /* a check mark, drawn with two borders */
+  content: "";
+  position: absolute;
+  left: 4.5px;
+  top: 1.5px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--surface-dark);
+  border-width: 0 1.6px 1.6px 0;
+  transform: rotate(45deg);
+}
+
+/* ---- landing <-> workspace ------------------------------------------------------------------ */
+::view-transition-old(root) {
+  animation: vtOut 160ms var(--ease-out) both;
+}
+::view-transition-new(root) {
+  animation: vtIn 280ms var(--ease-out) both;
+}
+@keyframes vtOut {
+  to { opacity: 0; }
+}
+@keyframes vtIn {
+  from { opacity: 0; transform: scale(0.994); }
+}
+
+/* ---- touch: comfortable targets where the pointer is a finger ------------------------------- */
+@media (pointer: coarse) {
+  .btn-ghost { height: 36px; padding: 0 14px; }
+  .btn-ghost-lg,
+  .btn-light { height: 42px; }
+  .btn-mini,
+  .switch-input { height: 38px; }
+  .btn-outline { height: 40px; }
+  .seg-btn { height: 34px; min-width: 44px; }
+  .chip { padding: 9px 15px; }
+  .follow-live { padding: 10px 18px; }
+  .link-inline { padding: 4px 0; }
+  .how-grouping summary { padding: 6px 0; }
+  .ws-brand { padding: 8px 0; }
+}
+@media (pointer: coarse) and (max-width: 720px) {
+  .tab { height: 40px; }
 }

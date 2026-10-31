@@ -173,6 +173,7 @@ test("burst: ~400 msgs/s stays responsive with a bounded DOM (measured)", async 
   );
   const calibrated = await page.evaluate(() => (window as unknown as { __maxGap: number }).__maxGap);
   // (frame timestamps are vsync-aligned, so a 150ms block reads as ~133-150ms)
+  console.log(`[burst] calibration: a deliberate 150ms block read as ${Math.round(calibrated)}ms`);
   expect(calibrated).toBeGreaterThanOrEqual(100);
 
   expect(domMsgs).toBeLessThanOrEqual(160); // bounded feed
@@ -238,21 +239,49 @@ test("keyboard only: enter a channel, open a group, close it with Escape", async
   await expect(page.locator(".evidence")).toHaveCount(0);
 });
 
-test("reduced motion: entrance animations are switched off", async ({ page }) => {
+test("reduced motion: nothing slides, rolls or pulses", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  let sock: { ws: WebSocketRoute; ch: string } | null = null;
   await mockTwitch(page, (ws, ch) => {
+    sock = { ws, ch };
     for (let i = 0; i < 8; i++) setTimeout(() => ws.send(line(ch, "LMAO")), 40 * i);
   });
   await page.goto("/");
   await enter(page, "xqc");
   await expect(page.locator(".cluster").first()).toBeVisible({ timeout: 10_000 });
+  // CSS: every keyframe and transition is collapsed by the global rule
   const durations = await page.evaluate(() =>
-    [".cluster", ".msg", ".dot-pulse"].map((sel) => {
+    [".zone", ".cluster", ".num-in", ".dot-pulse", ".seg-thumb"].map((sel) => {
       const el = document.querySelector(sel);
-      return el ? parseFloat(getComputedStyle(el).animationDuration) : 0;
+      if (!el) return 0;
+      const cs = getComputedStyle(el);
+      return Math.max(parseFloat(cs.animationDuration) || 0, parseFloat(cs.transitionDuration) || 0);
     }),
   );
   for (const d of durations) expect(d).toBeLessThan(0.01);
+  // script-driven motion (new messages, reordering, evidence) must not start at all: sample the
+  // document's running animations while chat, counts and a group opening all change
+  await page.evaluate(() => {
+    (window as unknown as { __maxRunning: number }).__maxRunning = 0;
+    const probe = () => {
+      // CSS motion is collapsed to 0.001ms by the global rule (checked above); anything longer
+      // that is running is motion the page started anyway
+      const n = document
+        .getAnimations()
+        .filter((a) => a.playState === "running")
+        .filter((a) => Number(a.effect?.getComputedTiming().activeDuration ?? 0) > 1).length;
+      const w = window as unknown as { __maxRunning: number };
+      w.__maxRunning = Math.max(w.__maxRunning, n);
+      requestAnimationFrame(probe);
+    };
+    requestAnimationFrame(probe);
+  });
+  for (let i = 0; i < 6; i++) sock!.ws.send(line(sock!.ch, "dracula"));
+  for (let i = 0; i < 6; i++) sock!.ws.send(line(sock!.ch, "LMAO"));
+  await page.locator(".cluster").first().click();
+  await expect(page.locator(".evidence")).toBeVisible();
+  await page.waitForTimeout(2_000);
+  expect(await page.evaluate(() => (window as unknown as { __maxRunning: number }).__maxRunning)).toBe(0);
 });
 
 test("deep link: ?channel= opens the channel, back returns to the start", async ({ page }) => {

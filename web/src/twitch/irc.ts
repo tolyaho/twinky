@@ -42,6 +42,8 @@ export function ircCommand(line: string): string {
 export interface IrcStateInfo {
   message?: string;
   attempt?: number;
+  /** While connecting: still reaching Twitch, or reached it and waiting for the JOIN answer. */
+  phase?: "opening" | "joining";
 }
 
 export interface IrcOptions {
@@ -193,7 +195,10 @@ export class TwitchChatClient {
   private open(): void {
     this.clearReconnect();
     this.clearProbe();
-    this.setState(this.attempt === 0 ? "connecting" : "reconnecting", { attempt: this.attempt });
+    this.setState(this.attempt === 0 ? "connecting" : "reconnecting", {
+      attempt: this.attempt,
+      phase: "opening",
+    });
     let ws: WebSocket;
     try {
       ws = new this.o.WebSocketImpl(this.o.url);
@@ -220,6 +225,9 @@ export class TwitchChatClient {
       this.joinedThisSocket = false;
       this.armJoinTimeout();
       this.startPing();
+      if (this._state === "connecting" || this._state === "reconnecting") {
+        this.setState(this._state, { attempt: this.attempt, phase: "joining" });
+      }
     });
     ws.addEventListener("message", (ev: MessageEvent) => {
       if (mine()) this.onData(ev);

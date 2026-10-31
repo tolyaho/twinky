@@ -24,6 +24,7 @@ export interface ChatSource {
 export interface SourceInfo {
   message?: string;
   attempt?: number;
+  phase?: "opening" | "joining";
 }
 
 /**
