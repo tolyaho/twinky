@@ -1,0 +1,143 @@
+/* Design tokens — transcribed from DESIGN.md (ElevenLabs-derived editorial system).
+   Light, warm, editorial. No saturated brand accent; the primary CTA is a near-black pill.
+   Dark SURFACES (not a dark mode) are used for the live product canvas, exactly as DESIGN.md
+   prescribes: light editorial frame outside, dark product canvas for the live workspace. */
+:root {
+  /* ink / primary */
+  --primary: #292524;
+  --primary-active: #0c0a09;
+
+  /* surfaces */
+  --canvas: #f5f5f5;
+  --canvas-soft: #fafafa;
+  --surface-card: #ffffff;
+  --surface-strong: #f0efed;
+  --surface-dark: #0c0a09;
+  --surface-dark-elev: #1c1917;
+  --surface-dark-elev2: #262320;
+
+  /* text */
+  --ink: #0c0a09;
+  --body: #4e4e4e;
+  --body-strong: #292524;
+  --muted: #777169;
+  --muted-soft: #a8a29e;
+
+  /* text on dark */
+  --ink-on-dark: #faf9f7;
+  --body-on-dark: #c4bfb8;
+  --muted-on-dark: #8a8178;
+
+  /* hairlines */
+  --hairline: #e7e5e4;
+  --hairline-soft: #f0efed;
+  --hairline-strong: #d6d3d1;
+  --hairline-on-dark: #2a2622;
+  --hairline-on-dark-soft: #211e1a;
+
+  /* atmospheric gradient tints — DECORATION ONLY */
+  --mint: #a7e5d3;
+  --peach: #f4c5a8;
+  --lavender: #c8b8e0;
+  --sky: #a8c8e8;
+  --rose: #e8b8c4;
+
+  --success: #16a34a;
+  --error: #dc2626;
+  --live: #e8b8c4; /* a muted rose used only inside live data, never as a UI accent */
+
+  /* spacing, base 4px */
+  --xxs: 4px;
+  --xs: 8px;
+  --sm: 12px;
+  --base: 16px;
+  --md: 20px;
+  --lg: 24px;
+  --xl: 32px;
+  --xxl: 48px;
+  --section: 96px;
+
+  /* radii */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-xxl: 24px;
+  --r-pill: 9999px;
+
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.04);
+
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-blur: 16px;
+
+  --focus-ring: var(--primary);
+  --focus-offset: 2px;
+
+  --font-display: "Inter", "Inter Tight", system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-ui: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, monospace;
+
+  --maxw: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: var(--ink);
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--r-sm);
+}
+
+::selection {
+  background: #0c0a09;
+  color: #f5f5f5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

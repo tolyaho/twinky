@@ -1,0 +1,5472 @@
+{
+ "canonical": [
+  {
+   "in": "",
+   "out": ""
+  },
+  {
+   "in": "   ",
+   "out": ""
+  },
+  {
+   "in": "!!!",
+   "out": ""
+  },
+  {
+   "in": "???",
+   "out": ""
+  },
+  {
+   "in": ".",
+   "out": ""
+  },
+  {
+   "in": "...",
+   "out": ""
+  },
+  {
+   "in": "LOL",
+   "out": "lol"
+  },
+  {
+   "in": "lol",
+   "out": "lol"
+  },
+  {
+   "in": "LOOOOL",
+   "out": "lool"
+  },
+  {
+   "in": "LMAO",
+   "out": "lmao"
+  },
+  {
+   "in": "LMFAO",
+   "out": "lmfao"
+  },
+  {
+   "in": "lmfaooooo",
+   "out": "lmfaoo"
+  },
+  {
+   "in": "ROFL",
+   "out": "rofl"
+  },
+  {
+   "in": "KEKW",
+   "out": "kekw"
+  },
+  {
+   "in": "xD",
+   "out": "xd"
+  },
+  {
+   "in": "xDDDD",
+   "out": "xdd"
+  },
+  {
+   "in": "HAHAHA",
+   "out": "haha"
+  },
+  {
+   "in": "ahahaha",
+   "out": "ahaha"
+  },
+  {
+   "in": "AHAHA AHAHA",
+   "out": "ahaha"
+  },
+  {
+   "in": "hehehe",
+   "out": "hehe"
+  },
+  {
+   "in": "hahahahaha",
+   "out": "haha"
+  },
+  {
+   "in": "ахахаха",
+   "out": "ахаха"
+  },
+  {
+   "in": "ахахахаха",
+   "out": "ахаха"
+  },
+  {
+   "in": "ХАХАХА",
+   "out": "хаха"
+  },
+  {
+   "in": "хехехе",
+   "out": "хехе"
+  },
+  {
+   "in": "ахах",
+   "out": "ахах"
+  },
+  {
+   "in": "W",
+   "out": "w"
+  },
+  {
+   "in": "L",
+   "out": "l"
+  },
+  {
+   "in": "W STREAM",
+   "out": "w stream"
+  },
+  {
+   "in": "w stream",
+   "out": "w stream"
+  },
+  {
+   "in": "W STREAM!!!",
+   "out": "w stream"
+  },
+  {
+   "in": "WWWWW",
+   "out": "ww"
+  },
+  {
+   "in": "LEFT",
+   "out": "left"
+  },
+  {
+   "in": "LEFT!!!",
+   "out": "left"
+  },
+  {
+   "in": "left",
+   "out": "left"
+  },
+  {
+   "in": "  left  ",
+   "out": "left"
+  },
+  {
+   "in": "😂",
+   "out": "😂"
+  },
+  {
+   "in": "😂😂😂",
+   "out": "😂😂"
+  },
+  {
+   "in": "😂😂😂😂😂",
+   "out": "😂😂"
+  },
+  {
+   "in": "LUL LUL LUL",
+   "out": "lul"
+  },
+  {
+   "in": "Pog Pog Pog Pog",
+   "out": "pog"
+  },
+  {
+   "in": "what game is this?",
+   "out": "what game is this"
+  },
+  {
+   "in": "whats the game",
+   "out": "whats the game"
+  },
+  {
+   "in": "WHAT HAPPENED??",
+   "out": "what happened"
+  },
+  {
+   "in": "parabola",
+   "out": "parabola"
+  },
+  {
+   "in": "parachute",
+   "out": "parachute"
+  },
+  {
+   "in": "PARAGON",
+   "out": "paragon"
+  },
+  {
+   "in": "VIOLET",
+   "out": "violet"
+  },
+  {
+   "in": "violet my goat",
+   "out": "violet my goat"
+  },
+  {
+   "in": "is that violet",
+   "out": "is that violet"
+  },
+  {
+   "in": "!drops",
+   "out": "drops"
+  },
+  {
+   "in": "!uptime",
+   "out": "uptime"
+  },
+  {
+   "in": "https://twitch.tv/xqc check this",
+   "out": "https twitch tv xqc check this"
+  },
+  {
+   "in": "gg",
+   "out": "gg"
+  },
+  {
+   "in": "ggs",
+   "out": "ggs"
+  },
+  {
+   "in": "yy",
+   "out": "yy"
+  },
+  {
+   "in": "no way",
+   "out": "no way"
+  },
+  {
+   "in": "NO WAY",
+   "out": "no way"
+  },
+  {
+   "in": "nooo way",
+   "out": "noo way"
+  },
+  {
+   "in": "первый",
+   "out": "первый"
+  },
+  {
+   "in": "кек",
+   "out": "кек"
+  },
+  {
+   "in": "кек кек кек",
+   "out": "кек"
+  },
+  {
+   "in": "соси",
+   "out": "соси"
+  },
+  {
+   "in": "ом­но­м",
+   "out": "ом­но­м"
+  },
+  {
+   "in": "ＨＥＬＬＯ",
+   "out": "hello"
+  },
+  {
+   "in": "ﬁre",
+   "out": "fire"
+  },
+  {
+   "in": "naïve",
+   "out": "naïve"
+  },
+  {
+   "in": "café",
+   "out": "café"
+  },
+  {
+   "in": "same",
+   "out": "same"
+  },
+  {
+   "in": "SAME",
+   "out": "same"
+  },
+  {
+   "in": "sameee",
+   "out": "samee"
+  },
+  {
+   "in": "this this this this",
+   "out": "this"
+  },
+  {
+   "in": "10",
+   "out": "10"
+  },
+  {
+   "in": "10/10",
+   "out": "10"
+  },
+  {
+   "in": "100000",
+   "out": "100"
+  },
+  {
+   "in": "7777777",
+   "out": "77"
+  },
+  {
+   "in": "D:",
+   "out": "d"
+  },
+  {
+   "in": "<3",
+   "out": "<3"
+  },
+  {
+   "in": ":)",
+   "out": ""
+  },
+  {
+   "in": ">_<",
+   "out": "> <"
+  },
+  {
+   "in": "o7",
+   "out": "o7"
+  }
+ ],
+ "parse": [
+  {
+   "in": "@badge-info=;badges=moderator/1;color=#1E90FF;display-name=SomeUser;emotes=;first-msg=0;flags=;id=abc-123-def;mod=1;returning-chatter=0;room-id=71092938;subscriber=0;tmi-sent-ts=1700000000123;turbo=0;user-id=44322889;user-type=mod :someuser!someuser@someuser.tmi.twitch.tv PRIVMSG #xqc :Hello chat! :) https://x.com",
+   "out": {
+    "id": "abc-123-def",
+    "ts_ms": 1700000000123,
+    "login": "someuser",
+    "text": "Hello chat! :) https://x.com",
+    "user_type": "mod",
+    "room_id": "71092938",
+    "reply_to": null
+   }
+  },
+  {
+   "in": "@id=xyz;tmi-sent-ts=1700000000456;display-name=;user-type= :u!u@u.tmi.twitch.tv PRIVMSG #xqc :no name here",
+   "out": {
+    "id": "xyz",
+    "ts_ms": 1700000000456,
+    "login": "",
+    "text": "no name here",
+    "user_type": "",
+    "room_id": null,
+    "reply_to": null
+   }
+  },
+  {
+   "in": "@id=empty1;tmi-sent-ts=1700000000999;display-name=Quiet;user-type= :q!q@q.tmi.twitch.tv PRIVMSG #xqc :",
+   "out": {
+    "id": "empty1",
+    "ts_ms": 1700000000999,
+    "login": "quiet",
+    "text": "",
+    "user_type": "",
+    "room_id": null,
+    "reply_to": null
+   }
+  },
+  {
+   "in": "@display-name=Replier;emotes=25:0-4;id=rep-1;reply-parent-msg-id=parent-99;tmi-sent-ts=1700000001000;user-type= :r!r@r.tmi.twitch.tv PRIVMSG #xqc :Kappa back",
+   "out": {
+    "id": "rep-1",
+    "ts_ms": 1700000001000,
+    "login": "replier",
+    "text": "Kappa back",
+    "user_type": "",
+    "room_id": null,
+    "reply_to": "parent-99"
+   }
+  },
+  {
+   "in": "@id=crlf1;tmi-sent-ts=1700000001500;display-name=Trail;user-type= :t!t@t.tmi.twitch.tv PRIVMSG #xqc :trailing text\r\n",
+   "out": {
+    "id": "crlf1",
+    "ts_ms": 1700000001500,
+    "login": "trail",
+    "text": "trailing text",
+    "user_type": "",
+    "room_id": null,
+    "reply_to": null
+   }
+  },
+  {
+   "in": "@tmi-sent-ts=1700000002000;display-name=NoId :n!n@n PRIVMSG #xqc :dropped",
+   "out": null
+  },
+  {
+   "in": "@id=noTs;display-name=NoTs :n!n@n PRIVMSG #xqc :dropped",
+   "out": null
+  },
+  {
+   "in": ":tmi.twitch.tv 001 justinfan123 :Welcome, GLHF!",
+   "out": null
+  },
+  {
+   "in": "PING :tmi.twitch.tv",
+   "out": null
+  },
+  {
+   "in": ":justinfan1!justinfan1@justinfan1.tmi.twitch.tv 366 justinfan1 #xqc :End of /NAMES list",
+   "out": null
+  },
+  {
+   "in": "@msg-id=msg_banned :tmi.twitch.tv NOTICE #xqc :You are permanently banned.",
+   "out": null
+  },
+  {
+   "in": "@idnoequals;tmi-sent-ts=1 :x!x@x PRIVMSG #xqc :bad tags",
+   "out": null
+  },
+  {
+   "in": "@id=nocolon;tmi-sent-ts=1700000003000;display-name=X;user-type= PRIVMSG-ish line",
+   "out": null
+  },
+  {
+   "in": "@id=uni1;tmi-sent-ts=1700000004000;display-name=Кек;user-type= :k!k@k.tmi.twitch.tv PRIVMSG #xqc :ахахаха 😂😂😂",
+   "out": {
+    "id": "uni1",
+    "ts_ms": 1700000004000,
+    "login": "кек",
+    "text": "ахахаха 😂😂😂",
+    "user_type": "",
+    "room_id": null,
+    "reply_to": null
+   }
+  }
+ ],
+ "groupCases": [
+  {
+   "name": "reaction_wave",
+   "window": [
+    1700000000000,
+    1700000009501
+   ],
+   "events": [
+    {
+     "id": "m0000",
+     "ts_ms": 1700000000000,
+     "author": "u00",
+     "text": "LOL"
+    },
+    {
+     "id": "m0001",
+     "ts_ms": 1700000000250,
+     "author": "u01",
+     "text": "LOL"
+    },
+    {
+     "id": "m0002",
+     "ts_ms": 1700000000500,
+     "author": "u02",
+     "text": "LOL"
+    },
+    {
+     "id": "m0003",
+     "ts_ms": 1700000000750,
+     "author": "u03",
+     "text": "LOL"
+    },
+    {
+     "id": "m0004",
+     "ts_ms": 1700000001000,
+     "author": "u04",
+     "text": "LOL"
+    },
+    {
+     "id": "m0005",
+     "ts_ms": 1700000001250,
+     "author": "u05",
+     "text": "LOL"
+    },
+    {
+     "id": "m0006",
+     "ts_ms": 1700000001500,
+     "author": "u06",
+     "text": "LOL"
+    },
+    {
+     "id": "m0007",
+     "ts_ms": 1700000001750,
+     "author": "u07",
+     "text": "LOL"
+    },
+    {
+     "id": "m0008",
+     "ts_ms": 1700000002000,
+     "author": "u08",
+     "text": "LOL"
+    },
+    {
+     "id": "m0009",
+     "ts_ms": 1700000002250,
+     "author": "u09",
+     "text": "LOL"
+    },
+    {
+     "id": "m0010",
+     "ts_ms": 1700000002500,
+     "author": "u10",
+     "text": "LOL"
+    },
+    {
+     "id": "m0011",
+     "ts_ms": 1700000002750,
+     "author": "u11",
+     "text": "LOL"
+    },
+    {
+     "id": "m0012",
+     "ts_ms": 1700000003000,
+     "author": "u12",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0013",
+     "ts_ms": 1700000003250,
+     "author": "u13",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0014",
+     "ts_ms": 1700000003500,
+     "author": "u14",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0015",
+     "ts_ms": 1700000003750,
+     "author": "u15",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0016",
+     "ts_ms": 1700000004000,
+     "author": "u16",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0017",
+     "ts_ms": 1700000004250,
+     "author": "u17",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0018",
+     "ts_ms": 1700000004500,
+     "author": "u18",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0019",
+     "ts_ms": 1700000004750,
+     "author": "u19",
+     "text": "LMAO"
+    },
+    {
+     "id": "m0020",
+     "ts_ms": 1700000005000,
+     "author": "u20",
+     "text": "ахахаха"
+    },
+    {
+     "id": "m0021",
+     "ts_ms": 1700000005250,
+     "author": "u21",
+     "text": "ахахаха"
+    },
+    {
+     "id": "m0022",
+     "ts_ms": 1700000005500,
+     "author": "u22",
+     "text": "ахахаха"
+    },
+    {
+     "id": "m0023",
+     "ts_ms": 1700000005750,
+     "author": "u23",
+     "text": "ахахаха"
+    },
+    {
+     "id": "m0024",
+     "ts_ms": 1700000006000,
+     "author": "u24",
+     "text": "ахахаха"
+    },
+    {
+     "id": "m0025",
+     "ts_ms": 1700000006250,
+     "author": "u25",
+     "text": "ахахаха"
+    },
+    {
+     "id": "m0026",
+     "ts_ms": 1700000006500,
+     "author": "u26",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0027",
+     "ts_ms": 1700000006750,
+     "author": "u27",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0028",
+     "ts_ms": 1700000007000,
+     "author": "u28",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0029",
+     "ts_ms": 1700000007250,
+     "author": "u29",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0030",
+     "ts_ms": 1700000007500,
+     "author": "u30",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0031",
+     "ts_ms": 1700000007750,
+     "author": "u31",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0032",
+     "ts_ms": 1700000008000,
+     "author": "u32",
+     "text": "😂😂😂😂"
+    },
+    {
+     "id": "m0033",
+     "ts_ms": 1700000008250,
+     "author": "u33",
+     "text": "KEKW"
+    },
+    {
+     "id": "m0034",
+     "ts_ms": 1700000008500,
+     "author": "u34",
+     "text": "KEKW"
+    },
+    {
+     "id": "m0035",
+     "ts_ms": 1700000008750,
+     "author": "u35",
+     "text": "KEKW"
+    },
+    {
+     "id": "m0036",
+     "ts_ms": 1700000009000,
+     "author": "u36",
+     "text": "KEKW"
+    },
+    {
+     "id": "m0037",
+     "ts_ms": 1700000009250,
+     "author": "u37",
+     "text": "KEKW"
+    },
+    {
+     "id": "m0038",
+     "ts_ms": 1700000009500,
+     "author": "u38",
+     "text": "actually that was insane"
+    }
+   ],
+   "groups": [
+    {
+     "key": "∎reaction",
+     "rule": "reaction",
+     "label": "reaction wave",
+     "count": 38,
+     "first_ts_ms": 1700000000000,
+     "last_ts_ms": 1700000009250,
+     "event_ids": [
+      "m0000",
+      "m0001",
+      "m0002",
+      "m0003",
+      "m0004",
+      "m0005",
+      "m0006",
+      "m0007",
+      "m0008",
+      "m0009",
+      "m0010",
+      "m0011",
+      "m0012",
+      "m0013",
+      "m0014",
+      "m0015",
+      "m0016",
+      "m0017",
+      "m0018",
+      "m0019",
+      "m0020",
+      "m0021",
+      "m0022",
+      "m0023",
+      "m0024",
+      "m0025",
+      "m0026",
+      "m0027",
+      "m0028",
+      "m0029",
+      "m0030",
+      "m0031",
+      "m0032",
+      "m0033",
+      "m0034",
+      "m0035",
+      "m0036",
+      "m0037"
+     ],
+     "samples": [
+      "LOL",
+      "LMAO",
+      "ахахаха"
+     ]
+    }
+   ],
+   "summary": {
+    "messages": 39,
+    "groups": 1,
+    "grouped": 38,
+    "ungrouped": 1
+   },
+   "pulse": {
+    "messages": 39,
+    "rate": [
+     39
+    ],
+    "peak_burst": 39,
+    "peak_per_second": 3.9,
+    "unique_chatters": 39,
+    "new_chatters": 39,
+    "messages_per_chatter": 1.0,
+    "concentration": 0.077,
+    "reaction_wave": 38,
+    "active_groups": 1,
+    "composition": {
+     "messages": 39,
+     "groups": 1,
+     "singletons": 1
+    },
+    "questions": []
+   },
+   "questions_fn": []
+  },
+  {
+   "name": "prefix_and_fold",
+   "window": [
+    1700000000000,
+    1700000004001
+   ],
+   "events": [
+    {
+     "id": "m0000",
+     "ts_ms": 1700000000000,
+     "author": "u00",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0001",
+     "ts_ms": 1700000000250,
+     "author": "u01",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0002",
+     "ts_ms": 1700000000500,
+     "author": "u02",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0003",
+     "ts_ms": 1700000000750,
+     "author": "u03",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0004",
+     "ts_ms": 1700000001000,
+     "author": "u04",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0005",
+     "ts_ms": 1700000001250,
+     "author": "u05",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0006",
+     "ts_ms": 1700000001500,
+     "author": "u06",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0007",
+     "ts_ms": 1700000001750,
+     "author": "u07",
+     "text": "VIOLET"
+    },
+    {
+     "id": "m0008",
+     "ts_ms": 1700000002000,
+     "author": "u08",
+     "text": "is that violet"
+    },
+    {
+     "id": "m0009",
+     "ts_ms": 1700000002250,
+     "author": "u09",
+     "text": "VIOLET my goat"
+    },
+    {
+     "id": "m0010",
+     "ts_ms": 1700000002500,
+     "author": "u10",
+     "text": "violet is cracked"
+    },
+    {
+     "id": "m0011",
+     "ts_ms": 1700000002750,
+     "author": "u11",
+     "text": "parabola"
+    },
+    {
+     "id": "m0012",
+     "ts_ms": 1700000003000,
+     "author": "u12",
+     "text": "parachute"
+    },
+    {
+     "id": "m0013",
+     "ts_ms": 1700000003250,
+     "author": "u13",
+     "text": "paragon"
+    },
+    {
+     "id": "m0014",
+     "ts_ms": 1700000003500,
+     "author": "u14",
+     "text": "parasite"
+    },
+    {
+     "id": "m0015",
+     "ts_ms": 1700000003750,
+     "author": "u15",
+     "text": "random singleton here"
+    },
+    {
+     "id": "m0016",
+     "ts_ms": 1700000004000,
+     "author": "u16",
+     "text": "another lonely line"
+    }
+   ],
+   "groups": [
+    {
+     "key": "t:violet",
+     "rule": "token",
+     "label": "violet",
+     "count": 11,
+     "first_ts_ms": 1700000000000,
+     "last_ts_ms": 1700000002500,
+     "event_ids": [
+      "m0000",
+      "m0001",
+      "m0002",
+      "m0003",
+      "m0004",
+      "m0005",
+      "m0006",
+      "m0007",
+      "m0008",
+      "m0009",
+      "m0010"
+     ],
+     "samples": [
+      "VIOLET",
+      "is that violet",
+      "VIOLET my goat"
+     ]
+    },
+    {
+     "key": "p:para",
+     "rule": "prefix",
+     "label": "para…",
+     "count": 4,
+     "first_ts_ms": 1700000002750,
+     "last_ts_ms": 1700000003500,
+     "event_ids": [
+      "m0011",
+      "m0012",
+      "m0013",
+      "m0014"
+     ],
+     "samples": [
+      "parabola",
+      "parachute",
+      "paragon"
+     ]
+    }
+   ],
+   "summary": {
+    "messages": 17,
+    "groups": 2,
+    "grouped": 15,
+    "ungrouped": 2
+   },
+   "pulse": {
+    "messages": 17,
+    "rate": [
+     17
+    ],
+    "peak_burst": 17,
+    "peak_per_second": 1.7,
+    "unique_chatters": 17,
+    "new_chatters": 17,
+    "messages_per_chatter": 1.0,
+    "concentration": 0.059,
+    "reaction_wave": 0,
+    "active_groups": 2,
+    "composition": {
+     "messages": 17,
+     "groups": 2,
+     "singletons": 2
+    },
+    "questions": [
+     {
+      "text": "is that violet",
+      "count": 1,
+      "event_ids": [
+       "m0008"
+      ],
+      "variants": [
+       "is that violet"
+      ],
+      "ts_ms": 1700000002000
+     }
+    ]
+   },
+   "questions_fn": [
+    {
+     "text": "is that violet",
+     "count": 1,
+     "event_ids": [
+      "m0008"
+     ],
+     "variants": [
+      "is that violet"
+     ],
+     "ts_ms": 1700000002000
+    }
+   ]
+  },
+  {
+   "name": "token_groups",
+   "window": [
+    1700000000000,
+    1700000002251
+   ],
+   "events": [
+    {
+     "id": "m0000",
+     "ts_ms": 1700000000000,
+     "author": "u00",
+     "text": "the game looks hard"
+    },
+    {
+     "id": "m0001",
+     "ts_ms": 1700000000250,
+     "author": "u01",
+     "text": "this game is broken"
+    },
+    {
+     "id": "m0002",
+     "ts_ms": 1700000000500,
+     "author": "u02",
+     "text": "what game is that"
+    },
+    {
+     "id": "m0003",
+     "ts_ms": 1700000000750,
+     "author": "u03",
+     "text": "he dropped the game"
+    },
+    {
+     "id": "m0004",
+     "ts_ms": 1700000001000,
+     "author": "u04",
+     "text": "insane clutch bro"
+    },
+    {
+     "id": "m0005",
+     "ts_ms": 1700000001250,
+     "author": "u05",
+     "text": "that clutch was insane"
+    },
+    {
+     "id": "m0006",
+     "ts_ms": 1700000001500,
+     "author": "u06",
+     "text": "clutch of the year"
+    },
+    {
+     "id": "m0007",
+     "ts_ms": 1700000001750,
+     "author": "u07",
+     "text": "nice clutch man"
+    },
+    {
+     "id": "m0008",
+     "ts_ms": 1700000002000,
+     "author": "u08",
+     "text": "random one off message"
+    },
+    {
+     "id": "m0009",
+     "ts_ms": 1700000002250,
+     "author": "u09",
+     "text": "totally unrelated thing"
+    }
+   ],
+   "groups": [
+    {
+     "key": "t:game",
+     "rule": "token",
+     "label": "game",
+     "count": 4,
+     "first_ts_ms": 1700000000000,
+     "last_ts_ms": 1700000000750,
+     "event_ids": [
+      "m0000",
+      "m0001",
+      "m0002",
+      "m0003"
+     ],
+     "samples": [
+      "the game looks hard",
+      "this game is broken",
+      "what game is that"
+     ]
+    },
+    {
+     "key": "t:clutch",
+     "rule": "token",
+     "label": "clutch",
+     "count": 4,
+     "first_ts_ms": 1700000001000,
+     "last_ts_ms": 1700000001750,
+     "event_ids": [
+      "m0004",
+      "m0005",
+      "m0006",
+      "m0007"
+     ],
+     "samples": [
+      "insane clutch bro",
+      "that clutch was insane",
+      "clutch of the year"
+     ]
+    }
+   ],
+   "summary": {
+    "messages": 10,
+    "groups": 2,
+    "grouped": 8,
+    "ungrouped": 2
+   },
+   "pulse": {
+    "messages": 10,
+    "rate": [
+     10
+    ],
+    "peak_burst": 10,
+    "peak_per_second": 1.0,
+    "unique_chatters": 10,
+    "new_chatters": 10,
+    "messages_per_chatter": 1.0,
+    "concentration": 0.1,
+    "reaction_wave": 0,
+    "active_groups": 2,
+    "composition": {
+     "messages": 10,
+     "groups": 2,
+     "singletons": 2
+    },
+    "questions": [
+     {
+      "text": "what game is that",
+      "count": 1,
+      "event_ids": [
+       "m0002"
+      ],
+      "variants": [
+       "what game is that"
+      ],
+      "ts_ms": 1700000000500
+     }
+    ]
+   },
+   "questions_fn": [
+    {
+     "text": "what game is that",
+     "count": 1,
+     "event_ids": [
+      "m0002"
+     ],
+     "variants": [
+      "what game is that"
+     ],
+     "ts_ms": 1700000000500
+    }
+   ]
+  },
+  {
+   "name": "questions_case",
+   "window": [
+    1700000000000,
+    1700000002751
+   ],
+   "events": [
+    {
+     "id": "m0000",
+     "ts_ms": 1700000000000,
+     "author": "u00",
+     "text": "what game is this?"
+    },
+    {
+     "id": "m0001",
+     "ts_ms": 1700000000250,
+     "author": "u01",
+     "text": "whats the game"
+    },
+    {
+     "id": "m0002",
+     "ts_ms": 1700000000500,
+     "author": "u02",
+     "text": "what game is this"
+    },
+    {
+     "id": "m0003",
+     "ts_ms": 1700000000750,
+     "author": "u03",
+     "text": "why is he here?"
+    },
+    {
+     "id": "m0004",
+     "ts_ms": 1700000001000,
+     "author": "u04",
+     "text": "why is he here"
+    },
+    {
+     "id": "m0005",
+     "ts_ms": 1700000001250,
+     "author": "u05",
+     "text": "WHY IS HE HERE???"
+    },
+    {
+     "id": "m0006",
+     "ts_ms": 1700000001500,
+     "author": "u06",
+     "text": "how old is he"
+    },
+    {
+     "id": "m0007",
+     "ts_ms": 1700000001750,
+     "author": "u07",
+     "text": "???"
+    },
+    {
+     "id": "m0008",
+     "ts_ms": 1700000002000,
+     "author": "u08",
+     "text": "is this ranked?"
+    },
+    {
+     "id": "m0009",
+     "ts_ms": 1700000002250,
+     "author": "u09",
+     "text": "anyone know the song"
+    },
+    {
+     "id": "m0010",
+     "ts_ms": 1700000002500,
+     "author": "u10",
+     "text": "just a statement here"
+    },
+    {
+     "id": "m0011",
+     "ts_ms": 1700000002750,
+     "author": "u11",
+     "text": "no question at all"
+    }
+   ],
+   "groups": [
+    {
+     "key": "t:here",
+     "rule": "token",
+     "label": "here",
+     "count": 4,
+     "first_ts_ms": 1700000000750,
+     "last_ts_ms": 1700000002500,
+     "event_ids": [
+      "m0003",
+      "m0004",
+      "m0005",
+      "m0010"
+     ],
+     "samples": [
+      "why is he here?",
+      "why is he here",
+      "WHY IS HE HERE???"
+     ]
+    },
+    {
+     "key": "t:game",
+     "rule": "token",
+     "label": "game",
+     "count": 3,
+     "first_ts_ms": 1700000000000,
+     "last_ts_ms": 1700000000500,
+     "event_ids": [
+      "m0000",
+      "m0001",
+      "m0002"
+     ],
+     "samples": [
+      "what game is this?",
+      "whats the game",
+      "what game is this"
+     ]
+    }
+   ],
+   "summary": {
+    "messages": 12,
+    "groups": 2,
+    "grouped": 7,
+    "ungrouped": 5
+   },
+   "pulse": {
+    "messages": 12,
+    "rate": [
+     12
+    ],
+    "peak_burst": 12,
+    "peak_per_second": 1.2,
+    "unique_chatters": 12,
+    "new_chatters": 12,
+    "messages_per_chatter": 1.0,
+    "concentration": 0.083,
+    "reaction_wave": 0,
+    "active_groups": 2,
+    "composition": {
+     "messages": 12,
+     "groups": 2,
+     "singletons": 5
+    },
+    "questions": [
+     {
+      "text": "what game is this?",
+      "count": 3,
+      "event_ids": [
+       "m0000",
+       "m0001",
+       "m0002"
+      ],
+      "variants": [
+       "what game is this?",
+       "whats the game",
+       "what game is this"
+      ],
+      "ts_ms": 1700000000000
+     },
+     {
+      "text": "why is he here?",
+      "count": 3,
+      "event_ids": [
+       "m0003",
+       "m0004",
+       "m0005"
+      ],
+      "variants": [
+       "why is he here?",
+       "why is he here",
+       "WHY IS HE HERE???"
+      ],
+      "ts_ms": 1700000000750
+     },
+     {
+      "text": "how old is he",
+      "count": 1,
+      "event_ids": [
+       "m0006"
+      ],
+      "variants": [
+       "how old is he"
+      ],
+      "ts_ms": 1700000001500
+     },
+     {
+      "text": "is this ranked?",
+      "count": 1,
+      "event_ids": [
+       "m0008"
+      ],
+      "variants": [
+       "is this ranked?"
+      ],
+      "ts_ms": 1700000002000
+     },
+     {
+      "text": "anyone know the song",
+      "count": 1,
+      "event_ids": [
+       "m0009"
+      ],
+      "variants": [
+       "anyone know the song"
+      ],
+      "ts_ms": 1700000002250
+     }
+    ]
+   },
+   "questions_fn": [
+    {
+     "text": "what game is this?",
+     "count": 3,
+     "event_ids": [
+      "m0000",
+      "m0001",
+      "m0002"
+     ],
+     "variants": [
+      "what game is this?",
+      "whats the game",
+      "what game is this"
+     ],
+     "ts_ms": 1700000000000
+    },
+    {
+     "text": "why is he here?",
+     "count": 3,
+     "event_ids": [
+      "m0003",
+      "m0004",
+      "m0005"
+     ],
+     "variants": [
+      "why is he here?",
+      "why is he here",
+      "WHY IS HE HERE???"
+     ],
+     "ts_ms": 1700000000750
+    },
+    {
+     "text": "how old is he",
+     "count": 1,
+     "event_ids": [
+      "m0006"
+     ],
+     "variants": [
+      "how old is he"
+     ],
+     "ts_ms": 1700000001500
+    },
+    {
+     "text": "is this ranked?",
+     "count": 1,
+     "event_ids": [
+      "m0008"
+     ],
+     "variants": [
+      "is this ranked?"
+     ],
+     "ts_ms": 1700000002000
+    },
+    {
+     "text": "anyone know the song",
+     "count": 1,
+     "event_ids": [
+      "m0009"
+     ],
+     "variants": [
+      "anyone know the song"
+     ],
+     "ts_ms": 1700000002250
+    }
+   ]
+  },
+  {
+   "name": "mixed_quiet",
+   "window": [
+    1700000000000,
+    1700000001001
+   ],
+   "events": [
+    {
+     "id": "m0000",
+     "ts_ms": 1700000000000,
+     "author": "u00",
+     "text": "hi"
+    },
+    {
+     "id": "m0001",
+     "ts_ms": 1700000000250,
+     "author": "u01",
+     "text": "hello there"
+    },
+    {
+     "id": "m0002",
+     "ts_ms": 1700000000500,
+     "author": "u02",
+     "text": "first time here"
+    },
+    {
+     "id": "m0003",
+     "ts_ms": 1700000000750,
+     "author": "u03",
+     "text": "cool stream"
+    },
+    {
+     "id": "m0004",
+     "ts_ms": 1700000001000,
+     "author": "u04",
+     "text": "nice"
+    }
+   ],
+   "groups": [],
+   "summary": {
+    "messages": 5,
+    "groups": 0,
+    "grouped": 0,
+    "ungrouped": 5
+   },
+   "pulse": {
+    "messages": 5,
+    "rate": [
+     5
+    ],
+    "peak_burst": 5,
+    "peak_per_second": 0.5,
+    "unique_chatters": 5,
+    "new_chatters": 5,
+    "messages_per_chatter": 1.0,
+    "concentration": 0.2,
+    "reaction_wave": 0,
+    "active_groups": 0,
+    "composition": {
+     "messages": 5,
+     "groups": 0,
+     "singletons": 5
+    },
+    "questions": []
+   },
+   "questions_fn": []
+  },
+  {
+   "name": "real:chat.jsonl",
+   "window": [
+    1788074591427,
+    1788074854750
+   ],
+   "events": [
+    {
+     "id": "m0000",
+     "ts_ms": 1788074591427,
+     "author": "u_4f66fd7dad",
+     "text": "sorry I won’t @ you then SAJ"
+    },
+    {
+     "id": "m0001",
+     "ts_ms": 1788074593089,
+     "author": "u_265e4a203f",
+     "text": "rather"
+    },
+    {
+     "id": "m0002",
+     "ts_ms": 1788074593267,
+     "author": "u_09a0bfda5a",
+     "text": "rations"
+    },
+    {
+     "id": "m0003",
+     "ts_ms": 1788074593611,
+     "author": "u_abb8b51fdf",
+     "text": "ranker"
+    },
+    {
+     "id": "m0004",
+     "ts_ms": 1788074593914,
+     "author": "u_dcfddf8c14",
+     "text": "ratter"
+    },
+    {
+     "id": "m0005",
+     "ts_ms": 1788074594982,
+     "author": "u_dd34997780",
+     "text": "random"
+    },
+    {
+     "id": "m0006",
+     "ts_ms": 1788074595116,
+     "author": "u_bd789914c9",
+     "text": "random"
+    },
+    {
+     "id": "m0007",
+     "ts_ms": 1788074595687,
+     "author": "u_f5e31c5f2c",
+     "text": "rachet"
+    },
+    {
+     "id": "m0008",
+     "ts_ms": 1788074596276,
+     "author": "u_e6fdb1ac23",
+     "text": "ramen"
+    },
+    {
+     "id": "m0009",
+     "ts_ms": 1788074596528,
+     "author": "u_cd12721466",
+     "text": "ratch\\"
+    },
+    {
+     "id": "m0010",
+     "ts_ms": 1788074596912,
+     "author": "u_c73b90c369",
+     "text": "raids"
+    },
+    {
+     "id": "m0011",
+     "ts_ms": 1788074597293,
+     "author": "u_1251f56c48",
+     "text": "Racoon"
+    },
+    {
+     "id": "m0012",
+     "ts_ms": 1788074597351,
+     "author": "u_abb8b51fdf",
+     "text": "rations"
+    },
+    {
+     "id": "m0013",
+     "ts_ms": 1788074597578,
+     "author": "u_f5e31c5f2c",
+     "text": "ramps"
+    },
+    {
+     "id": "m0014",
+     "ts_ms": 1788074597902,
+     "author": "u_09a0bfda5a",
+     "text": "ration"
+    },
+    {
+     "id": "m0015",
+     "ts_ms": 1788074598007,
+     "author": "u_5db9771a3f",
+     "text": "rather"
+    },
+    {
+     "id": "m0016",
+     "ts_ms": 1788074598130,
+     "author": "u_265e4a203f",
+     "text": "racket"
+    },
+    {
+     "id": "m0017",
+     "ts_ms": 1788074598142,
+     "author": "u_ca50df9c44",
+     "text": "rapper"
+    },
+    {
+     "id": "m0018",
+     "ts_ms": 1788074598232,
+     "author": "u_8b1ac25072",
+     "text": "rabies"
+    },
+    {
+     "id": "m0019",
+     "ts_ms": 1788074599349,
+     "author": "u_20ba764e39",
+     "text": "racer"
+    },
+    {
+     "id": "m0020",
+     "ts_ms": 1788074599372,
+     "author": "u_265e4a203f",
+     "text": "racquet"
+    },
+    {
+     "id": "m0021",
+     "ts_ms": 1788074600268,
+     "author": "u_94da6f9321",
+     "text": "ratatata"
+    },
+    {
+     "id": "m0022",
+     "ts_ms": 1788074600662,
+     "author": "u_fba8469aa7",
+     "text": "rapper"
+    },
+    {
+     "id": "m0023",
+     "ts_ms": 1788074600841,
+     "author": "u_65eefa0452",
+     "text": "ratios"
+    },
+    {
+     "id": "m0024",
+     "ts_ms": 1788074601076,
+     "author": "u_265e4a203f",
+     "text": "racer"
+    },
+    {
+     "id": "m0025",
+     "ts_ms": 1788074601330,
+     "author": "u_cd12721466",
+     "text": "rachet"
+    },
+    {
+     "id": "m0026",
+     "ts_ms": 1788074602358,
+     "author": "u_49664071a9",
+     "text": "rabbit"
+    },
+    {
+     "id": "m0027",
+     "ts_ms": 1788074602465,
+     "author": "u_dd34997780",
+     "text": "raccoon"
+    },
+    {
+     "id": "m0028",
+     "ts_ms": 1788074603472,
+     "author": "u_aafd12fd64",
+     "text": "@stableronaldo_manger she’s rude"
+    },
+    {
+     "id": "m0029",
+     "ts_ms": 1788074604585,
+     "author": "u_abb8b51fdf",
+     "text": "racket"
+    },
+    {
+     "id": "m0030",
+     "ts_ms": 1788074604833,
+     "author": "u_a63e7c17fe",
+     "text": "rapper"
+    },
+    {
+     "id": "m0031",
+     "ts_ms": 1788074605098,
+     "author": "u_fba8469aa7",
+     "text": "racket"
+    },
+    {
+     "id": "m0032",
+     "ts_ms": 1788074605323,
+     "author": "u_65eefa0452",
+     "text": "rapper"
+    },
+    {
+     "id": "m0033",
+     "ts_ms": 1788074605816,
+     "author": "u_c73b90c369",
+     "text": "random"
+    },
+    {
+     "id": "m0034",
+     "ts_ms": 1788074606051,
+     "author": "u_5e1c7a3810",
+     "text": "rabbit"
+    },
+    {
+     "id": "m0035",
+     "ts_ms": 1788074606084,
+     "author": "u_20ba764e39",
+     "text": "rarest"
+    },
+    {
+     "id": "m0036",
+     "ts_ms": 1788074606360,
+     "author": "u_b07a66a461",
+     "text": "rachet"
+    },
+    {
+     "id": "m0037",
+     "ts_ms": 1788074607074,
+     "author": "u_5e1c7a3810",
+     "text": "rancor"
+    },
+    {
+     "id": "m0038",
+     "ts_ms": 1788074607329,
+     "author": "u_09a0bfda5a",
+     "text": "random"
+    },
+    {
+     "id": "m0039",
+     "ts_ms": 1788074607496,
+     "author": "u_20ba764e39",
+     "text": "rare"
+    },
+    {
+     "id": "m0040",
+     "ts_ms": 1788074608281,
+     "author": "u_ea7b8e8129",
+     "text": "raning"
+    },
+    {
+     "id": "m0041",
+     "ts_ms": 1788074608463,
+     "author": "u_e6fdb1ac23",
+     "text": "raffle"
+    },
+    {
+     "id": "m0042",
+     "ts_ms": 1788074608937,
+     "author": "u_50043c9c7c",
+     "text": "ranch"
+    },
+    {
+     "id": "m0043",
+     "ts_ms": 1788074609274,
+     "author": "u_abb8b51fdf",
+     "text": "ranker"
+    },
+    {
+     "id": "m0044",
+     "ts_ms": 1788074609344,
+     "author": "u_34c97c79f1",
+     "text": "fubba dubba balright"
+    },
+    {
+     "id": "m0045",
+     "ts_ms": 1788074609433,
+     "author": "u_cd12721466",
+     "text": "rabbit"
+    },
+    {
+     "id": "m0046",
+     "ts_ms": 1788074610385,
+     "author": "u_b07a66a461",
+     "text": "rancid"
+    },
+    {
+     "id": "m0047",
+     "ts_ms": 1788074610831,
+     "author": "u_5db9771a3f",
+     "text": "random"
+    },
+    {
+     "id": "m0048",
+     "ts_ms": 1788074610897,
+     "author": "u_09a0bfda5a",
+     "text": "rancid"
+    },
+    {
+     "id": "m0049",
+     "ts_ms": 1788074610964,
+     "author": "u_a63e7c17fe",
+     "text": "random"
+    },
+    {
+     "id": "m0050",
+     "ts_ms": 1788074611186,
+     "author": "u_4077c33917",
+     "text": "im MAX EDGE RN"
+    },
+    {
+     "id": "m0052",
+     "ts_ms": 1788074611649,
+     "author": "u_20ba764e39",
+     "text": "raner"
+    },
+    {
+     "id": "m0051",
+     "ts_ms": 1788074611656,
+     "author": "u_cd12721466",
+     "text": "ranch"
+    },
+    {
+     "id": "m0053",
+     "ts_ms": 1788074611789,
+     "author": "u_fba8469aa7",
+     "text": "rani netz"
+    },
+    {
+     "id": "m0054",
+     "ts_ms": 1788074612341,
+     "author": "u_abb8b51fdf",
+     "text": "rancid"
+    },
+    {
+     "id": "m0055",
+     "ts_ms": 1788074612424,
+     "author": "u_dd34997780",
+     "text": "random"
+    },
+    {
+     "id": "m0056",
+     "ts_ms": 1788074612924,
+     "author": "u_265e4a203f",
+     "text": "ranked"
+    },
+    {
+     "id": "m0057",
+     "ts_ms": 1788074613243,
+     "author": "u_1c462034f9",
+     "text": "awwww so cute"
+    },
+    {
+     "id": "m0058",
+     "ts_ms": 1788074613839,
+     "author": "u_1251f56c48",
+     "text": "Random"
+    },
+    {
+     "id": "m0059",
+     "ts_ms": 1788074614043,
+     "author": "u_c3fdbca373",
+     "text": "ranaway"
+    },
+    {
+     "id": "m0060",
+     "ts_ms": 1788074614166,
+     "author": "u_65eefa0452",
+     "text": "randient"
+    },
+    {
+     "id": "m0061",
+     "ts_ms": 1788074614768,
+     "author": "u_5526e1756c",
+     "text": "rancid"
+    },
+    {
+     "id": "m0062",
+     "ts_ms": 1788074616619,
+     "author": "u_20ba764e39",
+     "text": "ranked"
+    },
+    {
+     "id": "m0063",
+     "ts_ms": 1788074616918,
+     "author": "u_a417f8a3b6",
+     "text": "ranch"
+    },
+    {
+     "id": "m0064",
+     "ts_ms": 1788074617286,
+     "author": "u_cd12721466",
+     "text": "rang;e"
+    },
+    {
+     "id": "m0065",
+     "ts_ms": 1788074617757,
+     "author": "u_4077c33917",
+     "text": "MAXIMUM EDGE RN"
+    },
+    {
+     "id": "m0066",
+     "ts_ms": 1788074617861,
+     "author": "u_abb8b51fdf",
+     "text": "random"
+    },
+    {
+     "id": "m0067",
+     "ts_ms": 1788074618012,
+     "author": "u_34c97c79f1",
+     "text": "flubba dubba chained together balright"
+    },
+    {
+     "id": "m0068",
+     "ts_ms": 1788074619048,
+     "author": "u_eac030eec1",
+     "text": "Ransom"
+    },
+    {
+     "id": "m0069",
+     "ts_ms": 1788074619947,
+     "author": "u_cd12721466",
+     "text": "rangle"
+    },
+    {
+     "id": "m0070",
+     "ts_ms": 1788074619982,
+     "author": "u_bd789914c9",
+     "text": "ranked"
+    },
+    {
+     "id": "m0071",
+     "ts_ms": 1788074620431,
+     "author": "u_4f66fd7dad",
+     "text": "@241jtn SAJ"
+    },
+    {
+     "id": "m0072",
+     "ts_ms": 1788074621108,
+     "author": "u_265e4a203f",
+     "text": "randit"
+    },
+    {
+     "id": "m0073",
+     "ts_ms": 1788074621812,
+     "author": "u_65eefa0452",
+     "text": "ranked"
+    },
+    {
+     "id": "m0074",
+     "ts_ms": 1788074622101,
+     "author": "u_09a0bfda5a",
+     "text": "ranger"
+    },
+    {
+     "id": "m0075",
+     "ts_ms": 1788074622213,
+     "author": "u_1251f56c48",
+     "text": "Ransom"
+    },
+    {
+     "id": "m0076",
+     "ts_ms": 1788074622261,
+     "author": "u_b07a66a461",
+     "text": "ranger"
+    },
+    {
+     "id": "m0077",
+     "ts_ms": 1788074622835,
+     "author": "u_e6fdb1ac23",
+     "text": "rangers"
+    },
+    {
+     "id": "m0078",
+     "ts_ms": 1788074622956,
+     "author": "u_a417f8a3b6",
+     "text": "range"
+    },
+    {
+     "id": "m0079",
+     "ts_ms": 1788074623205,
+     "author": "u_265e4a203f",
+     "text": "ranger"
+    },
+    {
+     "id": "m0080",
+     "ts_ms": 1788074623694,
+     "author": "u_a63e7c17fe",
+     "text": "ranger"
+    },
+    {
+     "id": "m0081",
+     "ts_ms": 1788074623927,
+     "author": "u_94da6f9321",
+     "text": "ranger"
+    },
+    {
+     "id": "m0082",
+     "ts_ms": 1788074624048,
+     "author": "u_abb8b51fdf",
+     "text": "ranger"
+    },
+    {
+     "id": "m0083",
+     "ts_ms": 1788074624380,
+     "author": "u_c73b90c369",
+     "text": "ranger"
+    },
+    {
+     "id": "m0084",
+     "ts_ms": 1788074624708,
+     "author": "u_fba8469aa7",
+     "text": "ranger"
+    },
+    {
+     "id": "m0085",
+     "ts_ms": 1788074624861,
+     "author": "u_dd34997780",
+     "text": "rangers"
+    },
+    {
+     "id": "m0086",
+     "ts_ms": 1788074625028,
+     "author": "u_4077c33917",
+     "text": "ranged"
+    },
+    {
+     "id": "m0087",
+     "ts_ms": 1788074625039,
+     "author": "u_5526e1756c",
+     "text": "ranger"
+    },
+    {
+     "id": "m0088",
+     "ts_ms": 1788074625955,
+     "author": "u_20ba764e39",
+     "text": "ranger"
+    },
+    {
+     "id": "m0089",
+     "ts_ms": 1788074627066,
+     "author": "u_c3fdbca373",
+     "text": "ranger"
+    },
+    {
+     "id": "m0090",
+     "ts_ms": 1788074627275,
+     "author": "u_bd789914c9",
+     "text": "ranger"
+    },
+    {
+     "id": "m0091",
+     "ts_ms": 1788074627312,
+     "author": "u_cd12721466",
+     "text": "ranger"
+    },
+    {
+     "id": "m0092",
+     "ts_ms": 1788074628478,
+     "author": "u_65eefa0452",
+     "text": "ranger"
+    },
+    {
+     "id": "m0093",
+     "ts_ms": 1788074628486,
+     "author": "u_f5e31c5f2c",
+     "text": "ranger"
+    },
+    {
+     "id": "m0094",
+     "ts_ms": 1788074629961,
+     "author": "u_45f32be6d8",
+     "text": "Ransom"
+    },
+    {
+     "id": "m0095",
+     "ts_ms": 1788074630121,
+     "author": "u_ffdb486b2b",
+     "text": "hi"
+    },
+    {
+     "id": "m0096",
+     "ts_ms": 1788074630951,
+     "author": "u_265e4a203f",
+     "text": "street"
+    },
+    {
+     "id": "m0097",
+     "ts_ms": 1788074631979,
+     "author": "u_5e1c7a3810",
+     "text": "stairs"
+    },
+    {
+     "id": "m0098",
+     "ts_ms": 1788074632296,
+     "author": "u_b07a66a461",
+     "text": "stopper"
+    },
+    {
+     "id": "m0099",
+     "ts_ms": 1788074632379,
+     "author": "u_265e4a203f",
+     "text": "streets"
+    },
+    {
+     "id": "m0100",
+     "ts_ms": 1788074632503,
+     "author": "u_a417f8a3b6",
+     "text": "street"
+    },
+    {
+     "id": "m0101",
+     "ts_ms": 1788074632608,
+     "author": "u_65eefa0452",
+     "text": "stable"
+    },
+    {
+     "id": "m0102",
+     "ts_ms": 1788074632696,
+     "author": "u_c73b90c369",
+     "text": "stable"
+    },
+    {
+     "id": "m0103",
+     "ts_ms": 1788074633249,
+     "author": "u_28f3f3662f",
+     "text": "street"
+    },
+    {
+     "id": "m0104",
+     "ts_ms": 1788074633648,
+     "author": "u_f5e31c5f2c",
+     "text": "stinger"
+    },
+    {
+     "id": "m0105",
+     "ts_ms": 1788074633852,
+     "author": "u_265e4a203f",
+     "text": "stars"
+    },
+    {
+     "id": "m0106",
+     "ts_ms": 1788074634094,
+     "author": "u_ea7b8e8129",
+     "text": "sticks"
+    },
+    {
+     "id": "m0107",
+     "ts_ms": 1788074634974,
+     "author": "u_94da6f9321",
+     "text": "stand"
+    },
+    {
+     "id": "m0108",
+     "ts_ms": 1788074635017,
+     "author": "u_c3fdbca373",
+     "text": "street"
+    },
+    {
+     "id": "m0109",
+     "ts_ms": 1788074635217,
+     "author": "u_abb8b51fdf",
+     "text": "stward"
+    },
+    {
+     "id": "m0110",
+     "ts_ms": 1788074635425,
+     "author": "u_5526e1756c",
+     "text": "sticks"
+    },
+    {
+     "id": "m0111",
+     "ts_ms": 1788074635466,
+     "author": "u_cd12721466",
+     "text": "street"
+    },
+    {
+     "id": "m0112",
+     "ts_ms": 1788074635598,
+     "author": "u_f5e31c5f2c",
+     "text": "stinge"
+    },
+    {
+     "id": "m0113",
+     "ts_ms": 1788074636408,
+     "author": "u_5db9771a3f",
+     "text": "studio"
+    },
+    {
+     "id": "m0114",
+     "ts_ms": 1788074636459,
+     "author": "u_fba8469aa7",
+     "text": "stewart"
+    },
+    {
+     "id": "m0115",
+     "ts_ms": 1788074636463,
+     "author": "u_ffdb486b2b",
+     "text": "stipen"
+    },
+    {
+     "id": "m0116",
+     "ts_ms": 1788074636837,
+     "author": "u_265e4a203f",
+     "text": "staple"
+    },
+    {
+     "id": "m0117",
+     "ts_ms": 1788074637471,
+     "author": "u_a63e7c17fe",
+     "text": "stomach"
+    },
+    {
+     "id": "m0118",
+     "ts_ms": 1788074637706,
+     "author": "u_f5e31c5f2c",
+     "text": "stinks"
+    },
+    {
+     "id": "m0119",
+     "ts_ms": 1788074637749,
+     "author": "u_abb8b51fdf",
+     "text": "stuard"
+    },
+    {
+     "id": "m0120",
+     "ts_ms": 1788074637773,
+     "author": "u_4077c33917",
+     "text": "sturdy"
+    },
+    {
+     "id": "m0121",
+     "ts_ms": 1788074637960,
+     "author": "u_265e4a203f",
+     "text": "stable"
+    },
+    {
+     "id": "m0122",
+     "ts_ms": 1788074638070,
+     "author": "u_ea7b8e8129",
+     "text": "stones"
+    },
+    {
+     "id": "m0123",
+     "ts_ms": 1788074638098,
+     "author": "u_b07a66a461",
+     "text": "stolen"
+    },
+    {
+     "id": "m0124",
+     "ts_ms": 1788074638383,
+     "author": "u_dd34997780",
+     "text": "struggle"
+    },
+    {
+     "id": "m0125",
+     "ts_ms": 1788074638582,
+     "author": "u_e6fdb1ac23",
+     "text": "stalling"
+    },
+    {
+     "id": "m0126",
+     "ts_ms": 1788074638638,
+     "author": "u_1c462034f9",
+     "text": "what bowser doing here"
+    },
+    {
+     "id": "m0127",
+     "ts_ms": 1788074638675,
+     "author": "u_c3fdbca373",
+     "text": "stick"
+    },
+    {
+     "id": "m0128",
+     "ts_ms": 1788074638693,
+     "author": "u_090701d688",
+     "text": "racoon"
+    },
+    {
+     "id": "m0129",
+     "ts_ms": 1788074638760,
+     "author": "u_5526e1756c",
+     "text": "stairds"
+    },
+    {
+     "id": "m0130",
+     "ts_ms": 1788074639026,
+     "author": "u_ca50df9c44",
+     "text": "stand"
+    },
+    {
+     "id": "m0131",
+     "ts_ms": 1788074639234,
+     "author": "u_4077c33917",
+     "text": "stupid"
+    },
+    {
+     "id": "m0132",
+     "ts_ms": 1788074639419,
+     "author": "u_bd789914c9",
+     "text": "strange"
+    },
+    {
+     "id": "m0133",
+     "ts_ms": 1788074639535,
+     "author": "u_4e4838e70f",
+     "text": "Steal"
+    },
+    {
+     "id": "m0134",
+     "ts_ms": 1788074639593,
+     "author": "u_94da6f9321",
+     "text": "stream"
+    },
+    {
+     "id": "m0135",
+     "ts_ms": 1788074639814,
+     "author": "u_1251f56c48",
+     "text": "Stuborn"
+    },
+    {
+     "id": "m0136",
+     "ts_ms": 1788074641215,
+     "author": "u_4077c33917",
+     "text": "stolen"
+    },
+    {
+     "id": "m0137",
+     "ts_ms": 1788074641349,
+     "author": "u_c73b90c369",
+     "text": "street"
+    },
+    {
+     "id": "m0138",
+     "ts_ms": 1788074641402,
+     "author": "u_e6fdb1ac23",
+     "text": "stalls"
+    },
+    {
+     "id": "m0139",
+     "ts_ms": 1788074641696,
+     "author": "u_aafd12fd64",
+     "text": "studio"
+    },
+    {
+     "id": "m0140",
+     "ts_ms": 1788074641826,
+     "author": "u_5526e1756c",
+     "text": "storms"
+    },
+    {
+     "id": "m0141",
+     "ts_ms": 1788074641925,
+     "author": "u_45f32be6d8",
+     "text": "Sleeper"
+    },
+    {
+     "id": "m0142",
+     "ts_ms": 1788074641965,
+     "author": "u_eac030eec1",
+     "text": "Staple"
+    },
+    {
+     "id": "m0143",
+     "ts_ms": 1788074642329,
+     "author": "u_abb8b51fdf",
+     "text": "stews"
+    },
+    {
+     "id": "m0144",
+     "ts_ms": 1788074642579,
+     "author": "u_bd789914c9",
+     "text": "steam"
+    },
+    {
+     "id": "m0145",
+     "ts_ms": 1788074643049,
+     "author": "u_fba8469aa7",
+     "text": "stomp"
+    },
+    {
+     "id": "m0146",
+     "ts_ms": 1788074643296,
+     "author": "u_4077c33917",
+     "text": "stilts"
+    },
+    {
+     "id": "m0147",
+     "ts_ms": 1788074643873,
+     "author": "u_ea7b8e8129",
+     "text": "straps"
+    },
+    {
+     "id": "m0148",
+     "ts_ms": 1788074643955,
+     "author": "u_265e4a203f",
+     "text": "stack"
+    },
+    {
+     "id": "m0149",
+     "ts_ms": 1788074644224,
+     "author": "u_94da6f9321",
+     "text": "stticks"
+    },
+    {
+     "id": "m0151",
+     "ts_ms": 1788074644836,
+     "author": "u_39b5e28888",
+     "text": "sticky"
+    },
+    {
+     "id": "m0150",
+     "ts_ms": 1788074644853,
+     "author": "u_cd12721466",
+     "text": "streets"
+    },
+    {
+     "id": "m0152",
+     "ts_ms": 1788074645041,
+     "author": "u_65eefa0452",
+     "text": "stadium"
+    },
+    {
+     "id": "m0153",
+     "ts_ms": 1788074645506,
+     "author": "u_5526e1756c",
+     "text": "studio"
+    },
+    {
+     "id": "m0154",
+     "ts_ms": 1788074645750,
+     "author": "u_265e4a203f",
+     "text": "stacksstocks"
+    },
+    {
+     "id": "m0155",
+     "ts_ms": 1788074646019,
+     "author": "u_abb8b51fdf",
+     "text": "stwess"
+    },
+    {
+     "id": "m0156",
+     "ts_ms": 1788074646425,
+     "author": "u_5e1c7a3810",
+     "text": "storm"
+    },
+    {
+     "id": "m0157",
+     "ts_ms": 1788074646472,
+     "author": "u_56f57a8cb5",
+     "text": "fuck you"
+    },
+    {
+     "id": "m0158",
+     "ts_ms": 1788074646762,
+     "author": "u_34c97c79f1",
+     "text": "fluhaba dibba dubba hubba subba dibble double buzzable balright"
+    },
+    {
+     "id": "m0159",
+     "ts_ms": 1788074647293,
+     "author": "u_ea7b8e8129",
+     "text": "stoves"
+    },
+    {
+     "id": "m0161",
+     "ts_ms": 1788074647633,
+     "author": "u_bd789914c9",
+     "text": "streak"
+    },
+    {
+     "id": "m0160",
+     "ts_ms": 1788074647634,
+     "author": "u_abb8b51fdf",
+     "text": "stomper"
+    },
+    {
+     "id": "m0162",
+     "ts_ms": 1788074647754,
+     "author": "u_b07a66a461",
+     "text": "stokes"
+    },
+    {
+     "id": "m0163",
+     "ts_ms": 1788074648069,
+     "author": "u_94da6f9321",
+     "text": "stocks"
+    },
+    {
+     "id": "m0164",
+     "ts_ms": 1788074648268,
+     "author": "u_c3fdbca373",
+     "text": "stopping"
+    },
+    {
+     "id": "m0165",
+     "ts_ms": 1788074649109,
+     "author": "u_c73b90c369",
+     "text": "stolen"
+    },
+    {
+     "id": "m0166",
+     "ts_ms": 1788074649127,
+     "author": "u_cd12721466",
+     "text": "stompb"
+    },
+    {
+     "id": "m0167",
+     "ts_ms": 1788074649196,
+     "author": "u_abb8b51fdf",
+     "text": "stores"
+    },
+    {
+     "id": "m0168",
+     "ts_ms": 1788074649409,
+     "author": "u_5db9771a3f",
+     "text": "stolen"
+    },
+    {
+     "id": "m0169",
+     "ts_ms": 1788074650269,
+     "author": "u_265e4a203f",
+     "text": "storms"
+    },
+    {
+     "id": "m0170",
+     "ts_ms": 1788074650573,
+     "author": "u_bd789914c9",
+     "text": "stoked"
+    },
+    {
+     "id": "m0171",
+     "ts_ms": 1788074650760,
+     "author": "u_fba8469aa7",
+     "text": "stomp#"
+    },
+    {
+     "id": "m0172",
+     "ts_ms": 1788074651389,
+     "author": "u_4e4838e70f",
+     "text": "Stripr"
+    },
+    {
+     "id": "m0173",
+     "ts_ms": 1788074651516,
+     "author": "u_ea7b8e8129",
+     "text": "stones"
+    },
+    {
+     "id": "m0174",
+     "ts_ms": 1788074651701,
+     "author": "u_5526e1756c",
+     "text": "stomps"
+    },
+    {
+     "id": "m0175",
+     "ts_ms": 1788074651822,
+     "author": "u_cd12721466",
+     "text": "stompn"
+    },
+    {
+     "id": "m0176",
+     "ts_ms": 1788074652229,
+     "author": "u_abb8b51fdf",
+     "text": "stompn"
+    },
+    {
+     "id": "m0177",
+     "ts_ms": 1788074652781,
+     "author": "u_1c462034f9",
+     "text": "stool"
+    },
+    {
+     "id": "m0178",
+     "ts_ms": 1788074652963,
+     "author": "u_65eefa0452",
+     "text": "stompn"
+    },
+    {
+     "id": "m0179",
+     "ts_ms": 1788074653274,
+     "author": "u_39b5e28888",
+     "text": "stocky"
+    },
+    {
+     "id": "m0180",
+     "ts_ms": 1788074654096,
+     "author": "u_bd789914c9",
+     "text": "stone"
+    },
+    {
+     "id": "m0181",
+     "ts_ms": 1788074654823,
+     "author": "u_3c1752c2ab",
+     "text": "somber"
+    },
+    {
+     "id": "m0182",
+     "ts_ms": 1788074655148,
+     "author": "u_f94c35ef01",
+     "text": "grown ass men still in here watching mfs sleep LMAO"
+    },
+    {
+     "id": "m0183",
+     "ts_ms": 1788074656387,
+     "author": "u_bd789914c9",
+     "text": "stones"
+    },
+    {
+     "id": "m0184",
+     "ts_ms": 1788074658145,
+     "author": "u_b40c71de7b",
+     "text": "he just a beh beh"
+    },
+    {
+     "id": "m0185",
+     "ts_ms": 1788074658527,
+     "author": "u_265e4a203f",
+     "text": "basketball"
+    },
+    {
+     "id": "m0186",
+     "ts_ms": 1788074658656,
+     "author": "u_c3fdbca373",
+     "text": "balright"
+    },
+    {
+     "id": "m0188",
+     "ts_ms": 1788074658994,
+     "author": "u_f5e31c5f2c",
+     "text": "bakery"
+    },
+    {
+     "id": "m0187",
+     "ts_ms": 1788074658999,
+     "author": "u_e6fdb1ac23",
+     "text": "balance"
+    },
+    {
+     "id": "m0190",
+     "ts_ms": 1788074659073,
+     "author": "u_b07a66a461",
+     "text": "backing"
+    },
+    {
+     "id": "m0189",
+     "ts_ms": 1788074659099,
+     "author": "u_09a0bfda5a",
+     "text": "bastion"
+    },
+    {
+     "id": "m0191",
+     "ts_ms": 1788074659900,
+     "author": "u_4077c33917",
+     "text": "basket"
+    },
+    {
+     "id": "m0192",
+     "ts_ms": 1788074660171,
+     "author": "u_860cef83fa",
+     "text": "!subcount"
+    },
+    {
+     "id": "m0193",
+     "ts_ms": 1788074660256,
+     "author": "u_265e4a203f",
+     "text": "baseball"
+    },
+    {
+     "id": "m0194",
+     "ts_ms": 1788074660495,
+     "author": "u_7d8b0b78aa",
+     "text": "@Young_cash1 StableRonaldo currently has 34238 subscribers!"
+    },
+    {
+     "id": "m0195",
+     "ts_ms": 1788074660740,
+     "author": "u_5526e1756c",
+     "text": "banana"
+    },
+    {
+     "id": "m0196",
+     "ts_ms": 1788074660758,
+     "author": "u_50043c9c7c",
+     "text": "bathing"
+    },
+    {
+     "id": "m0197",
+     "ts_ms": 1788074660928,
+     "author": "u_ea7b8e8129",
+     "text": "batches"
+    },
+    {
+     "id": "m0198",
+     "ts_ms": 1788074661444,
+     "author": "u_94da6f9321",
+     "text": "banana"
+    },
+    {
+     "id": "m0199",
+     "ts_ms": 1788074661531,
+     "author": "u_5db9771a3f",
+     "text": "backyard"
+    },
+    {
+     "id": "m0201",
+     "ts_ms": 1788074661939,
+     "author": "u_eac030eec1",
+     "text": "Baseball"
+    },
+    {
+     "id": "m0200",
+     "ts_ms": 1788074661970,
+     "author": "u_c73b90c369",
+     "text": "baboom"
+    },
+    {
+     "id": "m0202",
+     "ts_ms": 1788074662396,
+     "author": "u_cd12721466",
+     "text": "bascet"
+    },
+    {
+     "id": "m0203",
+     "ts_ms": 1788074662530,
+     "author": "u_4077c33917",
+     "text": "basinet"
+    },
+    {
+     "id": "m0204",
+     "ts_ms": 1788074662777,
+     "author": "u_dd34997780",
+     "text": "banana"
+    },
+    {
+     "id": "m0205",
+     "ts_ms": 1788074662800,
+     "author": "u_39b5e28888",
+     "text": "balesh"
+    },
+    {
+     "id": "m0206",
+     "ts_ms": 1788074663326,
+     "author": "u_a417f8a3b6",
+     "text": "bamboo"
+    },
+    {
+     "id": "m0207",
+     "ts_ms": 1788074663690,
+     "author": "u_4e4838e70f",
+     "text": "Basketball"
+    },
+    {
+     "id": "m0208",
+     "ts_ms": 1788074669489,
+     "author": "u_e6fdb1ac23",
+     "text": "landslides"
+    },
+    {
+     "id": "m0209",
+     "ts_ms": 1788074669719,
+     "author": "u_c3fdbca373",
+     "text": "la peace"
+    },
+    {
+     "id": "m0210",
+     "ts_ms": 1788074669735,
+     "author": "u_4f66fd7dad",
+     "text": "@wetnutsock12 is this Ragebait?"
+    },
+    {
+     "id": "m0211",
+     "ts_ms": 1788074669839,
+     "author": "u_a417f8a3b6",
+     "text": "lamentablemente"
+    },
+    {
+     "id": "m0212",
+     "ts_ms": 1788074670553,
+     "author": "u_5db9771a3f",
+     "text": "landscape"
+    },
+    {
+     "id": "m0213",
+     "ts_ms": 1788074670582,
+     "author": "u_34c97c79f1",
+     "text": "@wetnutsock12 you’re here rn"
+    },
+    {
+     "id": "m0214",
+     "ts_ms": 1788074670600,
+     "author": "u_94da6f9321",
+     "text": "lampost"
+    },
+    {
+     "id": "m0215",
+     "ts_ms": 1788074670700,
+     "author": "u_b07a66a461",
+     "text": "languages"
+    },
+    {
+     "id": "m0216",
+     "ts_ms": 1788074670799,
+     "author": "u_f5e31c5f2c",
+     "text": "lamborgini"
+    },
+    {
+     "id": "m0217",
+     "ts_ms": 1788074670900,
+     "author": "u_1c462034f9",
+     "text": "lactose"
+    },
+    {
+     "id": "m0218",
+     "ts_ms": 1788074673424,
+     "author": "u_e6fdb1ac23",
+     "text": "landslide"
+    },
+    {
+     "id": "m0219",
+     "ts_ms": 1788074673462,
+     "author": "u_cd12721466",
+     "text": "la peace"
+    },
+    {
+     "id": "m0220",
+     "ts_ms": 1788074673684,
+     "author": "u_1361b98f4b",
+     "text": "yo yo yo"
+    },
+    {
+     "id": "m0221",
+     "ts_ms": 1788074673892,
+     "author": "u_ea7b8e8129",
+     "text": "landcrueser"
+    },
+    {
+     "id": "m0222",
+     "ts_ms": 1788074674359,
+     "author": "u_b07a66a461",
+     "text": "language"
+    },
+    {
+     "id": "m0223",
+     "ts_ms": 1788074675017,
+     "author": "u_5526e1756c",
+     "text": "lampost"
+    },
+    {
+     "id": "m0224",
+     "ts_ms": 1788074675400,
+     "author": "u_b40c71de7b",
+     "text": "!watchtime"
+    },
+    {
+     "id": "m0225",
+     "ts_ms": 1788074675611,
+     "author": "u_f8432c0045",
+     "text": "@stabelmayella stabelmayella has spent  20 hours 30 mins watching stableronaldo"
+    },
+    {
+     "id": "m0226",
+     "ts_ms": 1788074675616,
+     "author": "u_eac030eec1",
+     "text": "Ianaamakks"
+    },
+    {
+     "id": "m0227",
+     "ts_ms": 1788074675984,
+     "author": "u_94da6f9321",
+     "text": "lam"
+    },
+    {
+     "id": "m0228",
+     "ts_ms": 1788074676357,
+     "author": "u_4077c33917",
+     "text": "lacrosse"
+    },
+    {
+     "id": "m0229",
+     "ts_ms": 1788074676742,
+     "author": "u_64cc1dd9c6",
+     "text": "damn los is huge"
+    },
+    {
+     "id": "m0230",
+     "ts_ms": 1788074678818,
+     "author": "u_1251f56c48",
+     "text": "Landslide"
+    },
+    {
+     "id": "m0231",
+     "ts_ms": 1788074679394,
+     "author": "u_d40bb5e56f",
+     "text": "ouu shi"
+    },
+    {
+     "id": "m0232",
+     "ts_ms": 1788074679620,
+     "author": "u_5526e1756c",
+     "text": "lanterns"
+    },
+    {
+     "id": "m0233",
+     "ts_ms": 1788074680424,
+     "author": "u_e6fdb1ac23",
+     "text": "laboratory"
+    },
+    {
+     "id": "m0234",
+     "ts_ms": 1788074681122,
+     "author": "u_d662ef5dc2",
+     "text": "w"
+    },
+    {
+     "id": "m0235",
+     "ts_ms": 1788074682080,
+     "author": "u_1c462034f9",
+     "text": "landscape"
+    },
+    {
+     "id": "m0236",
+     "ts_ms": 1788074682541,
+     "author": "u_94da6f9321",
+     "text": "landscape"
+    },
+    {
+     "id": "m0237",
+     "ts_ms": 1788074683017,
+     "author": "u_c73b90c369",
+     "text": "lavatate"
+    },
+    {
+     "id": "m0238",
+     "ts_ms": 1788074683313,
+     "author": "u_d662ef5dc2",
+     "text": "wew"
+    },
+    {
+     "id": "m0239",
+     "ts_ms": 1788074683488,
+     "author": "u_aafd12fd64",
+     "text": "@wetnutsock12 ur here too stabeDonoWall"
+    },
+    {
+     "id": "m0240",
+     "ts_ms": 1788074683533,
+     "author": "u_4e4838e70f",
+     "text": "Lazylagoon"
+    },
+    {
+     "id": "m0241",
+     "ts_ms": 1788074684212,
+     "author": "u_f5e31c5f2c",
+     "text": "labrotoires"
+    },
+    {
+     "id": "m0242",
+     "ts_ms": 1788074684691,
+     "author": "u_dd34997780",
+     "text": "lamastpoic"
+    },
+    {
+     "id": "m0243",
+     "ts_ms": 1788074685087,
+     "author": "u_d662ef5dc2",
+     "text": "wwwww"
+    },
+    {
+     "id": "m0244",
+     "ts_ms": 1788074687008,
+     "author": "u_d662ef5dc2",
+     "text": "wwwwwww"
+    },
+    {
+     "id": "m0245",
+     "ts_ms": 1788074687867,
+     "author": "u_5db9771a3f",
+     "text": "labratory"
+    },
+    {
+     "id": "m0246",
+     "ts_ms": 1788074689561,
+     "author": "u_d662ef5dc2",
+     "text": "wwwww"
+    },
+    {
+     "id": "m0247",
+     "ts_ms": 1788074689999,
+     "author": "u_4f66fd7dad",
+     "text": "@stabelmayella agahi"
+    },
+    {
+     "id": "m0248",
+     "ts_ms": 1788074692077,
+     "author": "u_d662ef5dc2",
+     "text": "w"
+    },
+    {
+     "id": "m0249",
+     "ts_ms": 1788074693585,
+     "author": "u_34c97c79f1",
+     "text": "@wetnutsock12 are you retarded"
+    },
+    {
+     "id": "m0250",
+     "ts_ms": 1788074693777,
+     "author": "u_d662ef5dc2",
+     "text": "wwww"
+    },
+    {
+     "id": "m0251",
+     "ts_ms": 1788074694859,
+     "author": "u_d662ef5dc2",
+     "text": "ww"
+    },
+    {
+     "id": "m0252",
+     "ts_ms": 1788074695195,
+     "author": "u_94da6f9321",
+     "text": "amamamamamama"
+    },
+    {
+     "id": "m0253",
+     "ts_ms": 1788074695413,
+     "author": "u_b07a66a461",
+     "text": "american"
+    },
+    {
+     "id": "m0254",
+     "ts_ms": 1788074695577,
+     "author": "u_a63e7c17fe",
+     "text": "amazingly"
+    },
+    {
+     "id": "m0255",
+     "ts_ms": 1788074695956,
+     "author": "u_d662ef5dc2",
+     "text": "www"
+    },
+    {
+     "id": "m0256",
+     "ts_ms": 1788074696181,
+     "author": "u_1c462034f9",
+     "text": "amazing"
+    },
+    {
+     "id": "m0257",
+     "ts_ms": 1788074696333,
+     "author": "u_5526e1756c",
+     "text": "amazing"
+    },
+    {
+     "id": "m0258",
+     "ts_ms": 1788074696625,
+     "author": "u_c73b90c369",
+     "text": "amument"
+    },
+    {
+     "id": "m0259",
+     "ts_ms": 1788074697012,
+     "author": "u_3f2cfa92a9",
+     "text": "amazing"
+    },
+    {
+     "id": "m0260",
+     "ts_ms": 1788074697049,
+     "author": "u_ea7b8e8129",
+     "text": "ambititon'"
+    },
+    {
+     "id": "m0261",
+     "ts_ms": 1788074697333,
+     "author": "u_f5e31c5f2c",
+     "text": "amusment"
+    },
+    {
+     "id": "m0262",
+     "ts_ms": 1788074697728,
+     "author": "u_d662ef5dc2",
+     "text": "wwwww"
+    },
+    {
+     "id": "m0263",
+     "ts_ms": 1788074698280,
+     "author": "u_94da6f9321",
+     "text": "amamamamamamaa'"
+    },
+    {
+     "id": "m0264",
+     "ts_ms": 1788074698281,
+     "author": "u_eac030eec1",
+     "text": "Amazing"
+    },
+    {
+     "id": "m0265",
+     "ts_ms": 1788074698311,
+     "author": "u_09a0bfda5a",
+     "text": "ambulance"
+    },
+    {
+     "id": "m0266",
+     "ts_ms": 1788074698415,
+     "author": "u_38aadb9e62",
+     "text": "@wetnutsock12 u the mf in here watchin them sleep goofy"
+    },
+    {
+     "id": "m0267",
+     "ts_ms": 1788074698766,
+     "author": "u_f5e31c5f2c",
+     "text": "amusement"
+    },
+    {
+     "id": "m0268",
+     "ts_ms": 1788074699231,
+     "author": "u_e6fdb1ac23",
+     "text": "amazing"
+    },
+    {
+     "id": "m0269",
+     "ts_ms": 1788074699362,
+     "author": "u_dd34997780",
+     "text": "ambiguous"
+    },
+    {
+     "id": "m0271",
+     "ts_ms": 1788074699564,
+     "author": "u_f94c35ef01",
+     "text": "@scottwillett4 i just came in here to say that"
+    },
+    {
+     "id": "m0270",
+     "ts_ms": 1788074699573,
+     "author": "u_d662ef5dc2",
+     "text": "wwwwww"
+    },
+    {
+     "id": "m0272",
+     "ts_ms": 1788074700114,
+     "author": "u_1c462034f9",
+     "text": "amazingly"
+    },
+    {
+     "id": "m0273",
+     "ts_ms": 1788074700769,
+     "author": "u_ea7b8e8129",
+     "text": "ambitoin"
+    },
+    {
+     "id": "m0274",
+     "ts_ms": 1788074701220,
+     "author": "u_df7b0c22c8",
+     "text": "ambulance"
+    },
+    {
+     "id": "m0275",
+     "ts_ms": 1788074702123,
+     "author": "u_d662ef5dc2",
+     "text": "wwww"
+    },
+    {
+     "id": "m0276",
+     "ts_ms": 1788074702324,
+     "author": "u_5526e1756c",
+     "text": "amusement"
+    },
+    {
+     "id": "m0277",
+     "ts_ms": 1788074703894,
+     "author": "u_d40bb5e56f",
+     "text": "amphipoudih"
+    },
+    {
+     "id": "m0278",
+     "ts_ms": 1788074704040,
+     "author": "u_d662ef5dc2",
+     "text": "wwwww"
+    },
+    {
+     "id": "m0279",
+     "ts_ms": 1788074704115,
+     "author": "u_28f3f3662f",
+     "text": "amendment"
+    },
+    {
+     "id": "m0280",
+     "ts_ms": 1788074704777,
+     "author": "u_c3fdbca373",
+     "text": "amusement"
+    },
+    {
+     "id": "m0281",
+     "ts_ms": 1788074705136,
+     "author": "u_e6fdb1ac23",
+     "text": "America"
+    },
+    {
+     "id": "m0282",
+     "ts_ms": 1788074707222,
+     "author": "u_a63e7c17fe",
+     "text": "amentities"
+    },
+    {
+     "id": "m0283",
+     "ts_ms": 1788074707838,
+     "author": "u_1251f56c48",
+     "text": "Amusement"
+    },
+    {
+     "id": "m0284",
+     "ts_ms": 1788074708722,
+     "author": "u_c73b90c369",
+     "text": "armament"
+    },
+    {
+     "id": "m0285",
+     "ts_ms": 1788074710592,
+     "author": "u_34c97c79f1",
+     "text": "@wetnutsock12 yeah you’re retarded"
+    },
+    {
+     "id": "m0286",
+     "ts_ms": 1788074710711,
+     "author": "u_1c462034f9",
+     "text": "American"
+    },
+    {
+     "id": "m0287",
+     "ts_ms": 1788074710787,
+     "author": "u_0c7b35db7d",
+     "text": "Americans"
+    },
+    {
+     "id": "m0288",
+     "ts_ms": 1788074711111,
+     "author": "u_e6fdb1ac23",
+     "text": "amendment"
+    },
+    {
+     "id": "m0289",
+     "ts_ms": 1788074712071,
+     "author": "u_5526e1756c",
+     "text": "americna"
+    },
+    {
+     "id": "m0290",
+     "ts_ms": 1788074713172,
+     "author": "u_ea7b8e8129",
+     "text": "amemetrn"
+    },
+    {
+     "id": "m0291",
+     "ts_ms": 1788074713465,
+     "author": "u_cd12721466",
+     "text": "amitturure"
+    },
+    {
+     "id": "m0292",
+     "ts_ms": 1788074714716,
+     "author": "u_09a0bfda5a",
+     "text": "amenities"
+    },
+    {
+     "id": "m0293",
+     "ts_ms": 1788074715158,
+     "author": "u_5526e1756c",
+     "text": "america"
+    },
+    {
+     "id": "m0294",
+     "ts_ms": 1788074715337,
+     "author": "u_d40bb5e56f",
+     "text": "amazingdih"
+    },
+    {
+     "id": "m0295",
+     "ts_ms": 1788074715504,
+     "author": "u_eac030eec1",
+     "text": "America"
+    },
+    {
+     "id": "m0296",
+     "ts_ms": 1788074717278,
+     "author": "u_f94c35ef01",
+     "text": "@ifillc0ffinzz I just came in here to make fun of u guys"
+    },
+    {
+     "id": "m0297",
+     "ts_ms": 1788074717627,
+     "author": "u_dd34997780",
+     "text": "amendment"
+    },
+    {
+     "id": "m0298",
+     "ts_ms": 1788074718414,
+     "author": "u_5526e1756c",
+     "text": "american"
+    },
+    {
+     "id": "m0299",
+     "ts_ms": 1788074718761,
+     "author": "u_f5e31c5f2c",
+     "text": "american"
+    },
+    {
+     "id": "m0300",
+     "ts_ms": 1788074719585,
+     "author": "u_cd12721466",
+     "text": "ameiture"
+    },
+    {
+     "id": "m0301",
+     "ts_ms": 1788074720609,
+     "author": "u_f5e31c5f2c",
+     "text": "americas"
+    },
+    {
+     "id": "m0302",
+     "ts_ms": 1788074721218,
+     "author": "u_a63e7c17fe",
+     "text": "amenities"
+    },
+    {
+     "id": "m0303",
+     "ts_ms": 1788074721924,
+     "author": "u_1c462034f9",
+     "text": "amethyst"
+    },
+    {
+     "id": "m0304",
+     "ts_ms": 1788074721932,
+     "author": "u_c73b90c369",
+     "text": "amendment"
+    },
+    {
+     "id": "m0305",
+     "ts_ms": 1788074723654,
+     "author": "u_4e4838e70f",
+     "text": "James lango"
+    },
+    {
+     "id": "m0306",
+     "ts_ms": 1788074723987,
+     "author": "u_e6fdb1ac23",
+     "text": "anesthetist"
+    },
+    {
+     "id": "m0307",
+     "ts_ms": 1788074725486,
+     "author": "u_77e8469a3d",
+     "text": "they faking"
+    },
+    {
+     "id": "m0308",
+     "ts_ms": 1788074725823,
+     "author": "u_c3fdbca373",
+     "text": "amethyist"
+    },
+    {
+     "id": "m0309",
+     "ts_ms": 1788074728402,
+     "author": "u_b07a66a461",
+     "text": "amethysts"
+    },
+    {
+     "id": "m0310",
+     "ts_ms": 1788074732746,
+     "author": "u_1c462034f9",
+     "text": "Amsterdam"
+    },
+    {
+     "id": "m0311",
+     "ts_ms": 1788074733497,
+     "author": "u_b07a66a461",
+     "text": "amethyst"
+    },
+    {
+     "id": "m0312",
+     "ts_ms": 1788074733720,
+     "author": "u_cd12721466",
+     "text": "ametiture"
+    },
+    {
+     "id": "m0313",
+     "ts_ms": 1788074734222,
+     "author": "u_a44392a5ad",
+     "text": "Ron"
+    },
+    {
+     "id": "m0314",
+     "ts_ms": 1788074737109,
+     "author": "u_c3fdbca373",
+     "text": "amethode"
+    },
+    {
+     "id": "m0315",
+     "ts_ms": 1788074737269,
+     "author": "u_eac030eec1",
+     "text": "Amethyst"
+    },
+    {
+     "id": "m0316",
+     "ts_ms": 1788074737706,
+     "author": "u_5e1c7a3810",
+     "text": "A M E T H Y S T"
+    },
+    {
+     "id": "m0317",
+     "ts_ms": 1788074739028,
+     "author": "u_4077c33917",
+     "text": "ametropias"
+    },
+    {
+     "id": "m0318",
+     "ts_ms": 1788074740018,
+     "author": "u_6d19f6d27a",
+     "text": "stabeCAUGHT stabeCAUGHT stabeCAUGHT stabeCAUGHT stabeDance stabeDance stabeDance stabeDance stabeTwerkk stabeDonoWall stabeDonoWall stabeDonoWall"
+    },
+    {
+     "id": "m0319",
+     "ts_ms": 1788074740312,
+     "author": "u_28f3f3662f",
+     "text": "amethyst’s"
+    },
+    {
+     "id": "m0320",
+     "ts_ms": 1788074740388,
+     "author": "u_f5e31c5f2c",
+     "text": "amethasine"
+    },
+    {
+     "id": "m0321",
+     "ts_ms": 1788074741279,
+     "author": "u_6b235506c8",
+     "text": "amethathine"
+    },
+    {
+     "id": "m0322",
+     "ts_ms": 1788074741455,
+     "author": "u_1251f56c48",
+     "text": "Amethysts"
+    },
+    {
+     "id": "m0323",
+     "ts_ms": 1788074741493,
+     "author": "u_ffdb486b2b",
+     "text": "amatterdaddy?"
+    },
+    {
+     "id": "m0324",
+     "ts_ms": 1788074742645,
+     "author": "u_dd34997780",
+     "text": "amethyst"
+    },
+    {
+     "id": "m0325",
+     "ts_ms": 1788074743019,
+     "author": "u_3557653af8",
+     "text": "amething"
+    },
+    {
+     "id": "m0326",
+     "ts_ms": 1788074743136,
+     "author": "u_4077c33917",
+     "text": "amethyst"
+    },
+    {
+     "id": "m0327",
+     "ts_ms": 1788074745220,
+     "author": "u_0c7b35db7d",
+     "text": "amethystine"
+    },
+    {
+     "id": "m0328",
+     "ts_ms": 1788074746549,
+     "author": "u_f5e31c5f2c",
+     "text": "amethesine"
+    },
+    {
+     "id": "m0329",
+     "ts_ms": 1788074746849,
+     "author": "u_5e1c7a3810",
+     "text": "amethyst"
+    },
+    {
+     "id": "m0330",
+     "ts_ms": 1788074747395,
+     "author": "u_c73b90c369",
+     "text": "amethysts"
+    },
+    {
+     "id": "m0331",
+     "ts_ms": 1788074749477,
+     "author": "u_c3fdbca373",
+     "text": "amethyst"
+    },
+    {
+     "id": "m0332",
+     "ts_ms": 1788074752271,
+     "author": "u_c3fdbca373",
+     "text": "amethysttine"
+    },
+    {
+     "id": "m0333",
+     "ts_ms": 1788074753282,
+     "author": "u_cd12721466",
+     "text": "amethstine"
+    },
+    {
+     "id": "m0334",
+     "ts_ms": 1788074755564,
+     "author": "u_f5e31c5f2c",
+     "text": "drunkin"
+    },
+    {
+     "id": "m0335",
+     "ts_ms": 1788074756594,
+     "author": "u_c73b90c369",
+     "text": "dragom"
+    },
+    {
+     "id": "m0336",
+     "ts_ms": 1788074756728,
+     "author": "u_b07a66a461",
+     "text": "drinking"
+    },
+    {
+     "id": "m0337",
+     "ts_ms": 1788074757538,
+     "author": "u_1c462034f9",
+     "text": "drawing"
+    },
+    {
+     "id": "m0338",
+     "ts_ms": 1788074757663,
+     "author": "u_4077c33917",
+     "text": "dresser"
+    },
+    {
+     "id": "m0339",
+     "ts_ms": 1788074758174,
+     "author": "u_ce4c7e5498",
+     "text": "drwozy"
+    },
+    {
+     "id": "m0340",
+     "ts_ms": 1788074758990,
+     "author": "u_cd12721466",
+     "text": "dragon"
+    },
+    {
+     "id": "m0341",
+     "ts_ms": 1788074759145,
+     "author": "u_f5e31c5f2c",
+     "text": "driven"
+    },
+    {
+     "id": "m0342",
+     "ts_ms": 1788074759438,
+     "author": "u_e6fdb1ac23",
+     "text": "dramatically"
+    },
+    {
+     "id": "m0343",
+     "ts_ms": 1788074759785,
+     "author": "u_a63e7c17fe",
+     "text": "dragging"
+    },
+    {
+     "id": "m0344",
+     "ts_ms": 1788074760233,
+     "author": "u_0c7b35db7d",
+     "text": "dr pepper"
+    },
+    {
+     "id": "m0345",
+     "ts_ms": 1788074760255,
+     "author": "u_4077c33917",
+     "text": "dressage"
+    },
+    {
+     "id": "m0346",
+     "ts_ms": 1788074760752,
+     "author": "u_ffdb486b2b",
+     "text": "drooling"
+    },
+    {
+     "id": "m0347",
+     "ts_ms": 1788074760846,
+     "author": "u_f5e31c5f2c",
+     "text": "drivers"
+    },
+    {
+     "id": "m0348",
+     "ts_ms": 1788074761706,
+     "author": "u_ea7b8e8129",
+     "text": "dragon"
+    },
+    {
+     "id": "m0349",
+     "ts_ms": 1788074761745,
+     "author": "u_28f3f3662f",
+     "text": "driven"
+    },
+    {
+     "id": "m0350",
+     "ts_ms": 1788074762705,
+     "author": "u_c3fdbca373",
+     "text": "drinking"
+    },
+    {
+     "id": "m0351",
+     "ts_ms": 1788074763229,
+     "author": "u_2738bb94e2",
+     "text": "!watchtime"
+    },
+    {
+     "id": "m0352",
+     "ts_ms": 1788074763589,
+     "author": "u_8584d767b3",
+     "text": "DREAMER"
+    },
+    {
+     "id": "m0353",
+     "ts_ms": 1788074763839,
+     "author": "u_1251f56c48",
+     "text": "Dramatic"
+    },
+    {
+     "id": "m0354",
+     "ts_ms": 1788074764295,
+     "author": "u_e6fdb1ac23",
+     "text": "definitely"
+    },
+    {
+     "id": "m0355",
+     "ts_ms": 1788074764335,
+     "author": "u_5526e1756c",
+     "text": "drawer"
+    },
+    {
+     "id": "m0356",
+     "ts_ms": 1788074765056,
+     "author": "u_4077c33917",
+     "text": "dragondeeznuts"
+    },
+    {
+     "id": "m0357",
+     "ts_ms": 1788074765442,
+     "author": "u_c3fdbca373",
+     "text": "driving"
+    },
+    {
+     "id": "m0358",
+     "ts_ms": 1788074765534,
+     "author": "u_8584d767b3",
+     "text": "DREAMING"
+    },
+    {
+     "id": "m0359",
+     "ts_ms": 1788074766135,
+     "author": "u_ea7b8e8129",
+     "text": "driven"
+    },
+    {
+     "id": "m0360",
+     "ts_ms": 1788074766553,
+     "author": "u_2738bb94e2",
+     "text": "omgBruh"
+    },
+    {
+     "id": "m0361",
+     "ts_ms": 1788074767337,
+     "author": "u_c73b90c369",
+     "text": "drunking"
+    },
+    {
+     "id": "m0362",
+     "ts_ms": 1788074767427,
+     "author": "u_ee921c1219",
+     "text": "AAAWWWWWWW"
+    },
+    {
+     "id": "m0363",
+     "ts_ms": 1788074767986,
+     "author": "u_ce4c7e5498",
+     "text": "dreamer"
+    },
+    {
+     "id": "m0364",
+     "ts_ms": 1788074768028,
+     "author": "u_1c462034f9",
+     "text": "driving"
+    },
+    {
+     "id": "m0365",
+     "ts_ms": 1788074769273,
+     "author": "u_5526e1756c",
+     "text": "drawing"
+    },
+    {
+     "id": "m0366",
+     "ts_ms": 1788074770538,
+     "author": "u_cd12721466",
+     "text": "dragging"
+    },
+    {
+     "id": "m0367",
+     "ts_ms": 1788074771004,
+     "author": "u_ffdb486b2b",
+     "text": "draconic"
+    },
+    {
+     "id": "m0368",
+     "ts_ms": 1788074771093,
+     "author": "u_a63e7c17fe",
+     "text": "dramatic"
+    },
+    {
+     "id": "m0369",
+     "ts_ms": 1788074771095,
+     "author": "u_b07a66a461",
+     "text": "dragons"
+    },
+    {
+     "id": "m0370",
+     "ts_ms": 1788074771192,
+     "author": "u_c3fdbca373",
+     "text": "dragon"
+    },
+    {
+     "id": "m0371",
+     "ts_ms": 1788074771218,
+     "author": "u_77e8469a3d",
+     "text": "drinking"
+    },
+    {
+     "id": "m0372",
+     "ts_ms": 1788074772199,
+     "author": "u_c73b90c369",
+     "text": "dragons"
+    },
+    {
+     "id": "m0373",
+     "ts_ms": 1788074772454,
+     "author": "u_ce4c7e5498",
+     "text": "dramatic"
+    },
+    {
+     "id": "m0374",
+     "ts_ms": 1788074772695,
+     "author": "u_8e7f9adc75",
+     "text": "hi"
+    },
+    {
+     "id": "m0375",
+     "ts_ms": 1788074772915,
+     "author": "u_aafd12fd64",
+     "text": "dramatic"
+    },
+    {
+     "id": "m0376",
+     "ts_ms": 1788074773847,
+     "author": "u_dd34997780",
+     "text": "drawing"
+    },
+    {
+     "id": "m0377",
+     "ts_ms": 1788074774008,
+     "author": "u_c3fdbca373",
+     "text": "dragons"
+    },
+    {
+     "id": "m0378",
+     "ts_ms": 1788074774481,
+     "author": "u_8584d767b3",
+     "text": "dragging"
+    },
+    {
+     "id": "m0379",
+     "ts_ms": 1788074774560,
+     "author": "u_d874caadc9",
+     "text": "dramatic"
+    },
+    {
+     "id": "m0380",
+     "ts_ms": 1788074774861,
+     "author": "u_4077c33917",
+     "text": "dracula"
+    },
+    {
+     "id": "m0381",
+     "ts_ms": 1788074775074,
+     "author": "u_a44392a5ad",
+     "text": "rob"
+    },
+    {
+     "id": "m0382",
+     "ts_ms": 1788074776801,
+     "author": "u_8584d767b3",
+     "text": "drafting"
+    },
+    {
+     "id": "m0383",
+     "ts_ms": 1788074777030,
+     "author": "u_1251f56c48",
+     "text": "Dragonfly"
+    },
+    {
+     "id": "m0384",
+     "ts_ms": 1788074777050,
+     "author": "u_c3fdbca373",
+     "text": "drawings"
+    },
+    {
+     "id": "m0385",
+     "ts_ms": 1788074777147,
+     "author": "u_f5e31c5f2c",
+     "text": "dragogns"
+    },
+    {
+     "id": "m0386",
+     "ts_ms": 1788074779423,
+     "author": "u_4077c33917",
+     "text": "draining"
+    },
+    {
+     "id": "m0387",
+     "ts_ms": 1788074779878,
+     "author": "u_f5e31c5f2c",
+     "text": "drastics"
+    },
+    {
+     "id": "m0388",
+     "ts_ms": 1788074780024,
+     "author": "u_e6fdb1ac23",
+     "text": "dragons"
+    },
+    {
+     "id": "m0389",
+     "ts_ms": 1788074782391,
+     "author": "u_c3fdbca373",
+     "text": "drafting"
+    },
+    {
+     "id": "m0390",
+     "ts_ms": 1788074783218,
+     "author": "u_dd34997780",
+     "text": "dragons"
+    },
+    {
+     "id": "m0391",
+     "ts_ms": 1788074783843,
+     "author": "u_495765af90",
+     "text": "dragalright"
+    },
+    {
+     "id": "m0392",
+     "ts_ms": 1788074784474,
+     "author": "u_a63e7c17fe",
+     "text": "draining"
+    },
+    {
+     "id": "m0393",
+     "ts_ms": 1788074784606,
+     "author": "u_f5e31c5f2c",
+     "text": "dractopm"
+    },
+    {
+     "id": "m0394",
+     "ts_ms": 1788074784608,
+     "author": "u_77e8469a3d",
+     "text": "drawers"
+    },
+    {
+     "id": "m0395",
+     "ts_ms": 1788074784733,
+     "author": "u_5526e1756c",
+     "text": "drainage"
+    },
+    {
+     "id": "m0396",
+     "ts_ms": 1788074785426,
+     "author": "u_09a0bfda5a",
+     "text": "draconian"
+    },
+    {
+     "id": "m0397",
+     "ts_ms": 1788074785540,
+     "author": "u_28f3f3662f",
+     "text": "Dracula"
+    },
+    {
+     "id": "m0398",
+     "ts_ms": 1788074785628,
+     "author": "u_c73b90c369",
+     "text": "dragonly"
+    },
+    {
+     "id": "m0399",
+     "ts_ms": 1788074786346,
+     "author": "u_1c462034f9",
+     "text": "draconian"
+    },
+    {
+     "id": "m0400",
+     "ts_ms": 1788074786391,
+     "author": "u_e6fdb1ac23",
+     "text": "draconian"
+    },
+    {
+     "id": "m0401",
+     "ts_ms": 1788074786480,
+     "author": "u_f5e31c5f2c",
+     "text": "draction"
+    },
+    {
+     "id": "m0402",
+     "ts_ms": 1788074787428,
+     "author": "u_ea7b8e8129",
+     "text": "dracula"
+    },
+    {
+     "id": "m0403",
+     "ts_ms": 1788074788029,
+     "author": "u_a63e7c17fe",
+     "text": "dracula"
+    },
+    {
+     "id": "m0404",
+     "ts_ms": 1788074788155,
+     "author": "u_4077c33917",
+     "text": "draccula"
+    },
+    {
+     "id": "m0405",
+     "ts_ms": 1788074788405,
+     "author": "u_f5e31c5f2c",
+     "text": "dracson"
+    },
+    {
+     "id": "m0406",
+     "ts_ms": 1788074788553,
+     "author": "u_5526e1756c",
+     "text": "dracula"
+    },
+    {
+     "id": "m0408",
+     "ts_ms": 1788074789498,
+     "author": "u_0c7b35db7d",
+     "text": "draculas"
+    },
+    {
+     "id": "m0407",
+     "ts_ms": 1788074789508,
+     "author": "u_c3fdbca373",
+     "text": "dracting"
+    },
+    {
+     "id": "m0409",
+     "ts_ms": 1788074789831,
+     "author": "u_cd12721466",
+     "text": "dracular"
+    },
+    {
+     "id": "m0410",
+     "ts_ms": 1788074790320,
+     "author": "u_4077c33917",
+     "text": "draculla"
+    },
+    {
+     "id": "m0412",
+     "ts_ms": 1788074791154,
+     "author": "u_c63b72f403",
+     "text": "dracults"
+    },
+    {
+     "id": "m0411",
+     "ts_ms": 1788074791182,
+     "author": "u_8584d767b3",
+     "text": "dracula"
+    },
+    {
+     "id": "m0413",
+     "ts_ms": 1788074791256,
+     "author": "u_f5e31c5f2c",
+     "text": "draconic"
+    },
+    {
+     "id": "m0414",
+     "ts_ms": 1788074791711,
+     "author": "u_dd34997780",
+     "text": "draconian"
+    },
+    {
+     "id": "m0415",
+     "ts_ms": 1788074792036,
+     "author": "u_7d8b0b78aa",
+     "text": "Join The NEW Stable Discord Community! https://discord.gg/stable"
+    },
+    {
+     "id": "m0416",
+     "ts_ms": 1788074792907,
+     "author": "u_ffdb486b2b",
+     "text": "draconian"
+    },
+    {
+     "id": "m0417",
+     "ts_ms": 1788074794586,
+     "author": "u_0c7b35db7d",
+     "text": "draconian"
+    },
+    {
+     "id": "m0418",
+     "ts_ms": 1788074795687,
+     "author": "u_971c403b40",
+     "text": "dracula"
+    },
+    {
+     "id": "m0419",
+     "ts_ms": 1788074796790,
+     "author": "u_c3fdbca373",
+     "text": "dracult"
+    },
+    {
+     "id": "m0420",
+     "ts_ms": 1788074797548,
+     "author": "u_ffdb486b2b",
+     "text": "draconia"
+    },
+    {
+     "id": "m0421",
+     "ts_ms": 1788074798364,
+     "author": "u_ce4c7e5498",
+     "text": "draconic"
+    },
+    {
+     "id": "m0422",
+     "ts_ms": 1788074798630,
+     "author": "u_f5e31c5f2c",
+     "text": "draconic ͏"
+    },
+    {
+     "id": "m0423",
+     "ts_ms": 1788074799078,
+     "author": "u_8584d767b3",
+     "text": "draculas"
+    },
+    {
+     "id": "m0424",
+     "ts_ms": 1788074799286,
+     "author": "u_8e7f9adc75",
+     "text": "why are they sleeping"
+    },
+    {
+     "id": "m0425",
+     "ts_ms": 1788074801085,
+     "author": "u_b3410df34f",
+     "text": "Draconian"
+    },
+    {
+     "id": "m0426",
+     "ts_ms": 1788074801694,
+     "author": "u_1251f56c48",
+     "text": "Draconian"
+    },
+    {
+     "id": "m0427",
+     "ts_ms": 1788074801712,
+     "author": "u_c63b72f403",
+     "text": "dracogn"
+    },
+    {
+     "id": "m0428",
+     "ts_ms": 1788074802002,
+     "author": "u_f5e31c5f2c",
+     "text": "dracolin"
+    },
+    {
+     "id": "m0429",
+     "ts_ms": 1788074802658,
+     "author": "u_8584d767b3",
+     "text": "drackers"
+    },
+    {
+     "id": "m0430",
+     "ts_ms": 1788074802722,
+     "author": "u_96d4c9eca4",
+     "text": "dragconic"
+    },
+    {
+     "id": "m0431",
+     "ts_ms": 1788074803302,
+     "author": "u_28f3f3662f",
+     "text": "draconian"
+    },
+    {
+     "id": "m0432",
+     "ts_ms": 1788074803872,
+     "author": "u_aafd12fd64",
+     "text": "draconian"
+    },
+    {
+     "id": "m0433",
+     "ts_ms": 1788074803976,
+     "author": "u_4077c33917",
+     "text": "draconian"
+    },
+    {
+     "id": "m0434",
+     "ts_ms": 1788074805632,
+     "author": "u_c3fdbca373",
+     "text": "dracoles"
+    },
+    {
+     "id": "m0435",
+     "ts_ms": 1788074805932,
+     "author": "u_971c403b40",
+     "text": "deacon"
+    },
+    {
+     "id": "m0436",
+     "ts_ms": 1788074807457,
+     "author": "u_c63b72f403",
+     "text": "dracole"
+    },
+    {
+     "id": "m0437",
+     "ts_ms": 1788074808019,
+     "author": "u_f5e31c5f2c",
+     "text": "draconic"
+    },
+    {
+     "id": "m0438",
+     "ts_ms": 1788074808581,
+     "author": "u_09a0bfda5a",
+     "text": "draconia"
+    },
+    {
+     "id": "m0439",
+     "ts_ms": 1788074811270,
+     "author": "u_cd12721466",
+     "text": "draculor"
+    },
+    {
+     "id": "m0440",
+     "ts_ms": 1788074812050,
+     "author": "u_d874caadc9",
+     "text": "dracoon"
+    },
+    {
+     "id": "m0441",
+     "ts_ms": 1788074813127,
+     "author": "u_ffdb486b2b",
+     "text": "draconer"
+    },
+    {
+     "id": "m0442",
+     "ts_ms": 1788074816135,
+     "author": "u_f5e31c5f2c",
+     "text": "dracorin"
+    },
+    {
+     "id": "m0443",
+     "ts_ms": 1788074816345,
+     "author": "u_1251f56c48",
+     "text": "Draconics"
+    },
+    {
+     "id": "m0444",
+     "ts_ms": 1788074816620,
+     "author": "u_c73b90c369",
+     "text": "dracoroy"
+    },
+    {
+     "id": "m0445",
+     "ts_ms": 1788074816627,
+     "author": "u_c63b72f403",
+     "text": "darcoric"
+    },
+    {
+     "id": "m0446",
+     "ts_ms": 1788074817929,
+     "author": "u_09a0bfda5a",
+     "text": "dracoria"
+    },
+    {
+     "id": "m0447",
+     "ts_ms": 1788074820402,
+     "author": "u_f5e31c5f2c",
+     "text": "dracoris"
+    },
+    {
+     "id": "m0448",
+     "ts_ms": 1788074822964,
+     "author": "u_02218aaf3e",
+     "text": "dracorde"
+    },
+    {
+     "id": "m0449",
+     "ts_ms": 1788074823525,
+     "author": "u_f5e31c5f2c",
+     "text": "dracoros"
+    },
+    {
+     "id": "m0450",
+     "ts_ms": 1788074824189,
+     "author": "u_291156aee0",
+     "text": "@outlaw"
+    },
+    {
+     "id": "m0451",
+     "ts_ms": 1788074824314,
+     "author": "u_0c7b35db7d",
+     "text": "dracorer"
+    },
+    {
+     "id": "m0452",
+     "ts_ms": 1788074825586,
+     "author": "u_b07a66a461",
+     "text": "dracorian"
+    },
+    {
+     "id": "m0453",
+     "ts_ms": 1788074826355,
+     "author": "u_495765af90",
+     "text": "dracoril"
+    },
+    {
+     "id": "m0454",
+     "ts_ms": 1788074827259,
+     "author": "u_ffdb486b2b",
+     "text": "dracorol"
+    },
+    {
+     "id": "m0455",
+     "ts_ms": 1788074827322,
+     "author": "u_f5e31c5f2c",
+     "text": "dracorin"
+    },
+    {
+     "id": "m0456",
+     "ts_ms": 1788074828390,
+     "author": "u_c63b72f403",
+     "text": "dracorle"
+    },
+    {
+     "id": "m0457",
+     "ts_ms": 1788074828471,
+     "author": "u_971c403b40",
+     "text": "dracorde"
+    },
+    {
+     "id": "m0458",
+     "ts_ms": 1788074830851,
+     "author": "u_1251f56c48",
+     "text": "Fracorer"
+    },
+    {
+     "id": "m0459",
+     "ts_ms": 1788074831292,
+     "author": "u_f94c35ef01",
+     "text": "NICE LIFE CHAT 9K PEOPLE WATCHING GROWN MEN SLEEP"
+    },
+    {
+     "id": "m0460",
+     "ts_ms": 1788074831778,
+     "author": "u_c73b90c369",
+     "text": "dracorry"
+    },
+    {
+     "id": "m0461",
+     "ts_ms": 1788074831841,
+     "author": "u_d874caadc9",
+     "text": "dracores\\"
+    },
+    {
+     "id": "m0462",
+     "ts_ms": 1788074831859,
+     "author": "u_4077c33917",
+     "text": "dracored"
+    },
+    {
+     "id": "m0463",
+     "ts_ms": 1788074832075,
+     "author": "u_e6fdb1ac23",
+     "text": "devoted"
+    },
+    {
+     "id": "m0464",
+     "ts_ms": 1788074832702,
+     "author": "u_110c637867",
+     "text": "dracorex"
+    },
+    {
+     "id": "m0465",
+     "ts_ms": 1788074832711,
+     "author": "u_28f3f3662f",
+     "text": "dracoret"
+    },
+    {
+     "id": "m0466",
+     "ts_ms": 1788074832906,
+     "author": "u_a63e7c17fe",
+     "text": "dracorel"
+    },
+    {
+     "id": "m0467",
+     "ts_ms": 1788074833034,
+     "author": "u_bce08dac4e",
+     "text": "dracorea"
+    },
+    {
+     "id": "m0468",
+     "ts_ms": 1788074833825,
+     "author": "u_02218aaf3e",
+     "text": "dracores"
+    },
+    {
+     "id": "m0469",
+     "ts_ms": 1788074834234,
+     "author": "u_0c7b35db7d",
+     "text": "dracoren"
+    },
+    {
+     "id": "m0470",
+     "ts_ms": 1788074834427,
+     "author": "u_dd34997780",
+     "text": "draconian"
+    },
+    {
+     "id": "m0471",
+     "ts_ms": 1788074834454,
+     "author": "u_c63b72f403",
+     "text": "dracorel"
+    },
+    {
+     "id": "m0472",
+     "ts_ms": 1788074834733,
+     "author": "u_ffdb486b2b",
+     "text": "dracorex"
+    },
+    {
+     "id": "m0473",
+     "ts_ms": 1788074834883,
+     "author": "u_d874caadc9",
+     "text": "dracores"
+    },
+    {
+     "id": "m0474",
+     "ts_ms": 1788074835849,
+     "author": "u_495765af90",
+     "text": "dracored"
+    },
+    {
+     "id": "m0475",
+     "ts_ms": 1788074836063,
+     "author": "u_5526e1756c",
+     "text": "dracored"
+    },
+    {
+     "id": "m0476",
+     "ts_ms": 1788074836556,
+     "author": "u_c3f1523b13",
+     "text": "anaconda"
+    },
+    {
+     "id": "m0477",
+     "ts_ms": 1788074836672,
+     "author": "u_c73b90c369",
+     "text": "dracorer"
+    },
+    {
+     "id": "m0478",
+     "ts_ms": 1788074837656,
+     "author": "u_c3fdbca373",
+     "text": "dracores"
+    },
+    {
+     "id": "m0479",
+     "ts_ms": 1788074838023,
+     "author": "u_4077c33917",
+     "text": "dracores"
+    },
+    {
+     "id": "m0480",
+     "ts_ms": 1788074838379,
+     "author": "u_e6fdb1ac23",
+     "text": "wtf"
+    },
+    {
+     "id": "m0481",
+     "ts_ms": 1788074839808,
+     "author": "u_b3410df34f",
+     "text": "Dracoret"
+    },
+    {
+     "id": "m0482",
+     "ts_ms": 1788074841431,
+     "author": "u_d874caadc9",
+     "text": "wtf ios that"
+    },
+    {
+     "id": "m0483",
+     "ts_ms": 1788074844632,
+     "author": "u_e6fdb1ac23",
+     "text": "limestone"
+    },
+    {
+     "id": "m0485",
+     "ts_ms": 1788074845059,
+     "author": "u_971c403b40",
+     "text": "dumbass word"
+    },
+    {
+     "id": "m0484",
+     "ts_ms": 1788074845061,
+     "author": "u_c73b90c369",
+     "text": "lilypad"
+    },
+    {
+     "id": "m0486",
+     "ts_ms": 1788074845864,
+     "author": "u_5526e1756c",
+     "text": "library"
+    },
+    {
+     "id": "m0487",
+     "ts_ms": 1788074846029,
+     "author": "u_09a0bfda5a",
+     "text": "licorice"
+    },
+    {
+     "id": "m0488",
+     "ts_ms": 1788074846561,
+     "author": "u_28f3f3662f",
+     "text": "Lithuania"
+    },
+    {
+     "id": "m0489",
+     "ts_ms": 1788074847036,
+     "author": "u_f5e31c5f2c",
+     "text": "limosine"
+    },
+    {
+     "id": "m0490",
+     "ts_ms": 1788074847753,
+     "author": "u_a63e7c17fe",
+     "text": "literally"
+    },
+    {
+     "id": "m0491",
+     "ts_ms": 1788074849378,
+     "author": "u_c3f1523b13",
+     "text": "limestone"
+    },
+    {
+     "id": "m0492",
+     "ts_ms": 1788074849909,
+     "author": "u_1251f56c48",
+     "text": "Limitations"
+    },
+    {
+     "id": "m0493",
+     "ts_ms": 1788074850276,
+     "author": "u_5526e1756c",
+     "text": "libraries"
+    },
+    {
+     "id": "m0494",
+     "ts_ms": 1788074850561,
+     "author": "u_4077c33917",
+     "text": "lithiuania"
+    },
+    {
+     "id": "m0495",
+     "ts_ms": 1788074850957,
+     "author": "u_09a0bfda5a",
+     "text": "listening"
+    },
+    {
+     "id": "m0496",
+     "ts_ms": 1788074851426,
+     "author": "u_02218aaf3e",
+     "text": "lithium"
+    },
+    {
+     "id": "m0497",
+     "ts_ms": 1788074852884,
+     "author": "u_f5e31c5f2c",
+     "text": "limousine"
+    },
+    {
+     "id": "m0498",
+     "ts_ms": 1788074854344,
+     "author": "u_7d8b0b78aa",
+     "text": "\u0001ACTION 🔵  JOIN THE STABLE COMMUNITY https://x.com/i/communities/1863444310034702669 🔵\u0001"
+    },
+    {
+     "id": "m0499",
+     "ts_ms": 1788074854749,
+     "author": "u_e4ab2d94cd",
+     "text": "Why is los so bricked wtf"
+    }
+   ],
+   "groups": [
+    {
+     "key": "p:drac",
+     "rule": "prefix",
+     "label": "drac…",
+     "count": 76,
+     "first_ts_ms": 1788074771004,
+     "last_ts_ms": 1788074839808,
+     "event_ids": [
+      "m0367",
+      "m0380",
+      "m0393",
+      "m0396",
+      "m0397",
+      "m0399",
+      "m0400",
+      "m0401",
+      "m0402",
+      "m0403",
+      "m0404",
+      "m0405",
+      "m0406",
+      "m0408",
+      "m0407",
+      "m0409",
+      "m0410",
+      "m0412",
+      "m0411",
+      "m0413",
+      "m0414",
+      "m0416",
+      "m0417",
+      "m0418",
+      "m0419",
+      "m0420",
+      "m0421",
+      "m0423",
+      "m0425",
+      "m0426",
+      "m0427",
+      "m0428",
+      "m0429",
+      "m0431",
+      "m0432",
+      "m0433",
+      "m0434",
+      "m0436",
+      "m0437",
+      "m0438",
+      "m0439",
+      "m0440",
+      "m0441",
+      "m0442",
+      "m0443",
+      "m0444",
+      "m0446",
+      "m0447",
+      "m0448",
+      "m0449",
+      "m0451",
+      "m0452",
+      "m0453",
+      "m0454",
+      "m0455",
+      "m0456",
+      "m0457",
+      "m0460",
+      "m0461",
+      "m0462",
+      "m0464",
+      "m0465",
+      "m0466",
+      "m0467",
+      "m0468",
+      "m0469",
+      "m0470",
+      "m0471",
+      "m0472",
+      "m0473",
+      "m0474",
+      "m0475",
+      "m0477",
+      "m0478",
+      "m0479",
+      "m0481"
+     ],
+     "samples": [
+      "draconic",
+      "dracula",
+      "dractopm"
+     ]
+    },
+    {
+     "key": "p:amet",
+     "rule": "prefix",
+     "label": "amet…",
+     "count": 21,
+     "first_ts_ms": 1788074721924,
+     "last_ts_ms": 1788074753282,
+     "event_ids": [
+      "m0303",
+      "m0308",
+      "m0309",
+      "m0311",
+      "m0312",
+      "m0314",
+      "m0315",
+      "m0317",
+      "m0320",
+      "m0321",
+      "m0322",
+      "m0324",
+      "m0325",
+      "m0326",
+      "m0327",
+      "m0328",
+      "m0329",
+      "m0330",
+      "m0331",
+      "m0332",
+      "m0333"
+     ],
+     "samples": [
+      "amethyst",
+      "amethyist",
+      "amethysts"
+     ]
+    },
+    {
+     "key": "p:rang",
+     "rule": "prefix",
+     "label": "rang…",
+     "count": 20,
+     "first_ts_ms": 1788074619947,
+     "last_ts_ms": 1788074628486,
+     "event_ids": [
+      "m0069",
+      "m0074",
+      "m0076",
+      "m0077",
+      "m0078",
+      "m0079",
+      "m0080",
+      "m0081",
+      "m0082",
+      "m0083",
+      "m0084",
+      "m0085",
+      "m0086",
+      "m0087",
+      "m0088",
+      "m0089",
+      "m0090",
+      "m0091",
+      "m0092",
+      "m0093"
+     ],
+     "samples": [
+      "rangle",
+      "ranger",
+      "rangers"
+     ]
+    },
+    {
+     "key": "p:drag",
+     "rule": "prefix",
+     "label": "drag…",
+     "count": 18,
+     "first_ts_ms": 1788074756594,
+     "last_ts_ms": 1788074802722,
+     "event_ids": [
+      "m0335",
+      "m0340",
+      "m0343",
+      "m0348",
+      "m0356",
+      "m0366",
+      "m0369",
+      "m0370",
+      "m0372",
+      "m0377",
+      "m0378",
+      "m0383",
+      "m0385",
+      "m0388",
+      "m0390",
+      "m0391",
+      "m0398",
+      "m0430"
+     ],
+     "samples": [
+      "dragom",
+      "dragon",
+      "dragging"
+     ]
+    },
+    {
+     "key": "p:rand",
+     "rule": "prefix",
+     "label": "rand…",
+     "count": 11,
+     "first_ts_ms": 1788074594982,
+     "last_ts_ms": 1788074621108,
+     "event_ids": [
+      "m0005",
+      "m0006",
+      "m0033",
+      "m0038",
+      "m0047",
+      "m0049",
+      "m0055",
+      "m0058",
+      "m0060",
+      "m0066",
+      "m0072"
+     ],
+     "samples": [
+      "random",
+      "Random",
+      "randient"
+     ]
+    },
+    {
+     "key": "p:stre",
+     "rule": "prefix",
+     "label": "stre…",
+     "count": 10,
+     "first_ts_ms": 1788074630951,
+     "last_ts_ms": 1788074647633,
+     "event_ids": [
+      "m0096",
+      "m0099",
+      "m0100",
+      "m0103",
+      "m0108",
+      "m0111",
+      "m0134",
+      "m0137",
+      "m0150",
+      "m0161"
+     ],
+     "samples": [
+      "street",
+      "streets",
+      "stream"
+     ]
+    },
+    {
+     "key": "p:amer",
+     "rule": "prefix",
+     "label": "amer…",
+     "count": 10,
+     "first_ts_ms": 1788074695413,
+     "last_ts_ms": 1788074720609,
+     "event_ids": [
+      "m0253",
+      "m0281",
+      "m0286",
+      "m0287",
+      "m0289",
+      "m0293",
+      "m0295",
+      "m0298",
+      "m0299",
+      "m0301"
+     ],
+     "samples": [
+      "american",
+      "America",
+      "American"
+     ]
+    },
+    {
+     "key": "p:stom",
+     "rule": "prefix",
+     "label": "stom…",
+     "count": 9,
+     "first_ts_ms": 1788074637471,
+     "last_ts_ms": 1788074652963,
+     "event_ids": [
+      "m0117",
+      "m0145",
+      "m0160",
+      "m0166",
+      "m0171",
+      "m0174",
+      "m0175",
+      "m0176",
+      "m0178"
+     ],
+     "samples": [
+      "stomach",
+      "stomp",
+      "stomper"
+     ]
+    },
+    {
+     "key": "p:ranc",
+     "rule": "prefix",
+     "label": "ranc…",
+     "count": 8,
+     "first_ts_ms": 1788074607074,
+     "last_ts_ms": 1788074616918,
+     "event_ids": [
+      "m0037",
+      "m0042",
+      "m0046",
+      "m0048",
+      "m0051",
+      "m0054",
+      "m0061",
+      "m0063"
+     ],
+     "samples": [
+      "rancor",
+      "ranch",
+      "rancid"
+     ]
+    },
+    {
+     "key": "p:amaz",
+     "rule": "prefix",
+     "label": "amaz…",
+     "count": 8,
+     "first_ts_ms": 1788074695577,
+     "last_ts_ms": 1788074715337,
+     "event_ids": [
+      "m0254",
+      "m0256",
+      "m0257",
+      "m0259",
+      "m0264",
+      "m0268",
+      "m0272",
+      "m0294"
+     ],
+     "samples": [
+      "amazingly",
+      "amazing",
+      "Amazing"
+     ]
+    },
+    {
+     "key": "t:here",
+     "rule": "token",
+     "label": "here",
+     "count": 7,
+     "first_ts_ms": 1788074638638,
+     "last_ts_ms": 1788074717278,
+     "event_ids": [
+      "m0126",
+      "m0182",
+      "m0213",
+      "m0239",
+      "m0266",
+      "m0271",
+      "m0296"
+     ],
+     "samples": [
+      "what bowser doing here",
+      "grown ass men still in here watching mfs sleep LMAO",
+      "@wetnutsock12 you’re here rn"
+     ]
+    },
+    {
+     "key": "p:land",
+     "rule": "prefix",
+     "label": "land…",
+     "count": 7,
+     "first_ts_ms": 1788074669489,
+     "last_ts_ms": 1788074682541,
+     "event_ids": [
+      "m0208",
+      "m0212",
+      "m0218",
+      "m0221",
+      "m0230",
+      "m0235",
+      "m0236"
+     ],
+     "samples": [
+      "landslides",
+      "landscape",
+      "landslide"
+     ]
+    },
+    {
+     "key": "p:amen",
+     "rule": "prefix",
+     "label": "amen…",
+     "count": 7,
+     "first_ts_ms": 1788074704115,
+     "last_ts_ms": 1788074721932,
+     "event_ids": [
+      "m0279",
+      "m0282",
+      "m0288",
+      "m0292",
+      "m0297",
+      "m0302",
+      "m0304"
+     ],
+     "samples": [
+      "amendment",
+      "amentities",
+      "amenities"
+     ]
+    },
+    {
+     "key": "p:rank",
+     "rule": "prefix",
+     "label": "rank…",
+     "count": 6,
+     "first_ts_ms": 1788074593611,
+     "last_ts_ms": 1788074621812,
+     "event_ids": [
+      "m0003",
+      "m0043",
+      "m0056",
+      "m0062",
+      "m0070",
+      "m0073"
+     ],
+     "samples": [
+      "ranker",
+      "ranked"
+     ]
+    },
+    {
+     "key": "p:draw",
+     "rule": "prefix",
+     "label": "draw…",
+     "count": 6,
+     "first_ts_ms": 1788074757538,
+     "last_ts_ms": 1788074784608,
+     "event_ids": [
+      "m0337",
+      "m0355",
+      "m0365",
+      "m0376",
+      "m0384",
+      "m0394"
+     ],
+     "samples": [
+      "drawing",
+      "drawer",
+      "drawings"
+     ]
+    },
+    {
+     "key": "p:driv",
+     "rule": "prefix",
+     "label": "driv…",
+     "count": 6,
+     "first_ts_ms": 1788074759145,
+     "last_ts_ms": 1788074768028,
+     "event_ids": [
+      "m0341",
+      "m0347",
+      "m0349",
+      "m0357",
+      "m0359",
+      "m0364"
+     ],
+     "samples": [
+      "driven",
+      "drivers",
+      "driving"
+     ]
+    },
+    {
+     "key": "p:dram",
+     "rule": "prefix",
+     "label": "dram…",
+     "count": 6,
+     "first_ts_ms": 1788074759438,
+     "last_ts_ms": 1788074774560,
+     "event_ids": [
+      "m0342",
+      "m0353",
+      "m0368",
+      "m0373",
+      "m0375",
+      "m0379"
+     ],
+     "samples": [
+      "dramatically",
+      "Dramatic",
+      "dramatic"
+     ]
+    },
+    {
+     "key": "t:stable",
+     "rule": "token",
+     "label": "stable",
+     "count": 5,
+     "first_ts_ms": 1788074632608,
+     "last_ts_ms": 1788074854344,
+     "event_ids": [
+      "m0101",
+      "m0102",
+      "m0121",
+      "m0415",
+      "m0498"
+     ],
+     "samples": [
+      "stable",
+      "Join The NEW Stable Discord Community! https://discord.gg/stable",
+      "\u0001ACTION 🔵  JOIN THE STABLE COMMUNITY https://x.com/i/communities/1863444310034702669 🔵\u0001"
+     ]
+    },
+    {
+     "key": "p:amus",
+     "rule": "prefix",
+     "label": "amus…",
+     "count": 5,
+     "first_ts_ms": 1788074697333,
+     "last_ts_ms": 1788074707838,
+     "event_ids": [
+      "m0261",
+      "m0267",
+      "m0276",
+      "m0280",
+      "m0283"
+     ],
+     "samples": [
+      "amusment",
+      "amusement",
+      "Amusement"
+     ]
+    },
+    {
+     "key": "p:rati",
+     "rule": "prefix",
+     "label": "rati…",
+     "count": 4,
+     "first_ts_ms": 1788074593267,
+     "last_ts_ms": 1788074600841,
+     "event_ids": [
+      "m0002",
+      "m0012",
+      "m0014",
+      "m0023"
+     ],
+     "samples": [
+      "rations",
+      "ration",
+      "ratios"
+     ]
+    },
+    {
+     "key": "p:rapp",
+     "rule": "prefix",
+     "label": "rapp…",
+     "count": 4,
+     "first_ts_ms": 1788074598142,
+     "last_ts_ms": 1788074605323,
+     "event_ids": [
+      "m0017",
+      "m0022",
+      "m0030",
+      "m0032"
+     ],
+     "samples": [
+      "rapper"
+     ]
+    },
+    {
+     "key": "t:balright",
+     "rule": "token",
+     "label": "balright",
+     "count": 4,
+     "first_ts_ms": 1788074609344,
+     "last_ts_ms": 1788074658656,
+     "event_ids": [
+      "m0044",
+      "m0067",
+      "m0158",
+      "m0186"
+     ],
+     "samples": [
+      "fubba dubba balright",
+      "flubba dubba chained together balright",
+      "fluhaba dibba dubba hubba subba dibble double buzzable balright"
+     ]
+    },
+    {
+     "key": "p:stic",
+     "rule": "prefix",
+     "label": "stic…",
+     "count": 4,
+     "first_ts_ms": 1788074634094,
+     "last_ts_ms": 1788074644836,
+     "event_ids": [
+      "m0106",
+      "m0110",
+      "m0127",
+      "m0151"
+     ],
+     "samples": [
+      "sticks",
+      "stick",
+      "sticky"
+     ]
+    },
+    {
+     "key": "p:ston",
+     "rule": "prefix",
+     "label": "ston…",
+     "count": 4,
+     "first_ts_ms": 1788074638070,
+     "last_ts_ms": 1788074656387,
+     "event_ids": [
+      "m0122",
+      "m0173",
+      "m0180",
+      "m0183"
+     ],
+     "samples": [
+      "stones",
+      "stone"
+     ]
+    },
+    {
+     "key": "p:stol",
+     "rule": "prefix",
+     "label": "stol…",
+     "count": 4,
+     "first_ts_ms": 1788074638098,
+     "last_ts_ms": 1788074649409,
+     "event_ids": [
+      "m0123",
+      "m0136",
+      "m0165",
+      "m0168"
+     ],
+     "samples": [
+      "stolen"
+     ]
+    },
+    {
+     "key": "p:stor",
+     "rule": "prefix",
+     "label": "stor…",
+     "count": 4,
+     "first_ts_ms": 1788074641826,
+     "last_ts_ms": 1788074650269,
+     "event_ids": [
+      "m0140",
+      "m0156",
+      "m0167",
+      "m0169"
+     ],
+     "samples": [
+      "storms",
+      "storm",
+      "stores"
+     ]
+    },
+    {
+     "key": "t:rachet",
+     "rule": "token",
+     "label": "rachet",
+     "count": 3,
+     "first_ts_ms": 1788074595687,
+     "last_ts_ms": 1788074606360,
+     "event_ids": [
+      "m0007",
+      "m0025",
+      "m0036"
+     ],
+     "samples": [
+      "rachet"
+     ]
+    },
+    {
+     "key": "t:racket",
+     "rule": "token",
+     "label": "racket",
+     "count": 3,
+     "first_ts_ms": 1788074598130,
+     "last_ts_ms": 1788074605098,
+     "event_ids": [
+      "m0016",
+      "m0029",
+      "m0031"
+     ],
+     "samples": [
+      "racket"
+     ]
+    },
+    {
+     "key": "t:rabbit",
+     "rule": "token",
+     "label": "rabbit",
+     "count": 3,
+     "first_ts_ms": 1788074602358,
+     "last_ts_ms": 1788074609433,
+     "event_ids": [
+      "m0026",
+      "m0034",
+      "m0045"
+     ],
+     "samples": [
+      "rabbit"
+     ]
+    },
+    {
+     "key": "t:stableronaldo",
+     "rule": "token",
+     "label": "stableronaldo",
+     "count": 3,
+     "first_ts_ms": 1788074603472,
+     "last_ts_ms": 1788074675611,
+     "event_ids": [
+      "m0028",
+      "m0194",
+      "m0225"
+     ],
+     "samples": [
+      "@stableronaldo_manger she’s rude",
+      "@Young_cash1 StableRonaldo currently has 34238 subscribers!",
+      "@stabelmayella stabelmayella has spent  20 hours 30 mins watching stableronaldo"
+     ]
+    },
+    {
+     "key": "t:ransom",
+     "rule": "token",
+     "label": "ransom",
+     "count": 3,
+     "first_ts_ms": 1788074619048,
+     "last_ts_ms": 1788074629961,
+     "event_ids": [
+      "m0068",
+      "m0075",
+      "m0094"
+     ],
+     "samples": [
+      "Ransom"
+     ]
+    },
+    {
+     "key": "t:studio",
+     "rule": "token",
+     "label": "studio",
+     "count": 3,
+     "first_ts_ms": 1788074636408,
+     "last_ts_ms": 1788074645506,
+     "event_ids": [
+      "m0113",
+      "m0139",
+      "m0153"
+     ],
+     "samples": [
+      "studio"
+     ]
+    },
+    {
+     "key": "t:banana",
+     "rule": "token",
+     "label": "banana",
+     "count": 3,
+     "first_ts_ms": 1788074660740,
+     "last_ts_ms": 1788074662777,
+     "event_ids": [
+      "m0195",
+      "m0198",
+      "m0204"
+     ],
+     "samples": [
+      "banana"
+     ]
+    },
+    {
+     "key": "t:wetnutsock12",
+     "rule": "token",
+     "label": "wetnutsock12",
+     "count": 3,
+     "first_ts_ms": 1788074669735,
+     "last_ts_ms": 1788074710592,
+     "event_ids": [
+      "m0210",
+      "m0249",
+      "m0285"
+     ],
+     "samples": [
+      "@wetnutsock12 is this Ragebait?",
+      "@wetnutsock12 are you retarded",
+      "@wetnutsock12 yeah you’re retarded"
+     ]
+    },
+    {
+     "key": "t:drinking",
+     "rule": "token",
+     "label": "drinking",
+     "count": 3,
+     "first_ts_ms": 1788074756728,
+     "last_ts_ms": 1788074771218,
+     "event_ids": [
+      "m0336",
+      "m0350",
+      "m0371"
+     ],
+     "samples": [
+      "drinking"
+     ]
+    },
+    {
+     "key": "t:wtf",
+     "rule": "token",
+     "label": "wtf",
+     "count": 3,
+     "first_ts_ms": 1788074838379,
+     "last_ts_ms": 1788074854749,
+     "event_ids": [
+      "m0480",
+      "m0482",
+      "m0499"
+     ],
+     "samples": [
+      "wtf",
+      "wtf ios that",
+      "Why is los so bricked wtf"
+     ]
+    }
+   ],
+   "summary": {
+    "messages": 500,
+    "groups": 36,
+    "grouped": 304,
+    "ungrouped": 196
+   },
+   "pulse": {
+    "messages": 500,
+    "rate": [
+     26,
+     25,
+     22,
+     24,
+     42,
+     34,
+     25,
+     20,
+     17,
+     13,
+     27,
+     14,
+     14,
+     7,
+     12,
+     10,
+     16,
+     24,
+     17,
+     25,
+     12,
+     14,
+     8,
+     12,
+     22,
+     15,
+     3
+    ],
+    "peak_burst": 42,
+    "peak_per_second": 4.2,
+    "unique_chatters": 76,
+    "new_chatters": 76,
+    "messages_per_chatter": 6.58,
+    "concentration": 0.322,
+    "reaction_wave": 0,
+    "active_groups": 36,
+    "composition": {
+     "messages": 500,
+     "groups": 36,
+     "singletons": 196
+    },
+    "questions": [
+     {
+      "text": "what bowser doing here",
+      "count": 1,
+      "event_ids": [
+       "m0126"
+      ],
+      "variants": [
+       "what bowser doing here"
+      ],
+      "ts_ms": 1788074638638
+     },
+     {
+      "text": "@wetnutsock12 is this Ragebait?",
+      "count": 1,
+      "event_ids": [
+       "m0210"
+      ],
+      "variants": [
+       "@wetnutsock12 is this Ragebait?"
+      ],
+      "ts_ms": 1788074669735
+     },
+     {
+      "text": "amatterdaddy?",
+      "count": 1,
+      "event_ids": [
+       "m0323"
+      ],
+      "variants": [
+       "amatterdaddy?"
+      ],
+      "ts_ms": 1788074741493
+     },
+     {
+      "text": "why are they sleeping",
+      "count": 1,
+      "event_ids": [
+       "m0424"
+      ],
+      "variants": [
+       "why are they sleeping"
+      ],
+      "ts_ms": 1788074799286
+     },
+     {
+      "text": "Why is los so bricked wtf",
+      "count": 1,
+      "event_ids": [
+       "m0499"
+      ],
+      "variants": [
+       "Why is los so bricked wtf"
+      ],
+      "ts_ms": 1788074854749
+     }
+    ]
+   },
+   "questions_fn": [
+    {
+     "text": "what bowser doing here",
+     "count": 1,
+     "event_ids": [
+      "m0126"
+     ],
+     "variants": [
+      "what bowser doing here"
+     ],
+     "ts_ms": 1788074638638
+    },
+    {
+     "text": "@wetnutsock12 is this Ragebait?",
+     "count": 1,
+     "event_ids": [
+      "m0210"
+     ],
+     "variants": [
+      "@wetnutsock12 is this Ragebait?"
+     ],
+     "ts_ms": 1788074669735
+    },
+    {
+     "text": "amatterdaddy?",
+     "count": 1,
+     "event_ids": [
+      "m0323"
+     ],
+     "variants": [
+      "amatterdaddy?"
+     ],
+     "ts_ms": 1788074741493
+    },
+    {
+     "text": "why are they sleeping",
+     "count": 1,
+     "event_ids": [
+      "m0424"
+     ],
+     "variants": [
+      "why are they sleeping"
+     ],
+     "ts_ms": 1788074799286
+    },
+    {
+     "text": "Why is los so bricked wtf",
+     "count": 1,
+     "event_ids": [
+      "m0499"
+     ],
+     "variants": [
+      "Why is los so bricked wtf"
+     ],
+     "ts_ms": 1788074854749
+    }
+   ]
+  }
+ ]
+}

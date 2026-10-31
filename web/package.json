@@ -1,0 +1,35 @@
+{
+  "name": "twinky-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Twinky — live Twitch chat clustering, a deterministic client-side demo.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.api.json",
+    "e2e": "playwright test --grep-invert @live",
+    "e2e:live": "playwright test --grep @live",
+    "gen:parity": "python3 scripts/gen_parity.py",
+    "gen:replay": "python3 scripts/gen_replay.py"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.48.2",
+    "@types/node": "^20.17.6",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vercel/node": "3.2.24",
+    "@vitejs/plugin-react": "4.3.3",
+    "jsdom": "25.0.1",
+    "typescript": "5.6.3",
+    "vite": "5.4.11",
+    "vitest": "2.1.5"
+  }
+}
