@@ -628,3 +628,96 @@ key-holding endpoint it would need.
 
 **Tests.** `npm test` 266 (was 210), `npm run e2e` 47 (was 33: 7 new topic flows in each of
 Chromium and WebKit), Python 738, `make scan` clean.
+
+## 2026-11-01, later — the audience timeline, questions in chat, the OBS overlay (`web/`)
+
+**What changed.** Three features, finished on the board that groups by meaning, plus a narrow
+quality pass on that grouping. The board stays the primary view; nothing here adds a second
+inference pipeline, a server, a key or a paid call.
+
+- **Audience timeline** (Pulse). Two stacked panels on one time axis: all chat, and the board's
+  top three groups plus the selected one, each panel with its own labelled maximum. Slices are
+  3 s / 5 s / 20 s for the 30 s / 1 min / 5 min windows. Before the session connected is drawn as
+  *not listening yet*, never as zero; the newest slice is drawn as still filling. Hover or arrow
+  keys read a slice (with a live region for screen readers); a line or its legend entry opens
+  the group on the board and lights its chat. It starts over on a channel switch. The metric
+  cards shrank to one row of three (msgs/min, chatters, peak/sec); the rest are under *More
+  numbers*.
+- **Questions in chat**. Rows count distinct chatters and messages separately, need two
+  chatters, open to their messages, and can open their group on the board. Paraphrases are one
+  row only when the topic model made them one question group; otherwise only the same wording is
+  the same question, and the panel says which (*by meaning* / *same wording*). One chatter
+  repeating a question is listed once, ×n. Nothing is called answered or unanswered.
+- **OBS overlay** (`/?channel=<name>&overlay=1`). Its own page and its own read-only chat
+  connection: no landing, no controls, a transparent page, the top three groups in a translucent
+  card that scales with the Browser Source. It says *connecting*, *quiet*, *reconnecting* and
+  *no such channel* in one line, and explains a missing or malformed channel instead of
+  connecting. A setup dialog on the dashboard gives the link, a copy button, the recommended
+  420 × 240, the OBS steps and a preview drawn from the dashboard's own groups.
+
+**Measured.**
+
+| check | result |
+|---|---|
+| slice widths, on the 14 real labelled windows (`web/eval/timeline-resolution.ts`) | shipped 3 s / 5 s / 20 s acceptable at every length; leading group empty in 10 % / 25 % / 28 % of its slices |
+| overlay transparency (screenshot pixels, Chromium and WebKit) | alpha ≤ 8 outside the card, > 150 inside |
+| overlay at 320×180, 420×240, 640×360, 1280×720, 1920×1080, 400×150 | no overflow, text ≥ 12 px, every shown row wholly on screen; 400×150 keeps two rows |
+| overlay first paint / socket joined / three rows (local build, mocked chat) | ~0.5–1.0 s / same / 1.8–2.9 s (rows wait for the first 1.5 s recount); 77 kB of JS transferred |
+| overlay memory, 400 msg/s for 150 s, Chromium, after GC | 2.2 → 16.8 MB, then 11.8–15.6 MB as caches prune: bounded |
+| setup dialog | opens no second chat connection and no second model worker |
+| 400 msg/s burst, word rules (Chromium), three full runs | longest frame gap 17–33 ms; click-probe latency median 74–143 ms |
+| 400 msg/s burst, topics, three full runs | longest frame gap 17 ms Chromium, 151–231 ms WebKit; caught up 0.9–2.9 s / 4.9–5.1 s after |
+
+**Grouping, narrowly** (`evals/semantic/followup.md`; decided on dev by the evaluation's own rule,
+test reported as already seen):
+
+- `vocatives` — "chat", "chatter", "chatters" left out of what is compared. A 15-message false
+  merge in the hasanabi test window was held together by "chatter". Dev B³ F1 0.801074 → 0.801584,
+  false merges 7 / 83 unchanged: **adopted**.
+- `oneWordStems` — single-word groups split into spellings of one word. Dev B³ F1 0.801074 →
+  0.800861: **not adopted**. Instead, a model-made group of single words is *named* "one-word"
+  rather than "topic"; the groups are unchanged.
+- Twitch's own `emotes` tag is now read, so "Kappa" or a channel's own emote is treated as an
+  emote rather than a word. Third-party emotes are not in the tag (RISKS #63).
+- `results.json` and `stability.json` still reproduce byte for byte.
+
+**Defects found on the way:**
+
+- *Replay at 3× read as three times the chat.* Messages were re-stamped with their spacing
+  divided by the speed, so a one-minute window held three minutes of the recording. The replay
+  now keeps the recording's spacing and the session reads a clock running at 3×.
+- *Reading the emote tag in the parser broke parity with `capture.py`.* The parity test caught it;
+  the tag is now read by the live client, outside the ported function.
+- *Naming one-word groups changed a published number.* `stability.json`'s topic-label tally fell
+  from 891 to 295 because those groups stopped being called topics, though no group changed. The
+  tally now counts them under their new name and the file reproduces again.
+- *`inspect.ts` silently followed the shipped options*, so a description of the evaluated results
+  could drift. It is pinned to the evaluated configuration, with `--current` to opt in.
+- *The overlay overflowed a 320×180 source by 1 px*, clipping the card's bottom edge: at that size
+  12 px is the text floor, so it now takes less padding below 200 px of height.
+- *The timeline measured 280 px wide whatever its column*: it measured a chart that was not
+  rendered yet. It measures its own box now.
+- *Two of the new E2E checks could not fail.* `page.on("websocket")` never fires for a mocked
+  socket, so "opens no connection" was always true; the mock now counts connections. Under
+  reduced motion WebKit lists finished 0.001 ms animations; the check is now "running and longer
+  than 1 ms", and a counterpart test shows the same check sees the rows slide with motion allowed.
+- *An older test was flaky under load, before this branch too.* "Opening a group unfolds its
+  evidence" held a row by position while topics arriving reordered the rows: 4 of 12 runs failed
+  at `HEAD` of `semantic-clustering` with six workers, 6 of 12 here. It now waits for the model to
+  catch up and holds the row by its label: 12 of 12.
+- *`make eval` could not import `ts` on this machine.* The virtualenv's editable-install `.pth`
+  file carried macOS's `hidden` flag, and Python 3.12.9 skips hidden `.pth` files. Local
+  environment, not the repository: clearing the flag restored it (48 hits, 0 misses).
+
+**Real chat.** Checked on live `#pokemon` chat (Sunday morning UTC, ~16 msgs/min) against a local
+build (`vite build`, `vite preview`), each view in its own browser context: board, timeline, questions,
+setup dialog, the overlay in a separate context (alpha 2 at the corners from its shadow, 202 in the
+card), replay (20 s of wall time read as 59 s of recording at 3×), phone and tablet (no sideways
+overflow), reduced motion (nothing running), and the model blocked (*Topics unavailable — grouped
+by shared words*; questions *same wording*). No console or page errors. The channel's own emote
+`pokemonDITTO` was grouped as an emote, from Twitch's tag. No question was asked by two chatters
+in that hour, so the evidence of a repeated question is shown on the synthetic stream only.
+
+**Tests.** `npm test` 302 (was 266), `npm run e2e` 99 (was 47: 26 new flows in each of Chromium
+and WebKit), Python 738, `make eval` 48 hits / 0 misses, `make scan` clean, `results.json` and
+`stability.json` byte-identical on re-run.

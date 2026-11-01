@@ -25,6 +25,12 @@ owner approved. The evaluation labels for that work were drafted by ten Claude s
 and Sonnet 5.5); `evals/semantic/labels/PROVENANCE.md` records how, and that no person has reviewed
 them. No paid API was called. The embedding models ran locally from the Hugging Face hub.
 
+On 1 Nov 2026, Claude Code (Opus 5.5) also built the audience timeline, the questions panel and the
+OBS overlay in `web/`, and the follow-up to the semantic evaluation (`evals/semantic/followup.md`),
+on branch `feat/final-product-polish`, deployed as a Vercel preview only; production was not
+touched. Its commits carry no AI co-author trailer, by the owner's standing instruction; this
+paragraph is the record that Claude Code did that work. No paid API was called.
+
 ## How the work was actually run
 
 An unattended loop, one bounded unit of work per iteration. The cadence moved with the work —
@@ -137,8 +143,8 @@ than quietly overwritten, because a disclosure that silently repairs its own err
 |---|---:|
 | Commits in the measured window | 201 |
 | Iterations logged | 120 |
-| Decisions recorded with rationale | 526 |
-| Risks tracked | 59 |
+| Decisions recorded with rationale | 536 |
+| Risks tracked | 64 |
 | Tests | 738 |
 | Total spend on model calls | $0.44 |
 
