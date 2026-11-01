@@ -7,7 +7,7 @@
 // the broadcaster is "live": anonymous IRC joins an offline channel just as happily as a live one,
 // so the strongest truthful claim here is "connected" / "receiving messages" / "quiet". Authoritative
 // live/offline/not-found status, when available, is layered on separately by the session engine.
-import { parsePrivmsg, type ChatRow } from "./parse";
+import { parsePrivmsg, withEmotes, type ChatRow } from "./parse";
 
 export const TWITCH_WS = "wss://irc-ws.chat.twitch.tv:443";
 
@@ -289,7 +289,7 @@ export class TwitchChatClient {
       if (row && !this.isDuplicate(row.id)) {
         this.sawMessage = true;
         this.attempt = 0;
-        this.o.onRow(row);
+        this.o.onRow(withEmotes(line, row));
         this.setState("receiving");
         this.armQuiet();
       }

@@ -11,7 +11,7 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ClusterOptions, Method } from "../src/semantic/cluster";
-import { MODEL, OPTIONS as SHIPPED } from "../src/semantic/config";
+import { MODEL, EVALUATED_OPTIONS as SHIPPED } from "../src/semantic/config"; // as chosen and scored on 2026-10-31
 import { DEFAULT_OPTIONS, prepAll, type HybridOptions } from "../src/semantic/hybrid";
 import { armEmbed, armHybrid, armLexical, hybridTexts, VectorStore } from "./arms";
 import { checkFrozen, contrastWindows, historicalWindows, realWindows, recordedOpenAI, ROOT, type Win } from "./data";

@@ -207,6 +207,7 @@ export class TwinkySession {
       author: this.o.pseudonymizer.label(row.login),
       text: row.text,
       ...(isBotLogin(row.login) ? { bot: true } : {}),
+      ...(row.emotes ? { emotes: row.emotes } : {}),
     };
     if (!this.firstSeen.has(event.author)) this.firstSeen.set(event.author, event.ts_ms);
     this.buffer.push(event);
@@ -306,10 +307,23 @@ export interface ReplayRow {
 }
 
 export interface ReplayOptions {
+  /** The session's clock. At `speed` > 1 it must run that much faster: see `streamClock`. */
   now?: () => number;
   setTimeoutImpl?: (fn: () => void, ms: number) => ReturnType<typeof setTimeout>;
   loop?: boolean;
   speed?: number; // 1 = real time
+}
+
+/**
+ * A clock that runs `speed` times faster than the wall clock from the moment it is made. A
+ * replay played at 3× stamps its messages with the recording's own spacing and the session
+ * reads this clock, so windows, rates, slices and "12s ago" are all in the recording's time —
+ * a minute on the board is a minute of the stream, played in twenty seconds. Without it, 3×
+ * playback would read as three times the chat.
+ */
+export function streamClock(speed: number, wall: () => number = () => Date.now()): () => number {
+  const t0 = wall();
+  return () => t0 + (wall() - t0) * speed;
 }
 
 export function replaySource(rows: ReplayRow[], opts: ReplayOptions = {}): ChatSource {
@@ -325,16 +339,15 @@ export function replaySource(rows: ReplayRow[], opts: ReplayOptions = {}): ChatS
       return;
     }
     const t0 = rows[0].ts_ms;
-    const anchor = now(); // map the recording's timeline onto real time starting now
     onState("replay");
     rows.forEach((r) => {
       const delay = Math.max(0, (r.ts_ms - t0) / speed);
       timers.push(
         setT(() => {
           if (stopped) return;
-          // Re-stamp onto the live wall clock so windows and "x ago" read correctly, while the
-          // relative spacing of the recording is preserved exactly.
-          const ts = anchor + delay + (base - anchor);
+          // Re-stamp onto the session's clock, keeping the recording's own spacing: played
+          // faster, a message still lands as far from the previous one as it did on stream.
+          const ts = base + (r.ts_ms - t0);
           onRow({
             id: `${r.id}#${base}`,
             ts_ms: Math.round(ts),

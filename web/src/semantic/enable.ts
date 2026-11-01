@@ -20,3 +20,12 @@ export function makeGrouper(channel: string): Grouper | undefined {
   if (!topicsEnabled()) return undefined;
   return new SemanticGrouper(channel, MODEL, OPTIONS, makeWorker, DUTY);
 }
+
+/**
+ * The overlay's grouper. It never shows the word rules' shared-word groups on stream: with the
+ * model it groups by meaning, and without it (`topics=off`, a browser that cannot run it, or a
+ * model that failed) it shows reactions and exact repeats only — the part that needs no model.
+ */
+export function makeOverlayGrouper(channel: string): Grouper {
+  return new SemanticGrouper(channel, MODEL, OPTIONS, topicsEnabled() ? makeWorker : null, DUTY, "repeats");
+}

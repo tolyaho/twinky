@@ -3,7 +3,9 @@
 A public, zero-config web demo of Twinky's **live chat clustering**. Enter a Twitch channel and
 watch its real chat collapse into the few things the audience is actually saying — reactions by
 kind, repeated messages, topics said in different words, shared questions — grouped and counted,
-updating every ~1.5s.
+updating every ~1.5s. Beside the board: an **audience timeline** of the leading groups, the
+**questions** more than one chatter asked, and an **OBS overlay** that puts the top three groups
+on stream.
 
 This is the honest **Tier 0** of the product: real live chat, **no API keys, no paid calls, no
 server state**. Topics come from a small sentence-embedding model that runs **in the visitor's
@@ -31,7 +33,8 @@ browser ── anonymous IRC WS ──► Twitch          (real chat, read-only,
    ├─ src/cluster/     canonical + group_chat + rail/questions  (faithful port of src/ts)
    ├─ src/semantic/    grouping by meaning: fast path, then a Web Worker running
    │                   all-MiniLM-L6-v2 (Transformers.js, ONNX Runtime WebAssembly)
-   └─ src/ui/          landing + three-zone live dashboard (React)
+   └─ src/ui/          landing + three-zone live dashboard (React); timeline, questions;
+                       the OBS overlay (its own page, ?overlay=1) and its setup dialog
 
 worker ── HTTPS ──► Hugging Face hub (model weights, pinned revision) and jsDelivr (ONNX Runtime
                     WebAssembly): ~30 MB, once, when a channel is first opened; then cached
@@ -50,19 +53,28 @@ npm run dev            # http://localhost:5173 — enter a live channel
 
 A channel can be linked directly: `/?channel=xqc`. `/?replay` opens the recorded example.
 
+**OBS overlay:** `/?channel=xqc&overlay=1` (optional `&window=30s|5m`, and `&topics=off` for the
+lighter mode: reactions and exact repeats, no model). In OBS: Sources → + → Browser, paste the
+link, 420 × 240. The *OBS overlay* button on a live channel gives the link with a preview. It reads
+public chat only — no key, no login, nothing to click.
+
 ## Test
 
 ```bash
-npm test               # 266 unit tests: clustering parity, IRC lifecycle, network loss, engine,
+npm test               # 302 unit tests: clustering parity, IRC lifecycle, network loss, engine,
                        #   stable ordering, broadcast status, grouping by meaning (prep,
-                       #   clustering, the worker, the page side, parity with the evaluation)
-npm run e2e            # 47 Playwright flows on a synthetic stream (deterministic chat):
+                       #   clustering, the worker, the page side, parity with the evaluation),
+                       #   timeline slices, questions, emote tags
+npm run e2e            # 99 Playwright flows (66 Chromium, 33 WebKit) on a synthetic stream:
                        #   layout, evidence, keyboard, reduced motion, reconnect without
                        #   duplicates, rapid switching, network loss, deep links, off air /
                        #   on air / stale status replies (mocked endpoint), hidden tab,
                        #   ranking stability, view transition, a calibrated ~400 msg/s burst;
                        #   topics in Chromium and WebKit: loading, ready, fallback, ?topics=off,
-                       #   channel switch, a 400 msg/s burst the model falls behind on
+                       #   channel switch, a 400 msg/s burst the model falls behind on;
+                       #   timeline, questions, the OBS overlay (transparency on screenshot
+                       #   pixels, six source sizes, states, memory under 400 msg/s) and its
+                       #   setup dialog, in both
 LIVE_CHANNEL=xqc npm run e2e:live   # 3 real-network checks: live chat, not-found, no false not-found
 PW_BASE_URL=https://… npm run e2e:live   # same, against a deployed URL
 npm run typecheck      # frontend + serverless function
@@ -153,7 +165,18 @@ model (Hugging Face hub) and its runtime (jsDelivr); chat text never leaves the 
   topics…* or *N new messages not read yet*, and unread messages are in no topic. If the model
   cannot load, the board says *Topics unavailable — grouped by shared words* and uses the word rules.
 - **A topic label is a quote**, the group's most repeated wording, never a generated summary or
-  a cause. Chat alone cannot say why.
+  a cause. Chat alone cannot say why. Single words the model found alike are called *one-word*,
+  not *topic*.
+- **The timeline draws only time the page listened.** Before connecting is *not listening yet*,
+  never zero; the newest slice is marked as still filling. A line counts the messages its group
+  holds now, by when they were sent, and messages the model has not read are counted, not drawn.
+- **Questions count people.** A row needs two different chatters, shows both chatters and
+  messages, and never says answered or unanswered: chat alone cannot know.
+- **The overlay never shows shared-word groups.** Without the model it shows reactions and exact
+  repeats only, and its header says so. It is its own page with its own connection, so closing
+  the dashboard does not take it off air.
+- **Replay keeps the recording's own time.** At 3× the board's clock runs at 3×, so a minute on
+  the board is a minute of the stream.
 
 ## Limitations
 
@@ -170,3 +193,6 @@ model (Hugging Face hub) and its runtime (jsDelivr); chat text never leaves the 
   precision 0.80), and it finds under a third of the pairs the labels group (recall 0.31). See `../evals/semantic/README.md`.
 - The first channel a visitor opens downloads ~30 MB. Save-Data and `?topics=off` skip it.
   Safari on phones has not been measured.
+- A message a moderator deletes on Twitch is not removed from the board or the overlay
+  (`../RISKS.md` #62). Third-party emotes (7TV, BTTV, FFZ) read as words (#63).
+- The overlay has been tested in headless Chromium and WebKit, not inside OBS itself (#65).

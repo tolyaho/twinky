@@ -49,6 +49,10 @@ const RULE_CHIP: Record<GroupView["rule"], { chip: string; hint: (g: GroupView) 
     hint: () => "Different words, one meaning: grouped by a small language model running in your browser",
   },
   question: { chip: "question", hint: () => "Chatters asking the same thing, in their own words" },
+  words: {
+    chip: "one-word",
+    hint: () => "Single-word messages a small language model found alike — usually answers or guesses, not one shared point",
+  },
   prefix: {
     chip: "variants",
     hint: (g) => `One-word messages starting with “${g.label.replace(/…$/, "")}”`,

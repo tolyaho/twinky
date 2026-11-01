@@ -3,7 +3,7 @@
 //
 //   npx tsx web/eval/compare.ts
 import type { HybridOptions } from "../src/semantic/hybrid";
-import { OPTIONS } from "../src/semantic/config";
+import { EVALUATED_OPTIONS as OPTIONS } from "../src/semantic/config"; // what shipped on 2026-10-31
 import { DEFAULT_OPTIONS } from "../src/semantic/hybrid";
 import { armHybrid, armLexical, hybridTexts, VectorStore } from "./arms";
 import { checkFrozen, historicalWindows, realWindows, type Win } from "./data";

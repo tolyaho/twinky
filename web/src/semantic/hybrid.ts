@@ -10,6 +10,8 @@ export interface Msg {
   author: string;
   text: string;
   bot?: boolean;
+  /** words Twitch marked as emotes (live chat only; the evaluation's captures have none) */
+  emotes?: readonly string[];
 }
 
 export type SemKind =
@@ -39,6 +41,28 @@ export interface HybridOptions extends ClusterOptions {
    * groups only when identical, exactly as without a model.
    */
   script?: "latin" | "any";
+  /**
+   * A group made only of one-word messages keeps together only the spellings of one word (the
+   * same first four letters). One word gives the model too little to compare meaning: what it
+   * compares is spelling, so "amethyst" joins "americna" and "ranked" joins "ranger" — guesses in
+   * a word game, an emote it does not know, not one thing being said. (evals/semantic/followup.md)
+   */
+  oneWordStems?: boolean;
+  /** leave "chat" / "chatter(s)" out of what the model compares (src/semantic/prep.ts) */
+  vocatives?: boolean;
+}
+
+const stem = (word: string) => Array.from(word).slice(0, 4).join("");
+
+/**
+ * One cluster of texts as the groups it stands for. With `oneWordStems`, a cluster of one-word
+ * texts is split by stem; anything with a phrase in it is left as the model made it.
+ */
+export function splitCluster(keys: readonly string[], o: Pick<HybridOptions, "oneWordStems">): string[][] {
+  if (!o.oneWordStems || keys.length < 2 || keys.some((k) => k.includes(" "))) return [[...keys]];
+  const by = new Map<string, string[]>();
+  for (const k of keys) (by.get(stem(k)) ?? by.set(stem(k), []).get(stem(k))!).push(k);
+  return [...by.values()];
 }
 
 /** Whether the model should see this text, given the script it was trained on. */
@@ -63,8 +87,11 @@ export interface Prepped extends Msg {
   prep: Prepared;
 }
 
-export function prepAll(msgs: readonly Msg[], channel: string): Prepped[] {
-  return msgs.map((m) => ({ ...m, prep: prepare(m.text, channel, m.bot) }));
+export function prepAll(msgs: readonly Msg[], channel: string, o: Pick<HybridOptions, "vocatives"> = {}): Prepped[] {
+  return msgs.map((m) => ({
+    ...m,
+    prep: prepare(m.text, channel, m.bot, { vocatives: o.vocatives, emotes: m.emotes ? new Set(m.emotes) : undefined }),
+  }));
 }
 
 /** The texts the model has to embed for these messages: unique, in first-seen order. */
@@ -167,8 +194,10 @@ export function hybridGroups(
     else items.push({ key: t.key, vec, weight: t.ids.length, authors: t.authors });
   }
   for (const g of clusterItems(items, o)) {
-    const sg = textGroup(g.map((i) => items[i].key), texts, coherence(items, g));
-    if (sg) groups.push(sg);
+    for (const keys of splitCluster(g.map((i) => items[i].key), o)) {
+      const sg = textGroup(keys, texts, coherence(items, g));
+      if (sg && sg.ids.length >= o.minMessages && sg.authors >= o.minAuthors) groups.push(sg);
+    }
   }
   groups.sort((a, b) => b.ids.length - a.ids.length || (a.key < b.key ? -1 : 1));
   return { groups, pending, textMessages };

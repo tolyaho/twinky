@@ -6,11 +6,12 @@
 import { isQuestion } from "../cluster/pulse";
 import { lexicalGrouper } from "../engine/session";
 import type { BoardRule, ChatEvent } from "../cluster/types";
-import { fastGroups, textGroup, textItems, type HybridOptions, type Prepped, type SemGroup } from "./hybrid";
+import { fastGroups, splitCluster, textGroup, textItems, type HybridOptions, type Prepped, type SemGroup } from "./hybrid";
 import { FAMILY_LABEL, prepare, type Family, type Prepared } from "./prep";
 import type { FromWorker, ModelSpec, ToWorker, WireCluster, WireItem } from "./protocol";
 
-export type SemanticState = "loading" | "ready" | "failed";
+/** "off": no model on purpose (the overlay's lighter mode): reactions and exact repeats only */
+export type SemanticState = "loading" | "ready" | "failed" | "off";
 
 export interface SemanticInfo {
   state: SemanticState;
@@ -88,7 +89,7 @@ export class SemanticGrouper {
   state: SemanticState = "loading";
   private loadMs?: number;
   private reason?: string;
-  private readonly link: Link;
+  private readonly link: Link | null;
   private readonly prep = new Map<string, Prepared>();
   private seq = 0;
   private sentSig = "";
@@ -99,13 +100,24 @@ export class SemanticGrouper {
   private nextTopic = 0;
   private readonly onMessage = (m: FromWorker) => this.receive(m);
 
+  /**
+   * `make` null: no model at all — reactions and exact repeats only, nothing downloaded.
+   * `fallback`: what a failed model gives way to — the word rules (the board, as before topics
+   * existed), or reactions and exact repeats (the overlay: no shared-word guesses on stream).
+   */
   constructor(
     private readonly channel: string,
     spec: ModelSpec,
     private readonly options: HybridOptions,
-    make: () => WorkerLike,
+    make: (() => WorkerLike) | null,
     duty = 1,
+    private readonly fallback: "words" | "repeats" = "words",
   ) {
+    if (!make) {
+      this.state = "off";
+      this.link = null;
+      return;
+    }
     this.link = connect(make, spec, duty);
     this.link.listeners.add(this.onMessage);
     this.link.worker.postMessage({ type: "reset", epoch: this.epoch });
@@ -113,7 +125,7 @@ export class SemanticGrouper {
   }
 
   stop(): void {
-    this.link.listeners.delete(this.onMessage);
+    this.link?.listeners.delete(this.onMessage);
   }
 
   info(textMessages: number, pending: number): SemanticInfo {
@@ -139,14 +151,18 @@ export class SemanticGrouper {
 
   /** One recount of the window. Never blocks on the model. */
   group(window: readonly ChatEvent[]): { groups: SemanticBoardGroup[]; soloMessages: number; semantic: SemanticInfo } {
-    if (this.state === "failed") {
+    if (this.state === "failed" && this.fallback === "words") {
       // the model could not run: the word rules, exactly as before topics existed, said so plainly
       const r = lexicalGrouper.group(window);
       return { ...r, semantic: this.info(0, 0) };
     }
+    const reading = this.state === "loading" || this.state === "ready"; // a model is, or will be
     const prepped: Prepped[] = window.map((e) => {
       let p = this.prep.get(e.id);
-      if (!p) this.prep.set(e.id, (p = prepare(e.text, this.channel, e.bot)));
+      if (!p) {
+        const extra = { vocatives: this.options.vocatives, emotes: e.emotes ? new Set(e.emotes) : undefined };
+        this.prep.set(e.id, (p = prepare(e.text, this.channel, e.bot, extra)));
+      }
       return { id: e.id, author: e.author, text: e.text, prep: p };
     });
     if (this.prep.size > window.length * 2 + 1_000) {
@@ -162,7 +178,7 @@ export class SemanticGrouper {
     );
     const wire: WireItem[] = order.slice(0, MAX_ITEMS).map((t) => ({ key: t.key, weight: t.ids.length, authors: [...t.authors] }));
     const sig = `${window.length}:${window.at(-1)?.id ?? ""}`;
-    if (sig !== this.sentSig) {
+    if (reading && this.link && sig !== this.sentSig) {
       this.sentSig = sig;
       const seq = ++this.seq;
       this.requested.set(seq, new Set(wire.map((w) => w.key)));
@@ -174,10 +190,12 @@ export class SemanticGrouper {
     const placed = new Set<string>();
     if (this.state === "ready") {
       for (const c of this.clusters) {
-        const g = textGroup(c.keys, items, c.coherence);
-        if (g && g.ids.length >= this.options.minMessages && g.authors >= this.options.minAuthors) {
-          sem.push(g);
-          for (const k of g.texts) placed.add(k);
+        for (const keys of splitCluster(c.keys, this.options)) {
+          const g = textGroup(keys, items, c.coherence);
+          if (g && g.ids.length >= this.options.minMessages && g.authors >= this.options.minAuthors) {
+            sem.push(g);
+            for (const k of g.texts) placed.add(k);
+          }
         }
       }
     }
@@ -186,7 +204,7 @@ export class SemanticGrouper {
     for (const t of items.values()) {
       textMessages += t.ids.length;
       if (this.state === "ready" && this.answered.has(t.key) && !this.waiting.has(t.key)) continue;
-      pending += t.ids.length;
+      if (reading) pending += t.ids.length; // without a model nothing is waiting to be read
       // the same words from several chatters need no model: shown at once, as a repeat, until the
       // model has read them (and may put them in a topic)
       if (!placed.has(t.key) && t.ids.length >= this.options.minMessages && t.authors.size >= this.options.minAuthors)
@@ -250,9 +268,16 @@ export class SemanticGrouper {
         nextTopics.push({ id, keys, labelKey });
         key = `t:${id}`;
         const asked = events.filter((e) => isQuestion(e.text)).length;
-        // one word in several spellings ("amethyst", "Amethysts") is the same answer repeated,
-        // not a discussion: say so rather than call it a topic
-        rule = sameWordVariants(g.texts) ? "phrase" : asked * 2 >= events.length ? "question" : "topic";
+        // one word in several spellings ("amethyst", "Amethysts") is the same answer repeated, and
+        // different single words ("ruby", "sapphire") are answers or guesses the model found alike:
+        // neither is a discussion, so neither is called a topic
+        rule = sameWordVariants(g.texts)
+          ? "phrase"
+          : oneWordEach(g.texts)
+            ? "words"
+            : asked * 2 >= events.length
+              ? "question"
+              : "topic";
         const textOf = (k: string) => tidy(events.filter((e) => this.prep.get(e.id)?.key === k).at(-1)?.text ?? k);
         display = shorten(textOf(labelKey));
         // the row's sample is a different wording: the point of a topic is that they differ
@@ -277,9 +302,14 @@ export class SemanticGrouper {
   }
 }
 
+/** Every text is a single word. */
+export function oneWordEach(texts: readonly string[]): boolean {
+  return texts.length > 0 && texts.every((t) => !t.includes(" "));
+}
+
 /** Every text is a single word, and they all start with the same four letters. */
 export function sameWordVariants(texts: readonly string[]): boolean {
-  if (texts.length < 2 || texts.some((t) => t.includes(" "))) return false;
+  if (texts.length < 2 || !oneWordEach(texts)) return false;
   const stem = Array.from(texts[0]).slice(0, 4).join("");
   return Array.from(stem).length === 4 && texts.every((t) => t.startsWith(stem));
 }

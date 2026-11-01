@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import parity from "../fixtures/parity.json";
-import { normalizeChannel, parsePrivmsg } from "../../src/twitch/parse";
+import { emoteWords, normalizeChannel, parsePrivmsg, withEmotes } from "../../src/twitch/parse";
 
 const data = parity as unknown as { parse: { in: string; out: unknown }[] };
 
@@ -50,4 +50,27 @@ describe("normalizeChannel", () => {
       expect(normalizeChannel(input)).toBeNull();
     });
   }
+});
+
+describe("emote tags", () => {
+  it("reads names from code-point ranges, so emoji before an emote do not shift it", () => {
+    expect(emoteWords("25:0-4,12-16/1902:6-10", "Kappa Keepo Kappa")).toEqual(["Kappa", "Keepo"]);
+    expect(emoteWords("25:2-6", "😂 Kappa")).toEqual(["Kappa"]);
+  });
+  it("ignores an empty or malformed tag, and ranges past the end of the text", () => {
+    expect(emoteWords(undefined, "Kappa")).toEqual([]);
+    expect(emoteWords("", "Kappa")).toEqual([]);
+    expect(emoteWords("25:x-y", "Kappa")).toEqual([]);
+    expect(emoteWords("25:0-40", "Kappa")).toEqual([]);
+  });
+  it("adds them to a row without changing what parsePrivmsg returns", () => {
+    const line = "@badge-info=;display-name=Someone;emotes=25:0-4;id=e-1;tmi-sent-ts=1700000000000;user-type= :someone!someone@someone.tmi.twitch.tv PRIVMSG #chan :Kappa hi";
+    const row = parsePrivmsg(line)!;
+    expect(row).not.toHaveProperty("emotes");
+    expect(withEmotes(line, row).emotes).toEqual(["Kappa"]);
+    const first = "@emotes=25:0-4;id=e-2;tmi-sent-ts=1700000000000 :a!a@a.tmi.twitch.tv PRIVMSG #chan :Kappa";
+    expect(withEmotes(first, parsePrivmsg(first)!).emotes).toEqual(["Kappa"]);
+    const none = line.replace("emotes=25:0-4", "emotes=");
+    expect(withEmotes(none, parsePrivmsg(none)!)).not.toHaveProperty("emotes");
+  });
 });

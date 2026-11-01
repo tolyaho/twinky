@@ -54,14 +54,14 @@ export function armEmbed(w: Win, vectorOf: (t: string) => Float32Array | undefin
 
 export function armHybrid(w: Win, vectorOf: (t: string) => Float32Array | undefined, o: HybridOptions): Pred {
   const pred: Pred = new Map(w.messages.map((m) => [m.id, null]));
-  const r = hybridGroups(prepAll(w.messages, w.channel), vectorOf, o);
+  const r = hybridGroups(prepAll(w.messages, w.channel, o), vectorOf, o);
   if (r.pending) throw new Error(`${w.name}: ${r.pending} texts without a vector`);
   for (const g of r.groups) for (const id of g.ids) pred.set(id, g.key);
   return pred;
 }
 
-export function hybridTexts(w: Win): string[] {
-  return textsToEmbed(prepAll(w.messages, w.channel)); // every text: the store serves all models
+export function hybridTexts(w: Win, o: HybridOptions = {}): string[] {
+  return textsToEmbed(prepAll(w.messages, w.channel, o)); // every text: the store serves all models
 }
 
 // --- vectors, cached on disk per model so sweeps never re-encode ------------------------------

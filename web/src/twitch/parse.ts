@@ -12,6 +12,38 @@ export interface ChatRow {
   user_type: string;
   room_id: string | null;
   reply_to: string | null;
+  /**
+   * Browser only, not part of the capture.py port (parsePrivmsg leaves it out): the words Twitch
+   * marked as its own emotes, added by the live client (`withEmotes`). Third-party emotes (7TV,
+   * BTTV, FFZ) are not in it.
+   */
+  emotes?: string[];
+}
+
+/** A parsed row plus the emote names from its line's `emotes` tag, when there are any. */
+export function withEmotes(line: string, row: ChatRow): ChatRow {
+  const m = /^@(?:[^ ]*;)?emotes=([^; ]*)/.exec(line);
+  const emotes = emoteWords(m?.[1], row.text);
+  return emotes.length ? { ...row, emotes } : row;
+}
+
+/**
+ * The emote names in a message, from the `emotes` tag: `25:0-4,12-16/1902:6-10`, where the
+ * positions count characters (code points), not UTF-16 units.
+ */
+export function emoteWords(tag: string | undefined, text: string): string[] {
+  if (!tag) return [];
+  const chars = Array.from(text);
+  const out = new Set<string>();
+  for (const part of tag.split("/")) {
+    const ranges = part.split(":")[1];
+    if (!ranges) continue;
+    for (const r of ranges.split(",")) {
+      const [a, b] = r.split("-").map(Number);
+      if (Number.isInteger(a) && Number.isInteger(b) && a >= 0 && b >= a && b < chars.length) out.add(chars.slice(a, b + 1).join(""));
+    }
+  }
+  return [...out];
 }
 
 /** Parse one IRC line. Returns a row for a well-formed tagged PRIVMSG, otherwise null. */

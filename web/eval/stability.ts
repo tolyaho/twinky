@@ -10,13 +10,14 @@
 //   relabelled of groups present at two consecutive recounts, the share whose label changed
 //   faithful   topics whose label is the start of one of its own messages (it should be all)
 //
-//   npx tsx web/eval/stability.ts [--write]
+//   npx tsx web/eval/stability.ts [--write]   the configuration evaluated on 2026-10-31 (stability.json)
+//   npx tsx web/eval/stability.ts --current   what ships now (printed only; evals/semantic/followup.md)
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ChatEvent } from "../src/cluster/types";
 import { lexicalGrouper } from "../src/engine/session";
 import { clusterItems, coherence, type Item } from "../src/semantic/cluster";
-import { MODEL, OPTIONS } from "../src/semantic/config";
+import { EVALUATED_OPTIONS, MODEL, OPTIONS as CURRENT } from "../src/semantic/config";
 import { prepAll, textsToEmbed } from "../src/semantic/hybrid";
 import { SemanticGrouper, resetSharedWorker, type WorkerLike } from "../src/semantic/live";
 import { isBotLogin } from "../src/semantic/prep";
@@ -27,7 +28,9 @@ import { CANDIDATES } from "./embedders";
 
 const WINDOW_MS = 60_000;
 const TICK_MS = 1_500;
-const write = process.argv.includes("--write");
+const current = process.argv.includes("--current");
+const write = process.argv.includes("--write") && !current;
+const OPTIONS = current ? CURRENT : EVALUATED_OPTIONS;
 checkFrozen();
 
 interface Source {
@@ -53,7 +56,7 @@ const sources: Source[] = [
 ];
 
 const store = new VectorStore(CANDIDATES.find((c) => c.key === "minilm-l6")!);
-await store.ensure(sources.flatMap((s) => textsToEmbed(prepAll(s.events, s.channel))));
+await store.ensure(sources.flatMap((s) => textsToEmbed(prepAll(s.events, s.channel, OPTIONS))));
 store.save();
 
 /** The real worker's protocol, answered synchronously from the evaluation's vectors. */
@@ -117,7 +120,8 @@ function run(s: Source, group: (w: ChatEvent[]) => Board, t: Tally) {
       }
     }
     for (const g of board.groups) {
-      if (g.rule !== "topic" && g.rule !== "question") continue;
+      // every group the model made and labelled; "words" were counted as topics before they had a name
+      if (g.rule !== "topic" && g.rule !== "question" && g.rule !== "words") continue;
       t.topics++;
       const stem = g.label.replace(/…$/, "");
       if (g.event_ids.some((id) => text.get(id)!.startsWith(stem))) t.faithful++;

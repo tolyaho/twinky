@@ -4,6 +4,7 @@ import {
   TwinkySession,
   liveSource,
   replaySource,
+  streamClock,
   type ChatSource,
   type SourceState,
   type TickSnapshot,
@@ -207,6 +208,27 @@ describe("TwinkySession", () => {
     expect(chats).toHaveLength(6);
     expect(states).toContain("ended");
     expect(states).not.toContain("receiving");
+    session.stop();
+  });
+
+  it("a faster replay keeps the recording's own time: a minute on the board is a minute of chat", () => {
+    // 120 messages, one a second: two minutes of recorded chat
+    const rows = Array.from({ length: 120 }, (_, i) => ({ id: `r${i}`, ts_ms: 5_000 + i * 1_000, login: `u${i % 7}`, text: "W" }));
+    const clock = streamClock(3);
+    const source = replaySource(rows, { speed: 3, now: clock });
+    const { session, chats, ticks } = harness(source, { now: clock });
+    session.start();
+    vi.advanceTimersByTime(30_000); // 30 s of wall time is 90 s of the recording
+    expect(chats.length).toBe(91); // t = 0 s … 90 s of the recording
+    // the spacing is the recording's, not a third of it
+    expect(chats[1].ts_ms - chats[0].ts_ms).toBe(1_000);
+    const last = ticks.at(-1)!;
+    // a 60 s window holds 60 s of recorded chat (61 messages, one a second, ends inclusive), not 180 s
+    expect(last.windowMessages).toBeGreaterThanOrEqual(60);
+    expect(last.windowMessages).toBeLessThanOrEqual(61);
+    expect(last.observedMs).toBe(60_000);
+    // and the rate it implies is the recording's: about one message a second
+    expect(Math.round((last.windowMessages / last.observedMs) * 60_000)).toBeLessThanOrEqual(61);
     session.stop();
   });
 

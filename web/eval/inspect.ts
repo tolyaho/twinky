@@ -3,27 +3,30 @@
 // Dev windows by default. `--report` also opens the test split, for describing results after the
 // one scored test run — never for changing the method.
 //
-//   npx tsx web/eval/inspect.ts <window name substring> [model] [threshold] [--report]
-import { OPTIONS } from "../src/semantic/config";
+// The evaluated configuration by default; `--current` looks at what ships now (followup.md).
+//
+//   npx tsx web/eval/inspect.ts <window name substring> [model] [threshold] [--report] [--current]
+import { EVALUATED_OPTIONS, OPTIONS as CURRENT } from "../src/semantic/config";
 import { prepAll, type HybridOptions } from "../src/semantic/hybrid";
 import { armHybrid, hybridTexts, VectorStore } from "./arms";
 import { checkFrozen, contrastWindows, historicalWindows, realWindows } from "./data";
 import { CANDIDATES } from "./embedders";
 
 const report = process.argv.includes("--report");
-const [needle, modelKey = "minilm-l6", t = "0.75"] = process.argv.slice(2).filter((a) => a !== "--report");
+const OPTIONS = process.argv.includes("--current") ? CURRENT : EVALUATED_OPTIONS;
+const [needle, modelKey = "minilm-l6", t = "0.75"] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 checkFrozen();
 const ws = [...realWindows().filter((w) => report || w.split === "dev"), ...historicalWindows(), ...contrastWindows()].filter((w) =>
   w.name.includes(needle),
 );
 const store = new VectorStore(CANDIDATES.find((c) => c.key === modelKey)!);
-await store.ensure(ws.flatMap(hybridTexts));
+await store.ensure(ws.flatMap((w) => hybridTexts(w, OPTIONS)));
 store.save();
 const o: HybridOptions = { ...OPTIONS, threshold: Number(t) };
 
 for (const w of ws) {
   const pred = armHybrid(w, store.get, o);
-  const prep = new Map(prepAll(w.messages, w.channel).map((m) => [m.id, m.prep]));
+  const prep = new Map(prepAll(w.messages, w.channel, OPTIONS).map((m) => [m.id, m.prep]));
   const text = new Map(w.messages.map((m) => [m.id, m.text]));
   const show = (id: string) => {
     const p = prep.get(id)!;

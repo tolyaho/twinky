@@ -12,7 +12,12 @@ export const MODEL: ModelSpec = {
   mb: 23,
 };
 
-export const OPTIONS: HybridOptions = {
+/**
+ * The configuration the evaluation chose on dev and scored once on test (2026-10-31). Frozen:
+ * evals/semantic/results.json and stability.json describe exactly this, and the scripts that made
+ * them (web/eval/run.ts, stability.ts, compare.ts) keep using it so they still reproduce.
+ */
+export const EVALUATED_OPTIONS: HybridOptions = {
   ...DEFAULT_OPTIONS,
   method: "center",
   threshold: 0.65,
@@ -24,6 +29,13 @@ export const OPTIONS: HybridOptions = {
   // the model reads English; other scripts group only when identical (no false merges from noise)
   script: "latin",
 };
+
+/**
+ * What ships: the evaluated configuration plus one follow-up, adopted on dev by the evaluation's
+ * own rule (web/eval/followup.ts, evals/semantic/followup.md): "chat" and "chatter(s)" are left
+ * out of what the model compares, as the streamer's name already was.
+ */
+export const OPTIONS: HybridOptions = { ...EVALUATED_OPTIONS, vocatives: true };
 
 /** Share of wall time the model may use while catching up, so a phone's page never stalls. */
 export const DUTY = 0.5;

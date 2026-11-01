@@ -1,0 +1,127 @@
+{
+ "question": "does either candidate rule (oneWordStems, vocatives) remove false merges without losing dev B-cubed F1?",
+ "rule": "adopt if dev B-cubed F1 does not fall and dev false merges stay <= 10%",
+ "testNote": "the test split was scored before these changes and its examples motivated them: not a fresh held-out result",
+ "dev": {
+  "evaluated": {
+   "pairP": 0.872,
+   "pairR": 0.515,
+   "pairF1": 0.647,
+   "b3F1": 0.801,
+   "shown": 83,
+   "falseMerges": 7,
+   "falseMergeShare": 0.084
+  },
+  "oneWordStems": {
+   "pairP": 0.872,
+   "pairR": 0.514,
+   "pairF1": 0.647,
+   "b3F1": 0.801,
+   "shown": 84,
+   "falseMerges": 7,
+   "falseMergeShare": 0.083
+  },
+  "vocatives": {
+   "pairP": 0.872,
+   "pairR": 0.515,
+   "pairF1": 0.648,
+   "b3F1": 0.802,
+   "shown": 83,
+   "falseMerges": 7,
+   "falseMergeShare": 0.084
+  }
+ },
+ "decision": {
+  "oneWordStems": {
+   "b3F1": 0.800861,
+   "falseMergeShare": 0.0833,
+   "adopt": false
+  },
+  "vocatives": {
+   "b3F1": 0.801584,
+   "falseMergeShare": 0.0843,
+   "adopt": true
+  }
+ },
+ "devWindows": {
+  "sodapoppin_2026-10-31T2120": {
+   "evaluated": 0.809,
+   "oneWordStems": 0.809,
+   "vocatives": 0.812
+  },
+  "jynxzi_2026-10-31T2120": {
+   "evaluated": 0.83,
+   "oneWordStems": 0.83,
+   "vocatives": 0.83
+  },
+  "zackrawrr_2026-10-31T2117": {
+   "evaluated": 0.696,
+   "oneWordStems": 0.696,
+   "vocatives": 0.696
+  },
+  "lirik_2026-10-31T2115": {
+   "evaluated": 0.881,
+   "oneWordStems": 0.881,
+   "vocatives": 0.881
+  },
+  "bratishkinoff_2026-10-31T2119": {
+   "evaluated": 0.932,
+   "oneWordStems": 0.932,
+   "vocatives": 0.932
+  },
+  "5opka_2026-10-31T2133": {
+   "evaluated": 0.95,
+   "oneWordStems": 0.95,
+   "vocatives": 0.95
+  },
+  "summit1g_2026-10-31T2115": {
+   "evaluated": 0.933,
+   "oneWordStems": 0.933,
+   "vocatives": 0.933
+  },
+  "ishowspeed_2026-10-31T2124": {
+   "evaluated": 0.917,
+   "oneWordStems": 0.917,
+   "vocatives": 0.917
+  },
+  "stableronaldo_2026-08-30T0723 w2": {
+   "evaluated": 0.434,
+   "oneWordStems": 0.429,
+   "vocatives": 0.434
+  },
+  "yugi_2026-08-30T0723 w9": {
+   "evaluated": 0.788,
+   "oneWordStems": 0.788,
+   "vocatives": 0.788
+  }
+ },
+ "testAlreadySeen": {
+  "evaluated": {
+   "pairP": 0.798,
+   "pairR": 0.313,
+   "pairF1": 0.449,
+   "b3F1": 0.781,
+   "shown": 45,
+   "falseMerges": 7,
+   "falseMergeShare": 0.156
+  },
+  "oneWordStems": {
+   "pairP": 0.798,
+   "pairR": 0.313,
+   "pairF1": 0.449,
+   "b3F1": 0.781,
+   "shown": 45,
+   "falseMerges": 7,
+   "falseMergeShare": 0.156
+  },
+  "vocatives": {
+   "pairP": 0.872,
+   "pairR": 0.313,
+   "pairF1": 0.461,
+   "b3F1": 0.791,
+   "shown": 44,
+   "falseMerges": 5,
+   "falseMergeShare": 0.114
+  }
+ }
+}

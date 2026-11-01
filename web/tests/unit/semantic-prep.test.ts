@@ -51,3 +51,27 @@ describe("prepare: messages that only count when identical", () => {
     expect(prepare("anything at all", "jynxzi", true).kind).toBe("skip");
   });
 });
+
+describe("prepare: who a message is addressed to is not what it says", () => {
+  const v = (t: string) => prepare(t, "jynxzi", false, { vocatives: true });
+  it("leaves chat / chatter out of what is compared", () => {
+    expect(v("chat he is cooking")).toEqual({ kind: "text", key: "he is cooking" });
+    expect(p("chat he is cooking")).toEqual({ kind: "text", key: "chat he is cooking" });
+  });
+  it("so a reaction aimed at a chatter is the reaction", () => {
+    expect(v("L chatter")).toMatchObject({ kind: "reaction", family: "loss" });
+    expect(p("L chatter")).toMatchObject({ kind: "text" });
+  });
+});
+
+describe("prepare: emotes Twitch itself marked", () => {
+  const tagged = (t: string, emotes: string[]) => prepare(t, "jynxzi", false, { emotes: new Set(emotes) });
+  it("are left out of a sentence even when they look like words", () => {
+    expect(p("NOWAYING this is insane")).toEqual({ kind: "text", key: "nowaying this is insane" });
+    expect(tagged("NOWAYING this is insane", ["NOWAYING"])).toEqual({ kind: "text", key: "this is insane" });
+  });
+  it("alone, group only with the same emote", () => {
+    expect(p("Kappa")).toMatchObject({ kind: "text" });
+    expect(tagged("Kappa", ["Kappa"])).toMatchObject({ kind: "reaction", family: "emote:kappa" });
+  });
+});

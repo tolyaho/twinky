@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { normalizeChannel } from "../twitch/parse";
 import { topicsEnabled } from "../semantic/enable";
 import { clock } from "./format";
 import { ChatFeed } from "./ChatFeed";
 import { ClusterBoard } from "./ClusterBoard";
 import { offAirMode } from "./derive";
+import { OverlaySetup } from "./OverlaySetup";
 import { Pulse } from "./Pulse";
 import { BroadcastPill, StatusBadge } from "./StatusBadge";
 import { REPLAY_SPEED, type SessionView, type UiStatus } from "./useSession";
@@ -49,6 +50,7 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
   const [topics] = useState(topicsEnabled); // fixed for the visit, as the session's grouper is
   const [tab, setTab] = useState<Tab>("clusters");
   const [switching, setSwitching] = useState(false);
+  const [overlay, setOverlay] = useState(false);
   const [value, setValue] = useState("");
   const now = view.tick?.serverNow ?? Date.now();
   const selectedLabel = view.groups.find((g) => g.key === view.selectedKey)?.display ?? null;
@@ -61,7 +63,7 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
   // Escape backs out one level: the channel switcher first, then an open group.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
+      if (e.key !== "Escape" || overlay) return; // the overlay dialog closes itself
       if (switching) {
         setSwitching(false);
         setValue("");
@@ -71,7 +73,7 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [switching, selectedKey, select]);
+  }, [switching, selectedKey, select, overlay]);
 
   useEffect(() => {
     const prev = document.title;
@@ -101,6 +103,14 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
     setValue("");
   };
 
+  // From the timeline or a question: open the group on the board (on a phone, go to the board)
+  const pick = (key: string | null) => {
+    select(key);
+    if (key) setTab("clusters");
+  };
+
+  const closeOverlay = useCallback(() => setOverlay(false), []);
+
   const tryAnother = () => {
     setSwitching(true);
     setTab("clusters");
@@ -126,6 +136,11 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
           <span className="ws-clock" aria-label="session time">
             {clock(view.elapsedMs)}
           </span>
+          {view.source === "live" && !switching && (
+            <button className="btn-outline btn-overlay" onClick={() => setOverlay(true)} title="Show this chat on your stream, as an OBS Browser Source">
+              OBS overlay
+            </button>
+          )}
           {switching ? (
             <form
               className="switch-form"
@@ -161,7 +176,7 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
       {view.source === "replay" && (
         <div className="replay-bar" role="note">
           <strong>Replay.</strong> A recorded, pseudonymized capture played back at {REPLAY_SPEED}× speed — not a
-          live stream. Enter a channel to watch live chat instead.
+          live stream. Times and rates are the recording's own. Enter a channel to watch live chat instead.
         </div>
       )}
       {offAir === "banner" && (
@@ -225,12 +240,30 @@ export function Workspace({ view, onSwitch, onBack, onReplay, replayPending }: P
         </div>
 
         <div className="zone zone-pulse">
-          <Pulse tick={view.tick} windowMs={view.windowMs} />
+          <Pulse
+            // a channel switch starts the timeline's colours and open questions afresh
+            key={`${view.source}:${view.channel}`}
+            tick={view.tick}
+            windowMs={view.windowMs}
+            groups={view.groups}
+            selectedKey={view.selectedKey}
+            onSelect={pick}
+          />
         </div>
       </main>
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {announce}
       </div>
+      {overlay && (
+        <OverlaySetup
+          channel={view.channel}
+          windowMs={view.windowMs}
+          groups={view.groups}
+          status={view.status}
+          semantic={view.tick?.semantic}
+          onClose={closeOverlay}
+        />
+      )}
     </div>
   );
 }

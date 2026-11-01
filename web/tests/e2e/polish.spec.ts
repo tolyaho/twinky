@@ -313,8 +313,13 @@ test("opening a group unfolds its evidence on screen; Escape folds it and return
   await page.goto("/");
   await enter(page, "evidence");
   const rows = page.locator(".cluster");
-  await expect.poll(() => rows.count(), { timeout: 6_000 }).toBeGreaterThan(2);
-  const last = rows.last();
+  await expect.poll(() => rows.count(), { timeout: 15_000 }).toBeGreaterThan(2);
+  // topics arrive after the first rows and reorder them: wait until the model has caught up, then
+  // hold on to one row by its label, not by a position another row can take
+  await expect(page.locator(".topic-status")).toHaveCount(0, { timeout: 20_000 });
+  const name = (await rows.last().locator(".cluster-label").textContent())!;
+  const last = rows.filter({ has: page.locator(".cluster-label", { hasText: new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`) }) });
+  await expect(last).toHaveCount(1);
   await last.click();
   const panel = page.locator(".evidence");
   await expect(panel).toBeVisible();

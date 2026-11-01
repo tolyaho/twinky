@@ -3,6 +3,7 @@ import {
   TwinkySession,
   liveSource,
   replaySource,
+  streamClock,
   type LiveGroup,
   type ReplayRow,
   type SourceInfo,
@@ -10,6 +11,7 @@ import {
   type TickSnapshot,
 } from "../engine/session";
 import type { ChatEvent } from "../cluster/types";
+import type { Grouper } from "../engine/session";
 import { makeGrouper } from "../semantic/enable";
 import { useBroadcast, type Broadcast } from "./broadcast";
 import { effectiveStatus } from "./derive";
@@ -60,15 +62,23 @@ export function isSurge(prev: number | undefined, now: number): boolean {
   return now - prev >= Math.max(3, Math.ceil(prev * 0.25));
 }
 
-export function useSession(descriptor: Descriptor | null): SessionView {
+export interface UseSessionOptions {
+  /** how a window becomes groups; the page's choice (src/semantic/enable.ts) by default */
+  grouper?: (channel: string) => Grouper | undefined;
+  /** the window to start with */
+  windowMs?: number;
+}
+
+export function useSession(descriptor: Descriptor | null, opts: UseSessionOptions = {}): SessionView {
   const [ircStatus, setStatus] = useState<UiStatus>("idle");
   const [statusInfo, setStatusInfo] = useState<SourceInfo | null>(null);
   const [tick, setTick] = useState<TickSnapshot | null>(null);
   const [feed, setFeed] = useState<ChatEvent[]>([]);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
-  const [windowMs, setWindowState] = useState(60_000);
-  const windowRef = useRef(60_000);
+  const [windowMs, setWindowState] = useState(opts.windowMs ?? 60_000);
+  const windowRef = useRef(opts.windowMs ?? 60_000);
+  const makeGrouperRef = useRef(opts.grouper ?? makeGrouper);
 
   const sessionRef = useRef<TwinkySession | null>(null);
   const feedBuf = useRef<ChatEvent[]>([]);
@@ -99,17 +109,20 @@ export function useSession(descriptor: Descriptor | null): SessionView {
     setStatusInfo(descriptor.kind === "live" ? { phase: "opening" } : null);
     setElapsedMs(0);
 
+    // A recorded 7-minute capture, played faster so the audience waves form within seconds.
+    // Same messages, same order, same spacing — only the clock runs faster, and the session reads
+    // that clock, so every time and rate on screen is the recording's. Clearly labelled REPLAY.
+    const clock = descriptor.kind === "replay" ? streamClock(REPLAY_SPEED) : undefined;
     const source =
       descriptor.kind === "live"
         ? liveSource(descriptor.channel)
-        : // A recorded 7-minute capture, compressed so the audience waves form within seconds.
-          // Same messages, same order — only the playback clock is faster. Clearly labelled REPLAY.
-          replaySource(descriptor.rows, { loop: true, speed: REPLAY_SPEED });
+        : replaySource(descriptor.rows, { loop: true, speed: REPLAY_SPEED, now: clock });
 
     const session = new TwinkySession({
       source,
+      now: clock,
       // grouping by meaning when the browser can run it; the word rules otherwise
-      grouper: makeGrouper(descriptor.channel),
+      grouper: makeGrouperRef.current(descriptor.channel),
       windowMs: windowRef.current,
       onChat: (e) => {
         feedBuf.current.push(e);

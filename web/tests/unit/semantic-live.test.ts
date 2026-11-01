@@ -8,6 +8,7 @@ import {
   MAX_ITEMS,
   SemanticGrouper,
   resetSharedWorker,
+  oneWordEach,
   sameWordVariants,
   type WorkerLike,
 } from "../../src/semantic/live";
@@ -228,6 +229,18 @@ describe("SemanticGrouper", () => {
     expect(g.group(window).groups[0].rule).toBe("phrase");
   });
 
+  it("calls different single words the model found alike one-word replies, not a topic", () => {
+    // a word game: guesses that are alike in kind, but nobody is discussing anything
+    const g = grouper();
+    const window = [ev("ruby", "a"), ev("sapphire", "b"), ev("emerald", "c"), ev("ruby", "d")];
+    g.group(window);
+    fake.emit({ type: "ready", device: "wasm", loadMs: 1 });
+    answer(g, [["ruby", "sapphire", "emerald"]]);
+    const [only] = g.group(window).groups;
+    expect(only.rule).toBe("words");
+    expect(only.count).toBe(4);
+  });
+
   it("falls back to the word rules, and says so, when the model cannot run", () => {
     const g = grouper();
     const window = [
@@ -264,7 +277,7 @@ describe("parity with the evaluated pipeline", () => {
     const window = [
       ev("his mic is muted", "a"), ev("we cant hear him", "b"), ev("no audio", "c"), ev("sound is gone", "d"),
       ev("what game is this", "e"), ev("which game is he playing", "f"), ev("clip it", "g"), ev("clip it", "h"),
-      ev("LUL", "i"), ev("KEKW", "j"), ev("ok", "k"), ev("first", "l"),
+      ev("LUL", "i"), ev("KEKW", "j"), ev("ok", "k"), ev("first", "l"), ev("L chatter", "m"), ev("chat no audio", "n"),
     ];
     const g = grouper("somechannel");
     g.group(window);
@@ -274,7 +287,7 @@ describe("parity with the evaluated pipeline", () => {
     const clusters = clusterItems(items, w.options).map((c) => ({ keys: c.map((i) => items[i].key), coherence: coherence(items, c) }));
     fake.emit({ type: "result", epoch: g.epoch, seq: w.seq, clusters, waiting: [], embedMs: 0, clusterMs: 0 });
     const board = g.group(window);
-    const evaluated = hybridGroups(prepAll(window, "somechannel"), vec, OPTIONS);
+    const evaluated = hybridGroups(prepAll(window, "somechannel", OPTIONS), vec, OPTIONS);
     const asSets = (gs: { ids?: string[]; event_ids?: string[] }[]) =>
       gs.map((x) => [...(x.ids ?? x.event_ids!)].sort().join(",")).sort();
     expect(asSets(board.groups)).toEqual(asSets(evaluated.groups));
@@ -293,5 +306,13 @@ describe("sameWordVariants", () => {
     expect(sameWordVariants(["his mic", "his mic is muted"])).toBe(false);
     expect(sameWordVariants(["gg"])).toBe(false);
     expect(sameWordVariants(["abc", "abcd"])).toBe(false);
+  });
+});
+
+describe("oneWordEach", () => {
+  it("is true only when every text is a single word", () => {
+    expect(oneWordEach(["ruby", "sapphire"])).toBe(true);
+    expect(oneWordEach(["ruby", "red ruby"])).toBe(false);
+    expect(oneWordEach([])).toBe(false);
   });
 });

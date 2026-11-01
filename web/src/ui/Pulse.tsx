@@ -1,16 +1,18 @@
-import { canonical } from "../cluster/canonical";
-import type { QuestionRow } from "../cluster/pulse";
 import type { TickSnapshot } from "../engine/session";
-import { Sparkline } from "./Sparkline";
+import { Questions } from "./Questions";
+import { Timeline } from "./Timeline";
 import { compact, pct, perMinute, spanLong, windowLong } from "./format";
 import { Num } from "./motion";
+import type { GroupView } from "./useSession";
 
 interface Props {
   tick: TickSnapshot | null;
   windowMs: number;
+  groups: GroupView[];
+  selectedKey: string | null;
+  onSelect: (key: string | null) => void;
 }
 
-const RATE_BUCKET_MS = 10_000; // matches pulse.ts
 const MIN_RATE_SPAN_MS = 5_000; // below this a per-minute rate is mostly noise
 
 function Stat({
@@ -38,24 +40,7 @@ function Stat({
   );
 }
 
-/**
- * The ported `questions` rule groups by the chat rules, which never join two identical multi-word
- * messages (a shared word needs three). On screen the same question twice reads as a bug, so
- * rows with the same canonical text are shown once with their counts summed. Display only.
- */
-export function mergeQuestions(rows: QuestionRow[]): QuestionRow[] {
-  const byText = new Map<string, QuestionRow>();
-  for (const q of rows) {
-    const k = canonical(q.text) || q.text;
-    const had = byText.get(k);
-    if (had) byText.set(k, { ...had, count: had.count + q.count, event_ids: [...had.event_ids, ...q.event_ids] });
-    else byText.set(k, q);
-  }
-  // stable re-rank: more askers first, then earliest — the same order the rule itself uses
-  return [...byText.values()].sort((a, b) => b.count - a.count || a.ts_ms - b.ts_ms);
-}
-
-export function Pulse({ tick, windowMs }: Props) {
+export function Pulse({ tick, windowMs, groups, selectedKey, onSelect }: Props) {
   const p = tick?.pulse;
   const windowMsgs = p?.composition.messages ?? 0;
   const grouped = p ? p.composition.messages - p.composition.singletons : 0;
@@ -67,10 +52,9 @@ export function Pulse({ tick, windowMs }: Props) {
   const warm = tick?.warm ?? false;
   const perMin = observed >= MIN_RATE_SPAN_MS ? perMinute(windowMsgs, observed) : null;
   const rate = perMin === null ? "—" : compact(perMin);
-  const rateFrom =
-    tick && !warm
-      ? Math.max(0, Math.floor((tick.windowMs[1] - observed - tick.windowMs[0]) / RATE_BUCKET_MS))
-      : 0;
+  const semantic = tick?.semantic;
+  // paraphrased questions join only when the model is actually grouping
+  const byMeaning = semantic?.state === "ready" || semantic?.state === "loading";
 
   return (
     <section className="pulse" aria-label="Live statistics">
@@ -82,14 +66,8 @@ export function Pulse({ tick, windowMs }: Props) {
           : "."}
       </p>
 
-      <div className="stat-grid">
+      <div className="stat-grid stat-row">
         <Stat value={rate} n={perMin ?? undefined} label="msgs / min" title="Messages in the window ÷ time observed" />
-        <Stat
-          value={p ? String(p.peak_per_second) : "0"}
-          n={p?.peak_per_second ?? 0}
-          label="peak / sec"
-          title="Busiest 10-second stretch, per second"
-        />
         <Stat
           value={compact(p?.unique_chatters ?? 0)}
           n={p?.unique_chatters ?? 0}
@@ -98,46 +76,60 @@ export function Pulse({ tick, windowMs }: Props) {
           title="Distinct chatters who wrote in the window. Not viewers: most viewers never type."
         />
         <Stat
-          value={pct(clustered)}
-          n={clustered}
-          label="clustered"
-          sub={`${compact(grouped)} of ${compact(windowMsgs)}`}
-          title="Share of the window's messages that landed in a group"
-        />
-        <Stat
-          value={compact(p?.active_groups ?? 0)}
-          n={p?.active_groups ?? 0}
-          label="active groups"
-        />
-        <Stat
-          value={p?.reaction_wave ? compact(p.reaction_wave) : "—"}
-          n={p?.reaction_wave || undefined}
-          label="reaction wave"
-          sub={p?.reaction_wave ? "laughs & emotes" : undefined}
+          value={p ? String(p.peak_per_second) : "0"}
+          n={p?.peak_per_second ?? 0}
+          label="peak / sec"
+          title="Busiest 10-second stretch, per second"
         />
       </div>
 
-      <div className="pulse-spark">
-        <div className="pulse-spark-head">
-          <span>message rate</span>
-          <span className="muted-tiny">10s buckets</span>
-        </div>
-        <Sparkline data={p?.rate ?? []} from={rateFrom} />
-      </div>
+      <Timeline
+        tick={tick}
+        groups={groups}
+        selectedKey={selectedKey}
+        onSelect={onSelect}
+        windowMs={windowMs}
+        semantic={semantic}
+      />
 
-      {p && p.questions.length > 0 && (
-        <div className="questions">
-          <div className="questions-head">Questions in chat</div>
-          <ul className="questions-list">
-            {mergeQuestions(p.questions).slice(0, 5).map((q, i) => (
-              <li key={i} className="question">
-                <span className="question-text">{q.text}</span>
-                {q.count > 1 && <span className="question-count">×{q.count}</span>}
-              </li>
-            ))}
-          </ul>
+      <Questions
+        groups={groups}
+        events={tick?.events ?? null}
+        now={tick?.serverNow ?? 0}
+        since={tick ? tick.windowMs[1] - tick.observedMs : 0}
+        windowMs={windowMs}
+        byMeaning={byMeaning}
+        selectedKey={selectedKey}
+        onSelect={onSelect}
+      />
+
+      {/* how the grouping itself is doing: worth a look, not worth the space above */}
+      <details className="pulse-more">
+        <summary>More numbers</summary>
+        <div className="stat-grid">
+          <Stat
+            value={pct(clustered)}
+            n={clustered}
+            label="in a group"
+            sub={`${compact(grouped)} of ${compact(windowMsgs)}`}
+            title="Share of the window's messages that landed in a group"
+          />
+          <Stat value={compact(p?.active_groups ?? 0)} n={p?.active_groups ?? 0} label="groups" />
+          <Stat
+            value={p?.reaction_wave ? compact(p.reaction_wave) : "—"}
+            n={p?.reaction_wave || undefined}
+            label="reactions"
+            sub={p?.reaction_wave ? "laughs & emotes" : undefined}
+            title="Messages in reaction groups"
+          />
+          <Stat
+            value={p ? String(p.messages_per_chatter) : "—"}
+            n={p?.messages_per_chatter}
+            label="msgs / chatter"
+            title="How much the average chatter wrote in the window"
+          />
         </div>
-      )}
+      </details>
     </section>
   );
 }

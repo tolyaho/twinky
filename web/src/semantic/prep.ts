@@ -147,12 +147,24 @@ function isEmote(raw: string): boolean {
   return EMOTE_NAMES.has(raw.toLowerCase()) || EMOTE_SHAPE.test(raw) || EMOJI_ONLY.test(raw);
 }
 
+// Words that address the audience rather than say something: "chat, is this real", "L chatter".
+// Like the streamer's name, they are not what a message is about, and a model comparing short
+// messages compares mostly them (a 15-message false merge held together by "chatter").
+const VOCATIVES = new Set(["chat", "chatter", "chatters"]);
+
+export interface PrepExtra {
+  /** words Twitch itself marked as emotes in this message (the IRC `emotes` tag) */
+  emotes?: ReadonlySet<string>;
+  /** leave the audience-address words out of what is compared (see VOCATIVES) */
+  vocatives?: boolean;
+}
+
 /**
  * Classify one message. `channel` is the streamer's login: on its own it says nothing, and inside
  * a sentence it is removed so that "jynxzi is the goat" and "jynxzi you're trash" are compared on
  * what they say, not on the name they share.
  */
-export function prepare(text: string, channel: string, bot = false): Prepared {
+export function prepare(text: string, channel: string, bot = false, extra: PrepExtra = {}): Prepared {
   const raw = (text ?? "").replace(INVISIBLE, "").trim();
   if (bot) return { kind: "skip", key: "" };
   if (URL.test(raw)) return { kind: "skip", key: "" };
@@ -170,8 +182,9 @@ export function prepare(text: string, channel: string, bot = false): Prepared {
     const bare = w.replace(/^[^\p{L}\p{N}<?!:]+|[^\p{L}\p{N}>?!)]+$/gu, "") || w;
     const low = bare.toLowerCase();
     if (low === name || low === `${name}s`) continue; // the streamer's name carries no meaning here
+    if (extra.vocatives && VOCATIVES.has(low)) continue;
     const fam = familyOfToken(bare);
-    if (isEmote(bare)) {
+    if (isEmote(bare) || extra.emotes?.has(w) || extra.emotes?.has(bare)) {
       if (fam) families.push(fam);
       else emoteName ??= low;
       continue; // an emote name tokenises into noise: never embedded

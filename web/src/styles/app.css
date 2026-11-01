@@ -1162,20 +1162,275 @@
 .spark-dot {
   transition: cx 0.4s var(--ease-out), cy 0.4s var(--ease-out);
 }
-.questions {
-  margin-top: 20px;
-  border-top: 1px solid var(--hairline-on-dark-soft);
-  padding-top: 14px;
+/* ---- audience timeline (Timeline.tsx) ------------------------------------------------------ */
+/* line colours: the brand's lavender, mint, peach and sky, stepped for the dark canvas (validated
+   for contrast and colour-blind separation on --surface-dark-elev) */
+.workspace,
+.ov {
+  --series-1: #927ccd;
+  --series-2: #42a788;
+  --series-3: #ca8042;
+  --series-4: #4984bf;
 }
-.questions-head {
+.stat-row {
+  grid-template-columns: repeat(3, 1fr);
+}
+.stat-row .stat {
+  padding: 10px 11px;
+}
+.stat-row .stat-value {
+  font-size: 22px;
+}
+.tl {
+  margin-top: 18px;
+}
+.tl-head,
+.qs-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.tl-title,
+.qs-title {
+  font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.96px;
   text-transform: uppercase;
   color: var(--muted-on-dark);
-  margin-bottom: 8px;
 }
-.questions-list {
+.tl-chart {
+  position: relative;
+  border-radius: var(--r-sm);
+  touch-action: pan-y;
+}
+.tl-chart:focus-visible {
+  outline-offset: 4px;
+}
+.tl-svg {
+  display: block;
+  overflow: visible;
+}
+.tl-k {
+  font-size: 10.5px;
+  fill: var(--muted-on-dark);
+  font-family: var(--font-ui);
+}
+.tl-max {
+  text-anchor: end;
+  font-variant-numeric: tabular-nums;
+}
+.tl-none,
+.tl-unknown-k {
+  text-anchor: middle;
+}
+.tl-base {
+  stroke: var(--hairline-on-dark);
+  stroke-width: 1;
+}
+.tl-unknown {
+  stroke: var(--muted-on-dark);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 4;
+  opacity: 0.6;
+}
+.tl-total-area {
+  fill: rgba(250, 249, 247, 0.07);
+}
+.tl-total {
+  fill: none;
+  stroke: var(--muted-on-dark);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.tl-open {
+  stroke-dasharray: 3 3;
+}
+.tl-line path {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: opacity var(--dur) var(--ease-out);
+}
+.tl-s1 { --c: var(--series-1); }
+.tl-s2 { --c: var(--series-2); }
+.tl-s3 { --c: var(--series-3); }
+.tl-s4 { --c: var(--series-4); }
+.tl-line path {
+  stroke: var(--c);
+}
+.tl-line .tl-open {
+  opacity: 0.8;
+}
+.tl-line.tl-sel path {
+  stroke-width: 2.5;
+}
+.tl-dim {
+  opacity: 0.28;
+}
+.tl-pt {
+  fill: var(--c, var(--muted-on-dark));
+}
+.tl-pt-total {
+  --c: var(--muted-on-dark);
+}
+.tl-pt-open {
+  fill: var(--surface-dark-elev);
+  stroke: var(--c, var(--muted-on-dark));
+  stroke-width: 1.5;
+}
+.tl-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 14;
+  stroke-linejoin: round;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+.tl-cross line {
+  stroke: var(--muted-on-dark);
+  stroke-width: 1;
+  opacity: 0.7;
+}
+.tl-dot {
+  fill: var(--c);
+  stroke: var(--surface-dark-elev);
+  stroke-width: 2;
+}
+.tl-dot-total {
+  fill: var(--body-on-dark);
+}
+.tl-tip {
+  position: absolute;
+  top: -6px;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  background: var(--surface-dark);
+  border: 1px solid var(--hairline-on-dark);
+  border-radius: var(--r-md);
+  padding: 7px 10px 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted-on-dark);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+  min-width: 128px;
+  max-width: 220px;
+  z-index: 2;
+}
+.tl-tip-when {
+  font-size: 11px;
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+.tl-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.tl-tip-row strong {
+  color: var(--ink-on-dark);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+  text-align: right;
+}
+.tl-tip-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tl-key {
+  display: inline-block;
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--c);
+  flex: none;
+}
+.tl-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--muted-soft);
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.tl-legend {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.tl-leg {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  height: 26px;
+  padding: 0 9px;
+  background: transparent;
+  border: 1px solid var(--hairline-on-dark);
+  border-radius: var(--r-pill);
+  color: var(--body-on-dark);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out), opacity var(--dur) var(--ease-out);
+}
+.tl-legend li {
+  min-width: 0;
+  max-width: 100%;
+}
+.tl-leg:hover {
+  border-color: var(--muted-on-dark);
+  color: var(--ink-on-dark);
+}
+.tl-leg-on,
+.tl-leg-on:hover {
+  border-color: var(--lavender);
+  color: var(--ink-on-dark);
+  background: rgba(200, 184, 224, 0.08);
+}
+.tl-leg-dim {
+  opacity: 0.6;
+}
+.tl-leg-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.tl-leg-n {
+  color: var(--muted-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+.tl-note,
+.tl-empty,
+.qs-empty,
+.qs-more {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted-soft);
+  margin: 8px 0 0;
+}
+.tl-empty,
+.qs-empty {
+  color: var(--muted-on-dark);
+  font-size: 12.5px;
+}
+
+/* ---- questions in chat (Questions.tsx) ------------------------------------------------------ */
+.qs {
+  margin-top: 20px;
+  border-top: 1px solid var(--hairline-on-dark-soft);
+  padding-top: 14px;
+}
+.qs-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1183,22 +1438,452 @@
   flex-direction: column;
   gap: 6px;
 }
-.question {
+.q-head {
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  background: var(--surface-dark-elev2);
+  border: 1px solid var(--hairline-on-dark-soft);
+  border-radius: var(--r-md);
+  padding: 9px 11px 10px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+}
+.q-head:hover {
+  border-color: var(--muted-on-dark);
+}
+.q-open .q-head {
+  border-color: var(--hairline-on-dark);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.q-text {
+  font-size: 13.5px;
+  color: var(--ink-on-dark);
+  overflow-wrap: anywhere;
+}
+.q-meta {
+  font-size: 11.5px;
+  color: var(--muted-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+.q-meta strong {
+  color: var(--body-on-dark);
+  font-weight: 500;
+}
+.q-new {
+  color: var(--mint);
+}
+.q-ev {
+  border: 1px solid var(--hairline-on-dark);
+  border-top: none;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  padding: 2px 11px 9px;
+  animation: fadeIn var(--dur) var(--ease-out);
+}
+.q-ev-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.q-ev-list .ev,
+.qs-others .ev {
+  grid-template-columns: 30px minmax(0, 76px) 1fr;
+  font-size: 12.5px;
+}
+.q-foot {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 13px;
+  margin-top: 8px;
+}
+.q-how {
+  font-size: 11px;
+  color: var(--muted-soft);
+}
+.q-times {
+  color: var(--muted-on-dark);
+  font-variant-numeric: tabular-nums;
+}
+.qs-others {
+  margin-top: 10px;
+}
+.qs-others summary,
+.pulse-more summary {
+  cursor: pointer;
+  color: var(--muted-on-dark);
+  font-size: 12px;
+  width: max-content;
+  max-width: 100%;
+  list-style: none;
+}
+.qs-others summary::-webkit-details-marker,
+.pulse-more summary::-webkit-details-marker {
+  display: none;
+}
+.qs-others summary::before,
+.pulse-more summary::before {
+  content: "+";
+  display: inline-block;
+  width: 1em;
+  color: var(--muted-soft);
+}
+.qs-others[open] summary::before,
+.pulse-more[open] summary::before {
+  content: "–";
+}
+.qs-others summary:hover,
+.pulse-more summary:hover {
   color: var(--body-on-dark);
 }
-.question-text {
+.qs-others .q-ev-list {
+  margin-top: 6px;
+  border-top: 1px solid var(--hairline-on-dark);
+}
+.pulse-more {
+  margin-top: 18px;
+  border-top: 1px solid var(--hairline-on-dark-soft);
+  padding-top: 12px;
+}
+.pulse-more .stat-grid {
+  margin-top: 10px;
+}
+
+/* ---- OBS overlay (Overlay.tsx): its own page, painted over the stream ------------------------ */
+/* the page itself is transparent: OBS composites it over the video */
+html.overlay-page,
+html.overlay-page body,
+html.overlay-page #root {
+  background: transparent !important;
+}
+html.overlay-page body {
+  overflow: hidden;
+}
+.ov {
+  /* everything scales with the Browser Source: 420 × 240 is 15 px text; a short source scales by
+     its height instead, so three rows always fit */
+  font-size: clamp(12px, min(3.6vw, 6.4vh), 30px);
+  padding: 0.55em;
+  color: #faf9f7;
+  font-family: var(--font-ui);
+  letter-spacing: 0.1px;
+}
+.ov-card {
+  /* a dark, translucent sheet: readable over bright or busy video, never a solid box */
+  background: rgba(12, 10, 9, 0.78);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+  border: 1px solid rgba(250, 249, 247, 0.1);
+  border-radius: 0.9em;
+  padding: 0.75em 0.85em 0.8em;
+  box-shadow: 0 0.4em 1.6em rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.ov-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-size: 0.78em;
+  color: #c4bfb8;
+  margin-bottom: 0.55em;
+  white-space: nowrap;
+}
+.ov-brand {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: #faf9f7;
+  letter-spacing: -0.2px;
+}
+.ov-chan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.ov-win {
+  margin-left: auto;
+  color: #a39b92;
+  font-variant-numeric: tabular-nums;
+}
+.ov-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+.ov-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.2em 1fr;
+  align-items: center;
+  gap: 0.6em;
+  background: rgba(250, 249, 247, 0.06);
+  border-radius: 0.55em;
+  padding: 0.42em 0.65em 0.5em;
+  overflow: hidden;
+  animation: fadeIn var(--dur-slow) var(--ease-out);
+}
+.ov-n {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.65em;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.ov-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ov-label {
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.question-count {
-  color: var(--muted-on-dark);
+.ov-meta {
+  font-size: 0.74em;
+  color: #c4bfb8;
   font-variant-numeric: tabular-nums;
-  flex: none;
+}
+.ov-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0.16em;
+}
+.ov-bar span {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--lavender), var(--sky));
+  opacity: 0.8;
+  transition: transform 0.6s var(--ease-out);
+}
+.ov-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+  font-size: 0.9em;
+  color: #e7e3de;
+}
+.ov-list + .ov-status {
+  margin-top: 0.5em;
+  font-size: 0.78em;
+  color: #c4bfb8;
+}
+.ov-status-bad {
+  color: #f3c2c2;
+}
+.ov .listening {
+  width: 0.5em;
+  height: 0.5em;
+}
+.ov-help {
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+.ov-help code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--lavender);
+}
+/* a short Browser Source, where 12 px text is the floor: less air, so three rows still fit */
+@media (max-height: 200px) {
+  .ov {
+    padding: 0.3em;
+  }
+  .ov-card {
+    padding: 0.5em 0.7em 0.55em;
+  }
+  .ov-head {
+    margin-bottom: 0.4em;
+  }
+}
+/* a very short Browser Source: two rows, no header */
+@media (max-height: 170px) {
+  .ov-head {
+    display: none;
+  }
+  .ov-row:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+/* ---- overlay setup (OverlaySetup.tsx) ------------------------------------------------------- */
+.btn-overlay {
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  /* OBS runs on a computer; on a phone the header keeps its two-row layout */
+  .btn-overlay {
+    display: none;
+  }
+}
+.ovs {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--hairline-on-dark);
+  border-radius: var(--r-xl);
+  background: var(--surface-dark-elev);
+  color: var(--ink-on-dark);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  --focus-ring: var(--lavender);
+}
+.ovs[open] {
+  animation: riseIn var(--dur-slow) var(--ease-out);
+}
+.ovs::backdrop {
+  background: rgba(12, 10, 9, 0.62);
+}
+.ovs-body {
+  padding: 22px 24px 20px;
+}
+.ovs-title {
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--ink-on-dark);
+  letter-spacing: -0.3px;
+}
+.ovs-lede {
+  margin: 6px 0 18px;
+  font-size: 13.5px;
+  color: var(--body-on-dark);
+  max-width: 62ch;
+}
+.ovs-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.96px;
+  text-transform: uppercase;
+  color: var(--muted-on-dark);
+  margin-bottom: 6px;
+}
+.ovs-url {
+  display: flex;
+  gap: 8px;
+}
+.ovs-url-input {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline-on-dark);
+  background: var(--surface-dark);
+  color: var(--ink-on-dark);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+.ovs-url-input:focus {
+  outline: none;
+  border-color: var(--lavender);
+}
+.ovs-copy {
+  min-width: 84px;
+}
+.ovs-hint {
+  margin: 6px 0 14px;
+  font-size: 12px;
+  color: var(--muted-on-dark);
+}
+.ovs-opt {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--body-on-dark);
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+.ovs-opt input {
+  margin-top: 3px;
+  accent-color: var(--lavender);
+}
+.ovs-opt strong {
+  color: var(--ink-on-dark);
+  font-weight: 500;
+}
+.ovs-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 20px;
+  align-items: start;
+}
+.ovs-steps {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--body-on-dark);
+}
+.ovs-steps li + li {
+  margin-top: 6px;
+}
+.ovs-steps strong {
+  color: var(--ink-on-dark);
+  font-weight: 500;
+}
+.ovs-preview {
+  margin: 0;
+}
+.ovs-stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline-on-dark);
+  /* transparency, shown the usual way: a checkerboard where the stream would be */
+  background-color: #3a3632;
+  background-image: linear-gradient(45deg, #2b2825 25%, transparent 25%), linear-gradient(-45deg, #2b2825 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2b2825 75%), linear-gradient(-45deg, transparent 75%, #2b2825 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  container-type: inline-size;
+}
+/* the preview scales like the real source: by its own width, not the window's */
+.ovs-stage .ov {
+  font-size: clamp(9px, 3.6cqi, 30px);
+}
+.ovs-preview figcaption {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--muted-soft);
+}
+.ovs-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline-on-dark-soft);
+  font-size: 13px;
+}
+@media (max-width: 640px) {
+  .ovs-body {
+    padding: 18px 16px 16px;
+  }
+  .ovs-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---- responsive ----------------------------------------------------------------------------- */
@@ -1225,8 +1910,8 @@
     container-type: inline-size;
   }
   @container (min-width: 380px) {
-    .stat-grid {
-      grid-template-columns: repeat(3, 1fr);
+    .pulse-more .stat-grid {
+      grid-template-columns: repeat(4, 1fr);
     }
     .stat {
       padding: 10px 11px;

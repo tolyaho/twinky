@@ -1,0 +1,186 @@
+{
+ "rule": "a width is acceptable with >= 10 slices and the leading group empty in <= 50% of its slices (median over windows of that length); the check passes when the shipped width is acceptable",
+ "note": "display check on the real windows of evals/semantic; labels (model-drafted) only identify the leading group; nothing is scored",
+ "lengths": {
+  "30s": {
+   "windows": [
+    "zackrawrr_2026-10-31T2117",
+    "hasanabi_2026-10-31T2125",
+    "extraemily_2026-10-31T2128"
+   ],
+   "shippedMs": 3000,
+   "shippedPasses": true,
+   "acceptableMs": [
+    1000,
+    2000,
+    3000
+   ],
+   "rows": [
+    {
+     "widthMs": 1000,
+     "slices": 30,
+     "emptyMedian": 0.43,
+     "thirdEmptyMedian": 0.57,
+     "perSliceMedian": 7.3,
+     "pass": true
+    },
+    {
+     "widthMs": 2000,
+     "slices": 15,
+     "emptyMedian": 0.2,
+     "thirdEmptyMedian": 0.36,
+     "perSliceMedian": 14.7,
+     "pass": true
+    },
+    {
+     "widthMs": 3000,
+     "slices": 10,
+     "emptyMedian": 0.1,
+     "thirdEmptyMedian": 0.29,
+     "perSliceMedian": 22,
+     "pass": true
+    },
+    {
+     "widthMs": 5000,
+     "slices": 6,
+     "emptyMedian": 0,
+     "thirdEmptyMedian": 0,
+     "perSliceMedian": 36.7,
+     "pass": false
+    },
+    {
+     "widthMs": 10000,
+     "slices": 3,
+     "emptyMedian": 0,
+     "thirdEmptyMedian": 0,
+     "perSliceMedian": 73.3,
+     "pass": false
+    }
+   ]
+  },
+  "60s": {
+   "windows": [
+    "sodapoppin_2026-10-31T2120",
+    "jynxzi_2026-10-31T2120",
+    "lirik_2026-10-31T2115",
+    "5opka_2026-10-31T2133",
+    "xqc_2026-10-31T2124"
+   ],
+   "shippedMs": 5000,
+   "shippedPasses": true,
+   "acceptableMs": [
+    3000,
+    5000
+   ],
+   "rows": [
+    {
+     "widthMs": 2000,
+     "slices": 30,
+     "emptyMedian": 0.54,
+     "thirdEmptyMedian": 0.65,
+     "perSliceMedian": 3.5,
+     "pass": false
+    },
+    {
+     "widthMs": 3000,
+     "slices": 20,
+     "emptyMedian": 0.44,
+     "thirdEmptyMedian": 0.49,
+     "perSliceMedian": 5.3,
+     "pass": true
+    },
+    {
+     "widthMs": 5000,
+     "slices": 12,
+     "emptyMedian": 0.25,
+     "thirdEmptyMedian": 0.31,
+     "perSliceMedian": 8.8,
+     "pass": true
+    },
+    {
+     "widthMs": 10000,
+     "slices": 6,
+     "emptyMedian": 0,
+     "thirdEmptyMedian": 0.08,
+     "perSliceMedian": 17.7,
+     "pass": false
+    },
+    {
+     "widthMs": 15000,
+     "slices": 4,
+     "emptyMedian": 0,
+     "thirdEmptyMedian": 0,
+     "perSliceMedian": 26.5,
+     "pass": false
+    }
+   ]
+  },
+  "5m-quiet": {
+   "windows": [
+    "bratishkinoff_2026-10-31T2119",
+    "summit1g_2026-10-31T2115",
+    "ishowspeed_2026-10-31T2124",
+    "emiru_2026-10-31T2119",
+    "morphe_ya_2026-10-31T2129",
+    "insize_2026-10-31T2127"
+   ],
+   "shippedMs": 20000,
+   "shippedPasses": true,
+   "acceptableMs": [
+    15000,
+    20000,
+    30000
+   ],
+   "rows": [
+    {
+     "widthMs": 5000,
+     "slices": 60,
+     "emptyMedian": 0.75,
+     "thirdEmptyMedian": 0.84,
+     "perSliceMedian": 1.2,
+     "pass": false
+    },
+    {
+     "widthMs": 10000,
+     "slices": 30,
+     "emptyMedian": 0.54,
+     "thirdEmptyMedian": 0.71,
+     "perSliceMedian": 2.4,
+     "pass": false
+    },
+    {
+     "widthMs": 15000,
+     "slices": 20,
+     "emptyMedian": 0.44,
+     "thirdEmptyMedian": 0.58,
+     "perSliceMedian": 3.6,
+     "pass": true
+    },
+    {
+     "widthMs": 20000,
+     "slices": 15,
+     "emptyMedian": 0.28,
+     "thirdEmptyMedian": 0.47,
+     "perSliceMedian": 4.8,
+     "pass": true
+    },
+    {
+     "widthMs": 30000,
+     "slices": 10,
+     "emptyMedian": 0.11,
+     "thirdEmptyMedian": 0.28,
+     "perSliceMedian": 7.2,
+     "pass": true
+    },
+    {
+     "widthMs": 60000,
+     "slices": 5,
+     "emptyMedian": 0,
+     "thirdEmptyMedian": 0.2,
+     "perSliceMedian": 14.4,
+     "pass": false
+    }
+   ]
+  }
+ }
+}

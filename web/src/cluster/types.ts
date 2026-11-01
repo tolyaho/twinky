@@ -12,15 +12,18 @@ export interface ChatEvent {
   text: string;
   /** A known bot account (decided from the login before it is pseudonymised). Browser only. */
   bot?: boolean;
+  /** Words Twitch marked as its emotes in this message (IRC `emotes` tag). Browser only. */
+  emotes?: string[];
 }
 
 export type GroupRule = "reaction" | "prefix" | "token";
 
 /**
  * What the live board can show: the ported rules above, plus the browser's grouping by meaning
- * (src/semantic) — a repeated phrase, a topic (different words, one meaning) or a shared question.
+ * (src/semantic) — a repeated phrase, a topic (different words, one meaning), a shared question,
+ * or single words the model found alike ("words": answers or guesses, too short to be a topic).
  */
-export type BoardRule = GroupRule | "phrase" | "topic" | "question";
+export type BoardRule = GroupRule | "phrase" | "topic" | "question" | "words";
 
 /** The part of a group that counting needs, whichever engine produced it. */
 export type Counted = Pick<Group, "count" | "event_ids"> & { rule: BoardRule };
